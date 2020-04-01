@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public class Control : MonoBehaviour
 {
+    [SerializeField] private Transform pointOfInterest;
     [SerializeField] private CharacterController controller;
 
     [SerializeField] private float speed = 12f;
@@ -20,17 +21,17 @@ public class Control : MonoBehaviour
 
     PlayerInput playerInput;
     Vector2 input;
-    bool jumped;
 
     private void Awake() {
         playerInput = new PlayerInput();
         playerInput.PlayerControls.Move.performed += ctx => input = ctx.ReadValue<Vector2>();
-        //playerInput.PlayerControls.Jump.performed += ctx => jumped = ctx.ReadValue<bool>();
     }
 
     // Update is called once per frame
     void Update()
     {
+        transform.LookAt(pointOfInterest);
+        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, transform.eulerAngles.z);
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
 
         if (isGrounded && velocity.y < 0) {
@@ -38,15 +39,15 @@ public class Control : MonoBehaviour
         }
         float x = input.x;
         float z = input.y;
-        print(input);
 
         Vector3 move = transform.right * x + transform.forward * z;
         controller.Move(move * speed * Time.deltaTime);
     
+        /*
         if (jumped && isGrounded) {
             velocity.y = Mathf.Sqrt(jumpHeight) * -2f * gravity;
         }
-
+        */
         velocity.y += gravity * Time.deltaTime; //Gravity formula
         controller.Move(velocity * Time.deltaTime); // T^2
     }
