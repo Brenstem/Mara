@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-public class Control : MonoBehaviour
-{
-    [SerializeField] private Transform pointOfInterest;
+public class Control : MonoBehaviour {
+    public Camera cam;
+    public Cinemachine.CinemachineFreeLook cinemachine;
+    
+    [SerializeField] public Transform pointOfInterest;
+
     [SerializeField] public CharacterController controller;
 
     [SerializeField] public float speed = 12f;
@@ -14,7 +17,7 @@ public class Control : MonoBehaviour
 
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundDistance = 0.4f;
-    [SerializeField] public LayerMask groundMask;
+    [SerializeField] public LayerMask groundMask, enemyMask;
 
     private Vector3 velocity;
     private bool isGrounded;
@@ -22,15 +25,16 @@ public class Control : MonoBehaviour
     PlayerInput playerInput;
     public Vector2 input;
     bool _lockon;
-    bool lockon
-    {
+    bool lockon {
         get { return _lockon; }
-        set
-        {
-            if (value)
+        set {
+            if (value && pointOfInterest != null) {
+                cinemachine.LookAt = pointOfInterest;
                 stateMachine.ChangeState(new StrafeMovementState());
-            else
-                stateMachine.ChangeState(new GeneralMovementState());
+            }
+            else {
+                cinemachine.LookAt = transform;
+            }
             _lockon = value;
         }
     }
@@ -38,11 +42,18 @@ public class Control : MonoBehaviour
     private void Awake() {
         playerInput = new PlayerInput();
         stateMachine = new StateMachine<Control>(this);
+        stateMachine.ChangeState(new IdleMovementState());
         lockon = false;
         Cursor.lockState = CursorLockMode.Locked;
         playerInput.PlayerControls.Move.performed += ctx => input = ctx.ReadValue<Vector2>();
         playerInput.PlayerControls.Test.performed += _ => lockon = !lockon;
         playerInput.PlayerControls.Jump.performed += ctx => jumped = true;
+        playerInput.PlayerControls.Dash.performed += _ => Dash();
+    }
+
+    private void Dash() {
+        print("Dash");
+        stateMachine.ChangeState(new DashMovementState());
     }
 
     public StateMachine<Control> stateMachine;
@@ -52,8 +63,7 @@ public class Control : MonoBehaviour
     [SerializeField, Range(-1.0f, 1.0f)] private float t;
     public float turnSpeed;
     // Update is called once per frame
-    void Update()
-    {
+    void Update() {
 
         /* === GROUND CHECK === */
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
@@ -63,9 +73,8 @@ public class Control : MonoBehaviour
         /* === \GROUND CHECK === */
 
         stateMachine.Update();
-
-        if (jumped && isGrounded)
-        {
+        print("Current state: " + stateMachine.currentState);
+        if (jumped && isGrounded) {
             velocity.y = Mathf.Sqrt(jumpHeight) * -gravity;
         }
 
@@ -73,6 +82,39 @@ public class Control : MonoBehaviour
         controller.Move(velocity * Time.deltaTime); // T^2
 
         jumped = false;
+        e();
+    }
+
+    Vector3 origin;
+    Vector3 direction;
+
+    [SerializeField] Vector3 lockonOffset;
+    [SerializeField] float lockOnRadius;
+    [SerializeField] float currentHitDistance;
+    [SerializeField] float maxDistance;
+    RaycastHit hit;
+    void e() {
+        if (!lockon) {
+            origin = transform.position + lockonOffset;
+            direction = Camera.main.transform.forward;
+            if (direction.y < 0)
+                direction.y = 0;
+
+            if (Physics.SphereCast(origin, lockOnRadius, direction, out hit, maxDistance, enemyMask)) {
+                pointOfInterest = hit.transform;
+                currentHitDistance = hit.distance;
+            }
+            else {
+                currentHitDistance = maxDistance;
+                pointOfInterest = null;
+            }
+        }
+    }
+
+    private void OnDrawGizmosSelected() {
+        Gizmos.color = Color.red;
+        Debug.DrawLine(origin, origin + direction * currentHitDistance);
+        Gizmos.DrawWireSphere(origin + direction * currentHitDistance, lockOnRadius);
     }
 
     private void OnEnable() {
@@ -103,91 +145,106 @@ public class IdleMovementState : State<Control>
     }
 }
 
-public class GeneralMovementState : State<Control>
-{
-    public override void EnterState(Control owner)
-    {
+public class GeneralMovementState : State<Control> {
+    public override void EnterState(Control owner) { }
+    public override void ExitState(Control owner) { }
 
-    }
-
-    public override void ExitState(Control owner)
-    {
-
-    }
-
-    float zRotation;
-    public override void UpdateState(Control owner)
-    {
-        float x = owner.input.x;
-        float z = owner.input.y;
-        if (owner.input == Vector2.zero)
+    float turnAroundAngleThreshold = 120;
+    public override void UpdateState(Control owner) {
+        if (owner.input == Vector2.zero) { // Changes state to idle if player is not moving
             owner.stateMachine.ChangeState(new IdleMovementState());
-        if (true) // start moving from standing still
-        {
-            Vector3 cameraForward = Camera.main.transform.forward;
-            Vector3 movementDirection = new Vector3();
-            movementDirection += Camera.main.transform.right * x;
-            movementDirection += Camera.main.transform.forward * z;
-
-            Vector3 newDirection = Vector3.RotateTowards(owner.transform.forward, movementDirection, owner.turnSpeed * Time.deltaTime, 0.0f);
-
-            //Vector3 newDirection = Vector3.RotateTowards(owner.transform.forward, cameraForward, owner.turnSpeed * Time.deltaTime, 0.0f);
-
-            Debug.DrawRay(owner.transform.position, newDirection, Color.red);
-            
-            /*
-            float angle = Vector2.Angle(new Vector2(owner.transform.forward.x, owner.transform.forward.z), new Vector2(cameraDirection.x, cameraDirection.z));
-            if (angle > 65)
-            {
-                owner.transform.Rotate(new Vector3(0, angle, 0));
-            }
-            else
-            {
-            }
-            */
-            owner.transform.rotation = Quaternion.LookRotation(newDirection);
-            owner.transform.eulerAngles = new Vector3(0, owner.transform.eulerAngles.y, 0);
         }
+        else {
+            Vector3 baseInputDirection = Camera.main.transform.right * owner.input.x + Camera.main.transform.forward * owner.input.y;
+            Vector3 resultingDirection = Vector3.RotateTowards(owner.transform.forward, baseInputDirection, owner.turnSpeed * Time.deltaTime, 0.0f);
 
-        Vector3 move = owner.transform.forward;
-        //zRotation += owner.rotationSpeed * x * Time.deltaTime; // smoothing för polish
+            // The angle between baseInputDirection and resultingDirection
+            float angle = Vector2.Angle(new Vector2(owner.transform.forward.x,  owner.transform.forward.z),
+                                        new Vector2(baseInputDirection.x,       baseInputDirection.z));
+            Debug.Log("GeneralMovementState angle: " + angle); // Debug info
 
-        //owner.transform.eulerAngles = new Vector3(0, zRotation, 0);
-        owner.controller.Move(move * owner.speed * Time.deltaTime);
+            if (angle > turnAroundAngleThreshold) {
+                // new state, turnaround state
+                // basically, loss of control och lite påbörjad momentum fram tills animationen är klar, då flippas det
+                owner.transform.Rotate(new Vector3(0, angle, 0)); // placeholder
+            }
+            else {
+                owner.transform.rotation = Quaternion.LookRotation(resultingDirection);
+            }
+
+            owner.transform.eulerAngles = new Vector3(0, owner.transform.eulerAngles.y, 0); // Limits rotation to the Y-axis
+            Vector3 move = owner.transform.forward;                                         // Constant forward facing force
+            owner.controller.Move(move * owner.speed * Time.deltaTime);                     // CharacterController movement application
+        }
     }
 }
 
-public class StrafeMovementState : State<Control>
-{
-    public override void EnterState(Control owner)
-    {
+public class StrafeMovementState : State<Control> {
+    public override void EnterState(Control owner) { }
+    public override void ExitState(Control owner) { }
 
-    }
+    public override void UpdateState(Control owner) {
+        if (owner.pointOfInterest != null) {/* ==== POINT OF INTEREST IS MOUSE POS ==== */
+                                            /*
+                                            Vector2 mousePos = Input.mousePosition;
+                                            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                                            RaycastHit hit;
+                                            if (Physics.Raycast(ray, out hit, 100f, owner.groundMask)) {
+                                                //owner.pointOfInterest = hit.transform;
+                                                owner.transform.LookAt(hit.point);
+                                                owner.transform.eulerAngles = new Vector3(0, owner.transform.eulerAngles.y, 0);
+                                            }
+                                            /* ==== \POINT OF INTEREST IS MOUSE POS ==== */
 
-    public override void ExitState(Control owner)
-    {
-
-    }
-
-    public override void UpdateState(Control owner)
-    {
-        /* ==== POINT OF INTEREST IS MOUSE POS ==== */
-        Vector2 mousePos = Input.mousePosition;
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 100f, owner.groundMask))
-        {
-            owner.transform.LookAt(hit.point);
+            owner.transform.LookAt(owner.pointOfInterest);
             owner.transform.eulerAngles = new Vector3(0, owner.transform.eulerAngles.y, 0);
-        }
-        /* ==== \POINT OF INTEREST IS MOUSE POS ==== */
 
+            float x = owner.input.x;
+            float z = owner.input.y;
+
+            Vector3 move = owner.transform.forward * z;
+            move += owner.transform.right * x;
+
+            owner.controller.Move(move * owner.speed * Time.deltaTime);
+        }
+        else {
+            owner.stateMachine.ChangeState(new GeneralMovementState());
+        }
+    }
+}
+
+public class DashMovementState : State<Control> {
+    Vector3 dashDirection;
+    public override void EnterState(Control owner) {
+        timer = new Timer(dashTime);
+        lagTimer = new Timer(dashLag);
         float x = owner.input.x;
         float z = owner.input.y;
 
-        Vector3 move = owner.transform.forward * z;
-        move += owner.transform.right * x;
+        dashDirection += Camera.main.transform.right * x;
+        dashDirection += Camera.main.transform.forward * z;
+        if (dashDirection == Vector3.zero)
+            dashDirection = owner.transform.forward;
+    }
 
-        owner.controller.Move(move * owner.speed * Time.deltaTime);
+    public override void ExitState(Control owner) {
+
+    }
+    //både det och cooldown
+    float dashTime = 0.25f;
+    float dashLag = 0.15f;
+    float dashSpeed = 10.0f;
+    Timer timer, lagTimer;
+    public override void UpdateState(Control owner) {
+        Debug.Log("Dash Timer: " + timer);
+        if (timer.Expired()) {
+            lagTimer.Time += Time.deltaTime;
+            if (lagTimer.Expired())
+                owner.stateMachine.ChangeState(new IdleMovementState());
+        }
+        else {
+            timer.Time += Time.deltaTime;
+            owner.controller.Move(dashDirection * dashSpeed * Time.deltaTime);
+        }
     }
 }
