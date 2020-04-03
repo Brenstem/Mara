@@ -45,7 +45,7 @@ public class Control : MonoBehaviour
         playerInput.PlayerControls.Jump.performed += ctx => jumped = true;
     }
 
-    StateMachine<Control> stateMachine;
+    public StateMachine<Control> stateMachine;
 
     float zRotation;
     [SerializeField] public float rotationSpeed;
@@ -84,7 +84,7 @@ public class Control : MonoBehaviour
     }
 }
 
-public class Idle : State<Control>
+public class IdleMovementState : State<Control>
 {
     public override void EnterState(Control owner)
     {
@@ -97,9 +97,9 @@ public class Idle : State<Control>
     }
 
     float zRotation;
-    public override void UpdateState(Control owner)
-    {
-
+    public override void UpdateState(Control owner) {
+        if (owner.input != Vector2.zero)
+            owner.stateMachine.ChangeState(new GeneralMovementState());
     }
 }
 
@@ -120,12 +120,18 @@ public class GeneralMovementState : State<Control>
     {
         float x = owner.input.x;
         float z = owner.input.y;
-
+        if (owner.input == Vector2.zero)
+            owner.stateMachine.ChangeState(new IdleMovementState());
         if (true) // start moving from standing still
         {
-            Vector3 cameraDirection = Camera.main.transform.forward;
+            Vector3 cameraForward = Camera.main.transform.forward;
+            Vector3 movementDirection = new Vector3();
+            movementDirection += Camera.main.transform.right * x;
+            movementDirection += Camera.main.transform.forward * z;
 
-            Vector3 newDirection = Vector3.RotateTowards(owner.transform.forward, cameraDirection, owner.turnSpeed * Time.deltaTime, 0.0f);
+            Vector3 newDirection = Vector3.RotateTowards(owner.transform.forward, movementDirection, owner.turnSpeed * Time.deltaTime, 0.0f);
+
+            //Vector3 newDirection = Vector3.RotateTowards(owner.transform.forward, cameraForward, owner.turnSpeed * Time.deltaTime, 0.0f);
 
             Debug.DrawRay(owner.transform.position, newDirection, Color.red);
             
@@ -143,7 +149,7 @@ public class GeneralMovementState : State<Control>
             owner.transform.eulerAngles = new Vector3(0, owner.transform.eulerAngles.y, 0);
         }
 
-        Vector3 move = owner.transform.forward * z;
+        Vector3 move = owner.transform.forward;
         //zRotation += owner.rotationSpeed * x * Time.deltaTime; // smoothing för polish
 
         //owner.transform.eulerAngles = new Vector3(0, zRotation, 0);
