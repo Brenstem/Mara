@@ -5,18 +5,34 @@ using UnityEngine;
 public class PlayerInsanity : MonoBehaviour
 {
     [SerializeField]
-    public float maxInsanity;
+    private InsanityBar InsanityBar;
+
+    [SerializeField]
+    private float maxInsanity;
 
     private float currentInsanity;
 
-    void Awake()
+    private void Start()
     {
-        // currentInsanity = maxInsanity;
+        InsanityBar.SetInsanity(currentInsanity);
     }
 
     private void Update()
     {
         print(currentInsanity);
+    }
+
+    public void SetMaxInsanity(float amount)
+    {
+        maxInsanity = amount;
+        InsanityBar.SetMaxInsanity(maxInsanity);
+    }
+
+    public void IncrementMaxInsanity(float amount)
+    {
+        maxInsanity += amount;
+        InsanityBar.SetMaxInsanity(maxInsanity);
+
     }
 
     // Sets insanity based on parameters
@@ -34,6 +50,8 @@ public class PlayerInsanity : MonoBehaviour
         {
             currentInsanity = amount;
         }
+
+        InsanityBar.SetInsanity(currentInsanity);
     }
 
     // Increments insanity based on parameters
@@ -51,5 +69,7 @@ public class PlayerInsanity : MonoBehaviour
         {
             currentInsanity += amount;
         }
+
+        InsanityBar.SetInsanity(currentInsanity);
     }
 }

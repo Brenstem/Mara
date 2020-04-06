@@ -20,5 +20,10 @@ public class EnemyTesting : MonoBehaviour
         {
             player.IncrementInsanity(damageAmount);
         }
+
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            player.SetMaxInsanity(120);
+        }
     }
 }
