@@ -19,7 +19,7 @@ public class PlayerInsanity : MonoBehaviour
 
     private void Update()
     {
-        print(currentInsanity);
+        
     }
 
     public float GetInsanity()
@@ -56,6 +56,8 @@ public class PlayerInsanity : MonoBehaviour
             currentInsanity = amount;
         }
 
+        ActivateBuffs();
+
         InsanityBar.SetInsanity(currentInsanity);
     }
 
@@ -75,6 +77,33 @@ public class PlayerInsanity : MonoBehaviour
             currentInsanity += amount;
         }
 
+        ActivateBuffs();
         InsanityBar.SetInsanity(currentInsanity);
+    }
+
+    public void ActivateBuffs()
+    {
+        // print("static: " + currentInsanity);
+        
+
+        // Static based buffs
+        switch (currentInsanity)
+        {
+            case 10:
+                print("meme");
+                break;
+        }
+
+        // Percentage based debuffs
+        float currentInsanityPercentage = currentInsanity / maxInsanity * 100;
+
+        print("dynamic: " + currentInsanityPercentage);
+
+        switch (currentInsanityPercentage)
+        {
+            case 10:
+                print("meme but in percent");
+                break;
+        }
     }
 }
