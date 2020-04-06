@@ -22,6 +22,11 @@ public class PlayerInsanity : MonoBehaviour
         print(currentInsanity);
     }
 
+    public float GetInsanity()
+    {
+        return currentInsanity;
+    }
+
     public void SetMaxInsanity(float amount)
     {
         maxInsanity = amount;
