@@ -23,7 +23,7 @@ public class MimicController : MonoBehaviour
     [SerializeField] public LayerMask targetLayers;
 
     [SerializeField] public bool cyclePathing;
-    [SerializeField] public Vector3[] pathingPoints;
+    [SerializeField] public Vector3[] idlePathingPoints;
 
 
     [NonSerialized] public Vector3 idlePosition;
@@ -51,11 +51,10 @@ public class MimicController : MonoBehaviour
 
     void Update()
     {
-        //agent.SetDestination(new Vector3(10,0,10));
         stateMachine.Update();
     }
 
-    //Körs när fiender ska vända sig mot spelaren
+    //vänder monstret mot spelaren
     public void FacePlayer()
     {
         Vector3 direction = (target.transform.position - this.transform.position).normalized;
@@ -71,11 +70,11 @@ public class MimicController : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, unaggroRange);
 
         Gizmos.color = Color.blue;
-        if (pathingPoints.Length > 1)
+        if (idlePathingPoints.Length > 1)
         {
-            for (int i = 0; i < pathingPoints.Length-1; i++)
+            for (int i = 0; i < idlePathingPoints.Length-1; i++)
             {
-                Gizmos.DrawLine(pathingPoints[i], pathingPoints[i + 1]);
+                Gizmos.DrawLine(idlePathingPoints[i], idlePathingPoints[i + 1]);
             }
         }
     }
@@ -85,8 +84,8 @@ public class MimicController : MonoBehaviour
 //State classer
 public class IdleState : State<MimicController>
 {
-    RaycastHit hit;
-    private int pathingIndex = 0;
+    private RaycastHit _hit;
+    private int _pathingIndex = 0;
 
     public override void EnterState(MimicController owner)
     {
@@ -94,35 +93,36 @@ public class IdleState : State<MimicController>
 
     public override void ExitState(MimicController owner)
     {
+        //sparar positionen AIn va på när den går ut idle
         owner.idlePosition = owner.transform.position;
     }
 
     public override void UpdateState(MimicController owner)
     {
         //idle pathing
-        if (owner.pathingPoints.Length > 1)
+        if (owner.idlePathingPoints.Length > 1)
         {
-            if (owner.agent.stoppingDistance > Vector3.Distance(owner.transform.position, owner.pathingPoints[pathingIndex]))
+            if (owner.agent.stoppingDistance > Vector3.Distance(owner.transform.position, owner.idlePathingPoints[_pathingIndex]))
             {
                 if (!owner.cyclePathing)
                 {
-                    if (pathingIndex == owner.pathingPoints.Length - 1)
+                    if (_pathingIndex == owner.idlePathingPoints.Length - 1)
                     {
-                        System.Array.Reverse(owner.pathingPoints);
+                        System.Array.Reverse(owner.idlePathingPoints);
                     }
                 }
-                pathingIndex = (pathingIndex + 1) % owner.pathingPoints.Length;
+                _pathingIndex = (_pathingIndex + 1) % owner.idlePathingPoints.Length;
             }
-            owner.agent.SetDestination(owner.pathingPoints[pathingIndex]);
+            //flyttar monstret mot nästa position i positions arrayen
+            owner.agent.SetDestination(owner.idlePathingPoints[_pathingIndex]);
         }
 
         //aggro detection
         if (owner.aggroRange > Vector3.Distance(owner.target.transform.position, owner.transform.position))
         {
-            if (Physics.Raycast(owner.transform.position + new Vector3(0, 1, 0), (owner.target.transform.position - owner.transform.position).normalized, out hit, owner.aggroRange, owner.targetLayers))
+            if (Physics.Raycast(owner.transform.position + new Vector3(0, 1, 0), (owner.target.transform.position - owner.transform.position).normalized, out _hit, owner.aggroRange, owner.targetLayers))
             {
-                //Debug.Log(hit.collider.gameObject.name);
-                if (hit.transform == owner.target.transform)
+                if (_hit.transform == owner.target.transform)
                 {
                     owner.stateMachine.ChangeState(owner.chasingState);
                 }
@@ -143,6 +143,7 @@ public class ChasingState : State<MimicController>
 
     public override void UpdateState(MimicController owner)
     {
+        //flyttar monstret mot spelaren
         owner.agent.SetDestination(owner.target.transform.position);
         
         if (owner.unaggroRange < Vector3.Distance(owner.target.transform.position, owner.transform.position))
@@ -184,7 +185,7 @@ public class AttackingState : State<MimicController>
 
 public class ReturnToIdlePosState : State<MimicController>
 {
-    RaycastHit hit;
+    private RaycastHit _hit;
 
     public override void EnterState(MimicController owner)
     {
@@ -196,16 +197,15 @@ public class ReturnToIdlePosState : State<MimicController>
 
     public override void UpdateState(MimicController owner)
     {
-
+        //flyttar monstret mot positionen den va på när den gick ur idle
         owner.agent.SetDestination(owner.idlePosition);
 
         //aggro detection
         if (owner.aggroRange > Vector3.Distance(owner.target.transform.position, owner.transform.position))
         {
-            if (Physics.Raycast(owner.transform.position + new Vector3(0, 1, 0), (owner.target.transform.position - owner.transform.position).normalized, out hit, owner.aggroRange, owner.targetLayers))
+            if (Physics.Raycast(owner.transform.position + new Vector3(0, 1, 0), (owner.target.transform.position - owner.transform.position).normalized, out _hit, owner.aggroRange, owner.targetLayers))
             {
-                //Debug.Log(hit.collider.gameObject.name);
-                if (hit.transform == owner.target.transform)
+                if (_hit.transform == owner.target.transform)
                 {
                     owner.stateMachine.ChangeState(owner.chasingState);
                 }
