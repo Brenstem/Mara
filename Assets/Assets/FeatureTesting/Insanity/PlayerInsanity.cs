@@ -17,14 +17,14 @@ public class PlayerInsanity : MonoBehaviour
         InsanityBar.SetInsanity(_currentInsanity);
     }
 
-    private void Update()
-    {
-        
-    }
-
     public float GetInsanity()
     {
         return _currentInsanity;
+    }
+
+    public float GetInsanityPercentage()
+    {
+        return _currentInsanity / maxInsanity * 100; 
     }
 
     public void SetMaxInsanity(float amount)
