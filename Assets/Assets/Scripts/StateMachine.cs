@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class StateMachine<T> {
     public State<T> currentState { get; private set; }
+    public State<T> previousState { get; private set; }
 
     /// <summary>
     /// The owner of the script. Used to by the states to access the owner's components.
@@ -30,6 +31,7 @@ public class StateMachine<T> {
     private void RemoveState() {
         if (currentState != null) {
             currentState.ExitState(owner);
+            previousState = currentState;
             currentState = null;
         }
     }
