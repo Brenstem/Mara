@@ -10,11 +10,11 @@ public class PlayerInsanity : MonoBehaviour
     [SerializeField]
     private float maxInsanity;
 
-    private float currentInsanity;
+    private float _currentInsanity;
 
     private void Start()
     {
-        InsanityBar.SetInsanity(currentInsanity);
+        InsanityBar.SetInsanity(_currentInsanity);
     }
 
     private void Update()
@@ -24,7 +24,7 @@ public class PlayerInsanity : MonoBehaviour
 
     public float GetInsanity()
     {
-        return currentInsanity;
+        return _currentInsanity;
     }
 
     public void SetMaxInsanity(float amount)
@@ -45,40 +45,40 @@ public class PlayerInsanity : MonoBehaviour
     {
         if (amount > maxInsanity)
         {
-            currentInsanity = maxInsanity;
+            _currentInsanity = maxInsanity;
         }
         else if (amount < 0)
         {
-            currentInsanity = 0;
+            _currentInsanity = 0;
         }
         else
         {
-            currentInsanity = amount;
+            _currentInsanity = amount;
         }
 
         ActivateBuffs();
 
-        InsanityBar.SetInsanity(currentInsanity);
+        InsanityBar.SetInsanity(_currentInsanity);
     }
 
     // Increments insanity based on parameters
     public void IncrementInsanity(float amount)
     {
-        if (amount + currentInsanity > maxInsanity)
+        if (amount + _currentInsanity > maxInsanity)
         {
-            currentInsanity = maxInsanity;
+            _currentInsanity = maxInsanity;
         }
-        else if (amount + currentInsanity < 0)
+        else if (amount + _currentInsanity < 0)
         {
-            currentInsanity = 0;
+            _currentInsanity = 0;
         }
         else
         {
-            currentInsanity += amount;
+            _currentInsanity += amount;
         }
 
         ActivateBuffs();
-        InsanityBar.SetInsanity(currentInsanity);
+        InsanityBar.SetInsanity(_currentInsanity);
     }
 
     public void ActivateBuffs()
@@ -87,7 +87,7 @@ public class PlayerInsanity : MonoBehaviour
         
 
         // Static based buffs
-        switch (currentInsanity)
+        switch (_currentInsanity)
         {
             case 10:
                 print("meme");
@@ -95,7 +95,7 @@ public class PlayerInsanity : MonoBehaviour
         }
 
         // Percentage based debuffs
-        float currentInsanityPercentage = currentInsanity / maxInsanity * 100;
+        float currentInsanityPercentage = _currentInsanity / maxInsanity * 100;
 
         print("dynamic: " + currentInsanityPercentage);
 
