@@ -4,17 +4,26 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
-    //[SerializeField]
-    //private HealthBar InsanityBar;
+    [SerializeField]
+    private GameObject healthBarPrefab;
 
     [SerializeField]
     private float maxHealth;
 
+    private TrackingHealthBar _healthBar;
     private float _currentHealth;
+
+    private void Awake()
+    {
+        Instantiate(healthBarPrefab, this.transform);
+    }
 
     private void Start()
     {
-        //HealthBar.SetHealth(currentHealth);
+        _healthBar = healthBarPrefab.GetComponentInChildren<TrackingHealthBar>();
+        _currentHealth = maxHealth;
+        _healthBar.SetMaxValue(maxHealth);
+        _healthBar.SetValue(_currentHealth);
     }
 
     public float GetHealth()
@@ -25,13 +34,13 @@ public class EnemyHealth : MonoBehaviour
     public void SetMaxHealth(float amount)
     {
         maxHealth = amount;
-        //HealthBar.SetMaxHealth(maxHealth);
+        _healthBar.SetMaxValue(maxHealth);
     }
 
     public void IncrementMaxHealth(float amount)
     {
         maxHealth += amount;
-        //HealthBar.SetMaxHealth(maxHealth);
+        _healthBar.SetMaxValue(maxHealth);
 
     }
 
@@ -51,7 +60,7 @@ public class EnemyHealth : MonoBehaviour
             _currentHealth = amount;
         }
 
-        //HealthBar.SetHealth(currentHealth);
+        _healthBar.SetValue(_currentHealth);
     }
 
     // Increments Health based on parameters
@@ -70,6 +79,6 @@ public class EnemyHealth : MonoBehaviour
             _currentHealth += amount;
         }
 
-        //HealthBar.SetHealth(currentHealth);
+        _healthBar.SetValue(_currentHealth);
     }
 }
