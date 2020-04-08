@@ -736,33 +736,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e605b4e819afc34e9009a4ac2acca1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pointOfInterest: {fileID: 0}
-  freeLookCam: {fileID: 2097666166}
-  lockonCam: {fileID: 267481726}
-  controller: {fileID: 565017978}
+  lockCursor: 1
+  _gravity: -9.82
+  _jumpHeight: 3
   maxSpeed: 5
   acceleration: 8
   deceleration: 2
-  gravity: -9.82
-  jumpHeight: 0.2
-  groundCheck: {fileID: 778052926}
-  groundDistance: 0.4
+  rotationSpeed: 15
+  rotationAngleUntilMove: 30
+  dashTime: 0.25
+  dashLag: 0.15
+  dashSpeed: 10
+  mainCamera: {fileID: 0}
+  controller: {fileID: 565017978}
+  _groundCheckPosition: {fileID: 778052926}
+  _freeLookCam: {fileID: 2097666166}
+  _lockonCam: {fileID: 267481726}
   groundMask:
     serializedVersion: 2
     m_Bits: 256
   enemyMask:
     serializedVersion: 2
     m_Bits: 512
-  _velocity: {x: 0, y: 0, z: 0}
+  _groundDistance: 0.4
+  _lockOnOffset: {x: 0, y: 0.75, z: 0}
+  _lockOnRadius: 2
+  _lockOnMaxDistance: 2.88
   input: {x: 0, y: 0}
-  rotationSpeed: 10
-  t: 0
-  turnSpeed: 6
-  doSnapCamera: 0
-  lockonOffset: {x: 0, y: 1.25, z: 0}
-  lockOnRadius: 0.75
-  currentHitDistance: 0
-  maxDistance: 1.7
+  pointOfInterest: {fileID: 0}
 --- !u!143 &565017978
 CharacterController:
   m_ObjectHideFlags: 0
@@ -1062,13 +1063,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f3ab1a0b417287e47aa808fa60689ecf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 5006512736636807642}
-  offset: {x: 0, y: 0, z: 0}
-  targetOffset: {x: 0, y: 0.5, z: 0}
-  localOffset: {x: 0, y: 0, z: 0}
-  angle: 0
-  radius: 3
-  sensitivity: 1
 --- !u!114 &596135835
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1162,7 +1156,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 842602650}
   m_LocalRotation: {x: 0.1543458, y: -0.68611026, z: 0.1525063, w: 0.694386}
-  m_LocalPosition: {x: -2.9997845, y: 0, z: -2.9640326}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1626641647}
@@ -2793,6 +2787,7 @@ GameObject:
   - component: {fileID: 5006512736636807642}
   - component: {fileID: 565017978}
   - component: {fileID: 8296172667357256650}
+  - component: {fileID: 8296172667357256651}
   - component: {fileID: 565017977}
   m_Layer: 0
   m_Name: BasemeshTest
@@ -2820,6 +2815,46 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &8296172667357256651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8296172667357256649}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5cb0ea6ea425054ba37f580ff46767e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointOfInterest: {fileID: 0}
+  freeLookCam: {fileID: 2097666166}
+  lockonCam: {fileID: 267481726}
+  controller: {fileID: 565017978}
+  maxSpeed: 200
+  acceleration: 20
+  deceleration: 20
+  gravity: -9.82
+  jumpHeight: 0.2
+  groundCheck: {fileID: 778052926}
+  groundDistance: 0.4
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 256
+  enemyMask:
+    serializedVersion: 2
+    m_Bits: 512
+  _velocity: {x: 0, y: 0, z: 0}
+  input: {x: 0, y: 0}
+  rotationSpeed: 5
+  t: 0
+  turnSpeed: 5
+  doSnapCamera: 0
+  direction: {x: 0, y: 0, z: 0}
+  lockonOffset: {x: 0, y: 0.92, z: 0}
+  lockOnRadius: 1.26
+  currentHitDistance: 3
+  maxDistance: 4.08
 --- !u!23 &8409943478807265014
 MeshRenderer:
   m_ObjectHideFlags: 0
