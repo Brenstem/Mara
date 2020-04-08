@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9136159454433031016}
   - component: {fileID: 9136159454433031017}
   - component: {fileID: 9136159454433031022}
-  - component: {fileID: 9136159454433031023}
+  - component: {fileID: -6054785714401296535}
   m_Layer: 12
   m_Name: Test Mimic Monster
   m_TagString: Untagged
@@ -70,7 +70,7 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &9136159454433031023
+--- !u!114 &-6054785714401296535
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -79,17 +79,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 9136159454433031018}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3876db30075dd5d4bb707edf603b57f4, type: 3}
+  m_Script: {fileID: 11500000, guid: 53ec072b23b19dd49a533be208940333, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  aggroRange: 11.27
+  aggroRange: 10
   unaggroRange: 20
   turnSpeed: 5
   targetLayers:
     serializedVersion: 2
     m_Bits: 2359
   cyclePathing: 0
-  pathingPoints: []
+  idlePathingPoints: []
 --- !u!1001 &9136159454789978412
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -162,6 +162,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -1504981713932161579, guid: 2cc94a0cc3495f2468dcc56f0fa17a4f,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 83cd9589d55fd164f94dc873ddcb3b07, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2cc94a0cc3495f2468dcc56f0fa17a4f, type: 3}
 --- !u!4 &4301109515367801398 stripped

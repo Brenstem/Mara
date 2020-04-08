@@ -29,7 +29,7 @@ public class BossAIScript : MonoBehaviour
     public BossPhaseOneState bossPhaseOneState = new BossPhaseOneState();
     public BossPhaseTwoState bossPhaseTwoState = new BossPhaseTwoState();
 
-
+    //galet nog är alla variabler som heter test något, inte planerat att vara permanenta
     [SerializeField] public float testMaxHP = 500f;
     [SerializeField] [Range(0,1)] public float testP2TransitionHP = 0.5f;
 
@@ -48,7 +48,7 @@ public class BossAIScript : MonoBehaviour
 
     //[SerializeField] public State<BossPhaseOneState>[] stateArray;
 
-
+    //borde vara nonserialized men har den som serialized för testning
     /*[NonSerialized]*/ public float testCurrentHP;
 
     [NonSerialized] public GameObject player;

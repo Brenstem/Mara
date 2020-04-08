@@ -575,8 +575,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 596135829}
-  m_LocalRotation: {x: 0.28047818, y: 0.000000025490229, z: -0.0000000074484303, w: 0.95986044}
-  m_LocalPosition: {x: 0.000000001898898, y: 2.7139864, z: -2.59652}
+  m_LocalRotation: {x: 0.28047815, y: -0.000000025490229, z: 0.00000000744843, w: 0.95986044}
+  m_LocalPosition: {x: -0.00000001998354, y: 2.7139864, z: -2.59652}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -869,7 +869,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1002231332
 Transform:
   m_ObjectHideFlags: 0
@@ -988,7 +988,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1018096109}
-  m_LocalRotation: {x: 0.25857574, y: 0.000000008347147, z: -0.0000000023610922, w: 0.965991}
+  m_LocalRotation: {x: 0.25857574, y: -0.000000008274063, z: 0.0000000020880608, w: 0.965991}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1071,7 +1071,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1118123069}
-  m_LocalRotation: {x: 0.2987709, y: 0.000000013070527, z: 0.0000000055595395, w: 0.9543249}
+  m_LocalRotation: {x: 0.29877087, y: -0.000000019770427, z: 0.00000001584107, w: 0.9543249}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1386,7 +1386,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1207810644}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -11.31, y: 2.8851104, z: 10.12}
+  m_LocalPosition: {x: -13.04, y: 2.8851104, z: -16.32}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -1408,6 +1408,10 @@ MonoBehaviour:
     testP1value1: 14.71
     testP1value2: 0
     testP1value3: 0
+  phaseTwoStats:
+    testP2value1: 0
+    testP2value2: 0
+    testP2value3: 0
   testMaxHP: 500
   testP2TransitionHP: 0.5
   testAttackSpeed: 2
@@ -1588,7 +1592,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1610387828}
-  m_LocalRotation: {x: 0.21849225, y: 0.000000008395327, z: -0.0000000018797317, w: 0.9758387}
+  m_LocalRotation: {x: 0.21849225, y: -0.000000008395327, z: 0.0000000018797295, w: 0.9758387}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2213,6 +2217,54 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 0}
+      propertyPath: pathingPoints.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: idlePathingPoints.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: pathingPoints.Array.data[0].z
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: pathingPoints.Array.data[1].z
+      value: 22.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: pathingPoints.Array.data[2].z
+      value: 21.54
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: pathingPoints.Array.data[1].x
+      value: 3.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: pathingPoints.Array.data[2].x
+      value: -4.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: idlePathingPoints.Array.data[0].z
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: idlePathingPoints.Array.data[1].z
+      value: 21.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: idlePathingPoints.Array.data[2].z
+      value: 22.34
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: idlePathingPoints.Array.data[1].x
+      value: 3.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: idlePathingPoints.Array.data[2].x
+      value: -3.5
+      objectReference: {fileID: 0}
     - target: {fileID: 9136159454433031018, guid: b32074eea7d787841b749d218665be7b,
         type: 3}
       propertyPath: m_Name
@@ -2221,7 +2273,7 @@ PrefabInstance:
     - target: {fileID: 9136159454433031018, guid: b32074eea7d787841b749d218665be7b,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9136159454433031016, guid: b32074eea7d787841b749d218665be7b,
         type: 3}
@@ -2278,40 +2330,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9136159454433031023, guid: b32074eea7d787841b749d218665be7b,
+    - target: {fileID: 9136159454433031022, guid: b32074eea7d787841b749d218665be7b,
         type: 3}
-      propertyPath: pathingPoints.Array.size
-      value: 3
+      propertyPath: m_Speed
+      value: 3.07
       objectReference: {fileID: 0}
-    - target: {fileID: 9136159454433031023, guid: b32074eea7d787841b749d218665be7b,
-        type: 3}
-      propertyPath: pathingPoints.Array.data[0].z
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 9136159454433031023, guid: b32074eea7d787841b749d218665be7b,
-        type: 3}
-      propertyPath: pathingPoints.Array.data[1].z
-      value: 22.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 9136159454433031023, guid: b32074eea7d787841b749d218665be7b,
-        type: 3}
-      propertyPath: pathingPoints.Array.data[2].z
-      value: 21.54
-      objectReference: {fileID: 0}
-    - target: {fileID: 9136159454433031023, guid: b32074eea7d787841b749d218665be7b,
-        type: 3}
-      propertyPath: pathingPoints.Array.data[1].x
-      value: 3.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9136159454433031023, guid: b32074eea7d787841b749d218665be7b,
-        type: 3}
-      propertyPath: pathingPoints.Array.data[2].x
-      value: -4.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1573748055558595833, guid: b32074eea7d787841b749d218665be7b,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: 83cd9589d55fd164f94dc873ddcb3b07, type: 2}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 0}
   m_SourcePrefab: {fileID: 100100000, guid: b32074eea7d787841b749d218665be7b, type: 3}
