@@ -5,24 +5,16 @@ using UnityEngine;
 public class EnemyHealth : MonoBehaviour
 {
     [SerializeField]
-    private GameObject healthBarPrefab;
-
-    [SerializeField]
     private float maxHealth;
 
     private TrackingHealthBar _healthBar;
     private float _currentHealth;
 
-    private void Awake()
-    {
-        Instantiate(healthBarPrefab, this.transform);
-    }
-
     private void Start()
     {
-        _healthBar = healthBarPrefab.GetComponentInChildren<TrackingHealthBar>();
-        _currentHealth = maxHealth;
+        _healthBar = GetComponentInChildren<TrackingHealthBar>();
         _healthBar.SetMaxValue(maxHealth);
+        _currentHealth = maxHealth;
         _healthBar.SetValue(_currentHealth);
     }
 
