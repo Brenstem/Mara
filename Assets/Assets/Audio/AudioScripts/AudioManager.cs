@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
+    private PlayerInsanityAudio playerInsanityAudio;
+    private PlayerMovementAudio playerMovementAudio;
 
     private void Awake()
     {
 
     }
     //Player sounds
-    public void PlayerFootStepsAudio()
+    public void PlayerFootStepsAudio(Transform obj)
     {
+        playerMovementAudio.AudioPlayerFootsteps(obj.tag); // betyder att den utgår från objektets tag istället för name
 
     }
 
@@ -28,6 +31,11 @@ public class AudioManager : MonoBehaviour
     public void PlayerJumpAudio()
     {
 
+    }
+
+    public void PlayerInsanityAudio()
+    {
+        playerInsanityAudio.PlayerInsanity(); // spelar upp ljudet
     }
 
     //Enemy sounds
