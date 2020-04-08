@@ -44,12 +44,10 @@ public class TrackingHealthBar : MonoBehaviour
     public void SetValue(float amount)
     {
         Slider.value = amount;
-        print("value " + Slider.value);
     }
 
     public void SetMaxValue(float amount)
     {
-        print("amount " + amount);
         Slider.maxValue = amount;
         Transform.sizeDelta = new Vector2(amount, 10);
     }
