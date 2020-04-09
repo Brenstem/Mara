@@ -5,28 +5,66 @@ using UnityEngine;
 public class animController : MonoBehaviour
 {
 
+    [SerializeField] float radius;
+    [SerializeField] float _dashAttackSpeed;
+
     Animator anim;
+    CharacterController characterController;
+    Control control;
+    FindTargets TargetFinder;
 
+    private bool temp;
+    private Vector3 direction ;
 
-    // Start is called before the first frame update
-    void Start()
+    GameObject target;
+    private void Awake()
     {
         anim = GetComponent<Animator>();
+        characterController = GetComponent<CharacterController>();
+        control = GetComponent<Control>();
+        TargetFinder = GetComponent<FindTargets>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
             
+            anim.SetTrigger("Attack");
+            target = TargetFinder.FindTarget();
+
+
+            if (target != null)
+            {
+                FaceEnemy();
+            }
+        }
+
+        if (temp)
+        {
+            if (radius > Vector3.Distance(target.transform.position, this.transform.position))
+            {
+                print("abcdefg");
+                temp = false;
+                control.enabled = true;
+            }
+            else
+            {
+                characterController.Move(new Vector3(direction.normalized.x, 0, direction.normalized.z) * _dashAttackSpeed * Time.deltaTime);           
+            }
         }
     }
 
-    public void FaceAndDash()
+    public void FaceEnemy()
     {
-        Vector3 direction = (target.transform.position - this.transform.position);
+
+        direction = (target.transform.position - this.transform.position);
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-        this.transform.rotation = Quaternion.Slerp(this.transform.rotation, lookRotation, Time.deltaTime * 100f);
+        this.transform.rotation = lookRotation;
+        if (radius < direction.magnitude)
+        {
+            temp = true;
+            control.enabled = false;
+        }
     }
 }

@@ -2,33 +2,44 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class findTargets : MonoBehaviour
+public class FindTargets : MonoBehaviour
 {
-    [SerializeField] float _radius;
-    LayerMask targets;
+    [SerializeField] float _trackRadius;
+    [SerializeField] float _playerAngle;
 
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] LayerMask targets;
+
+   
+
+    public GameObject FindTarget()
     {
-        
-    }
+        Collider[] toHit = Physics.OverlapSphere(transform.position, _trackRadius, targets);
+        GameObject targetToHit = null;
+        float temp = Mathf.Infinity;
+        Vector3 playerRotation = transform.forward;
 
-    // Update is called once per frame
-    void Update()
-    {
-        Collider[] toHit = Physics.OverlapSphere(transform.position, _radius, targets);
-    }
+        foreach (Collider target in toHit)
+        {
+            if (temp > Vector3.Distance(transform.position, target.transform.position))
+            {
+                temp = Vector3.Distance(transform.position, target.transform.position);
+                Vector3 targetRotation = target.transform.position - transform.position;
 
-    private GameObject FindTarget()
-    {
-
-
+                if ( _playerAngle*Mathf.Deg2Rad > Mathf.Acos((Vector3.Dot(playerRotation, targetRotation)) / (playerRotation.magnitude * targetRotation.magnitude)))
+                {
+                    //print("Hello");
+                    targetToHit = target.gameObject;
+                }
+            }
+        }
         return targetToHit;
     }
 
-
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, _radius);
+        Gizmos.DrawWireSphere(transform.position, _trackRadius);
     }
 }
+
+//Mathf.Acos((Vector3.Dot(playerRotation, targetRotation)) / (playerRotation.magnitude* targetRotation.magnitude))
+//Vector3.Angle(transform.forward, new Vector3(target.transform.rotation.x, 0, target.transform.rotation.z))
