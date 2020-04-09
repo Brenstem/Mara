@@ -4,15 +4,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+[RequireComponent(typeof(NavMeshAgent))]
 
-public class MimicController : MonoBehaviour
+public class BaseAIMovementController : MonoBehaviour
 {
-    public StateMachine<MimicController> stateMachine;
+    public StateMachine<BaseAIMovementController> stateMachine;
 
-    public IdleState idleState = new IdleState();
-    public ChasingState chasingState = new ChasingState();
-    public AttackingState attackingState = new AttackingState();
-    public ReturnToIdlePosState returnToIdlePosState  = new ReturnToIdlePosState();
+    public EnemyBasicIdleState idleState = new EnemyBasicIdleState();
+    public EnemyBasicChasingState chasingState = new EnemyBasicChasingState();
+    public EnemyBasicAttackingState attackingState = new EnemyBasicAttackingState();
+    public EnemyBasicReturnToIdlePosState returnToIdlePosState  = new EnemyBasicReturnToIdlePosState();
 
 
     [SerializeField] public float aggroRange = 10f;
@@ -31,10 +32,10 @@ public class MimicController : MonoBehaviour
     [NonSerialized] public GameObject target;
     [NonSerialized] public NavMeshAgent agent;
 
-    void Awake()
+    virtual protected void Awake()
     {
         idlePosition = this.transform.position;
-        stateMachine = new StateMachine<MimicController>(this);
+        stateMachine = new StateMachine<BaseAIMovementController>(this);
 
         agent = GetComponent<NavMeshAgent>();
 
@@ -43,26 +44,26 @@ public class MimicController : MonoBehaviour
     }
 
 
-    void Start()
+    virtual protected void Start()
     {
         stateMachine.ChangeState(idleState);
     }
 
 
-    void Update()
+    virtual protected void Update()
     {
         stateMachine.Update();
     }
 
     //vänder monstret mot spelaren
-    public void FacePlayer()
+    virtual public void FacePlayer()
     {
         Vector3 direction = (target.transform.position - this.transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         this.transform.rotation = Quaternion.Slerp(this.transform.rotation, lookRotation, Time.deltaTime * turnSpeed);
     }
 
-    void OnDrawGizmosSelected()
+    virtual protected void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, aggroRange);
@@ -82,22 +83,22 @@ public class MimicController : MonoBehaviour
 
 
 //State classer
-public class IdleState : State<MimicController>
+public class EnemyBasicIdleState : State<BaseAIMovementController>
 {
     private RaycastHit _hit;
     private int _pathingIndex = 0;
 
-    public override void EnterState(MimicController owner)
+    public override void EnterState(BaseAIMovementController owner)
     {
     }
 
-    public override void ExitState(MimicController owner)
+    public override void ExitState(BaseAIMovementController owner)
     {
         //sparar positionen AIn va på när den går ut idle
         owner.idlePosition = owner.transform.position;
     }
 
-    public override void UpdateState(MimicController owner)
+    public override void UpdateState(BaseAIMovementController owner)
     {
         //idle pathing
         if (owner.idlePathingPoints.Length > 1)
@@ -131,17 +132,17 @@ public class IdleState : State<MimicController>
     }
 }
 
-public class ChasingState : State<MimicController>
+public class EnemyBasicChasingState : State<BaseAIMovementController>
 {
-    public override void EnterState(MimicController owner)
+    public override void EnterState(BaseAIMovementController owner)
     {
     }
 
-    public override void ExitState(MimicController owner)
+    public override void ExitState(BaseAIMovementController owner)
     {
     }
 
-    public override void UpdateState(MimicController owner)
+    public override void UpdateState(BaseAIMovementController owner)
     {
         //flyttar monstret mot spelaren
         owner.agent.SetDestination(owner.target.transform.position);
@@ -160,17 +161,17 @@ public class ChasingState : State<MimicController>
 }
 
 //kommer antagligen få fixa olika states beroende på attacken men de lär se ut ungefär såhär
-public class AttackingState : State<MimicController>
+public class EnemyBasicAttackingState : State<BaseAIMovementController>
 {
-    public override void EnterState(MimicController owner)
+    public override void EnterState(BaseAIMovementController owner)
     {
     }
 
-    public override void ExitState(MimicController owner)
+    public override void ExitState(BaseAIMovementController owner)
     {
     }
 
-    public override void UpdateState(MimicController owner)
+    public override void UpdateState(BaseAIMovementController owner)
     {
         //lägg in attack metod här
 
@@ -183,19 +184,19 @@ public class AttackingState : State<MimicController>
     }
 }
 
-public class ReturnToIdlePosState : State<MimicController>
+public class EnemyBasicReturnToIdlePosState : State<BaseAIMovementController>
 {
     private RaycastHit _hit;
 
-    public override void EnterState(MimicController owner)
+    public override void EnterState(BaseAIMovementController owner)
     {
     }
 
-    public override void ExitState(MimicController owner)
+    public override void ExitState(BaseAIMovementController owner)
     {
     }
 
-    public override void UpdateState(MimicController owner)
+    public override void UpdateState(BaseAIMovementController owner)
     {
         //flyttar monstret mot positionen den va på när den gick ur idle
         owner.agent.SetDestination(owner.idlePosition);
