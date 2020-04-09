@@ -17,7 +17,7 @@ public class PlayerInsanity : MonoBehaviour
     [Tooltip("Add the static and dynamic values for each insanity tier here. Do not change the array size!")]
     [SerializeField] int[] staticInsanityValues;
 
-    [SerializeField] int[] dynamicInsanityValuesnew;
+    [SerializeField] int[] dynamicInsanityValues;
 
     // TODO Add event support for insanity tiers
     private UnityEngine.Events.UnityEvent tutorialDebuff;
@@ -123,29 +123,29 @@ public class PlayerInsanity : MonoBehaviour
                 break;
             case float n when (n > staticInsanityValues[5]):
                 Debug.Log("<color=red>Monsters static</color>");
-                monsters.Invoke();
+                //monsters.Invoke();
                 break;
             case float n when (n > staticInsanityValues[4]):
                 Debug.Log("<color=red>Shadow clone static</color>");
-                shadowClone.Invoke();
+                //shadowClone.Invoke();
                 break;
             case float n when (n > staticInsanityValues[3]):
                 Debug.Log("<color=red>Hallucination static</color>");
-                hallucination.Invoke();
+                //hallucination.Invoke();
                 break;
             case float n when (n > staticInsanityValues[2]):
                 Debug.Log("<color=red>slow static</color>");
-                slow.Invoke();
+                //slow.Invoke();
 
                 break;
             case float n when (n > staticInsanityValues[1]):
                 Debug.Log("<color=red>Paranoia static</color>");
-                paranoia.Invoke();
+                //paranoia.Invoke();
 
                 break;
             case float n when (n > staticInsanityValues[0]):
                 Debug.Log("<color=red>Tutorial debuff static</color>");
-                tutorialDebuff.Invoke();
+                //tutorialDebuff.Invoke();
                 break;
         }
 
@@ -154,32 +154,32 @@ public class PlayerInsanity : MonoBehaviour
 
         switch (currentInsanityPercentage)
         {
-            case float n when (n > dynamicInsanityValuesnew[6]):
+            case float n when (n > dynamicInsanityValues[6]):
                 Debug.Log("<color=red>Impending doom</color>");
                 break;
-            case float n when (n > dynamicInsanityValuesnew[5]):
+            case float n when (n > dynamicInsanityValues[5]):
                 Debug.Log("<color=red>Monsters</color>");
-                monsters.Invoke();
+                //monsters.Invoke();
                 break;
-            case float n when (n > dynamicInsanityValuesnew[4]):
+            case float n when (n > dynamicInsanityValues[4]):
                 Debug.Log("<color=red>Shadow clone</color>");
-                shadowClone.Invoke();
+                //shadowClone.Invoke();
                 break;
-            case float n when (n > dynamicInsanityValuesnew[3]):
+            case float n when (n > dynamicInsanityValues[3]):
                 Debug.Log("<color=red>Hallucination</color>");
-                hallucination.Invoke();
+                //hallucination.Invoke();
                 break;
-            case float n when (n > dynamicInsanityValuesnew[2]):
+            case float n when (n > dynamicInsanityValues[2]):
                 Debug.Log("<color=red>slow</color>");
-                slow.Invoke();
+                //slow.Invoke();
                 break;
-            case float n when (n > dynamicInsanityValuesnew[1]):
+            case float n when (n > dynamicInsanityValues[1]):
                 Debug.Log("<color=red>Paranoia</color>");
-                paranoia.Invoke();
+                //paranoia.Invoke();
                 break;
-            case float n when (n > dynamicInsanityValuesnew[0]):
+            case float n when (n > dynamicInsanityValues[0]):
                 Debug.Log("<color=red>Tutorial debuff</color>");
-                tutorialDebuff.Invoke();
+                //tutorialDebuff.Invoke();
                 break;
         }
     }

@@ -61,9 +61,10 @@ public class EnemyHealth : MonoBehaviour
         {
             _currentHealth = maxHealth;
         }
-        else if (amount + _currentHealth < 0)
+        else if (amount + _currentHealth <= 0)
         {
             _currentHealth = 0;
+            KillEnemy();
         }
         else
         {
@@ -71,5 +72,9 @@ public class EnemyHealth : MonoBehaviour
         }
 
         _healthBar.SetValue(_currentHealth);
+    }
+    private void KillEnemy()
+    {
+        Destroy(this.gameObject);
     }
 }
