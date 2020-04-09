@@ -22,7 +22,6 @@ public class CameraManager : MonoBehaviour { // https://forum.unity.com/threads/
         _lookDelta = _defaultcontrols.PlayerControls.Look.ReadValue<Vector2>();
         if (_defaultcontrols.PlayerControls.Look.activeControl != null) {
             string controls = _defaultcontrols.PlayerControls.Look.activeControl.device.name;
-            print(controls);
             if (controls != "Mouse") { // Checks if the input device is a mouse
                 CinemachineCore.GetInputAxis = GetAxisCustom;
             }
