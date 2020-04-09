@@ -18,7 +18,7 @@ public class CameraManager : MonoBehaviour { // https://forum.unity.com/threads/
 
     public float GetAxisCustom(string axisName) {
         _lookDelta = _defaultcontrols.PlayerControls.Look.ReadValue<Vector2>();
-        _lookDelta.Normalize();
+        //_lookDelta.Normalize();
 
         if (axisName == "Mouse X") {
             return _lookDelta.x;

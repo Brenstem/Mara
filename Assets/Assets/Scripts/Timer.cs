@@ -47,13 +47,10 @@ public class Timer {
     public Timer(Timer timer) {
         _time = timer._time;
         _duration = timer._duration;
-<<<<<<< HEAD:Assets/Assets/Player/Prototyping/Timer.cs
-=======
     }
 
     public override string ToString() {
         string s = "Time: " + _time + ", Time left: " + (Duration - _time) + ", Ratio: " + Ratio();
         return s;
->>>>>>> movement:Assets/Assets/Scripts/Timer.cs
     }
 }

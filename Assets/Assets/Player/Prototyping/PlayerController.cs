@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour {
     /* === DEBUG === */
     [Header("Debug")]
     [SerializeField] private bool lockCursor = true;
+    [SerializeField] private Transform lockOnTarget;
 
     /* === STATS === */
     [Header("Character properties")]
@@ -141,7 +142,10 @@ public class PlayerController : MonoBehaviour {
 
     private void OnDisable() { _playerInput.Disable(); }
 
-
+    private void OnValidate() {
+        pointOfInterest = lockOnTarget;
+        lockon = true;
+    }
     /// <summary>
     /// Snaps camera after returning to free look camera
     /// </summary>
