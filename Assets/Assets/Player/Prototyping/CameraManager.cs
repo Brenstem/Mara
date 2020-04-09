@@ -31,13 +31,20 @@ public class CameraManager : MonoBehaviour { // https://forum.unity.com/threads/
         }
     }
 
-    public float GetAxisCustom(string axisName) {
+    private void Update()
+    {
         _lookDelta = _defaultcontrols.PlayerControls.Look.ReadValue<Vector2>();
 
-        if (axisName == "Mouse X") {
+    public float GetAxisCustom(string axisName)
+    {
+        _lookDelta = _defaultcontrols.PlayerControls.Look.ReadValue<Vector2>();
+
+        if (axisName == "Mouse X")
+        {
             return _lookDelta.x;
         }
-        else if (axisName == "Mouse Y") {
+        else if (axisName == "Mouse Y")
+        {
             return _lookDelta.y;
         }
         return 0;
