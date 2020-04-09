@@ -26,10 +26,11 @@ public class PlayerController : MonoBehaviour {
     /* === HIDDEN REFERENCES === */
     [HideInInspector] public Camera mainCamera;
     [HideInInspector] public CharacterController controller;
-    private Animator animator;
+    private Animator _cameraAnimator;
 
     /* === PUBLIC REFERENCES === */
     [Header("References")]
+    public Animator playerAnimator;
     [SerializeField] private Transform _groundCheckPosition;
     [SerializeField] private Cinemachine.CinemachineFreeLook _freeLookCam;
     [SerializeField] private Cinemachine.CinemachineFreeLook _lockonCam;
@@ -77,7 +78,7 @@ public class PlayerController : MonoBehaviour {
         set {
             if (pointOfInterest != null) {
                 if (value) {
-                    animator.SetBool("lockedOn", true);
+                    _cameraAnimator.SetBool("lockedOn", true);
                     if (pointOfInterest != null)
                         _lockonCam.LookAt = pointOfInterest;
 
@@ -85,7 +86,7 @@ public class PlayerController : MonoBehaviour {
                     stateMachine.ChangeState(new StrafeMovementState());
                 }
                 else {
-                    animator.SetBool("lockedOn", false);
+                    _cameraAnimator.SetBool("lockedOn", false);
                     _doSnapCamera = true;
                 }
                 _lockon = value;
@@ -100,7 +101,7 @@ public class PlayerController : MonoBehaviour {
             Cursor.lockState = CursorLockMode.Locked;
 
         // Reference handling
-        animator = GetComponent<Animator>();
+        _cameraAnimator = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
 
         // Declarations
@@ -158,11 +159,13 @@ public class PlayerController : MonoBehaviour {
         if (_isGrounded && _velocity.y < 0) {
             _velocity.y = -2f;
         }
+        playerAnimator.SetBool("Grounded", _isGrounded);
     }
 
     void Jump() {
         if (_hasJumped && _isGrounded) {
             _velocity.y = Mathf.Sqrt(_jumpHeight) * -_gravity;
+            playerAnimator.SetTrigger("Jump");
         }
 
         _velocity.y += _gravity * Time.deltaTime; //Gravity formula
@@ -194,12 +197,28 @@ public class PlayerController : MonoBehaviour {
 }
 
 public class IdleMovementState : State<PlayerController> {
-    public override void EnterState(PlayerController owner) { }
+    private float _currentBlend;
+    private float _timer;
+    private float Timer {
+        get { return _timer; }
+        set {
+            if (value >= 1)
+                _timer = 1;
+            else
+                _timer = value;
+        }
+    }
+    public override void EnterState(PlayerController owner) {
+        _currentBlend = owner.playerAnimator.GetFloat("Blend");
+        owner.playerAnimator.SetFloat("Blend", 0.0f);
+    }
     public override void ExitState(PlayerController owner) { }
     
     public override void UpdateState(PlayerController owner) {
         if (owner.input != Vector2.zero)
             owner.stateMachine.ChangeState(new GeneralMovementState());
+        //Timer += Time.deltaTime;
+        //owner.playerAnimator.SetFloat("Blend", Mathf.Lerp(_currentBlend, 0.0f, Timer));
     }
 }
 
@@ -211,29 +230,32 @@ public class GeneralMovementState : State<PlayerController> {
         _isMoving = false;
     }
 
+    public float movingThreshold = 0.09f;
     //private float completeTurnAroundAngleThreshold = 120;
     public override void UpdateState(PlayerController owner) {
         if (owner.input == Vector2.zero) { // Changes state to idle if player is not moving
             owner.stateMachine.ChangeState(new IdleMovementState());
         }
         else {
-            Vector3 baseInputDirection = Camera.main.transform.right * owner.input.normalized.x + Camera.main.transform.forward * owner.input.normalized.y;
-            Vector3 resultingDirection = Vector3.RotateTowards(owner.transform.forward, baseInputDirection, owner.rotationSpeed * Time.deltaTime, 0.0f);
+            if (owner.input.magnitude >= movingThreshold) {
+                Vector3 baseInputDirection = Camera.main.transform.right * owner.input.normalized.x + Camera.main.transform.forward * owner.input.normalized.y;
+                Vector3 resultingDirection = Vector3.RotateTowards(owner.transform.forward, baseInputDirection, owner.rotationSpeed * Time.deltaTime, 0.0f);
 
-            // The angle between baseInputDirection and resultingDirection
-            float angle = Vector2.Angle(new Vector2(owner.transform.forward.x, owner.transform.forward.z),
-                                        new Vector2(baseInputDirection.x, baseInputDirection.z));
+                // The angle between baseInputDirection and resultingDirection
+                float angle = Vector2.Angle(new Vector2(owner.transform.forward.x, owner.transform.forward.z),
+                                            new Vector2(baseInputDirection.x, baseInputDirection.z));
 
-            owner.transform.rotation = Quaternion.LookRotation(resultingDirection);
-            owner.transform.eulerAngles = new Vector3(0, owner.transform.eulerAngles.y, 0); // Limits rotation to the Y-axis
-            Vector3 move = owner.transform.forward * owner.input.magnitude;                 // Constant forward facing force
+                owner.transform.rotation = Quaternion.LookRotation(resultingDirection);
+                owner.transform.eulerAngles = new Vector3(0, owner.transform.eulerAngles.y, 0); // Limits rotation to the Y-axis
+                Vector3 move = owner.transform.forward * owner.input.magnitude;                 // Constant forward facing force
+                owner.playerAnimator.SetFloat("Blend", owner.input.magnitude);
+                if (angle < owner.rotationAngleUntilMove) {
+                    _isMoving = true;
+                }
 
-            if (angle < owner.rotationAngleUntilMove) {
-                _isMoving = true;
-            }
-
-            if (_isMoving) {
-                owner.controller.Move(move * owner.maxSpeed * Time.deltaTime);
+                if (_isMoving) {
+                    owner.controller.Move(move * owner.maxSpeed * Time.deltaTime);
+                }
             }
         }
     }
@@ -281,11 +303,15 @@ public class DashMovementState : State<PlayerController> {
     private Timer _lagTimer;
     private Vector3 _dashDirection;
 
-    public override void ExitState(PlayerController owner) { }
+    public override void ExitState(PlayerController owner) {
+        owner.playerAnimator.SetBool("Dash", false);
+    }
 
     public override void EnterState(PlayerController owner) {
         _timer = new Timer(owner.dashTime);
         _lagTimer = new Timer(owner.dashLag);
+
+        owner.playerAnimator.SetBool("Dash", true);
 
         _dashDirection += Camera.main.transform.right * owner.input.x;
         _dashDirection += Camera.main.transform.forward * owner.input.y;

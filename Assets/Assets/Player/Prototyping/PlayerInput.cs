@@ -116,17 +116,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""isPartOfComposite"": true
                 },
                 {
-                    ""name"": """",
-                    ""id"": ""67808f48-755b-49b3-a830-0a91c558f12e"",
-                    ""path"": ""<Mouse>/delta"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""Look"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
                     ""name"": ""LeftStick"",
                     ""id"": ""d9a1e7cd-3fbe-4a9c-aa30-d30ab3dff7f8"",
                     ""path"": ""2DVector(mode=2)"",
@@ -216,7 +205,18 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""2f961b02-34f7-4bed-8b82-49f23db47238"",
+                    ""id"": ""d2b95035-1e62-47bd-bcd2-a4c60cb02779"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4b6f8cc2-da43-4467-ae99-299c62bc60a6"",
                     ""path"": ""<Gamepad>/rightStick"",
                     ""interactions"": """",
                     ""processors"": """",
