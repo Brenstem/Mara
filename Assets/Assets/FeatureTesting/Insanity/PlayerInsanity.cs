@@ -4,24 +4,22 @@ using UnityEngine;
 
 public class PlayerInsanity : MonoBehaviour
 {
-    [SerializeField]
-    private HealthBar InsanityBar;
+    [Header("Insanity values")]
+    [SerializeField] private float maxInsanity;
 
-    [SerializeField]
-    private float maxInsanity;
+    [SerializeField] private float impendingDoomTimer;
+    [Space(10)]
 
-    [SerializeField]
-    private float impendingDoomTimer;
+    [Tooltip("Add the insanity bar game object here")]
+    [SerializeField] private HealthBar InsanityBar;
+    [Space(10)]
 
-    [SerializeField]
-    int insanityTierAmount;
+    [Tooltip("Add the static and dynamic values for each insanity tier here. Do not change the array size!")]
+    [SerializeField] int[] staticInsanityValues;
 
-    [SerializeField]
-    int[] staticInsanityValues;
+    [SerializeField] int[] dynamicInsanityValuesnew;
 
-    [SerializeField]
-    int[] dynamicInsanityValuesnew;
-
+    // TODO Add event support for insanity tiers
     private UnityEngine.Events.UnityEvent tutorialDebuff;
     private UnityEngine.Events.UnityEvent paranoia;
     private UnityEngine.Events.UnityEvent slow;
@@ -32,7 +30,7 @@ public class PlayerInsanity : MonoBehaviour
 
     private float _currentInsanity;
 
-    private Timer timer;
+    private Timer _timer;
 
     private void Start()
     {
@@ -41,10 +39,10 @@ public class PlayerInsanity : MonoBehaviour
 
     private void Update()
     {
-        if (timer != null)
+        if (_timer != null)
         {
-            timer.Time += Time.deltaTime;
-            if (timer.Expired())
+            _timer.Time += Time.deltaTime;
+            if (_timer.Expired())
             {
                 ImpendingDoom();
             }
@@ -121,7 +119,7 @@ public class PlayerInsanity : MonoBehaviour
         {
             case float n when (n > staticInsanityValues[6]):
                 Debug.Log("<color=red>Impending doom static</color>");
-                timer = new Timer(impendingDoomTimer);
+                _timer = new Timer(impendingDoomTimer);
                 break;
             case float n when (n > staticInsanityValues[5]):
                 Debug.Log("<color=red>Monsters static</color>");
@@ -189,6 +187,6 @@ public class PlayerInsanity : MonoBehaviour
     public void ImpendingDoom()
     { 
         print("player dead woo");
-        timer.Reset();
+        _timer.Reset();
     }
 }

@@ -36,6 +36,7 @@ public class TrackingHealthBar : MonoBehaviour
         _cam = Camera.main.transform;
     }
 
+    // health bar billboarding
     private void LateUpdate()
     {
         transform.LookAt(transform.position + _cam.forward);

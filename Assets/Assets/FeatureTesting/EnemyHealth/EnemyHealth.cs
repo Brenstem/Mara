@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
-    [SerializeField]
-    private float maxHealth;
+    [SerializeField] private float maxHealth;
 
     private TrackingHealthBar _healthBar;
     private float _currentHealth;
