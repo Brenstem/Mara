@@ -10,7 +10,7 @@ public class animController : MonoBehaviour
 
     Animator anim;
     CharacterController characterController;
-    Control control;
+    PlayerController control;
     FindTargets TargetFinder;
 
     private bool temp;
@@ -21,7 +21,7 @@ public class animController : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         characterController = GetComponent<CharacterController>();
-        control = GetComponent<Control>();
+        control = GetComponent<PlayerController>();
         TargetFinder = GetComponent<FindTargets>();
     }
 
