@@ -8,7 +8,6 @@ public class CheckpointHandler : MonoBehaviour
     float respawnTime;
 
     private CheckpointData _activeCheckPoint;
-    private GameObject _player;
     private Timer _respawnTimer;
 
     // Subscribe to player death event
@@ -27,7 +26,7 @@ public class CheckpointHandler : MonoBehaviour
         _activeCheckPoint = new CheckpointData(this.transform, 0);
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         if (_respawnTimer != null)
         {
@@ -43,13 +42,12 @@ public class CheckpointHandler : MonoBehaviour
 
 
     // Save checkpoint data to struct on checkpoint activation
-    public void ActivateCheckpoint(GameObject player, Transform respawnPosition)
+    public void ActivateCheckpoint(Transform respawnPosition)
     {
         print("Checkpoint Set");
 
-        _player = player;
         Transform position = respawnPosition;
-        float insanity = player.GetComponent<PlayerInsanity>().GetInsanity();
+        float insanity = GlobalState.state.Player.GetComponent<PlayerInsanity>().GetInsanity();
         _activeCheckPoint = new CheckpointData(position, insanity);
     }
 
@@ -58,9 +56,11 @@ public class CheckpointHandler : MonoBehaviour
     {
         print("Respawning Player");
 
-        _player.transform.position = _activeCheckPoint.pos.position;
-        _player.transform.rotation = _activeCheckPoint.pos.rotation;
-        _player.GetComponent<PlayerInsanity>().SetInsanity(_activeCheckPoint.ins);
+        GlobalState.state.Player.GetComponent<CharacterController>().enabled = false;
+        GlobalState.state.Player.transform.position = _activeCheckPoint.pos.position;
+        GlobalState.state.Player.transform.rotation = _activeCheckPoint.pos.rotation;
+        GlobalState.state.Player.GetComponent<PlayerInsanity>().SetInsanity(_activeCheckPoint.ins);
+        GlobalState.state.Player.GetComponent<CharacterController>().enabled = true;
     }
 
     void RespawnPlayer()

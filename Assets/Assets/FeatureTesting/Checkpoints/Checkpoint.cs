@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Checkpoint : MonoBehaviour
 {
-
     [SerializeField] 
     private Transform RespawnPosition;
 
@@ -19,7 +18,7 @@ public class Checkpoint : MonoBehaviour
     {
         if (hitInfo.CompareTag("Player"))
         {
-            _globalState.GetComponent<CheckpointHandler>().ActivateCheckpoint(hitInfo.gameObject, RespawnPosition);
+            _globalState.GetComponent<CheckpointHandler>().ActivateCheckpoint(RespawnPosition);
         }
     }
 }
