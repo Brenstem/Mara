@@ -28,9 +28,14 @@ public class PlayerInsanity : MonoBehaviour
     private UnityEngine.Events.UnityEvent monsters;
     private UnityEngine.Events.UnityEvent impendingDoom;
 
+    public delegate void PlayerDead();
+    public static event PlayerDead onPlayerDeath;
+
     private float _currentInsanity;
 
     private Timer _timer;
+
+    private bool _playerDead;
 
     private void Start()
     {
@@ -39,12 +44,12 @@ public class PlayerInsanity : MonoBehaviour
 
     private void Update()
     {
-        if (_timer != null)
+        if (_timer != null && _playerDead)
         {
             _timer.Time += Time.deltaTime;
             if (_timer.Expired())
             {
-                ImpendingDoom();
+                KillPlayer();
             }
         }
     }
@@ -118,33 +123,34 @@ public class PlayerInsanity : MonoBehaviour
         switch (_currentInsanity)
         {
             case float n when (n > staticInsanityValues[6]):
-                Debug.Log("<color=red>Impending doom static</color>");
+                //Debug.Log("<color=red>Impending doom static</color>");
                 _timer = new Timer(impendingDoomTimer);
+                _playerDead = true;
                 break;
             case float n when (n > staticInsanityValues[5]):
-                Debug.Log("<color=red>Monsters static</color>");
+                //Debug.Log("<color=red>Monsters static</color>");
                 //monsters.Invoke();
                 break;
             case float n when (n > staticInsanityValues[4]):
-                Debug.Log("<color=red>Shadow clone static</color>");
+                //Debug.Log("<color=red>Shadow clone static</color>");
                 //shadowClone.Invoke();
                 break;
             case float n when (n > staticInsanityValues[3]):
-                Debug.Log("<color=red>Hallucination static</color>");
+                //Debug.Log("<color=red>Hallucination static</color>");
                 //hallucination.Invoke();
                 break;
             case float n when (n > staticInsanityValues[2]):
-                Debug.Log("<color=red>slow static</color>");
+                //Debug.Log("<color=red>slow static</color>");
                 //slow.Invoke();
 
                 break;
             case float n when (n > staticInsanityValues[1]):
-                Debug.Log("<color=red>Paranoia static</color>");
+                //Debug.Log("<color=red>Paranoia static</color>");
                 //paranoia.Invoke();
 
                 break;
             case float n when (n > staticInsanityValues[0]):
-                Debug.Log("<color=red>Tutorial debuff static</color>");
+                //Debug.Log("<color=red>Tutorial debuff static</color>");
                 //tutorialDebuff.Invoke();
                 break;
         }
@@ -155,38 +161,41 @@ public class PlayerInsanity : MonoBehaviour
         switch (currentInsanityPercentage)
         {
             case float n when (n > dynamicInsanityValues[6]):
-                Debug.Log("<color=red>Impending doom</color>");
+                //Debug.Log("<color=red>Impending doom</color>");
                 break;
             case float n when (n > dynamicInsanityValues[5]):
-                Debug.Log("<color=red>Monsters</color>");
+                //Debug.Log("<color=red>Monsters</color>");
                 //monsters.Invoke();
                 break;
             case float n when (n > dynamicInsanityValues[4]):
-                Debug.Log("<color=red>Shadow clone</color>");
+                //Debug.Log("<color=red>Shadow clone</color>");
                 //shadowClone.Invoke();
                 break;
             case float n when (n > dynamicInsanityValues[3]):
-                Debug.Log("<color=red>Hallucination</color>");
+               // //Debug.Log("<color=red>Hallucination</color>");
                 //hallucination.Invoke();
                 break;
             case float n when (n > dynamicInsanityValues[2]):
-                Debug.Log("<color=red>slow</color>");
+                //Debug.Log("<color=red>slow</color>");
                 //slow.Invoke();
                 break;
             case float n when (n > dynamicInsanityValues[1]):
-                Debug.Log("<color=red>Paranoia</color>");
+                //Debug.Log("<color=red>Paranoia</color>");
                 //paranoia.Invoke();
                 break;
             case float n when (n > dynamicInsanityValues[0]):
-                Debug.Log("<color=red>Tutorial debuff</color>");
+                //Debug.Log("<color=red>Tutorial debuff</color>");
                 //tutorialDebuff.Invoke();
                 break;
         }
     }
 
-    public void ImpendingDoom()
+    public void KillPlayer()
     { 
-        print("player dead woo");
+        print("Killing Player");
+
+        _playerDead = false;
         _timer.Reset();
+        onPlayerDeath();
     }
 }
