@@ -47,7 +47,6 @@ public class animController : MonoBehaviour
         {
             if (radius > Vector3.Distance(target.transform.position, this.transform.position))
             {
-                print("abcdefg");
                 temp = false;
                 control.enabled = true;
             }
