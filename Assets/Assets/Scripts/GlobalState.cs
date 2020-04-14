@@ -9,7 +9,10 @@ public class GlobalState : MonoBehaviour
         get { return _state; }
     }
 
-    public GameObject playerMesh;
+    [SerializeField] private GameObject _playerMesh;
+    public GameObject PlayerMesh {
+        get { return _playerMesh; }
+    }
 
     private void Awake() {
         if (_state != null && _state != this) {
