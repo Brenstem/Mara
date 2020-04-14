@@ -33,8 +33,7 @@ public class animController : MonoBehaviour
             anim.SetTrigger("Attack");
             target = TargetFinder.FindTarget();
 
-
-            if (target != null)
+            if (!target)
             {
                 FaceEnemy();
             }
@@ -44,7 +43,6 @@ public class animController : MonoBehaviour
         {
             if (radius > Vector3.Distance(target.transform.position, this.transform.position))
             {
-                print("abcdefg");
                 temp = false;
                 control.enabled = true;
             }
@@ -57,7 +55,6 @@ public class animController : MonoBehaviour
 
     public void FaceEnemy()
     {
-
         direction = (target.transform.position - this.transform.position);
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         this.transform.rotation = lookRotation;
