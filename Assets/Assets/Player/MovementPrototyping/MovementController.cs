@@ -2,7 +2,8 @@
 using UnityEngine.InputSystem;
 
 [RequireComponent(typeof(CharacterController))]
-public class MovementController : MonoBehaviour {
+public class MovementController : MonoBehaviour
+{
     #region Parameters
     /* === DEBUG === */
     [Header("Debug")]
@@ -67,8 +68,10 @@ public class MovementController : MonoBehaviour {
     [HideInInspector] public StateMachine<MovementController> stateMachine;
 
     private Vector3 _maxSpeedVec;
-    public Vector3 maxSpeedVec {
-        get {
+    public Vector3 maxSpeedVec
+    {
+        get
+        {
             if (_maxSpeedVec == null || _maxSpeedVec == Vector3.zero)
                 _maxSpeedVec = Vector3.Normalize(new Vector3(1, 0, 1)) * maxSpeed;
             return _maxSpeedVec;
@@ -79,26 +82,50 @@ public class MovementController : MonoBehaviour {
     [HideInInspector] public bool isLockedOn { get { return _lockedOn; } }
     #endregion
 
-    public void ToggleLockon() {
-        if (!pointOfInterest) {
+    public void EnableLockon()
+    {
+        _lockedOn = true;
+        _cameraAnimator.SetBool("lockedOn", _lockedOn);
+        _doSnapCamera = true;
+        _lockonCam.LookAt = pointOfInterest;
+
+        // BUG: overrides current state, resulting in deleted end lag
+        stateMachine.ChangeState(new StrafeMovementState());
+    }
+
+    public void DisableLockon()
+    {
+        _lockedOn = false;
+        _cameraAnimator.SetBool("lockedOn", _lockedOn);
+        _doSnapCamera = true;
+    }
+
+    public void ToggleLockon()
+    {
+        if (!pointOfInterest)
+        {
             Debug.LogWarning("Trying to toggle lockon without a point of interest!", this);
         }
-        else {
+        else
+        {
             _lockedOn = !_lockedOn;
             _cameraAnimator.SetBool("lockedOn", _lockedOn);
-            if (isLockedOn) {
+            if (isLockedOn)
+            {
                 _lockonCam.LookAt = pointOfInterest;
 
                 // BUG: overrides current state, resulting in deleted end lag
                 stateMachine.ChangeState(new StrafeMovementState());
             }
-            else {
+            else
+            {
                 _doSnapCamera = true;
             }
         }
     }
 
-    private void Awake() {
+    private void Awake()
+    {
         // Debug
         if (lockCursor)
             Cursor.lockState = CursorLockMode.Locked;
@@ -120,8 +147,9 @@ public class MovementController : MonoBehaviour {
         _playerInput.PlayerControls.Jump.performed += ctx => _hasJumped = true;
         _playerInput.PlayerControls.Dash.performed += Dash;
     }
-    
-    void Update() {
+
+    void Update()
+    {
         GroundCheck();
 
         stateMachine.Update();
@@ -135,7 +163,8 @@ public class MovementController : MonoBehaviour {
         _hasJumped = false;
     }
 
-    private void OnDrawGizmosSelected() {
+    private void OnDrawGizmosSelected()
+    {
         Gizmos.color = Color.red;
         Debug.DrawLine(_lockOnOrigin, _lockOnOrigin + _lockOnDirection * _lockOnCurrentHitDistance);
         Gizmos.DrawWireSphere(_lockOnOrigin + _lockOnDirection * _lockOnCurrentHitDistance, _lockOnRadius);
@@ -146,9 +175,11 @@ public class MovementController : MonoBehaviour {
     private void OnDisable() { _playerInput.Disable(); }
 
     [SerializeField] private bool toggleLockon;
-    private void OnValidate() {
+    private void OnValidate()
+    {
         pointOfInterest = lockOnTarget;
-        if (toggleLockon) {
+        if (toggleLockon)
+        {
             toggleLockon = false;
             ToggleLockon();
         }
@@ -156,8 +187,10 @@ public class MovementController : MonoBehaviour {
     /// <summary>
     /// Snaps camera after returning to free look camera
     /// </summary>
-    void SnapCamera() {
-        if (_doSnapCamera) {
+    void SnapCamera()
+    {
+        if (_doSnapCamera)
+        {
             //var free = new Vector2(_freeLookCam.m_XAxis.Value, _freeLookCam.m_YAxis.Value);
             //var loc = new Vector2(_lockonCam.m_XAxis.Value, _lockonCam.m_YAxis.Value);
             _freeLookCam.m_XAxis.Value = transform.eulerAngles.y;
@@ -165,16 +198,20 @@ public class MovementController : MonoBehaviour {
         }
     }
 
-    void GroundCheck() {
+    void GroundCheck()
+    {
         _isGrounded = Physics.CheckSphere(_groundCheckPosition.position, _groundDistance, groundMask);
-        if (_isGrounded && _velocity.y < 0) {
+        if (_isGrounded && _velocity.y < 0)
+        {
             _velocity.y = -2f;
         }
         playerAnimator.SetBool("Grounded", _isGrounded);
     }
 
-    void Jump() {
-        if (_hasJumped && _isGrounded) {
+    void Jump()
+    {
+        if (_hasJumped && _isGrounded)
+        {
             _velocity.y = Mathf.Sqrt(_jumpHeight) * -_gravity;
             playerAnimator.SetTrigger("Jump");
         }
@@ -184,33 +221,40 @@ public class MovementController : MonoBehaviour {
     }
 
     /* === PLACEHOLDERS === */
-    private void Dash(InputAction.CallbackContext c) { // Placeholder
-        if (_dashCooldownTimer.Expired()) {
+    private void Dash(InputAction.CallbackContext c)
+    { // Placeholder
+        if (_dashCooldownTimer.Expired())
+        {
             _dashCooldownTimer.Reset();
             stateMachine.ChangeState(new DashMovementState());
         }
     }
 }
 
-public class IdleMovementState : State<MovementController> {
+public class IdleMovementState : State<MovementController>
+{
     private float _currentBlend;
     private float _timer;
-    private float Timer {
+    private float Timer
+    {
         get { return _timer; }
-        set {
+        set
+        {
             if (value >= 1)
                 _timer = 1;
             else
                 _timer = value;
         }
     }
-    public override void EnterState(MovementController owner) {
+    public override void EnterState(MovementController owner)
+    {
         _currentBlend = owner.playerAnimator.GetFloat("Blend");
         owner.playerAnimator.SetFloat("Blend", 0.0f);
     }
     public override void ExitState(MovementController owner) { }
-    
-    public override void UpdateState(MovementController owner) {
+
+    public override void UpdateState(MovementController owner)
+    {
         if (owner.input != Vector2.zero)
             owner.stateMachine.ChangeState(new GeneralMovementState());
         //Timer += Time.deltaTime;
@@ -218,22 +262,28 @@ public class IdleMovementState : State<MovementController> {
     }
 }
 
-public class GeneralMovementState : State<MovementController> {
+public class GeneralMovementState : State<MovementController>
+{
     private bool _isMoving;
 
     public override void EnterState(MovementController owner) { }
-    public override void ExitState(MovementController owner) {
+    public override void ExitState(MovementController owner)
+    {
         _isMoving = false;
     }
 
     public float movingThreshold = 0.09f;
     //private float completeTurnAroundAngleThreshold = 120;
-    public override void UpdateState(MovementController owner) {
-        if (owner.input == Vector2.zero) { // Changes state to idle if player is not moving
+    public override void UpdateState(MovementController owner)
+    {
+        if (owner.input == Vector2.zero)
+        { // Changes state to idle if player is not moving
             owner.stateMachine.ChangeState(new IdleMovementState());
         }
-        else {
-            if (owner.input.magnitude >= movingThreshold) {
+        else
+        {
+            if (owner.input.magnitude >= movingThreshold)
+            {
                 Vector3 baseInputDirection = Camera.main.transform.right * owner.input.normalized.x + Camera.main.transform.forward * owner.input.normalized.y;
                 Vector3 resultingDirection = Vector3.RotateTowards(owner.transform.forward, baseInputDirection, owner.rotationSpeed * Time.deltaTime, 0.0f);
 
@@ -245,11 +295,13 @@ public class GeneralMovementState : State<MovementController> {
                 owner.transform.eulerAngles = new Vector3(0, owner.transform.eulerAngles.y, 0); // Limits rotation to the Y-axis
                 Vector3 move = owner.transform.forward * owner.input.magnitude;                 // Constant forward facing force
                 owner.playerAnimator.SetFloat("Blend", owner.input.magnitude);
-                if (angle < owner.rotationAngleUntilMove) {
+                if (angle < owner.rotationAngleUntilMove)
+                {
                     _isMoving = true;
                 }
 
-                if (_isMoving) {
+                if (_isMoving)
+                {
                     owner.controller.Move(move * owner.maxSpeed * Time.deltaTime);
                 }
             }
@@ -257,12 +309,15 @@ public class GeneralMovementState : State<MovementController> {
     }
 }
 
-public class StrafeMovementState : State<MovementController> {
+public class StrafeMovementState : State<MovementController>
+{
     public override void EnterState(MovementController owner) { }
     public override void ExitState(MovementController owner) { }
 
-    public override void UpdateState(MovementController owner) {
-        if (owner.isLockedOn) {
+    public override void UpdateState(MovementController owner)
+    {
+        if (owner.isLockedOn)
+        {
             //PointOfInterestIsMousePos(owner);
 
             owner.transform.LookAt(owner.pointOfInterest);
@@ -276,17 +331,20 @@ public class StrafeMovementState : State<MovementController> {
 
             owner.controller.Move(move * owner.maxSpeed * Time.deltaTime);
         }
-        else {
+        else
+        {
             owner.stateMachine.ChangeState(new GeneralMovementState());
         }
     }
 
     // Placeholder meant for debug
-    void PointOfInterestIsMousePos(MovementController owner) {
+    void PointOfInterestIsMousePos(MovementController owner)
+    {
         Vector2 mousePos = Input.mousePosition;
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 100f, owner.groundMask)) {
+        if (Physics.Raycast(ray, out hit, 100f, owner.groundMask))
+        {
             //owner.pointOfInterest = hit.transform;
             owner.transform.LookAt(hit.point);
             owner.transform.eulerAngles = new Vector3(0, owner.transform.eulerAngles.y, 0);
@@ -294,16 +352,19 @@ public class StrafeMovementState : State<MovementController> {
     }
 }
 
-public class DashMovementState : State<MovementController> {
+public class DashMovementState : State<MovementController>
+{
     private Timer _timer;
     private Timer _lagTimer;
     private Vector3 _dashDirection;
 
-    public override void ExitState(MovementController owner) {
+    public override void ExitState(MovementController owner)
+    {
         owner.playerAnimator.SetBool("Dash", false);
     }
 
-    public override void EnterState(MovementController owner) {
+    public override void EnterState(MovementController owner)
+    {
         _timer = new Timer(owner.dashTime);
         _lagTimer = new Timer(owner.dashLag);
 
@@ -315,22 +376,27 @@ public class DashMovementState : State<MovementController> {
             _dashDirection = Camera.main.transform.forward;
         _dashDirection.y = 0;
 
-        if (!owner.isLockedOn) {
+        if (!owner.isLockedOn)
+        {
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(_dashDirection.x, 0, _dashDirection.z));
             owner.transform.rotation = lookRotation;
         }
     }
-    public override void UpdateState(MovementController owner) {
-        if (_timer.Expired()) {
+    public override void UpdateState(MovementController owner)
+    {
+        if (_timer.Expired())
+        {
             _lagTimer.Time += Time.deltaTime;
-            if (_lagTimer.Expired()) {
+            if (_lagTimer.Expired())
+            {
                 if (owner.isLockedOn)
                     owner.stateMachine.ChangeState(new StrafeMovementState());
                 else
                     owner.stateMachine.ChangeState(new IdleMovementState());
             }
         }
-        else {
+        else
+        {
             _timer.Time += Time.deltaTime;
             owner.controller.Move(_dashDirection * owner.dashSpeed * Time.deltaTime);
         }
