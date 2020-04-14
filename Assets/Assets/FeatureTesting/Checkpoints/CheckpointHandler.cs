@@ -42,12 +42,23 @@ public class CheckpointHandler : MonoBehaviour
 
 
     // Save checkpoint data to struct on checkpoint activation
-    public void ActivateCheckpoint(Transform respawnPosition)
+    public void ActivateCheckpoint(Transform respawnPosition, bool useMaxHealth = false)
     {
         print("Checkpoint Set");
 
+        float insanity;
+
         Transform position = respawnPosition;
-        float insanity = GlobalState.state.Player.GetComponent<PlayerInsanity>().GetInsanity();
+
+        if (useMaxHealth)
+        {
+            insanity = 0;
+        }
+        else
+        {
+            insanity = GlobalState.state.Player.GetComponent<PlayerInsanity>().GetInsanity();
+        }
+
         _activeCheckPoint = new CheckpointData(position, insanity);
     }
 

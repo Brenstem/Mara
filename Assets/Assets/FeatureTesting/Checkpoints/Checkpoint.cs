@@ -5,7 +5,10 @@ using UnityEngine;
 public class Checkpoint : MonoBehaviour
 {
     [SerializeField] 
-    private Transform RespawnPosition;
+    private Transform respawnPosition;
+
+    [SerializeField]
+    private bool maxHealthOnRespawn;
 
     private GameObject _globalState;
 
@@ -18,7 +21,7 @@ public class Checkpoint : MonoBehaviour
     {
         if (hitInfo.CompareTag("Player"))
         {
-            _globalState.GetComponent<CheckpointHandler>().ActivateCheckpoint(RespawnPosition);
+            _globalState.GetComponent<CheckpointHandler>().ActivateCheckpoint(respawnPosition, maxHealthOnRespawn);
         }
     }
 }

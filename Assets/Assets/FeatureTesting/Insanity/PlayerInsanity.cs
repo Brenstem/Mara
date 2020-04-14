@@ -5,9 +5,11 @@ using UnityEngine;
 public class PlayerInsanity : MonoBehaviour
 {
     [Header("Insanity values")]
-    [SerializeField] private float maxInsanity;
+    [SerializeField] 
+    private float _maxInsanity;
 
-    [SerializeField] private float impendingDoomTimer;
+    [SerializeField] 
+    private float _impendingDoomTimer;
     [Space(10)]
 
     [Tooltip("Add the insanity bar game object here")]
@@ -15,9 +17,11 @@ public class PlayerInsanity : MonoBehaviour
     [Space(10)]
 
     [Tooltip("Add the static and dynamic values for each insanity tier here. Do not change the array size!")]
-    [SerializeField] int[] staticInsanityValues;
+    [SerializeField] 
+    private int[] staticInsanityValues;
 
-    [SerializeField] int[] dynamicInsanityValues;
+    [SerializeField] 
+    private int[] dynamicInsanityValues;
 
     // TODO Add event support for insanity tiers
     private UnityEngine.Events.UnityEvent tutorialDebuff;
@@ -59,29 +63,34 @@ public class PlayerInsanity : MonoBehaviour
         return _currentInsanity;
     }
 
+    public float GetMaxInsanity()
+    {
+        return _maxInsanity;
+    }
+
     public float GetInsanityPercentage()
     {
-        return _currentInsanity / maxInsanity * 100; 
+        return _currentInsanity / _maxInsanity * 100; 
     }
 
     public void SetMaxInsanity(float amount)
     {
-        maxInsanity = amount;
-        InsanityBar.SetMaxValue(maxInsanity);
+        _maxInsanity = amount;
+        InsanityBar.SetMaxValue(_maxInsanity);
     }
 
     public void IncrementMaxInsanity(float amount)
     {
-        maxInsanity += amount;
-        InsanityBar.SetMaxValue(maxInsanity);
+        _maxInsanity += amount;
+        InsanityBar.SetMaxValue(_maxInsanity);
     }
 
     // Sets insanity based on parameters
     public void SetInsanity(float amount)
     {
-        if (amount > maxInsanity)
+        if (amount > _maxInsanity)
         {
-            _currentInsanity = maxInsanity;
+            _currentInsanity = _maxInsanity;
         }
         else if (amount < 0)
         {
@@ -100,9 +109,9 @@ public class PlayerInsanity : MonoBehaviour
     // Increments insanity based on parameters
     public void IncrementInsanity(float amount)
     {
-        if (amount + _currentInsanity > maxInsanity)
+        if (amount + _currentInsanity > _maxInsanity)
         {
-            _currentInsanity = maxInsanity;
+            _currentInsanity = _maxInsanity;
         }
         else if (amount + _currentInsanity < 0)
         {
@@ -124,7 +133,7 @@ public class PlayerInsanity : MonoBehaviour
         {
             case float n when (n > staticInsanityValues[6]):
                 //Debug.Log("<color=red>Impending doom static</color>");
-                _timer = new Timer(impendingDoomTimer);
+                _timer = new Timer(_impendingDoomTimer);
                 _playerDead = true;
                 break;
             case float n when (n > staticInsanityValues[5]):
@@ -156,7 +165,7 @@ public class PlayerInsanity : MonoBehaviour
         }
 
         // Percentage based debuffs
-        float currentInsanityPercentage = _currentInsanity / maxInsanity * 100;
+        float currentInsanityPercentage = _currentInsanity / _maxInsanity * 100;
 
         switch (currentInsanityPercentage)
         {
