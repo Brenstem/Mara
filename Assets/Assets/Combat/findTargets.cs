@@ -9,7 +9,6 @@ public class FindTargets : MonoBehaviour
 
     [SerializeField] LayerMask targets;
 
-   
 
     public GameObject FindTarget()
     {
@@ -20,15 +19,17 @@ public class FindTargets : MonoBehaviour
 
         foreach (Collider target in toHit)
         {
-            if (temp > Vector3.Distance(transform.position, target.transform.position))
+            if (target != null)
             {
-                temp = Vector3.Distance(transform.position, target.transform.position);
-                Vector3 targetRotation = target.transform.position - transform.position;
-
-                if ( _playerAngle*Mathf.Deg2Rad > Mathf.Acos((Vector3.Dot(playerRotation, targetRotation)) / (playerRotation.magnitude * targetRotation.magnitude)))
+                if (temp > Vector3.Distance(transform.position, target.transform.position))
                 {
-                    //print("Hello");
-                    targetToHit = target.gameObject;
+                    temp = Vector3.Distance(transform.position, target.transform.position);
+                    Vector3 targetRotation = target.transform.position - transform.position;
+
+                    if (_playerAngle * Mathf.Deg2Rad > Mathf.Acos((Vector3.Dot(playerRotation, targetRotation)) / (playerRotation.magnitude * targetRotation.magnitude)))
+                    {
+                        targetToHit = target.gameObject;
+                    }
                 }
             }
         }
