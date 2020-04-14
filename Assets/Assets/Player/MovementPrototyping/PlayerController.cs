@@ -20,6 +20,7 @@ public class PlayerController : MonoBehaviour {
     public float rotationSpeed;
     public float rotationAngleUntilMove = 30;
 
+    [SerializeField] private float _dashCooldownTime = 0.25f;
     public float dashTime = 0.25f;
     public float dashLag = 0.15f;
     public float dashSpeed = 10.0f;
@@ -55,6 +56,7 @@ public class PlayerController : MonoBehaviour {
     private RaycastHit _lockOnCastHit;
 
 
+    private Timer _dashCooldownTimer;
     private bool _doSnapCamera;
     private bool _hasJumped;
     private bool _isGrounded;
@@ -73,28 +75,28 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    private bool _lockon;
-    public bool lockon { // better solution is adviced, though it is functional
-        get { return _lockon; }
-        set {
-            if (pointOfInterest != null) {
-                if (value) {
-                    _cameraAnimator.SetBool("lockedOn", true);
-                    if (pointOfInterest != null)
-                        _lockonCam.LookAt = pointOfInterest;
+    private bool _lockedOn;
+    [HideInInspector] public bool isLockedOn { get { return _lockedOn; } }
+    #endregion
 
-                    // BUG: overrides current state, resulting in deleted end lag
-                    stateMachine.ChangeState(new StrafeMovementState());
-                }
-                else {
-                    _cameraAnimator.SetBool("lockedOn", false);
-                    _doSnapCamera = true;
-                }
-                _lockon = value;
+    public void ToggleLockon() {
+        if (!pointOfInterest) {
+            Debug.LogWarning("Trying to toggle lockon without a point of interest!", this);
+        }
+        else {
+            _lockedOn = !_lockedOn;
+            _cameraAnimator.SetBool("lockedOn", _lockedOn);
+            if (isLockedOn) {
+                _lockonCam.LookAt = pointOfInterest;
+
+                // BUG: overrides current state, resulting in deleted end lag
+                stateMachine.ChangeState(new StrafeMovementState());
+            }
+            else {
+                _doSnapCamera = true;
             }
         }
     }
-#endregion
 
     private void Awake() {
         // Debug
@@ -108,12 +110,13 @@ public class PlayerController : MonoBehaviour {
         // Declarations
         _playerInput = new PlayerInput();
         stateMachine = new StateMachine<PlayerController>(this);
+        _dashCooldownTimer = new Timer(_dashCooldownTime);
+        _dashCooldownTimer.Time = _dashCooldownTime;
         stateMachine.ChangeState(new IdleMovementState());
-        lockon = false;
 
         // Input
         _playerInput.PlayerControls.Move.performed += ctx => input = ctx.ReadValue<Vector2>();
-        _playerInput.PlayerControls.Test.performed += _ => lockon = !lockon;
+        //_playerInput.PlayerControls.Test.performed += _ => ToggleLockon();
         _playerInput.PlayerControls.Jump.performed += ctx => _hasJumped = true;
         _playerInput.PlayerControls.Dash.performed += Dash;
     }
@@ -121,13 +124,13 @@ public class PlayerController : MonoBehaviour {
     void Update() {
         GroundCheck();
 
-        PlaceholderLockon();
-
         stateMachine.Update();
 
         Jump();
 
         SnapCamera();
+
+        _dashCooldownTimer.Time += Time.deltaTime;
 
         _hasJumped = false;
     }
@@ -142,17 +145,21 @@ public class PlayerController : MonoBehaviour {
 
     private void OnDisable() { _playerInput.Disable(); }
 
+    [SerializeField] private bool toggleLockon;
     private void OnValidate() {
         pointOfInterest = lockOnTarget;
-        lockon = true;
+        if (toggleLockon) {
+            toggleLockon = false;
+            ToggleLockon();
+        }
     }
     /// <summary>
     /// Snaps camera after returning to free look camera
     /// </summary>
     void SnapCamera() {
         if (_doSnapCamera) {
-            var free = new Vector2(_freeLookCam.m_XAxis.Value, _freeLookCam.m_YAxis.Value);
-            var loc = new Vector2(_lockonCam.m_XAxis.Value, _lockonCam.m_YAxis.Value);
+            //var free = new Vector2(_freeLookCam.m_XAxis.Value, _freeLookCam.m_YAxis.Value);
+            //var loc = new Vector2(_lockonCam.m_XAxis.Value, _lockonCam.m_YAxis.Value);
             _freeLookCam.m_XAxis.Value = transform.eulerAngles.y;
             _doSnapCamera = false;
         }
@@ -178,24 +185,9 @@ public class PlayerController : MonoBehaviour {
 
     /* === PLACEHOLDERS === */
     private void Dash(InputAction.CallbackContext c) { // Placeholder
-        stateMachine.ChangeState(new DashMovementState());
-    }
-
-    void PlaceholderLockon() {
-        if (!lockon) {
-            _lockOnOrigin = transform.position + _lockOnOffset;
-            _lockOnDirection = Camera.main.transform.forward;
-            if (_lockOnDirection.y < 0)
-                _lockOnDirection.y = 0;
-
-            if (Physics.SphereCast(_lockOnOrigin, _lockOnRadius, _lockOnDirection, out _lockOnCastHit, _lockOnMaxDistance, enemyMask)) {
-                pointOfInterest = _lockOnCastHit.transform;
-                _lockOnCurrentHitDistance = _lockOnCastHit.distance;
-            }
-            else {
-                _lockOnCurrentHitDistance = _lockOnMaxDistance;
-                pointOfInterest = null;
-            }
+        if (_dashCooldownTimer.Expired()) {
+            _dashCooldownTimer.Reset();
+            stateMachine.ChangeState(new DashMovementState());
         }
     }
 }
@@ -270,7 +262,7 @@ public class StrafeMovementState : State<PlayerController> {
     public override void ExitState(PlayerController owner) { }
 
     public override void UpdateState(PlayerController owner) {
-        if (owner.pointOfInterest != null) {
+        if (owner.isLockedOn) {
             //PointOfInterestIsMousePos(owner);
 
             owner.transform.LookAt(owner.pointOfInterest);
@@ -323,7 +315,7 @@ public class DashMovementState : State<PlayerController> {
             _dashDirection = Camera.main.transform.forward;
         _dashDirection.y = 0;
 
-        if (!owner.lockon) {
+        if (!owner.isLockedOn) {
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(_dashDirection.x, 0, _dashDirection.z));
             owner.transform.rotation = lookRotation;
         }
@@ -332,7 +324,7 @@ public class DashMovementState : State<PlayerController> {
         if (_timer.Expired()) {
             _lagTimer.Time += Time.deltaTime;
             if (_lagTimer.Expired()) {
-                if (owner.lockon)
+                if (owner.isLockedOn)
                     owner.stateMachine.ChangeState(new StrafeMovementState());
                 else
                     owner.stateMachine.ChangeState(new IdleMovementState());
