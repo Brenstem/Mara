@@ -9,9 +9,9 @@ public class EnemyTesting : MonoBehaviour
 
     private PlayerInsanity player;
 
-    void Awake()
+    void Start()
     {
-        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInsanity>(); 
+        player = GlobalState.state.Player.GetComponent<PlayerInsanity>(); 
     }
 
     void Update()

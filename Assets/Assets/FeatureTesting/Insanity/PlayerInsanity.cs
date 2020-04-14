@@ -5,9 +5,11 @@ using UnityEngine;
 public class PlayerInsanity : MonoBehaviour
 {
     [Header("Insanity values")]
-    [SerializeField] private float maxInsanity;
+    [SerializeField] 
+    private float _maxInsanity;
 
-    [SerializeField] private float impendingDoomTimer;
+    [SerializeField] 
+    private float _impendingDoomTimer;
     [Space(10)]
 
     [Tooltip("Add the insanity bar game object here")]
@@ -15,9 +17,11 @@ public class PlayerInsanity : MonoBehaviour
     [Space(10)]
 
     [Tooltip("Add the static and dynamic values for each insanity tier here. Do not change the array size!")]
-    [SerializeField] int[] staticInsanityValues;
+    [SerializeField] 
+    private int[] staticInsanityValues;
 
-    [SerializeField] int[] dynamicInsanityValues;
+    [SerializeField] 
+    private int[] dynamicInsanityValues;
 
     // TODO Add event support for insanity tiers
     private UnityEngine.Events.UnityEvent tutorialDebuff;
@@ -28,9 +32,14 @@ public class PlayerInsanity : MonoBehaviour
     private UnityEngine.Events.UnityEvent monsters;
     private UnityEngine.Events.UnityEvent impendingDoom;
 
+    public delegate void PlayerDead();
+    public static event PlayerDead onPlayerDeath;
+
     private float _currentInsanity;
 
     private Timer _timer;
+
+    private bool _playerDead;
 
     private void Start()
     {
@@ -39,12 +48,12 @@ public class PlayerInsanity : MonoBehaviour
 
     private void Update()
     {
-        if (_timer != null)
+        if (_timer != null && _playerDead)
         {
             _timer.Time += Time.deltaTime;
             if (_timer.Expired())
             {
-                ImpendingDoom();
+                KillPlayer();
             }
         }
     }
@@ -54,29 +63,34 @@ public class PlayerInsanity : MonoBehaviour
         return _currentInsanity;
     }
 
+    public float GetMaxInsanity()
+    {
+        return _maxInsanity;
+    }
+
     public float GetInsanityPercentage()
     {
-        return _currentInsanity / maxInsanity * 100; 
+        return _currentInsanity / _maxInsanity * 100; 
     }
 
     public void SetMaxInsanity(float amount)
     {
-        maxInsanity = amount;
-        InsanityBar.SetMaxValue(maxInsanity);
+        _maxInsanity = amount;
+        InsanityBar.SetMaxValue(_maxInsanity);
     }
 
     public void IncrementMaxInsanity(float amount)
     {
-        maxInsanity += amount;
-        InsanityBar.SetMaxValue(maxInsanity);
+        _maxInsanity += amount;
+        InsanityBar.SetMaxValue(_maxInsanity);
     }
 
     // Sets insanity based on parameters
     public void SetInsanity(float amount)
     {
-        if (amount > maxInsanity)
+        if (amount > _maxInsanity)
         {
-            _currentInsanity = maxInsanity;
+            _currentInsanity = _maxInsanity;
         }
         else if (amount < 0)
         {
@@ -95,9 +109,9 @@ public class PlayerInsanity : MonoBehaviour
     // Increments insanity based on parameters
     public void IncrementInsanity(float amount)
     {
-        if (amount + _currentInsanity > maxInsanity)
+        if (amount + _currentInsanity > _maxInsanity)
         {
-            _currentInsanity = maxInsanity;
+            _currentInsanity = _maxInsanity;
         }
         else if (amount + _currentInsanity < 0)
         {
@@ -118,75 +132,79 @@ public class PlayerInsanity : MonoBehaviour
         switch (_currentInsanity)
         {
             case float n when (n > staticInsanityValues[6]):
-                Debug.Log("<color=red>Impending doom static</color>");
-                _timer = new Timer(impendingDoomTimer);
+                //Debug.Log("<color=red>Impending doom static</color>");
+                _timer = new Timer(_impendingDoomTimer);
+                _playerDead = true;
                 break;
             case float n when (n > staticInsanityValues[5]):
-                Debug.Log("<color=red>Monsters static</color>");
+                //Debug.Log("<color=red>Monsters static</color>");
                 //monsters.Invoke();
                 break;
             case float n when (n > staticInsanityValues[4]):
-                Debug.Log("<color=red>Shadow clone static</color>");
+                //Debug.Log("<color=red>Shadow clone static</color>");
                 //shadowClone.Invoke();
                 break;
             case float n when (n > staticInsanityValues[3]):
-                Debug.Log("<color=red>Hallucination static</color>");
+                //Debug.Log("<color=red>Hallucination static</color>");
                 //hallucination.Invoke();
                 break;
             case float n when (n > staticInsanityValues[2]):
-                Debug.Log("<color=red>slow static</color>");
+                //Debug.Log("<color=red>slow static</color>");
                 //slow.Invoke();
 
                 break;
             case float n when (n > staticInsanityValues[1]):
-                Debug.Log("<color=red>Paranoia static</color>");
+                //Debug.Log("<color=red>Paranoia static</color>");
                 //paranoia.Invoke();
 
                 break;
             case float n when (n > staticInsanityValues[0]):
-                Debug.Log("<color=red>Tutorial debuff static</color>");
+                //Debug.Log("<color=red>Tutorial debuff static</color>");
                 //tutorialDebuff.Invoke();
                 break;
         }
 
         // Percentage based debuffs
-        float currentInsanityPercentage = _currentInsanity / maxInsanity * 100;
+        float currentInsanityPercentage = _currentInsanity / _maxInsanity * 100;
 
         switch (currentInsanityPercentage)
         {
             case float n when (n > dynamicInsanityValues[6]):
-                Debug.Log("<color=red>Impending doom</color>");
+                //Debug.Log("<color=red>Impending doom</color>");
                 break;
             case float n when (n > dynamicInsanityValues[5]):
-                Debug.Log("<color=red>Monsters</color>");
+                //Debug.Log("<color=red>Monsters</color>");
                 //monsters.Invoke();
                 break;
             case float n when (n > dynamicInsanityValues[4]):
-                Debug.Log("<color=red>Shadow clone</color>");
+                //Debug.Log("<color=red>Shadow clone</color>");
                 //shadowClone.Invoke();
                 break;
             case float n when (n > dynamicInsanityValues[3]):
-                Debug.Log("<color=red>Hallucination</color>");
+               // //Debug.Log("<color=red>Hallucination</color>");
                 //hallucination.Invoke();
                 break;
             case float n when (n > dynamicInsanityValues[2]):
-                Debug.Log("<color=red>slow</color>");
+                //Debug.Log("<color=red>slow</color>");
                 //slow.Invoke();
                 break;
             case float n when (n > dynamicInsanityValues[1]):
-                Debug.Log("<color=red>Paranoia</color>");
+                //Debug.Log("<color=red>Paranoia</color>");
                 //paranoia.Invoke();
                 break;
             case float n when (n > dynamicInsanityValues[0]):
-                Debug.Log("<color=red>Tutorial debuff</color>");
+                //Debug.Log("<color=red>Tutorial debuff</color>");
                 //tutorialDebuff.Invoke();
                 break;
         }
     }
 
-    public void ImpendingDoom()
+    public void KillPlayer()
     { 
-        print("player dead woo");
+        print("Killing Player");
+
+        _playerDead = false;
         _timer.Reset();
+        onPlayerDeath();
     }
 }

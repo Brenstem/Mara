@@ -31,7 +31,10 @@ public class animController : MonoBehaviour
         {
             
             anim.SetTrigger("Attack");
-            target = TargetFinder.FindTarget();
+            if (TargetFinder.FindTarget() != null)
+            {
+                target = TargetFinder.FindTarget();
+            }
 
 
             if (target != null)
