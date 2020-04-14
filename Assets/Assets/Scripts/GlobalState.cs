@@ -9,6 +9,8 @@ public class GlobalState : MonoBehaviour
         get { return _state; }
     }
 
+    public GameObject playerMesh;
+
     private void Awake() {
         if (_state != null && _state != this) {
             Destroy(this.gameObject);

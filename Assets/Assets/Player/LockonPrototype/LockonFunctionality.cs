@@ -27,8 +27,8 @@ public class LockonFunctionality : MonoBehaviour {
 
     private void e2(InputAction.CallbackContext c) {
         if (pointOfInterest != null) {
-            GetComponent<PlayerController>().pointOfInterest = pointOfInterest;
-            GetComponent<PlayerController>().ToggleLockon();
+            GetComponent<MovementController>().pointOfInterest = pointOfInterest;
+            GetComponent<MovementController>().ToggleLockon();
         }
     }
 
