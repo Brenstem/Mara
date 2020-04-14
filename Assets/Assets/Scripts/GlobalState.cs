@@ -10,6 +10,8 @@ public class GlobalState : MonoBehaviour
     [SerializeField]
     private Camera _camera;
 
+    [SerializeField]
+    private AudioManager _audioManager;
 
     public GameObject Player
     {
@@ -19,6 +21,11 @@ public class GlobalState : MonoBehaviour
     public Camera Camera
     {
         get { return _camera; }
+    }
+
+    public AudioManager AudioManager
+    {
+        get { return _audioManager;  }
     }
 
     private static GlobalState _state;

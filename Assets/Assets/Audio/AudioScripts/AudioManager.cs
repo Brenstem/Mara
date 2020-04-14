@@ -1,21 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using FMOD.Studio;
+using FMODUnity;
 
 public class AudioManager : MonoBehaviour
 {
-    private PlayerInsanityAudio playerInsanityAudio;
-    private PlayerMovementAudio playerMovementAudio;
+    [EventRef]
+    public string InsanityEventAudio;
+    EventInstance InsanityEvent;
 
-    private void Awake()
-    {
-
-    }
     //Player sounds
     public void PlayerFootStepsAudio(Transform obj)
     {
-        playerMovementAudio.AudioPlayerFootsteps(obj.tag); // betyder att den utgår från objektets tag istället för name
-
+        // playerMovementAudio.AudioPlayerFootsteps(obj.tag); // betyder att den utgår från objektets tag istället för name
     }
 
     public void PlayerSwordSwingAudio()
@@ -33,13 +31,19 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    public void PlayerInsanityAudio()
+    public void PlayerInsanityAudio(float insanityPercentage)
     {
-        playerInsanityAudio.PlayerInsanity(); // spelar upp ljudet
+        InsanityEvent = RuntimeManager.CreateInstance(InsanityEventAudio); // Create a new FMOD::Studio::EventInstance.
+        InsanityEvent.setParameterByName("InsanityBar", insanityPercentage); // string-värdet är parameternamnet och insanitypercentage är float-värdet
+        InsanityEvent.start(); // spelar upp ljudet
     }
 
-    //Enemy sounds
+    public void PlayerInsanityAudioUpdate(float insanityPercentage)
+    {
+        InsanityEvent.setParameterByName("InsanityBar", insanityPercentage);
+    }
 
+    //Enemy sound
     public void EnemyStalkerIdleAudio()
     {
 
@@ -49,8 +53,8 @@ public class AudioManager : MonoBehaviour
     {
 
     }
-    //Music
 
+    //Music
     public void MenuMusicAudio()
     {
 
