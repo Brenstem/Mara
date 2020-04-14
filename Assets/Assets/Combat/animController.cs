@@ -20,8 +20,8 @@ public class animController : MonoBehaviour
     private void Awake()
     {
         anim = GetComponent<Animator>();
-        characterController = GetComponent<CharacterController>();
-        control = GetComponent<PlayerController>();
+        characterController = GetComponentInParent<CharacterController>();
+        control = GetComponentInParent<PlayerController>();
         TargetFinder = GetComponent<FindTargets>();
     }
 
