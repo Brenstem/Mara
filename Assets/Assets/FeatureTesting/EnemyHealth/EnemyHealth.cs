@@ -15,6 +15,11 @@ public class EnemyHealth : MonoBehaviour
         _healthBar.SetMaxValue(maxHealth);
         _currentHealth = maxHealth;
         _healthBar.SetValue(_currentHealth);
+
+        if (!_healthBar)
+        {
+            throw new System.Exception("Please add a trackingHealthbar prefab as a child to this component!");
+        }
     }
 
     public float GetHealth()
@@ -38,6 +43,7 @@ public class EnemyHealth : MonoBehaviour
     // Sets Health based on parameters
     public void SetHealth(float amount)
     {
+        // Insanity cannot be above max or below 0
         if (amount > maxHealth)
         {
             _currentHealth = maxHealth;
@@ -55,24 +61,26 @@ public class EnemyHealth : MonoBehaviour
     }
 
     // Increments Health based on parameters
-    public void IncrementHealth(float amount)
+    public void Damage(float amount)
     {
-        if (amount + _currentHealth > maxHealth)
+        // Insanity cannot be above max or below 0
+        if (amount - _currentHealth > maxHealth)
         {
             _currentHealth = maxHealth;
         }
-        else if (amount + _currentHealth <= 0)
+        else if (amount - _currentHealth <= 0)
         {
             _currentHealth = 0;
             KillEnemy();
         }
         else
         {
-            _currentHealth += amount;
+            _currentHealth -= amount;
         }
 
         _healthBar.SetValue(_currentHealth);
     }
+
     private void KillEnemy()
     {
         Destroy(this.gameObject);

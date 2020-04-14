@@ -39,18 +39,25 @@ public class PlayerInsanity : MonoBehaviour
 
     private Timer _timer;
 
-    private bool _playerDead;
+    private bool _playerDying;
 
     private void Start()
     {
+        if (!InsanityBar)
+        {
+            throw new System.Exception("Healthbar prefab missing!");
+        }
+
         InsanityBar.SetValue(_currentInsanity);
     }
 
     private void Update()
     {
-        if (_timer != null && _playerDead)
+        // if a timer exists and the player is "dead" wait for timer to kill player
+        if (!Object.ReferenceEquals( _timer, null) && _playerDying) 
         {
             _timer.Time += Time.deltaTime;
+
             if (_timer.Expired())
             {
                 KillPlayer();
@@ -88,6 +95,7 @@ public class PlayerInsanity : MonoBehaviour
     // Sets insanity based on parameters
     public void SetInsanity(float amount)
     {
+        // Insanity cannot be above max or below 0
         if (amount > _maxInsanity)
         {
             _currentInsanity = _maxInsanity;
@@ -109,6 +117,7 @@ public class PlayerInsanity : MonoBehaviour
     // Increments insanity based on parameters
     public void IncrementInsanity(float amount)
     {
+        // Insanity cannot be above max or below 0
         if (amount + _currentInsanity > _maxInsanity)
         {
             _currentInsanity = _maxInsanity;
@@ -134,7 +143,7 @@ public class PlayerInsanity : MonoBehaviour
             case float n when (n > staticInsanityValues[6]):
                 //Debug.Log("<color=red>Impending doom static</color>");
                 _timer = new Timer(_impendingDoomTimer);
-                _playerDead = true;
+                _playerDying = true;
                 break;
             case float n when (n > staticInsanityValues[5]):
                 //Debug.Log("<color=red>Monsters static</color>");
@@ -203,7 +212,7 @@ public class PlayerInsanity : MonoBehaviour
     { 
         print("Killing Player");
 
-        _playerDead = false;
+        _playerDying = false;
         _timer.Reset();
         onPlayerDeath();
     }

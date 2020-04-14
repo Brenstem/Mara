@@ -14,7 +14,7 @@ public class DamageTest : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.J))
         {
-            enemy.IncrementHealth(-damage);
+            enemy.Damage(-damage);
         }
     }
 }

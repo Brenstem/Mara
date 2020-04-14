@@ -8,24 +8,28 @@ public class TrackingHealthBar : MonoBehaviour
 {
     private Transform _cam;
 
+    // Get transform component if null
     public RectTransform Transform
     {
         get
         {
-            if(_transform == null)
+            if(!_transform)
                 _transform = GetComponent<RectTransform>();
+
             return _transform;
         }
     }
 
     private RectTransform _transform;
 
+    // Get slider component if null
     public Slider Slider
     {
         get
         {
-            if (_slider == null)
+            if (!_slider)
                 _slider = GetComponent<Slider>();
+
             return _slider;
         }
     }
@@ -36,7 +40,7 @@ public class TrackingHealthBar : MonoBehaviour
         _cam = Camera.main.transform;
     }
 
-    // health bar billboarding
+    // Health bar billboarding
     private void LateUpdate()
     {
         transform.LookAt(transform.position + _cam.forward);

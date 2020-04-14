@@ -24,7 +24,7 @@ public class swordCollision : MonoBehaviour
         {
             if (isHit.Length != 0 && !_alreadyHit.Contains(enemy.gameObject))
             {
-                enemy.gameObject.GetComponent<EnemyHealth>().IncrementHealth(-_damageValue);
+                enemy.gameObject.GetComponent<EnemyHealth>().Damage(-_damageValue);
                 _alreadyHit.Add(enemy.gameObject);
             }
 
