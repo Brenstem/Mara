@@ -10,6 +10,7 @@ public class FindTargets : MonoBehaviour
     [SerializeField] LayerMask targets;
 
 
+
     public GameObject FindTarget()
     {
         Collider[] toHit = Physics.OverlapSphere(transform.position, _trackRadius, targets);
@@ -41,6 +42,3 @@ public class FindTargets : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, _trackRadius);
     }
 }
-
-//Mathf.Acos((Vector3.Dot(playerRotation, targetRotation)) / (playerRotation.magnitude* targetRotation.magnitude))
-//Vector3.Angle(transform.forward, new Vector3(target.transform.rotation.x, 0, target.transform.rotation.z))

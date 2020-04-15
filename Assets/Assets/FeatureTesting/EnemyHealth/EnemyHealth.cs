@@ -9,8 +9,7 @@ public class EnemyHealth : MonoBehaviour
     private TrackingHealthBar _healthBar;
     private float _currentHealth;
 
-    private void Start()
-    {
+    private void Start() {
         _healthBar = GetComponentInChildren<TrackingHealthBar>();
         _healthBar.SetMaxValue(maxHealth);
         _currentHealth = maxHealth;
@@ -22,22 +21,18 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
-    public float GetHealth()
-    {
+    public float GetHealth() {
         return _currentHealth;
     }
 
-    public void SetMaxHealth(float amount)
-    {
+    public void SetMaxHealth(float amount) {
         maxHealth = amount;
         _healthBar.SetMaxValue(maxHealth);
     }
 
-    public void IncrementMaxHealth(float amount)
-    {
+    public void IncrementMaxHealth(float amount) {
         maxHealth += amount;
         _healthBar.SetMaxValue(maxHealth);
-
     }
 
     // Sets Health based on parameters
@@ -48,12 +43,10 @@ public class EnemyHealth : MonoBehaviour
         {
             _currentHealth = maxHealth;
         }
-        else if (amount < 0)
-        {
+        else if (amount < 0) {
             _currentHealth = 0;
         }
-        else
-        {
+        else {
             _currentHealth = amount;
         }
 
@@ -78,6 +71,7 @@ public class EnemyHealth : MonoBehaviour
             _currentHealth -= amount;
         }
 
+        print(amount);
         _healthBar.SetValue(_currentHealth);
     }
 
