@@ -96,7 +96,7 @@ public class LockonFunctionality : MonoBehaviour {
         {
             if (_movementController.isLockedOn)
             {
-                if (Vector3.Distance(transform.position, _pointOfInterest.position) > _lockedOnRadius)
+                if (Object.ReferenceEquals(_pointOfInterest, null) || Vector3.Distance(transform.position, _pointOfInterest.position) > _lockedOnRadius)
                 {
                     _pointOfInterest = null;
                     _movementController.DisableLockon();
