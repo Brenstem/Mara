@@ -141,11 +141,15 @@ public class LockonFunctionality : MonoBehaviour
         {
             if (_pointOfInterest != null)
             {
+<<<<<<< Updated upstream
+                if (Object.ReferenceEquals(_pointOfInterest, null) || Vector3.Distance(transform.position, _pointOfInterest.position) > _lockedOnRadius)
+=======
                 Vector3 direction = _pointOfInterest.transform.position - transform.position;
                 direction.y = 0;
                 RaycastHit hit;
                 Physics.Raycast(_lockonThreshold.position, direction.normalized, out hit, Vector3.Distance(_lockonThreshold.position, _pointOfInterest.position), _groundMask); // is the view of the object obstructed?
                 if (hit.collider != null || Vector3.Distance(_lockonThreshold.position, _pointOfInterest.position) > _lockedOnRadius)
+>>>>>>> Stashed changes
                 {
                     _pointOfInterest = null;
                     _closestTarget = null;
