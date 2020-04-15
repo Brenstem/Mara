@@ -37,7 +37,7 @@ public class HitboxGroup : MonoBehaviour
             }
 
             foreach (Collider enemy in _hitTimes[highestPriorityIndex].isHit) {
-                enemy.gameObject.GetComponent<EnemyHealth>().Damage(-_hitTimes[highestPriorityIndex].damageValue);
+                enemy.gameObject.GetComponent<EnemyHealth>().Damage(_hitTimes[highestPriorityIndex].damageValue);
                 _alreadyHit.Add(enemy.gameObject);
             }
 
