@@ -4,14 +4,13 @@ using UnityEngine;
 
 public class GlobalState : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject _player;
+    [SerializeField] private GameObject _player;
+    
+    [SerializeField] private Camera _camera;
 
-    [SerializeField]
-    private Camera _camera;
+    [SerializeField] private AudioManager _audioManager;
 
-    [SerializeField]
-    private AudioManager _audioManager;
+    [SerializeField] private GameObject _playerMesh;
 
     public GameObject Player
     {
@@ -28,14 +27,14 @@ public class GlobalState : MonoBehaviour
         get { return _audioManager;  }
     }
 
+    public GameObject PlayerMesh
+    {
+        get { return _playerMesh; }
+    }
+
     private static GlobalState _state;
     public static GlobalState state {
         get { return _state; }
-    }
-
-    [SerializeField] private GameObject _playerMesh;
-    public GameObject PlayerMesh {
-        get { return _playerMesh; }
     }
 
     private void Awake() {
