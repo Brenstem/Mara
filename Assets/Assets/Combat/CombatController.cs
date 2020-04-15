@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 
 public class CombatController : MonoBehaviour
 {
@@ -11,8 +12,6 @@ public class CombatController : MonoBehaviour
 
     private bool _temp;
     private PlayerInput _playerInput;
-    public AttackState attackState = new AttackState();
-    public IdleAttackState idleState = new IdleAttackState();
 
     public HitboxGroup hitboxGroup;
 
@@ -45,13 +44,15 @@ public class CombatController : MonoBehaviour
 
     void Update()
     {
-        stateMachine.currentState.UpdateState(this);
+        stateMachine.Update();
         print("Animation is over: " + _animationOver);
+        print(stateMachine.currentState);
+        
     }
 
     public void EndAnim()
     {
-        print("Nu ska animationen ta slut eller vad fuck :)");
+        print("End animation");
         _animationOver = true;
     }
 }
@@ -65,6 +66,8 @@ public class IdleAttackState : State<CombatController>
 
     public override void UpdateState(CombatController owner)
     {
+        owner._animationOver = false;
+
         if (owner._attack)
         {
             if (GlobalState.state.Player.GetComponent<MovementController>().isLockedOn)
@@ -73,7 +76,7 @@ public class IdleAttackState : State<CombatController>
             }
             else 
             {
-                owner.stateMachine.ChangeState(owner.attackState);
+                owner.stateMachine.ChangeState(new AttackState());
             }
         }
     }
@@ -94,9 +97,9 @@ public class AttackState : State<CombatController>
 
     public override void ExitState(CombatController owner) 
     {
-        Debug.Log("Exit State");
         owner._animationOver = false;
         owner._attack = false;
+        Debug.Log("Exit State: " + owner._animationOver);
     }
 
     // Pulls player toward enemy "AutoAim"
@@ -104,15 +107,24 @@ public class AttackState : State<CombatController>
     {
         if (!_target) // If there is no target swing at air
         {
-            owner.stateMachine.ChangeState(owner.idleState);
+            Debug.Log("No target");
+            owner.stateMachine.ChangeState(new IdleAttackState());
+        }
+        else if (owner._animationOver) // If attack animation ended go to idlestate
+        {
+            owner._control.enabled = true;
+            owner.stateMachine.ChangeState(new IdleAttackState());
         }
         else if (hit = Physics.Raycast(owner.transform.position + _offset, _target.transform.position, owner.stoppingDistance, owner.enemyLayer)) // If target is in attack range face target and swing
         {
+            Debug.Log("Enemy in range");
             FaceEnemy(owner);
-            owner.stateMachine.ChangeState(owner.idleState);
-        }
+            owner.stateMachine.ChangeState(new IdleAttackState());
+        } 
         else
         {
+            Debug.Log("Target: " + _target);
+
             owner._control.enabled = false;
             FaceEnemy(owner);
 
@@ -127,12 +139,6 @@ public class AttackState : State<CombatController>
                 Debug.Log("Moving towards enemy...");
 
                 owner.characterController.Move(new Vector3(_direction.normalized.x, 0, _direction.normalized.z) * owner._dashAttackSpeed * Time.deltaTime);
-            }
-
-            if (owner._animationOver) // If attack animation ended go to idlestate
-            {
-                owner._control.enabled = true;
-                owner.stateMachine.ChangeState(owner.idleState);
             }
         }
     }
