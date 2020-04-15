@@ -9,7 +9,7 @@ public class Hitbox : MonoBehaviour {
     [SerializeField] private LayerMask _targetLayerMask;
 
     [Header("Hitbox stats")]
-    public int priority;
+    [Tooltip("Lower numbers are prioritized"), Range(0, 15)] public int priority;
     public float damageValue;
     [SerializeField] private Vector3 _size;
     [SerializeField] private Vector3 _offset;

@@ -10,7 +10,7 @@ public class CombatController : MonoBehaviour {
     Animator anim;
     CharacterController characterController;
     MovementController control;
-    FindTargets TargetFinder;
+    TargetFinder TargetFinder;
 
     private bool temp;
     private Vector3 direction;
@@ -20,7 +20,7 @@ public class CombatController : MonoBehaviour {
         anim = GetComponent<Animator>();
         characterController = GetComponentInParent<CharacterController>();
         control = GetComponentInParent<MovementController>();
-        TargetFinder = GetComponent<FindTargets>();
+        TargetFinder = GetComponent<TargetFinder>();
     }
 
     [SerializeField] private HitboxGroup hitboxGroup;
