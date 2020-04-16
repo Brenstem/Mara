@@ -5,26 +5,42 @@ using UnityEngine;
 // DW och Dennis
 public class HitboxGroup : MonoBehaviour
 {
+    public delegate void OnEnableHitboxes(int id);
+    public event OnEnableHitboxes onEnableHitboxes;
+
+    public delegate void OnDisableHitboxes(int id);
+    public event OnDisableHitboxes onDisableHitboxes;
+
+    private HitboxEventHandler _hitboxEventHandler;
     public List<GameObject> _alreadyHit;
     private List<Hitbox> _hitTimes;
-
+    
     void Awake() {
         _alreadyHit = new List<GameObject>();
         _hitTimes = new List<Hitbox>();
+        print(GlobalState.state.PlayerMesh);
+        print(GlobalState.state.PlayerMesh.GetComponent<HitboxEventHandler>());
+        _hitboxEventHandler = GlobalState.state.PlayerMesh.GetComponent<HitboxEventHandler>();
+        _hitboxEventHandler.onEnableHitboxes += EnableEvent;
+        _hitboxEventHandler.onDisableHitboxes += DisableEvent;
+        _hitboxEventHandler.onEndAnim += ResetList;
     }
 
-    private void EnableChildren() {
-        Transform[] children = GetComponentsInChildren<Transform>(true);
-        foreach (Transform child in children) {
-            child.gameObject.SetActive(true);
-        }
+    private void EnableEvent(int id)
+    {
+        if (onEnableHitboxes != null)
+            onEnableHitboxes(id);
+        else
+            Debug.LogWarning("No object is subscribed to the \"onEnableHitboxes\" event!", this);
+
     }
 
-    private void DisableChildren() {
-        for (int i = 0; i < transform.childCount; i++) {
-            transform.GetChild(i).gameObject.SetActive(false);
-        }
-        ResetList();
+    private void DisableEvent(int id)
+    {
+        if (onDisableHitboxes != null)
+            onDisableHitboxes(id);
+        else
+            Debug.LogWarning("No object is subscribed to the \"onDisableHitboxes\" event!", this);
     }
 
     void LateUpdate() {
@@ -49,19 +65,42 @@ public class HitboxGroup : MonoBehaviour
         _hitTimes.Add(hitbox);
     }
 
-    private void OnEnable() {
-        HitboxHandler.onEnableHitboxes += EnableChildren;
-        HitboxHandler.onDisableHitboxes += DisableChildren;
+    private void OnEnable()
+    {
+        _hitboxEventHandler.onEnableHitboxes += EnableEvent;
+        _hitboxEventHandler.onDisableHitboxes += DisableEvent;
+        _hitboxEventHandler.onEndAnim += ResetList;
+
         ResetList();
     }
 
     private void OnDisable() {
-        HitboxHandler.onEnableHitboxes -= EnableChildren;
-        HitboxHandler.onDisableHitboxes -= DisableChildren;
-        DisableChildren();
+        _hitboxEventHandler.onEnableHitboxes -= EnableEvent;
+        _hitboxEventHandler.onDisableHitboxes -= DisableEvent;
+        _hitboxEventHandler.onEndAnim -= ResetList;
     }
 
     private void ResetList() {
+        DisableEvent(0);
         _alreadyHit.Clear();
     }
+
+
+
+    /*
+    private void EnableChildren(int id) {
+        Transform[] children = GetComponentsInChildren<Transform>(true);
+        foreach (Transform child in children) {
+            child.gameObject.SetActive(true);
+        }
+    }
+
+    private void DisableChildren(int id) {
+        for (int i = 0; i < transform.childCount; i++) {
+            transform.GetChild(i).gameObject.SetActive(false);
+        }
+        ResetList();
+    }
+    */
+
 }

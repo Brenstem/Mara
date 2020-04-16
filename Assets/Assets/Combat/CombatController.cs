@@ -45,14 +45,14 @@ public class CombatController : MonoBehaviour
     void Update()
     {
         stateMachine.Update();
-        print("Animation is over: " + _animationOver);
-        print(stateMachine.currentState);
+        //print("Animation is over: " + _animationOver);
+        //print(stateMachine.currentState);
         
     }
 
     public void EndAnim()
     {
-        print("End animation");
+        //print("End animation");
         _animationOver = true;
     }
 }
