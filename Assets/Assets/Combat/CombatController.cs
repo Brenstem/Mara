@@ -13,7 +13,7 @@ public class CombatController : MonoBehaviour
     private bool _temp;
     private PlayerInput _playerInput;
 
-    public HitboxGroup hitboxGroup;
+    [SerializeField] public List<HitboxGroup> hitboxGroups;
 
     [HideInInspector] public bool _attack;
     [HideInInspector] public bool _animationOver;
@@ -45,43 +45,68 @@ public class CombatController : MonoBehaviour
     void Update()
     {
         stateMachine.Update();
-        //print("Animation is over: " + _animationOver);
-        //print(stateMachine.currentState);
-        
+        print(stateMachine.currentState);
+        print(_animationOver);
     }
 
     public void EndAnim()
     {
-        //print("End animation");
         _animationOver = true;
+        print("EndAnim");
     }
-}
 
-
-public class IdleAttackState : State<CombatController>
-{
-    public override void EnterState(CombatController owner) {  }
-
-    public override void ExitState(CombatController owner) {  }
-
-    public override void UpdateState(CombatController owner)
+    public void Attack(GameObject target)
     {
-        owner._animationOver = false;
+        Vector3 offset = new Vector3(0, 0.5f, 0);
+        Vector3 direction; // Direction of enemy
+        bool hit; // Cast a ray with a length of stoppingdistance from player towards enemy
 
-        if (owner._attack)
+        foreach (HitboxGroup group in hitboxGroups)
         {
-            if (GlobalState.state.Player.GetComponent<MovementController>().isLockedOn)
+            group.enabled = true;
+        }
+
+        if (!target) // If there is no target swing at air
+        {
+            // wait for animation and go to idle
+            if (_animationOver)
             {
-                // owner.stateMachine.ChangeState(new LockedAttackState());
+                stateMachine.ChangeState(new IdleAttackState());
             }
-            else 
+        }
+        else
+        {
+            direction = target.transform.position - transform.position;
+            hit = Physics.Raycast(transform.position + offset, direction, stoppingDistance, enemyLayer);
+
+            // Check if target is in range
+            if (hit = Physics.Raycast(transform.position + offset, target.transform.position, stoppingDistance, enemyLayer)) // If target is in attack range face target and swing
             {
-                owner.stateMachine.ChangeState(new AttackState());
+                FaceEnemy(target);
+                _control.enabled = true;
+                stateMachine.ChangeState(new IdleAttackState());
+            }
+            else
+            {
+                _control.enabled = false;
+                FaceEnemy(target);
+
+                if (!hit) // If raycast missed move towards enemy
+                {
+                    characterController.Move(new Vector3(direction.normalized.x, 0, direction.normalized.z) * _dashAttackSpeed * Time.deltaTime);
+                }
             }
         }
     }
-}
 
+    // Character looks at enemy
+    private void FaceEnemy(GameObject target)
+    {
+        Vector3 _direction = (target.transform.position - transform.position);
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(_direction.x, 0, _direction.z));
+        GlobalState.state.Player.GetComponent<Transform>().rotation = lookRotation;
+    }
+}
 public class AttackState : State<CombatController>
 {
     private GameObject _target;
@@ -91,11 +116,10 @@ public class AttackState : State<CombatController>
 
     public override void EnterState(CombatController owner)
     {
-        Attack(owner);
         _target = owner.TargetFinder.FindTarget(); // Active target
     }
 
-    public override void ExitState(CombatController owner) 
+    public override void ExitState(CombatController owner)
     {
         owner._animationOver = false;
         owner._attack = false;
@@ -120,7 +144,7 @@ public class AttackState : State<CombatController>
             Debug.Log("Enemy in range");
             FaceEnemy(owner);
             owner.stateMachine.ChangeState(new IdleAttackState());
-        } 
+        }
         else
         {
             Debug.Log("Target: " + _target);
@@ -144,37 +168,140 @@ public class AttackState : State<CombatController>
     }
 
     // Character looks at enemy
-    private void FaceEnemy(CombatController owner) 
+    private void FaceEnemy(CombatController owner)
     {
         _direction = (_target.transform.position - owner.transform.position);
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(_direction.x, 0, _direction.z));
         GlobalState.state.Player.GetComponent<Transform>().rotation = lookRotation;
     }
+}
 
-    // Run the attack animations and enable hitboxes
-    public void Attack(CombatController owner)
+public class IdleAttackState : State<CombatController>
+{
+    public override void EnterState(CombatController owner) { }
+
+    public override void ExitState(CombatController owner) { }
+
+    public override void UpdateState(CombatController owner)
     {
-        owner.hitboxGroup.enabled = true;
-        owner.anim.SetTrigger("Attack");
+        if (Input.GetMouseButtonDown(0))
+        {
+            owner.stateMachine.ChangeState(new FirstAttackState());
+        }
     }
 }
 
-public class LockedAttackState : State<CombatController>
+public class FirstAttackState : State<CombatController>
 {
-    public override void EnterState(CombatController owner) 
+    private bool _doubleCombo;
+    private GameObject _target;
+
+    public override void EnterState(CombatController owner)
     {
-        owner.hitboxGroup.enabled = true;
+        owner.anim.SetBool("DoubleCombo", false);
         owner.anim.SetTrigger("Attack");
+        _target = owner.TargetFinder.FindTarget();
+    }
+
+    public override void ExitState(CombatController owner)
+    {
+        if (_doubleCombo)
+        {
+            owner.anim.SetBool("DoubleCombo", true);
+            _doubleCombo = false;
+        }
+
+        owner._animationOver = false;
+        owner._attack = false;
+        owner._control.enabled = true;
+    }
+
+    public override void UpdateState(CombatController owner)
+    {
+        owner.Attack(_target);
+
+        if (!owner._animationOver && Input.GetMouseButtonDown(0))
+        {
+            _doubleCombo = true;
+        }
+
+        if (owner._animationOver && !_doubleCombo)
+        {
+            Debug.Log("go back to idle from first attack");
+            owner.stateMachine.ChangeState(new IdleAttackState());
+        }
+        else if (owner._animationOver)
+        {
+            owner.stateMachine.ChangeState(new SecondAttackState());
+        }
+    }
+}
+
+public class SecondAttackState : State<CombatController>
+{
+    private bool _tripleCombo;
+    private GameObject _target;
+
+    public override void EnterState(CombatController owner)
+    {
+        _target = owner.TargetFinder.FindTarget();
+        owner.anim.SetBool("TripleCombo", false);
+    }
+
+    public override void ExitState(CombatController owner)
+    {
+        if (_tripleCombo)
+        {
+            owner.anim.SetBool("TripleCombo", true);
+            _tripleCombo = false;
+        }
+
+        owner._animationOver = false;
+        owner._attack = false;
+        owner._control.enabled = true;
+    }
+
+    public override void UpdateState(CombatController owner)
+    {
+        owner.Attack(_target);
+
+        if (!owner._animationOver && Input.GetMouseButtonDown(0))
+        {
+            Debug.Log("triple combo");
+            _tripleCombo = true;
+        }
+
+        if (owner._animationOver && !_tripleCombo)
+        {
+            owner.stateMachine.ChangeState(new IdleAttackState());
+        }
+        else if (owner._animationOver)
+        {
+            owner.stateMachine.ChangeState(new ThirdAttackState());
+        }
+    }
+}
+
+public class ThirdAttackState : State<CombatController>
+{
+    private GameObject _target;
+
+    public override void EnterState(CombatController owner)
+    {
+        _target = owner.TargetFinder.FindTarget();
     }
 
     public override void ExitState(CombatController owner)
     {
         owner._animationOver = false;
         owner._attack = false;
+        owner._control.enabled = true;
     }
 
     public override void UpdateState(CombatController owner)
     {
+        owner.Attack(_target);
+
         if (owner._animationOver)
         {
             owner.stateMachine.ChangeState(new IdleAttackState());
