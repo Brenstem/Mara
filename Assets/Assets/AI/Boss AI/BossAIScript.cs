@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -19,8 +20,22 @@ public class BossAIScript : MonoBehaviour
 
     public PhaseOneStats phaseOneStats;
     public PhaseTwoStats phaseTwoStats;
+    
+    [System.Serializable] public struct DesiredDistanceToAngleValues
+    {
+        public float desiredDistanceOffset;
+        public float angle;
+    }
 
-    public Animator bossAnimator;
+    [Tooltip("Elementen MÅSTE vara i ordnade utifrån Desired Distance Offset (från störst till minst)")]
+    [SerializeField] public DesiredDistanceToAngleValues[] desiredDistanceToAngleValues;
+
+    [NonSerialized] public List<float> desiredDistanceOffsetValues = new List<float>();
+    [NonSerialized] public List<float> desiredDistanceAngleValues = new List<float>();
+
+
+    //[NonSerialized] public Dictionary<float, float> desierdDistanceOffsetToAngleDictionary = new Dictionary<float, float>();
+
 
 
     public StateMachine<BossAIScript> phaseControllingStateMachine;
@@ -57,12 +72,14 @@ public class BossAIScript : MonoBehaviour
     [SerializeField] public float defaultTurnSpeed = 5f;
 
 
+    //borde vara nonserialized men har den som serialized för testning
+    /*[NonSerialized]*/ public float testCurrentHP;
+
+    [NonSerialized] public Animator bossAnimator;
     [NonSerialized] public float turnSpeed;
 
     //[SerializeField] public State<BossPhaseOneState>[] stateArray;
 
-    //borde vara nonserialized men har den som serialized för testning
-    /*[NonSerialized]*/ public float testCurrentHP;
 
     [NonSerialized] public NavMeshAgent agent;
     [NonSerialized] public GameObject player;
@@ -93,6 +110,17 @@ public class BossAIScript : MonoBehaviour
 
     void Start()
     {
+
+        for (int i = 0; i < desiredDistanceToAngleValues.Length; i++)
+        {
+            desiredDistanceOffsetValues.Add(desiredDistanceToAngleValues[i].desiredDistanceOffset);
+            desiredDistanceAngleValues.Add(desiredDistanceToAngleValues[i].angle);
+
+            print("added " + desiredDistanceAngleValues[i] + " with " + desiredDistanceOffsetValues[i]);
+
+            //desierdDistanceOffsetToAngleDictionary.Add(desierdDistanceToAngleValues[i].desierdDistanceOffset, desierdDistanceToAngleValues[i].angle);
+        }
+
         agent.updateRotation = false;
         phaseControllingStateMachine.ChangeState(preBossFightState);
     }
@@ -208,6 +236,7 @@ public class BossPhaseOneState : State<BossAIScript>
     public PhaseOneCombatState phaseOneCombatState;
     public PhaseOneDrainAttackState phaseOneDrainAttackState;
     public PhaseOneMeleeAttackOneState phaseOneMeleeAttackOneState;
+    public PhaseOneDashState phaseOneDashState;
 
 
     public override void EnterState(BossAIScript owner)
@@ -215,8 +244,10 @@ public class BossPhaseOneState : State<BossAIScript>
         //fixa detta i konstruktor kanske?
         phaseOneStateMashine = new StateMachine<BossPhaseOneState>(this);
 
-        phaseOneCombatState = new PhaseOneCombatState(owner.testAttackSpeed, owner.testMinAttackCooldown, owner.testMeleeRange, owner.testDrainRange, owner);
         phase1Attack1State = new Phase1Attack1State(owner.testDrainDPS, owner.testDrainRange, owner.testDrainChargeTime);
+
+        phaseOneCombatState = new PhaseOneCombatState(owner.testAttackSpeed, owner.testMinAttackCooldown, owner.testMeleeRange, owner.testDrainRange, owner);
+        phaseOneDashState = new PhaseOneDashState(4f, 2f, 0.1f);
 
         phaseOneDrainAttackState = new PhaseOneDrainAttackState(owner.testDrainDPS, owner.testDrainRange, owner.testDrainAttackTime, owner.testDrainChargeTime);
         phaseOneMeleeAttackOneState = new PhaseOneMeleeAttackOneState(owner.testDrainDPS, owner.testMeleeRange, owner.testDrainAttackTime, owner.testDrainChargeTime);
@@ -246,9 +277,10 @@ public class BossPhaseOneState : State<BossAIScript>
     }
 }
 
+//vet inte om allt detta typ egentligen borde göras i parent statet (borde typ det tror jag)
 public class PhaseOneCombatState : State<BossPhaseOneState>
 {
-    private float timer;
+    private Timer timer;
     private float _attackSpeed;
     private float _minAttackCooldown;
     private float _meleeAttackRange;
@@ -265,20 +297,20 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
         _minAttackCooldown = minAttackCooldown;
         _meleeAttackRange = meleeAttackRange;
         _drainAttackRange = drainAttackRange;
+
         _ownerParentScript = ownerParentScript;
     }
 
     public override void EnterState(BossPhaseOneState owner)
     {
         Debug.Log("in i PhaseOneCombatState");
-        
+        timer = new Timer(_attackSpeed);
     }
 
     public override void ExitState(BossPhaseOneState owner)
     {
         Debug.Log("hej då PhaseOneCombatState");
         _ownerParentScript.agent.SetDestination(_ownerParentScript.transform.position);
-        timer = 0;
     }
 
     public override void UpdateState(BossPhaseOneState owner)
@@ -286,13 +318,12 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
 
         _ownerParentScript.FacePlayer();
 
-        timer += Time.deltaTime;
-
+        timer.Time += Time.deltaTime;
 
         //kanske borde dela upp detta i olika movement states pga animationer men vet inte om det behövs
 
         //kolla om man ska attackera
-        if (timer > _attackSpeed)
+        if (timer.Expired())
         {
             if (_drainAttackRange > Vector3.Distance(_ownerParentScript.transform.position, _ownerParentScript.player.transform.position))
             {
@@ -303,8 +334,6 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
                 }
                 else
                 {
-                    //_destination = _ownerParentScript.player.transform.position + (_ownerParentScript.transform.position - _ownerParentScript.player.transform.position).normalized * (_attackRange - _ownerParentScript.agent.stoppingDistance);
-
                     //dasha ibland här?
 
                     _destination = _ownerParentScript.player.transform.position;
@@ -319,96 +348,150 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
             }
         }
         //kolla om spelaren är nära nog att slå
-        else if (timer > _minAttackCooldown && _meleeAttackRange > Vector3.Distance(_ownerParentScript.transform.position, _ownerParentScript.player.transform.position))
+        else if (timer.Time > _minAttackCooldown && _meleeAttackRange > Vector3.Distance(_ownerParentScript.transform.position, _ownerParentScript.player.transform.position))
         {
-            //kanske göra AOE attack för att tvinga iväg spelaren?
+            //kanske göra AOE attack här för att tvinga iväg spelaren?
             owner.phaseOneStateMashine.ChangeState(owner.phaseOneMeleeAttackOneState);
         }
-        //idle movement
+        //idle strafe movement
         else
         {
             //gör så att den byter mellan att gå höger och vänster
             int sign = 0;
-            if (timer > _attackSpeed / 2)
+            if (timer.Ratio() > 0.5f)
             {
                 sign = -1;
-                //_ownerParentScript.agent.SetDestination(_ownerParentScript.transform.position + _ownerParentScript.transform.right * 2);
             }
             else
             {
                 sign = 1;
-                //_ownerParentScript.agent.SetDestination(_ownerParentScript.transform.position + _ownerParentScript.transform.right * 2 * -1);
             }
-
-
 
             _direction = _ownerParentScript.transform.right;
 
-            //_ownerParentScript.desiredDistanceToPlayer = 5f;
-
-            //vector = Quaternion.AngleAxis(-45, Vector3.up) * vector;
-
-            //använd en Serialized dictionary för att kunna säga "om +3 off, ändra vinkeln med -65"
             //lägga till någon randomness variabel så movement inte blir lika predictable? (kan fucka animationerna?)
+            //kanske slurpa mellan de olika värdena (kan bli jobbigt och vet inte om det behövs)
+            float compairValue = Vector3.Distance(_ownerParentScript.transform.position, _ownerParentScript.player.transform.position);
+
+            for (int i = 0; i < _ownerParentScript.desiredDistanceToAngleValues.Length; i++)
+            {
+                if (compairValue > _ownerParentScript.desiredDistanceToPlayer + _ownerParentScript.desiredDistanceOffsetValues[i])
+                {
+                    _direction = Quaternion.AngleAxis(_ownerParentScript.desiredDistanceAngleValues[i] * sign * -1, Vector3.up) * _direction;
+                    break;
+                }
+            }
+
+            /*
             switch (Vector3.Distance(_ownerParentScript.transform.position, _ownerParentScript.player.transform.position))
             {
                 case float n when (n > _ownerParentScript.desiredDistanceToPlayer + 3f):
                     //gå väldigt frammåt
                     _direction = Quaternion.AngleAxis(-65 * sign, Vector3.up) * _direction;
-                    Debug.Log("8");
+                    Debug.Log("gå väldigt frammåt");
                     break;
                 case float n when (n > _ownerParentScript.desiredDistanceToPlayer + 2f):
                     //gå ganska frammåt
                     _direction = Quaternion.AngleAxis(-45 * sign, Vector3.up) * _direction;
-                    Debug.Log("7");
+                    Debug.Log("gå ganska frammåt");
                     break;
                 case float n when (n > _ownerParentScript.desiredDistanceToPlayer + 1f):
                     //gå lite frammåt
                     _direction = Quaternion.AngleAxis(-20 * sign, Vector3.up) * _direction;
-                    Debug.Log("6");
+                    Debug.Log("gå lite frammåt");
                     break;
                 case float n when (n > _ownerParentScript.desiredDistanceToPlayer):
                     //gå åt sidan
                     _direction = Quaternion.AngleAxis(0 * sign, Vector3.up) * _direction;
-                    Debug.Log("5");
+                    Debug.Log("gå åt sidan");
                     break;
                 case float n when (n > _ownerParentScript.desiredDistanceToPlayer - 1f):
                     //gå lite bakåt
                     _direction = Quaternion.AngleAxis(20 * sign, Vector3.up) * _direction;
-                    Debug.Log("4");
+                    Debug.Log("gå lite bakåt");
                     break;
                 case float n when (n > _ownerParentScript.desiredDistanceToPlayer - 2f):
                     //gå ganska bakåt
                     _direction = Quaternion.AngleAxis(30 * sign, Vector3.up) * _direction;
-                    Debug.Log("3");
+                    Debug.Log("gå ganska bakåt");
                     break;
                 //tog bort för det känndes wack
-                /*case float n when (n > _ownerParentScript.desiredDistanceToPlayer - 3f):
+                case float n when (n > _ownerParentScript.desiredDistanceToPlayer - 3f):
                     //gå väldigt bakåt
                     _direction = Quaternion.AngleAxis(65 * sign, Vector3.up) * _direction;
                     Debug.Log("2");
-                    break;*/
+                    break;
                 //precis inpå spelaren
                 case float n when (n > 1f):
                     //gå väldigt bakåt
                     _direction = Quaternion.AngleAxis(90 * sign, Vector3.up) * _direction;
                     //kanske lägga in att man dashar här istället
-                    Debug.Log("2 CLOSE >:(");
+                    Debug.Log("2 CLOSE >:( (gå väldigt bakåt)");
                     break;
             }
-            //_direction = Quaternion.AngleAxis(-45 * sign, Vector3.up) * _direction;
-
-            Debug.Log(_direction);
+            */
 
             //ändra 5an till typ destinationAmplifier
             _destination = _ownerParentScript.transform.position + _direction * 5 * sign;
-
-            Debug.Log(_destination);
 
             _ownerParentScript.agent.SetDestination(_destination);
         }
     }
 }
+
+public class PhaseOneDashState : State<BossPhaseOneState>
+{
+    private float _speed;
+    private float _dashDurration;
+    private float _lagDurration;
+
+    private Timer _dashTimer;
+    private Timer _lagTimer;
+
+    private Vector2 _dashDirection;
+
+
+    public PhaseOneDashState(float speed, float dashDurration, float lagDurration)
+    {
+        _speed = speed;
+        _dashDurration = dashDurration;
+        _lagDurration = lagDurration;
+    }
+
+
+    public override void EnterState(BossPhaseOneState owner)
+    {
+        Debug.Log("zoom for, " + _dashDurration + " MPH, " + _speed);
+        _dashTimer = new Timer(_dashDurration);
+        _lagTimer = new Timer(_lagDurration);
+    }
+
+    public override void ExitState(BossPhaseOneState owner)
+    {
+        Debug.Log("hej då zoom");
+    }
+
+    public override void UpdateState(BossPhaseOneState owner)
+    {
+        _dashTimer.Time += Time.deltaTime;
+
+        if (_dashTimer.Expired())
+        {
+            _lagTimer.Time += Time.deltaTime;
+            
+            if (_lagTimer.Expired())
+            {
+                owner.phaseOneStateMashine.ChangeState(owner.phaseOneCombatState);
+            }
+        }
+        else
+        {
+            //dash time
+            Debug.Log("dash time");
+        }
+    }
+}
+
 
 
 
@@ -418,7 +501,6 @@ public class PhaseOneDrainAttackState : State<BossPhaseOneState>
     private float _range;
     private float _totalDurration;
     private float _chargeTime;
-    private float timer;
 
 
     public PhaseOneDrainAttackState(float damagePerSecond, float range, float attackTime, float chargeTime)
@@ -473,7 +555,6 @@ public class PhaseOneMeleeAttackOneState : State<BossPhaseOneState>
     private float _range;
     private float _totalDurration;
     private float _chargeTime;
-    private float timer;
 
 
     public PhaseOneMeleeAttackOneState(float damagePerSecond, float range, float attackTime, float chargeTime)
@@ -530,7 +611,7 @@ public class Phase1Attack1State : State<BossPhaseOneState>
     private float _damage;
     private float _range;
     private float _durration;
-    private float timer;
+    private Timer _timer;
 
 
     public Phase1Attack1State(float damage, float range, float durration)
@@ -544,6 +625,7 @@ public class Phase1Attack1State : State<BossPhaseOneState>
     public override void EnterState(BossPhaseOneState owner)
     {
         Debug.Log("nu ska jag fan göra Phase1Attack1 >:(, med dessa stats:  damage " + _damage + " range " + _range + " durration " + _durration);
+        _timer = new Timer(_durration);
     }
 
     public override void ExitState(BossPhaseOneState owner)
@@ -555,11 +637,10 @@ public class Phase1Attack1State : State<BossPhaseOneState>
     {
         //kör cool animation som bestämmer när attacken är över istället för durration
 
-        timer += Time.deltaTime;
+        _timer.Time += Time.deltaTime;
 
-        if (timer > _durration)
+        if (_timer.Expired())
         {
-            timer = 0;
             owner.phaseOneStateMashine.ChangeState(owner.phaseOneCombatState);
         }
     }
