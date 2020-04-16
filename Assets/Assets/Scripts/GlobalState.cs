@@ -34,7 +34,13 @@ public class GlobalState : MonoBehaviour
 
     private static GlobalState _state;
     public static GlobalState state {
-        get { return _state; }
+        get {
+            if (_state == null)
+            {
+                _state = GameObject.FindObjectOfType<GlobalState>();
+            }
+            return _state;
+        }
     }
 
     private void Awake() {

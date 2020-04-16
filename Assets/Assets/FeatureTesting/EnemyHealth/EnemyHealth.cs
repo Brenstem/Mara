@@ -70,8 +70,6 @@ public class EnemyHealth : MonoBehaviour
         {
             _currentHealth -= amount;
         }
-
-        print(amount);
         _healthBar.SetValue(_currentHealth);
     }
 
