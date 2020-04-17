@@ -161,7 +161,7 @@ public class PlayerInsanity : MonoBehaviour
                 _timer = new Timer(_impendingDoomTimer);
                 _playerDying = true;
                 break;
-            case float n when (n > staticInsanityValues[5]):
+            /*case float n when (n > staticInsanityValues[5]):
                 OnMonsters();
                 break;
             case float n when (n > staticInsanityValues[4]):
@@ -178,13 +178,13 @@ public class PlayerInsanity : MonoBehaviour
                 break;
             case float n when (n > staticInsanityValues[0]):
                 OnTutorialDebuff();
-                break;
+                break;*/
         }
 
         // Percentage based debuffs
         float currentInsanityPercentage = _currentInsanity / _maxInsanity * 100;
 
-        switch (currentInsanityPercentage)
+        /*switch (currentInsanityPercentage)
         {
             case float n when (n > dynamicInsanityValues[6]):
                 OnImpendingDoom();
@@ -207,7 +207,7 @@ public class PlayerInsanity : MonoBehaviour
             case float n when (n > dynamicInsanityValues[0]):
                 OnTutorialDebuff();
                 break;
-        }
+        }*/
     }
 
     public void KillPlayer()
