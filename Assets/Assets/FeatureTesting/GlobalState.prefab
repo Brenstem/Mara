@@ -47,6 +47,7 @@ MonoBehaviour:
   _player: {fileID: 0}
   _camera: {fileID: 0}
   _audioManager: {fileID: 1604520631144556562}
+  _playerMesh: {fileID: 0}
 --- !u!114 &1604520631144556562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,3 +61,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InsanityEventAudio: event:/Insanity manager
+  PlayerFootsteps: 
+  playerSwordSwingAudio: 
+  playerDodgeAudio: 
+  playerJumpAudio: 
