@@ -7,12 +7,12 @@ public class Hitbox : MonoBehaviour
 {
     private HitboxGroup _parent;
     [HideInInspector] public Collider[] isHit;
-    [SerializeField] private LayerMask _targetLayerMask;
 
     [Header("Hitbox stats")]
     [Tooltip("Lower numbers are prioritized"), Range(0, 15)] public int priority;
     public int id;
     public float damageValue;
+    public bool isParryable;
     [SerializeField] private Vector3 _size;
     [SerializeField] private Vector3 _offset;
 
@@ -24,7 +24,7 @@ public class Hitbox : MonoBehaviour
     void Update()
     {
         //Lägger in objekt som är i hitboxen i arrayn
-        isHit = Physics.OverlapBox(transform.position + _offset, _size * 0.5f, transform.rotation, _targetLayerMask);
+        isHit = Physics.OverlapBox(transform.position + _offset, _size * 0.5f, transform.rotation, _parent.targetLayerMask);
 
         foreach (Collider enemy in isHit)
         {

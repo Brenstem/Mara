@@ -11,8 +11,10 @@ public class HitboxGroup : MonoBehaviour
     public delegate void OnDisableHitboxes(int id);
     public event OnDisableHitboxes onDisableHitboxes;
 
-    private HitboxEventHandler _hitboxEventHandler;
-    public List<GameObject> _alreadyHit;
+    [SerializeField] private HitboxEventHandler _hitboxEventHandler;
+    public LayerMask targetLayerMask;
+
+    [HideInInspector] public List<GameObject> _alreadyHit;
     private List<Hitbox> _hitTimes;
     
     void Awake() {
@@ -20,7 +22,19 @@ public class HitboxGroup : MonoBehaviour
         _hitTimes = new List<Hitbox>();
         // print(GlobalState.state.PlayerMesh);
         // print(GlobalState.state.PlayerMesh.GetComponent<HitboxEventHandler>());
-        _hitboxEventHandler = GlobalState.state.PlayerMesh.GetComponent<HitboxEventHandler>();
+        if (_hitboxEventHandler == null)
+        {
+            Debug.LogWarning("HitboxEventHandler missing! Resorting to finding in parent...", this);
+            _hitboxEventHandler = GetComponentInParent<HitboxEventHandler>();
+            if (_hitboxEventHandler == null)
+            {
+                Debug.LogError("Unable to find HitboxEventHandler in parent!", this);
+            }
+            else
+            {
+                Debug.Log("HitboxEventHandler found. Please add this component as a reference after game session", this);
+            }
+        }
         _hitboxEventHandler.onEnableHitboxes += EnableEvent;
         _hitboxEventHandler.onDisableHitboxes += DisableEvent;
         _hitboxEventHandler.onEndAnim += ResetList;
@@ -55,7 +69,34 @@ public class HitboxGroup : MonoBehaviour
             {
                 if (!_alreadyHit.Contains(enemy.gameObject))
                 {
-                    enemy.gameObject.GetComponent<EnemyHealth>().Damage(_hitTimes[highestPriorityIndex].damageValue);
+                    Hitbox hit = _hitTimes[highestPriorityIndex];
+                    if (targetLayerMask == GlobalState.state.PlayerMask)
+                    {
+                        if (hit.isParryable && GlobalState.state.PlayerMesh.GetComponent<CombatController>().IsParrying)
+                        {
+                            //dont do damage, msg player parry successful
+                            print("Successful parry");
+                            GlobalState.state.PlayerMesh.GetComponent<CombatController>().startTime = true;
+                            Time.timeScale = 0.01f;
+                        }
+                        else
+                        {
+                            print("failed parry");
+                            enemy.gameObject.GetComponent<PlayerInsanity>().IncrementInsanity(hit.damageValue);
+                        }
+                    }
+                    else
+                    {
+                        var health = enemy.gameObject.GetComponent<EnemyHealth>();
+                        if (health == null)
+                        {
+                            Debug.LogWarning("EnemyHealth missing!", this);
+                        }
+                        else
+                        {
+                            enemy.gameObject.GetComponent<EnemyHealth>().Damage(hit.damageValue);
+                        }
+                    }
                     _alreadyHit.Add(enemy.gameObject);
                 }
             }

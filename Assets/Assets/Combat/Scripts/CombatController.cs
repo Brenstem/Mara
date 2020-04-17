@@ -23,6 +23,17 @@ public class CombatController : MonoBehaviour
     [HideInInspector] public TargetFinder TargetFinder;
     [HideInInspector] public CharacterController characterController;
 
+    public bool IsParrying
+    {
+        get
+        {
+            if (stateMachine.currentState.GetType() == typeof(ParryState))
+                return true;
+            else
+                return false;
+        }
+    }
+
     private void OnEnable() { _playerInput.Enable(); }
 
     private void OnDisable() { _playerInput.Disable(); }
@@ -42,10 +53,35 @@ public class CombatController : MonoBehaviour
         stateMachine.ChangeState(new IdleAttackState());
     }
 
+    private Timer _timer = new Timer(1.0f); // kul effekt, ta bort sen
+    private bool st;
+    public bool startTime
+    {
+        get { return st; }
+        set
+        {
+            if (value)
+                _timer.Reset();
+            st = value;
+        }
+    }
     void Update()
     {
         stateMachine.Update();
         print(stateMachine.currentState);
+        if (startTime)
+            _timer.Time += Time.deltaTime;
+        if (_timer.Expired())
+        {
+            Time.timeScale = 1.0f;
+            startTime = false;
+            _timer.Reset();
+        }
+        else
+        {
+            Time.timeScale = Mathf.Lerp(Time.timeScale, 1.0f, _timer.Time);
+        }
+
     }
 
     public void EndAnim()
@@ -107,11 +143,14 @@ public class IdleAttackState : State<CombatController>
     public override void UpdateState(CombatController owner)
     {
         owner._animationOver = false;
-
-
+        
         if (Input.GetMouseButtonDown(0))
         {
             owner.stateMachine.ChangeState(new FirstAttackState());
+        }
+        else if (Input.GetMouseButtonDown(1))
+        {
+            owner.stateMachine.ChangeState(new ParryState());
         }
     }
 }
@@ -232,4 +271,30 @@ public class ThirdAttackState : State<CombatController>
     }
 }
 
+public class ParryState : State<CombatController>
+{
+    private Timer _timer;
+    public override void EnterState(CombatController owner)
+    {
+        float parryTime = 1.0f;
+        _timer = new Timer(parryTime);
+        owner.anim.SetBool("Parry", true);
+    }
 
+    public override void ExitState(CombatController owner)
+    {
+        owner.anim.SetBool("Parry", false);
+        _timer.Reset();
+    }
+
+    public override void UpdateState(CombatController owner)
+    {
+        _timer.Time += Time.deltaTime;
+        if (_timer.Expired())
+        {
+            //Lag men det gör man sen typ
+            owner.stateMachine.ChangeState(new IdleAttackState());
+        }
+
+    }
+}
