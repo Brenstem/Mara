@@ -45,13 +45,11 @@ public class CombatController : MonoBehaviour
     void Update()
     {
         stateMachine.Update();
-        print(stateMachine.currentState);
     }
 
     public void EndAnim()
     {
         _animationOver = true;
-        print("EndAnim");
     }
 
     public void Attack(GameObject target, bool autoaim)
@@ -190,7 +188,6 @@ public class SecondAttackState : State<CombatController>
 
         if (!owner._animationOver && Input.GetMouseButtonDown(0))
         {
-            Debug.Log("triple combo");
             _tripleCombo = true;
         }
 
