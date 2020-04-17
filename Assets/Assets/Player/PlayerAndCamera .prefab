@@ -669,12 +669,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isHit: []
-  _targetLayerMask:
-    serializedVersion: 2
-    m_Bits: 4096
   priority: 1
   id: 0
   damageValue: 20
+  isParryable: 1
   _size: {x: 0.3, y: 1.07, z: 0.36}
   _offset: {x: 0, y: 0, z: 0}
 --- !u!114 &8581799129504464421
@@ -718,7 +716,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8581799129506417584}
-  m_LocalRotation: {x: 0.10794224, y: -0.68770075, z: 0.104511276, w: 0.7102771}
+  m_LocalRotation: {x: 0.13121316, y: -0.72653186, z: 0.14470716, w: 0.6587825}
   m_LocalPosition: {x: 2.9997842, y: 2.5829766, z: -0.035967167}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1737,11 +1735,15 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8581799129851290799}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef3d454b079a7dd4fa4e70762dc708fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hitboxEventHandler: {fileID: 8581799131055868872}
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 4096
   _alreadyHit: []
 --- !u!1 &8581799129870644995
 GameObject:
@@ -2235,7 +2237,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8581799130048636935}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -1.4862136, y: 0.087961584, z: -1.2656728}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8581799130576285638}
@@ -3008,7 +3010,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8581799130216799883}
   m_LocalRotation: {x: 0.09169052, y: -0.34490216, z: 0.35459048, w: 0.8642343}
-  m_LocalPosition: {x: 0.00000023497824, y: 0.000000010626472, z: 0.000000068104555}
+  m_LocalPosition: {x: -1.7211813, y: 0.101867944, z: -1.4657727}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8581799130161272434}
@@ -3585,13 +3587,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isHit: []
-  _targetLayerMask:
-    serializedVersion: 2
-    m_Bits: 4096
   priority: 0
-  id: 0
+  id: 1
   damageValue: 50
-  _size: {x: 0.51, y: 1.07, z: 0.36}
+  isParryable: 0
+  _size: {x: 0.66, y: 1.27, z: 0.38}
   _offset: {x: 0, y: 0, z: 0}
 --- !u!114 &8581799130385221991
 MonoBehaviour:
@@ -3629,7 +3629,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8581799130388899773}
-  m_LocalRotation: {x: 0.397291, y: 0.53375465, z: -0.5504349, w: -0.50426906}
+  m_LocalRotation: {x: 0.3674939, y: 0.6589138, z: -0.49608716, w: -0.42974222}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3897,7 +3897,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8581799130557173821}
-  m_LocalRotation: {x: -0.08661549, y: -0.66633946, z: 0.30392286, w: 0.6753669}
+  m_LocalRotation: {x: -0.109134026, y: -0.67300195, z: 0.2998014, w: 0.66729105}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3981,7 +3981,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8581799130576285633}
   m_LocalRotation: {x: 0.24943301, y: -0.45197254, z: 0.11817962, w: 0.84825563}
-  m_LocalPosition: {x: 0.00000023497824, y: 0.000000010626472, z: 0.000000068104555}
+  m_LocalPosition: {x: 1.5145373, y: -0.08982622, z: 3.219564}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8581799129988552190}
@@ -5201,8 +5201,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8581799131056419571}
-  m_LocalRotation: {x: -0.44436386, y: -0.47604674, z: 0.70256364, w: 0.28692284}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0.5163372, y: -0.5556431, z: 0.598476, w: 0.2578432}
+  m_LocalPosition: {x: -0.00000020798255, y: 0.000000020156712, z: 0.00000045072545}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8581799131167436814}
@@ -6414,7 +6414,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8581799131461392846}
   m_LocalRotation: {x: 0.21226938, y: -0.31830055, z: 0.11968869, w: 0.91613376}
-  m_LocalPosition: {x: 0.00000023497824, y: 0.000000010626472, z: 0.000000068104555}
+  m_LocalPosition: {x: 1.4862133, y: -0.08796157, z: 1.2656727}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8581799130884500769}
