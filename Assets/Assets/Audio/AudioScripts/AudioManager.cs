@@ -9,26 +9,51 @@ public class AudioManager : MonoBehaviour
     [EventRef]
     public string InsanityEventAudio;
     EventInstance InsanityEvent;
+    [EventRef]
+    public string PlayerFootsteps;
+    EventInstance PlayerFootstepsAudio;
+    [EventRef]
+    public string playerSwordSwingAudio;
+    [EventRef]
+    public string playerDodgeAudio;
+    [EventRef]
+    public string playerJumpAudio;
+
 
     //Player sounds
-    public void PlayerFootStepsAudio(Transform obj)
+    public void PlayerFootStepsAudio(string GroundMaterial)
     {
-        // playerMovementAudio.AudioPlayerFootsteps(obj.tag); // betyder att den utgår från objektets tag istället för name
+        // playerMovementAudio.AudioPlayerFootsteps(obj.tag); // något liknande kan användas för att jämföra med tags istälelt för strings methinks
+        PlayerFootstepsAudio = RuntimeManager.CreateInstance(PlayerFootsteps);
+        switch (GroundMaterial)
+        {
+            case "Gravel":
+                PlayerFootstepsAudio.setParameterByName("Surface", 0f);
+                break;
+            case "Water":
+                PlayerFootstepsAudio.setParameterByName("Surface", 1f);
+                break;
+            case "Wood":
+                PlayerFootstepsAudio.setParameterByName("Surface", 2f);
+                break;
+        }
+        PlayerFootstepsAudio.start();
     }
 
     public void PlayerSwordSwingAudio()
     {
-
+     RuntimeManager.PlayOneShot(playerSwordSwingAudio, transform.position);
     }
 
     public void PlayerDodgeAudio()
     {
+    RuntimeManager.PlayOneShot(playerDodgeAudio, transform.position);
 
     }
 
     public void PlayerJumpAudio()
     {
-
+        RuntimeManager.PlayOneShot(playerJumpAudio, transform.position);
     }
 
     public void PlayerInsanityAudio(float insanityPercentage)
@@ -60,6 +85,15 @@ public class AudioManager : MonoBehaviour
 
     }
 
+    public void FloatingWorldMusic()
+    {
+
+    }
+
+    public void CaveMusic()
+    {
+
+    }
 
     public void BossMusicAudio()
     {
