@@ -18,8 +18,8 @@ public class HitboxGroup : MonoBehaviour
     void Awake() {
         _alreadyHit = new List<GameObject>();
         _hitTimes = new List<Hitbox>();
-        print(GlobalState.state.PlayerMesh);
-        print(GlobalState.state.PlayerMesh.GetComponent<HitboxEventHandler>());
+        // print(GlobalState.state.PlayerMesh);
+        // print(GlobalState.state.PlayerMesh.GetComponent<HitboxEventHandler>());
         _hitboxEventHandler = GlobalState.state.PlayerMesh.GetComponent<HitboxEventHandler>();
         _hitboxEventHandler.onEnableHitboxes += EnableEvent;
         _hitboxEventHandler.onDisableHitboxes += DisableEvent;
