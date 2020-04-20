@@ -5,13 +5,15 @@ using UnityEngine.AI;
 
 public class BossAIScript : MonoBehaviour
 {
-    [System.Serializable] public struct PhaseOneStats
+    [System.Serializable]
+    public struct PhaseOneStats
     {
         public float testP1value1;
         public float testP1value2;
         public float testP1value3;
     }
-    [System.Serializable] public struct PhaseTwoStats
+    [System.Serializable]
+    public struct PhaseTwoStats
     {
         public float testP2value1;
         public float testP2value2;
@@ -20,8 +22,9 @@ public class BossAIScript : MonoBehaviour
 
     public PhaseOneStats phaseOneStats;
     public PhaseTwoStats phaseTwoStats;
-    
-    [System.Serializable] public struct DesiredDistanceToAngleValues
+
+    [System.Serializable]
+    public struct DesiredDistanceToAngleValues
     {
         public float desiredDistanceOffset;
         public float angle;
@@ -47,10 +50,10 @@ public class BossAIScript : MonoBehaviour
 
 
     [SerializeField] public LayerMask targetLayers;
-    
+
     //galet nog är alla variabler som heter test något, inte planerat att vara permanenta
     [SerializeField] public float testMaxHP = 500f;
-    [SerializeField] [Range(0,1)] public float testP2TransitionHP = 0.5f;
+    [SerializeField] [Range(0, 1)] public float testP2TransitionHP = 0.5f;
 
     [SerializeField] public float testAttackSpeed = 5f;
     [SerializeField] public float testMinAttackCooldown = 1f;
@@ -73,7 +76,8 @@ public class BossAIScript : MonoBehaviour
 
 
     //borde vara nonserialized men har den som serialized för testning
-    /*[NonSerialized]*/ public float testCurrentHP;
+    /*[NonSerialized]*/
+    public float testCurrentHP;
 
     [NonSerialized] public Animator bossAnimator;
     [NonSerialized] public float turnSpeed;
@@ -105,7 +109,7 @@ public class BossAIScript : MonoBehaviour
 
         turnSpeed = defaultTurnSpeed;
 
-        
+
     }
 
     void Start()
@@ -124,7 +128,7 @@ public class BossAIScript : MonoBehaviour
         agent.updateRotation = false;
         phaseControllingStateMachine.ChangeState(preBossFightState);
     }
-    
+
     void Update()
     {
         phaseControllingStateMachine.Update();
@@ -155,7 +159,7 @@ public class BossAIScript : MonoBehaviour
 
     //Animation attack events
     #region Animation attack events
-        //Generella
+    //Generella
     public void TestBossEvent1()
     {
         print("hahahhahahha 1");
@@ -171,7 +175,7 @@ public class BossAIScript : MonoBehaviour
         facePlayer = false;
         //print("rotation stopped");
     }
-        //P1
+    //P1
     public void FlipDrainHitboxActivation()
     {
         drainHitboxActive = !drainHitboxActive;
@@ -194,7 +198,7 @@ public class PreBossFightState : State<BossAIScript>
     {
 
     }
-    
+
     public override void ExitState(BossAIScript owner)
     {
         //kanske köra någon funktion som stänger en dörr eller något så man inte kan springa iväg
@@ -220,10 +224,10 @@ public class PreBossFightState : State<BossAIScript>
 //PHASE 1 STATES//
 //////////////////
 
-    //drain (charge, shoot, stay)
-    //idle/movement/bestämma nästa attack (gå runt lite, vara vänd mot spelaren, bestämma vilket state man ska in i sen, alla states går in i detta state)
-    //slå attack (om nära -> slå, typ?)
-    //dash (dasha, fast vart?) (dash attack, random dash(kan bli dåligt), dash om nära, dash om wiff)
+//drain (charge, shoot, stay)
+//idle/movement/bestämma nästa attack (gå runt lite, vara vänd mot spelaren, bestämma vilket state man ska in i sen, alla states går in i detta state)
+//slå attack (om nära -> slå, typ?)
+//dash (dasha, fast vart?) (dash attack, random dash(kan bli dåligt), dash om nära, dash om wiff)
 
 
 
@@ -422,7 +426,7 @@ public class PhaseOneDashState : State<BossPhaseOneState>
     private Vector3 _dashDestination;
 
 
-    public PhaseOneDashState(float speed, float distance, float lagDurration , float acceleration)
+    public PhaseOneDashState(float speed, float distance, float lagDurration, float acceleration)
     {
         _dashSpeed = speed;
         _dashDistance = distance;
@@ -448,6 +452,7 @@ public class PhaseOneDashState : State<BossPhaseOneState>
 
         _dashDirection = owner.movementDirection.normalized;
         _dashDestination = owner.bossPhaseOneParentScript.transform.position + _dashDirection * _dashDistance;
+
         owner.bossPhaseOneParentScript.agent.SetDestination(_dashDestination);
     }
 
@@ -465,7 +470,7 @@ public class PhaseOneDashState : State<BossPhaseOneState>
         if (_dashTimer.Expired())
         {
             _lagTimer.Time += Time.deltaTime;
-            
+
             if (_lagTimer.Expired())
             {
                 owner.phaseOneStateMashine.ChangeState(owner.phaseOneCombatState);
@@ -473,22 +478,11 @@ public class PhaseOneDashState : State<BossPhaseOneState>
         }
         else
         {
-            //
             //dash time
             Debug.Log("dash time");
         }
     }
 }
-
-public class PhaseOneDashState : State<BossPhaseOneState>
-{
-    private float _speed;
-    private float _dashDurration;
-    private float _lagDurration;
-
-    private Timer _dashTimer;
-    private Timer _lagTimer;
-
 
 public class PhaseOneDrainAttackState : State<BossPhaseOneState>
 {
