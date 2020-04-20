@@ -50,6 +50,7 @@ public class BossAIScript : MonoBehaviour
 
 
     [SerializeField] public LayerMask targetLayers;
+    [SerializeField] public LayerMask dashCollisionLayers;
 
     //galet nog är alla variabler som heter test något, inte planerat att vara permanenta
     [SerializeField] public float testMaxHP = 500f;
@@ -69,6 +70,11 @@ public class BossAIScript : MonoBehaviour
     [SerializeField] public float desiredDistanceToPlayer = 5f;
 
 
+    [SerializeField] public float testDashSpeed = 20f;
+    [SerializeField] public float testDashDistance = 5f;
+    [SerializeField] public float testDashLagDurration = 0.5f;
+    [SerializeField] public float testDashAcceleration = 2000f;
+
 
 
     [SerializeField] public float aggroRange = 10f;
@@ -76,13 +82,18 @@ public class BossAIScript : MonoBehaviour
 
 
     //borde vara nonserialized men har den som serialized för testning
-    /*[NonSerialized]*/
-    public float testCurrentHP;
+    /*[NonSerialized]*/ public float testCurrentHP;
 
     [NonSerialized] public Animator bossAnimator;
     [NonSerialized] public float turnSpeed;
 
     //[SerializeField] public State<BossPhaseOneState>[] stateArray;
+
+
+    [NonSerialized]  public Vector3 movementDirection = new Vector3(0f, 0f, 1f);
+    [NonSerialized] public Vector3 dashCheckOffsetVector;
+    [NonSerialized] public float dashCheckAngle;
+
 
 
     [NonSerialized] public NavMeshAgent agent;
@@ -109,6 +120,7 @@ public class BossAIScript : MonoBehaviour
 
         turnSpeed = defaultTurnSpeed;
 
+        dashCheckOffsetVector = new Vector3(0f, 1f, testDashDistance / 2);
 
     }
 
@@ -155,6 +167,27 @@ public class BossAIScript : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, aggroRange);
+
+        Gizmos.color = Color.blue;
+
+        Vector3 dashCheckOffsetVectorGizmo = new Vector3(0f, 1f, testDashDistance / 2);
+        //Vector3 testDashDir = new Vector3(-0.7f, 0f, 1f);
+        //Vector3 testDashDir = movementDirection;
+
+        float dashCheckAngleGizmo = Vector3.SignedAngle(transform.forward, movementDirection, transform.up);
+
+        dashCheckOffsetVectorGizmo = Quaternion.AngleAxis(dashCheckAngleGizmo, Vector3.up) * dashCheckOffsetVectorGizmo;
+
+        Gizmos.matrix = Matrix4x4.TRS(transform.TransformPoint(dashCheckOffsetVectorGizmo), Quaternion.LookRotation(movementDirection.normalized), transform.localScale);
+        Gizmos.DrawWireCube(Vector3.zero, new Vector3(1f, 1.5f, testDashDistance));
+
+        //Physics.OverlapBox(transform.TransformPoint(dashCheckOffsetVectorGizmo), new Vector3(1f, 1.5f, testDashDistance) /** 0.5f*/, Quaternion.LookRotation(movementDirection.normalized), dashCollisionLayers);
+
+        //Physics.BoxCast(_ownerParentScript.transform.position, new Vector3(1f, 2.5f, _ownerParentScript.testDashDistance / 2), _ownerParentScript.movementDirection, Quaternion.identity, 2f, _ownerParentScript.dashCollisionLayers);
+        
+        //Gizmos.matrix = Matrix4x4.TRS(/*transform.position +*/ transform.TransformPoint(new Vector3(0f, 1f, testDashDistance/(2 * transform.localScale.z))), transform.rotation, transform.localScale);
+        //Gizmos.DrawWireCube(Vector3.zero, new Vector3(1f, 1f, testDashDistance/transform.localScale.z));
+
     }
 
     //Animation attack events
@@ -247,7 +280,7 @@ public class BossPhaseOneState : State<BossAIScript>
     public PhaseOneMeleeAttackOneState phaseOneMeleeAttackOneState;
     public PhaseOneDashState phaseOneDashState;
 
-    public Vector3 movementDirection;
+    //public Vector3 movementDirection;
 
 
     public override void EnterState(BossAIScript owner)
@@ -258,7 +291,7 @@ public class BossPhaseOneState : State<BossAIScript>
         phase1Attack1State = new Phase1Attack1State(owner.testDrainDPS, owner.testDrainRange, owner.testDrainChargeTime);
 
         phaseOneCombatState = new PhaseOneCombatState(owner.testAttackSpeed, owner.testMinAttackCooldown, owner.testMeleeRange, owner.testDrainRange, owner);
-        phaseOneDashState = new PhaseOneDashState(20f, 5f, 0.1f, 2000f);
+        phaseOneDashState = new PhaseOneDashState(owner.testDashSpeed, owner.testDashDistance, owner.testDashLagDurration, owner.testDashAcceleration);
 
         phaseOneDrainAttackState = new PhaseOneDrainAttackState(owner.testDrainDPS, owner.testDrainRange, owner.testDrainAttackTime, owner.testDrainChargeTime);
         phaseOneMeleeAttackOneState = new PhaseOneMeleeAttackOneState(owner.testDrainDPS, owner.testMeleeRange, owner.testDrainAttackTime, owner.testDrainChargeTime);
@@ -309,12 +342,18 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
         _drainAttackRange = drainAttackRange;
 
         _ownerParentScript = ownerParentScript;
+
+        timer = new Timer(_attackSpeed);
     }
 
     public override void EnterState(BossPhaseOneState owner)
     {
         Debug.Log("in i PhaseOneCombatState");
-        timer = new Timer(_attackSpeed);
+        //kan inte ha den i enter för det fuckar pga dash
+        if (timer.Expired())
+        {
+            timer = new Timer(_attackSpeed);
+        }
     }
 
     public override void ExitState(BossPhaseOneState owner)
@@ -378,7 +417,7 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
                 sign = 1;
             }
 
-            owner.movementDirection = _ownerParentScript.transform.right;
+            _ownerParentScript.movementDirection = _ownerParentScript.transform.right;
 
             //lägga till någon randomness variabel så movement inte blir lika predictable? (kan fucka animationerna?)
             //kanske slurpa mellan de olika värdena (kan bli jobbigt och vet inte om det behövs)
@@ -388,23 +427,46 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
             {
                 if (compairValue > _ownerParentScript.desiredDistanceToPlayer + _ownerParentScript.desiredDistanceOffsetValues[i])
                 {
-                    owner.movementDirection = Quaternion.AngleAxis(_ownerParentScript.desiredDistanceAngleValues[i] * sign * -1, Vector3.up) * owner.movementDirection;
+                    _ownerParentScript.movementDirection = Quaternion.AngleAxis(_ownerParentScript.desiredDistanceAngleValues[i] * sign * -1, Vector3.up) * _ownerParentScript.movementDirection;
+                    _ownerParentScript.movementDirection *= sign;
                     break;
                 }
             }
 
             if (UnityEngine.Random.Range(0f, 100f) > 99f)
             {
-                owner.phaseOneStateMashine.ChangeState(owner.phaseOneDashState);
+                //RaycastHit _dashHit;
+
+                //if (!Physics.BoxCast(_ownerParentScript.transform.position, new Vector3(1f, 2.5f, _ownerParentScript.testDashDistance / 2), _ownerParentScript.movementDirection, Quaternion.identity, 2f, _ownerParentScript.dashCollisionLayers))
+                //{
+
+                //}
+                //else
+                //{
+                //    Debug.Log("kunde inte dasha för saker va i vägen");
+                //}
+
+                //Physics.OverlapBox(_ownerParentScript.transform.TransformPoint(_ownerParentScript.dashCheckOffsetVector), new Vector3(1f, 1.5f, _ownerParentScript.testDashDistance) /** 0.5f*/, Quaternion.LookRotation(_ownerParentScript.movementDirection.normalized), _ownerParentScript.dashCollisionLayers);
+
+
+                //skiten funkar typ bara att positionen är scuffed
+                if (Physics.OverlapBox(_ownerParentScript.transform.TransformPoint(_ownerParentScript.dashCheckOffsetVector), new Vector3(1f, 1.5f, _ownerParentScript.testDashDistance) /** 0.5f*/, Quaternion.LookRotation(_ownerParentScript.movementDirection.normalized), _ownerParentScript.dashCollisionLayers).Length <= 0)
+                {
+                    owner.phaseOneStateMashine.ChangeState(owner.phaseOneDashState);
+                }
+                else
+                {
+                    Debug.Log("kunde inte dasha för saker va i vägen");
+                }
             }
             else
             {
                 //ändra 5an till typ destinationAmplifier
-                _destination = _ownerParentScript.transform.position + owner.movementDirection * 5 * sign;
+                //_destination = _ownerParentScript.transform.position + _ownerParentScript.movementDirection * 5 * sign;
+                _destination = _ownerParentScript.transform.position + _ownerParentScript.movementDirection * 5;
 
                 _ownerParentScript.agent.SetDestination(_destination);
             }
-
         }
     }
 }
@@ -442,7 +504,7 @@ public class PhaseOneDashState : State<BossPhaseOneState>
 
         _dashDurration = (_dashDistance - owner.bossPhaseOneParentScript.agent.stoppingDistance) / _dashSpeed;
         Debug.Log("zoom for, " + _dashDurration + " MPH, " + _dashSpeed);
-        Debug.Log(_dashDistance + " " + owner.bossPhaseOneParentScript.agent.stoppingDistance + " " + _dashSpeed);
+        //Debug.Log(_dashDistance + " " + owner.bossPhaseOneParentScript.agent.stoppingDistance + " " + _dashSpeed);
         _dashTimer = new Timer(_dashDurration);
         _lagTimer = new Timer(_lagDurration);
 
@@ -450,7 +512,7 @@ public class PhaseOneDashState : State<BossPhaseOneState>
         owner.bossPhaseOneParentScript.agent.speed = _dashSpeed;
         owner.bossPhaseOneParentScript.agent.acceleration = _dashAcceleration;
 
-        _dashDirection = owner.movementDirection.normalized;
+        _dashDirection = owner.bossPhaseOneParentScript.movementDirection.normalized;
         _dashDestination = owner.bossPhaseOneParentScript.transform.position + _dashDirection * _dashDistance;
 
         owner.bossPhaseOneParentScript.agent.SetDestination(_dashDestination);
@@ -473,13 +535,15 @@ public class PhaseOneDashState : State<BossPhaseOneState>
 
             if (_lagTimer.Expired())
             {
+
                 owner.phaseOneStateMashine.ChangeState(owner.phaseOneCombatState);
             }
         }
+        //else if, kolla om någon terrain är i box casten
         else
         {
             //dash time
-            Debug.Log("dash time");
+            //Debug.Log("dash time");
         }
     }
 }
