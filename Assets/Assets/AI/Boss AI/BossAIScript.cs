@@ -480,7 +480,14 @@ public class PhaseOneDashState : State<BossPhaseOneState>
     }
 }
 
+public class PhaseOneDashState : State<BossPhaseOneState>
+{
+    private float _speed;
+    private float _dashDurration;
+    private float _lagDurration;
 
+    private Timer _dashTimer;
+    private Timer _lagTimer;
 
 
 public class PhaseOneDrainAttackState : State<BossPhaseOneState>
