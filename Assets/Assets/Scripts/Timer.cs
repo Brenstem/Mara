@@ -20,16 +20,16 @@ public class Timer {
         get { return _duration; }
     }
 
-    public bool Expired() {
-        return _time >= _duration;
+    public bool Expired {
+        get { return _time >= _duration; }
     }
 
     public void Reset() {
         _time = 0;
     }
 
-    public float Ratio() {
-        return _time / _duration;
+    public float Ratio {
+        get { return _time / _duration; }
     }
 
     // Constructors
@@ -50,7 +50,7 @@ public class Timer {
     }
 
     public override string ToString() {
-        string s = "Time: " + _time + ", Time left: " + (Duration - _time) + ", Ratio: " + Ratio();
+        string s = "Time: " + _time + ", Time left: " + (Duration - _time) + ", Ratio: " + Ratio;
         return s;
     }
 }

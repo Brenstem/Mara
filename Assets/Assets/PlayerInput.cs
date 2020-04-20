@@ -79,7 +79,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 {
                     ""name"": ""WASD"",
                     ""id"": ""fc4ab01c-a4fc-44a8-82cc-c77c1a4e0e00"",
-                    ""path"": ""2DVector"",
+                    ""path"": ""2DVector(mode=2)"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

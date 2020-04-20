@@ -161,6 +161,8 @@ public class MovementController : MonoBehaviour
         _dashCooldownTimer.Time += Time.deltaTime;
 
         _hasJumped = false;
+
+        print(_playerInput.PlayerControls.Move.ReadValue<Vector2>());
     }
 
     private void OnDrawGizmosSelected()
@@ -170,9 +172,21 @@ public class MovementController : MonoBehaviour
         Gizmos.DrawWireSphere(_lockOnOrigin + _lockOnDirection * _lockOnCurrentHitDistance, _lockOnRadius);
     }
 
-    private void OnEnable() { _playerInput.Enable(); }
+    private void OnEnable()
+    {
+        _playerInput.PlayerControls.Enable();
+        var e = _playerInput.PlayerControls.Get();
+        /*
+        input = _playerInput.PlayerControls.Move.ReadValue<Vector2>();
+        print(input);
+        */
+    }
 
-    private void OnDisable() { _playerInput.Disable(); }
+    private void OnDisable()
+    {
+        _playerInput.PlayerControls.Disable();
+        stateMachine.ChangeState(new IdleMovementState());
+    }
 
     [SerializeField] private bool toggleLockon;
     private void OnValidate()
@@ -215,15 +229,21 @@ public class MovementController : MonoBehaviour
             _velocity.y = Mathf.Sqrt(_jumpHeight) * -_gravity;
             playerAnimator.SetTrigger("Jump");
         }
-
-        _velocity.y += _gravity * Time.deltaTime; //Gravity formula
+        if (stateMachine.currentState.GetType() == typeof(DashMovementState))
+        {
+            _velocity.y = 0;
+        }
+        else
+        {
+            _velocity.y += _gravity * Time.deltaTime; //Gravity formula
+        }
         controller.Move(_velocity * Time.deltaTime); // T^2
     }
 
     /* === PLACEHOLDERS === */
     private void Dash(InputAction.CallbackContext c)
     { // Placeholder
-        if (_dashCooldownTimer.Expired())
+        if (_dashCooldownTimer.Expired)
         {
             _dashCooldownTimer.Reset();
             stateMachine.ChangeState(new DashMovementState());
@@ -384,10 +404,10 @@ public class DashMovementState : State<MovementController>
     }
     public override void UpdateState(MovementController owner)
     {
-        if (_timer.Expired())
+        if (_timer.Expired)
         {
             _lagTimer.Time += Time.deltaTime;
-            if (_lagTimer.Expired())
+            if (_lagTimer.Expired)
             {
                 if (owner.isLockedOn)
                     owner.stateMachine.ChangeState(new StrafeMovementState());

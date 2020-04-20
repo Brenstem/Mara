@@ -82,4 +82,9 @@ public class EnemyHealth : Entity
     {
         Damage(hitbox.damageValue);
     }
+
+    public override void TakeDamage(float damage)
+    {
+        Damage(damage);
+    }
 }

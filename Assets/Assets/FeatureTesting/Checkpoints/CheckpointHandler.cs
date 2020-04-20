@@ -32,7 +32,7 @@ public class CheckpointHandler : MonoBehaviour
         {
             _respawnTimer.Time += Time.deltaTime;
 
-            if (_respawnTimer.Expired())
+            if (_respawnTimer.Expired)
             {
                 Spawn();
                 _respawnTimer = null;

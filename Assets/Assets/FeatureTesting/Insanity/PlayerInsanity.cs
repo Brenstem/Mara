@@ -74,7 +74,7 @@ public class PlayerInsanity : MonoBehaviour
         {
             _timer.Time += Time.deltaTime;
 
-            if (_timer.Expired())
+            if (_timer.Expired)
             {
                 KillPlayer();
             }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(HitboxController))]
+// DW
 public class Hitbox : MonoBehaviour
 {
     private HitboxGroup _parent;

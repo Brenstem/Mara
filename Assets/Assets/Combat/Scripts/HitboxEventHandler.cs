@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // DW
+/// <summary>
+/// Provides the basic events needed for the hitboxes to function properly by linking
+/// the events ran by the animator to the ones contained within this class.
+/// </summary>
 public class HitboxEventHandler : MonoBehaviour
 {
     public delegate void OnEnableHitboxes(int id);

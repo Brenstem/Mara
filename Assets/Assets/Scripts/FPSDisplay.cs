@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// DW
+// Modified version of this script: https://gist.github.com/hurr1star/c1bdeebcf56a3d94d74bcabe6aec214f
 public class FPSDisplay : MonoBehaviour {
     [SerializeField] private bool displayFpsCounter;
     [SerializeField] private int targetFPS;

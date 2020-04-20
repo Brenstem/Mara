@@ -36,7 +36,15 @@ public class CombatController : MonoBehaviour
 
     private void OnEnable() { _playerInput.Enable(); }
 
-    private void OnDisable() { _playerInput.Disable(); }
+    private void OnDisable()
+    {
+        _playerInput.Disable();
+        foreach (HitboxGroup group in hitboxGroups)
+        {
+            group.hitboxEventHandler.EndAnim();
+        }
+        stateMachine.ChangeState(new IdleAttackState());
+    }
 
     private void Awake()
     {
@@ -262,7 +270,7 @@ public class ParryState : State<CombatController>
     public override void UpdateState(CombatController owner)
     {
         _timer.Time += Time.deltaTime;
-        if (_timer.Expired())
+        if (_timer.Expired)
         {
             //Lag men det gör man sen typ
             owner.stateMachine.ChangeState(new IdleAttackState());
