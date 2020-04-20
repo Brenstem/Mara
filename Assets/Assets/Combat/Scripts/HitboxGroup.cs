@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// DW och Dennis
+// DW
 public class HitboxGroup : MonoBehaviour
 {
     public delegate void OnEnableHitboxes(int id);
@@ -20,8 +20,6 @@ public class HitboxGroup : MonoBehaviour
     void Awake() {
         _alreadyHit = new List<GameObject>();
         _hitTimes = new List<Hitbox>();
-        // print(GlobalState.state.PlayerMesh);
-        // print(GlobalState.state.PlayerMesh.GetComponent<HitboxEventHandler>());
         if (_hitboxEventHandler == null)
         {
             Debug.LogWarning("HitboxEventHandler missing! Resorting to finding in parent...", this);
@@ -70,32 +68,23 @@ public class HitboxGroup : MonoBehaviour
                 if (!_alreadyHit.Contains(enemy.gameObject))
                 {
                     Hitbox hit = _hitTimes[highestPriorityIndex];
-                    if (targetLayerMask == GlobalState.state.PlayerMask)
+                    var entity = enemy.gameObject.GetComponent<Entity>();
+                    if (entity == null)
                     {
-                        if (hit.isParryable && GlobalState.state.PlayerMesh.GetComponent<CombatController>().IsParrying)
+                        Debug.LogWarning("Object derived from Entity class is missing! Resorting to find in children...", this);
+                        entity = enemy.gameObject.GetComponentInChildren<Entity>();
+                        if (entity == null)
                         {
-                            //dont do damage, msg player parry successful
-                            print("Successful parry");
-                            GlobalState.state.PlayerMesh.GetComponent<CombatController>().startTime = true;
-                            Time.timeScale = 0.01f;
+                            Debug.LogError("Object derived from Entity class is missing from \"" + entity.gameObject.name + "\"!", this);
                         }
                         else
                         {
-                            print("failed parry");
-                            enemy.gameObject.GetComponent<PlayerInsanity>().IncrementInsanity(hit.damageValue);
+                            entity.TakeDamage(hit);
                         }
                     }
                     else
                     {
-                        var health = enemy.gameObject.GetComponent<EnemyHealth>();
-                        if (health == null)
-                        {
-                            Debug.LogWarning("EnemyHealth missing!", this);
-                        }
-                        else
-                        {
-                            enemy.gameObject.GetComponent<EnemyHealth>().Damage(hit.damageValue);
-                        }
+                        entity.TakeDamage(hit);
                     }
                     _alreadyHit.Add(enemy.gameObject);
                 }
@@ -128,23 +117,4 @@ public class HitboxGroup : MonoBehaviour
         DisableEvent(0);
         _alreadyHit.Clear();
     }
-
-
-
-    /*
-    private void EnableChildren(int id) {
-        Transform[] children = GetComponentsInChildren<Transform>(true);
-        foreach (Transform child in children) {
-            child.gameObject.SetActive(true);
-        }
-    }
-
-    private void DisableChildren(int id) {
-        for (int i = 0; i < transform.childCount; i++) {
-            transform.GetChild(i).gameObject.SetActive(false);
-        }
-        ResetList();
-    }
-    */
-
 }

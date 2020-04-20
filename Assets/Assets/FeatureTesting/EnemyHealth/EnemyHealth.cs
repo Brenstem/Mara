@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyHealth : MonoBehaviour
+public class EnemyHealth : Entity
 {
     [SerializeField] private float maxHealth;
 
@@ -76,5 +76,10 @@ public class EnemyHealth : MonoBehaviour
     private void KillEnemy()
     {
         Destroy(this.gameObject);
+    }
+
+    public override void TakeDamage(Hitbox hitbox)
+    {
+        Damage(hitbox.damageValue);
     }
 }

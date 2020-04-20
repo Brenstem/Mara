@@ -53,35 +53,9 @@ public class CombatController : MonoBehaviour
         stateMachine.ChangeState(new IdleAttackState());
     }
 
-    private Timer _timer = new Timer(1.0f); // kul effekt, ta bort sen
-    private bool st;
-    public bool startTime
-    {
-        get { return st; }
-        set
-        {
-            if (value)
-                _timer.Reset();
-            st = value;
-        }
-    }
     void Update()
     {
         stateMachine.Update();
-        print(stateMachine.currentState);
-        if (startTime)
-            _timer.Time += Time.deltaTime;
-        if (_timer.Expired())
-        {
-            Time.timeScale = 1.0f;
-            startTime = false;
-            _timer.Reset();
-        }
-        else
-        {
-            Time.timeScale = Mathf.Lerp(Time.timeScale, 1.0f, _timer.Time);
-        }
-
     }
 
     public void EndAnim()
