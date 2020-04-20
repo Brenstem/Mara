@@ -10,14 +10,6 @@ public abstract class BaseAIMovementController : MonoBehaviour
 {
     public StateMachine<BaseAIMovementController> stateMachine;
 
-    public enum BasicState
-    {
-        Idle,
-        Chasing, 
-        Attack, 
-        ReturnToIdle
-    }
-
     [SerializeField] public float aggroRange = 10f;
     [SerializeField] public float unaggroRange = 20f;
     [SerializeField] public float turnSpeed = 5f;
@@ -43,11 +35,6 @@ public abstract class BaseAIMovementController : MonoBehaviour
 
         //borde inte göras såhär at the end of the day men måste göra skit med spelaren då och vet inte om jag får det
         target = GlobalState.state.Player;
-    }
-
-    public virtual void Start()
-    {
-        // stateMachine.ChangeState(new BaseIdleState());
     }
 
     virtual protected void Update()
@@ -79,37 +66,6 @@ public abstract class BaseAIMovementController : MonoBehaviour
                 Gizmos.DrawLine(idlePathingPoints[i], idlePathingPoints[i + 1]);
             }
         }
-    }
-
-    public virtual void ChangeState(State<BaseAIMovementController> desiredState)
-    {
-        stateMachine.ChangeState(desiredState);
-    }
-
-    public virtual void ChangeState(BasicState state)
-    {
-        State<BaseAIMovementController> desiredState;
-
-        switch (state)
-        {
-            case BasicState.Idle:
-                desiredState = new BaseIdleState();
-                break;
-            case BasicState.Chasing:
-                desiredState = new BaseChasingState();
-                break;
-            case BasicState.Attack:
-                desiredState = new BaseAttackingState();
-                break;
-            case BasicState.ReturnToIdle:
-                desiredState = new BaseReturnToIdlePosState();
-                break;
-            default:
-                desiredState = new BaseIdleState();
-                break;
-        }
-
-        stateMachine.ChangeState(desiredState);
     }
 }
 
