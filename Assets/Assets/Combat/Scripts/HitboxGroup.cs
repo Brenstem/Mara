@@ -11,31 +11,41 @@ public class HitboxGroup : MonoBehaviour
     public delegate void OnDisableHitboxes(int id);
     public event OnDisableHitboxes onDisableHitboxes;
 
-    [SerializeField] private HitboxEventHandler _hitboxEventHandler;
+    public HitboxEventHandler hitboxEventHandler;
     public LayerMask targetLayerMask;
 
     [HideInInspector] public List<GameObject> _alreadyHit;
     private List<Hitbox> _hitTimes;
-    
-    void Awake() {
+
+    [SerializeField] private bool _eventLess;
+
+    void Awake()
+    {
         _alreadyHit = new List<GameObject>();
         _hitTimes = new List<Hitbox>();
-        if (_hitboxEventHandler == null)
+        if (!_eventLess)
         {
-            Debug.LogWarning("HitboxEventHandler missing! Resorting to finding in parent...", this);
-            _hitboxEventHandler = GetComponentInParent<HitboxEventHandler>();
-            if (_hitboxEventHandler == null)
+            if (hitboxEventHandler == null)
             {
-                Debug.LogError("Unable to find HitboxEventHandler in parent!", this);
+                Debug.LogWarning("HitboxEventHandler missing! Resorting to finding in parent...", this);
+                hitboxEventHandler = GetComponentInParent<HitboxEventHandler>();
+                if (hitboxEventHandler == null)
+                {
+                    Debug.LogError("Unable to find HitboxEventHandler in parent!", this);
+                }
+                else
+                {
+                    Debug.Log("HitboxEventHandler found. Please add this component as a reference after game session", this);
+                }
             }
-            else
-            {
-                Debug.Log("HitboxEventHandler found. Please add this component as a reference after game session", this);
-            }
+            hitboxEventHandler.onEnableHitboxes += EnableEvent;
+            hitboxEventHandler.onDisableHitboxes += DisableEvent;
+            hitboxEventHandler.onEndAnim += ResetList;
         }
-        _hitboxEventHandler.onEnableHitboxes += EnableEvent;
-        _hitboxEventHandler.onDisableHitboxes += DisableEvent;
-        _hitboxEventHandler.onEndAnim += ResetList;
+        else
+        {
+            EnableEvent(0);
+        }
     }
 
     private void EnableEvent(int id)
@@ -54,11 +64,15 @@ public class HitboxGroup : MonoBehaviour
             Debug.LogWarning("No object is subscribed to the \"onDisableHitboxes\" event!", this);
     }
 
-    void LateUpdate() {
-        if (_hitTimes.Count > 0) {
+    void LateUpdate()
+    {
+        if (_hitTimes.Count > 0)
+        {
             int highestPriorityIndex = 0;
-            for (int i = 1; i < _hitTimes.Count; i++) {
-                if (_hitTimes[i].priority < _hitTimes[highestPriorityIndex].priority) {
+            for (int i = 1; i < _hitTimes.Count; i++)
+            {
+                if (_hitTimes[i].priority < _hitTimes[highestPriorityIndex].priority)
+                {
                     highestPriorityIndex = i;
                 }
             }
@@ -75,7 +89,7 @@ public class HitboxGroup : MonoBehaviour
                         entity = enemy.gameObject.GetComponentInChildren<Entity>();
                         if (entity == null)
                         {
-                            Debug.LogError("Object derived from Entity class is missing from \"" + entity.gameObject.name + "\"!", this);
+                            Debug.LogError("Object derived from Entity class is missing from \"" + enemy.gameObject.name + "\"!", this);
                         }
                         else
                         {
@@ -94,26 +108,35 @@ public class HitboxGroup : MonoBehaviour
         }
     }
 
-    public void AddHitbox(Hitbox hitbox) {
+    public void AddHitbox(Hitbox hitbox)
+    {
         _hitTimes.Add(hitbox);
     }
 
     private void OnEnable()
     {
-        _hitboxEventHandler.onEnableHitboxes += EnableEvent;
-        _hitboxEventHandler.onDisableHitboxes += DisableEvent;
-        _hitboxEventHandler.onEndAnim += ResetList;
+        if (!_eventLess)
+        {
+            hitboxEventHandler.onEnableHitboxes += EnableEvent;
+            hitboxEventHandler.onDisableHitboxes += DisableEvent;
+            hitboxEventHandler.onEndAnim += ResetList;
+        }
 
         ResetList();
     }
 
-    private void OnDisable() {
-        _hitboxEventHandler.onEnableHitboxes -= EnableEvent;
-        _hitboxEventHandler.onDisableHitboxes -= DisableEvent;
-        _hitboxEventHandler.onEndAnim -= ResetList;
+    private void OnDisable()
+    {
+        if (!_eventLess)
+        {
+            hitboxEventHandler.onEnableHitboxes -= EnableEvent;
+            hitboxEventHandler.onDisableHitboxes -= DisableEvent;
+            hitboxEventHandler.onEndAnim -= ResetList;
+        }
     }
 
-    private void ResetList() {
+    private void ResetList()
+    {
         DisableEvent(0);
         _alreadyHit.Clear();
     }

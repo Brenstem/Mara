@@ -10,14 +10,6 @@ public abstract class BaseAIMovementController : MonoBehaviour
 {
     public StateMachine<BaseAIMovementController> stateMachine;
 
-    public enum BasicState
-    {
-        Idle,
-        Chasing, 
-        Attack, 
-        ReturnToIdle
-    }
-
     [SerializeField] public float aggroRange = 10f;
     [SerializeField] public float unaggroRange = 20f;
     [SerializeField] public float turnSpeed = 5f;
@@ -26,28 +18,29 @@ public abstract class BaseAIMovementController : MonoBehaviour
     [SerializeField] public LayerMask targetLayers;
 
     [SerializeField] public bool cyclePathing;
+    [SerializeField] public bool waitAtPoints;
+    [SerializeField] public float waitTime;
     [SerializeField] public Vector3[] idlePathingPoints;
-    [SerializeField] public float attackRange;
+    [SerializeField] public float attackRange = 12f;
 
     [NonSerialized] public Vector3 idlePosition;
 
     [NonSerialized] public GameObject target;
     [NonSerialized] public NavMeshAgent agent;
 
+    [NonSerialized] public RangedEnemyAI rangedAI;
+    [NonSerialized] public Timer waitTimer;
+
     virtual protected void Awake()
     {
         idlePosition = this.transform.position;
         stateMachine = new StateMachine<BaseAIMovementController>(this);
+        waitTimer = new Timer(waitTime);
 
         agent = GetComponent<NavMeshAgent>();
 
         //borde inte göras såhär at the end of the day men måste göra skit med spelaren då och vet inte om jag får det
         target = GlobalState.state.Player;
-    }
-
-    public virtual void Start()
-    {
-        // stateMachine.ChangeState(new BaseIdleState());
     }
 
     virtual protected void Update()
@@ -70,6 +63,8 @@ public abstract class BaseAIMovementController : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, aggroRange);
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, unaggroRange);
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(transform.position, agent.stoppingDistance + attackRange);
 
         Gizmos.color = Color.blue;
         if (idlePathingPoints.Length > 1)
@@ -79,37 +74,6 @@ public abstract class BaseAIMovementController : MonoBehaviour
                 Gizmos.DrawLine(idlePathingPoints[i], idlePathingPoints[i + 1]);
             }
         }
-    }
-
-    public virtual void ChangeState(State<BaseAIMovementController> desiredState)
-    {
-        stateMachine.ChangeState(desiredState);
-    }
-
-    public virtual void ChangeState(BasicState state)
-    {
-        State<BaseAIMovementController> desiredState;
-
-        switch (state)
-        {
-            case BasicState.Idle:
-                desiredState = new BaseIdleState();
-                break;
-            case BasicState.Chasing:
-                desiredState = new BaseChasingState();
-                break;
-            case BasicState.Attack:
-                desiredState = new BaseAttackingState();
-                break;
-            case BasicState.ReturnToIdle:
-                desiredState = new BaseReturnToIdlePosState();
-                break;
-            default:
-                desiredState = new BaseIdleState();
-                break;
-        }
-
-        stateMachine.ChangeState(desiredState);
     }
 }
 
@@ -135,6 +99,8 @@ public class BaseIdleState : State<BaseAIMovementController>
         {
             if (owner.agent.stoppingDistance > Vector3.Distance(owner.transform.position, owner.idlePathingPoints[_pathingIndex]))
             {
+                owner.waitTimer.Time += Time.deltaTime;
+
                 if (!owner.cyclePathing)
                 {
                     if (_pathingIndex == owner.idlePathingPoints.Length - 1)
@@ -145,7 +111,14 @@ public class BaseIdleState : State<BaseAIMovementController>
                 _pathingIndex = (_pathingIndex + 1) % owner.idlePathingPoints.Length;
             }
             //flyttar monstret mot nästa position i positions arrayen
-            owner.agent.SetDestination(owner.idlePathingPoints[_pathingIndex]);
+            if (owner.waitAtPoints)
+            {
+                if (owner.waitTimer.Expired())
+                {
+                    owner.agent.SetDestination(owner.idlePathingPoints[_pathingIndex]);
+                    owner.waitTimer.Reset();
+                }
+            }
         }
 
         //aggro detection
@@ -167,16 +140,14 @@ public class BaseChasingState : State<BaseAIMovementController>
     protected static BaseReturnToIdlePosState _returnToIdleState = new BaseReturnToIdlePosState();
     protected static BaseAttackingState _attackingState = new BaseAttackingState();
 
-
     public override void EnterState(BaseAIMovementController owner) { }
 
     public override void ExitState(BaseAIMovementController owner) { }
 
     public override void UpdateState(BaseAIMovementController owner)
     {
-        float range = owner.agent.stoppingDistance + owner.attackRange;
+        float range = owner.attackRange - owner.agent.stoppingDistance;
 
-        //
         Vector3 vectorToPlayer = (owner.target.transform.position - owner.transform.position).normalized * range;
         Vector3 targetPosition = owner.target.transform.position - vectorToPlayer; 
 
