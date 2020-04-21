@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class MenuTrigger : MonoBehaviour
 {
     [SerializeField] private int _sceneIndex;
     public void ChangeScene()
     {
-        print("Does nothing atm");
+        SceneManager.LoadScene(_sceneIndex);
     }
 
     public void ExitGame()

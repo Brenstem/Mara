@@ -12,6 +12,10 @@ public class GlobalState : MonoBehaviour
 
     [SerializeField] private GameObject _playerMesh;
 
+    [SerializeField] private LayerMask _playerMask;
+
+    [SerializeField] private LayerMask _enemyMask;
+
     public GameObject Player
     {
         get { return _player; }
@@ -30,6 +34,16 @@ public class GlobalState : MonoBehaviour
     public GameObject PlayerMesh
     {
         get { return _playerMesh; }
+    }
+
+    public LayerMask PlayerMask
+    {
+        get { return _playerMask; }
+    }
+
+    public LayerMask EnemyMask
+    {
+        get { return _enemyMask; }
     }
 
     private static GlobalState _state;

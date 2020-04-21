@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// DW och Dennis
+// DW
 [RequireComponent(typeof(Hitbox))]
 public class HitboxController : MonoBehaviour {
     private HitboxGroup _parent;
@@ -28,7 +28,7 @@ public class HitboxController : MonoBehaviour {
 
     private void Enable(int id)
     {
-        if (id < 1 || _hitbox.id == id)
+        if (id < 1 || _hitbox.id == id) // If ID is less than or equal to 0; every hitbox is enabled
         {
             _hitbox.enabled = true;
         }

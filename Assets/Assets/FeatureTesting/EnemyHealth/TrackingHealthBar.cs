@@ -37,7 +37,7 @@ public class TrackingHealthBar : MonoBehaviour
 
     private void Awake()
     {
-        _cam = Camera.main.transform;
+        _cam = GlobalState.state.Camera.transform;
     }
 
     // Health bar billboarding

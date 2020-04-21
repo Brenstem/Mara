@@ -23,9 +23,28 @@ public class CombatController : MonoBehaviour
     [HideInInspector] public TargetFinder TargetFinder;
     [HideInInspector] public CharacterController characterController;
 
+    public bool IsParrying
+    {
+        get
+        {
+            if (stateMachine.currentState.GetType() == typeof(ParryState))
+                return true;
+            else
+                return false;
+        }
+    }
+
     private void OnEnable() { _playerInput.Enable(); }
 
-    private void OnDisable() { _playerInput.Disable(); }
+    private void OnDisable()
+    {
+        _playerInput.Disable();
+        foreach (HitboxGroup group in hitboxGroups)
+        {
+            group.hitboxEventHandler.EndAnim();
+        }
+        stateMachine.ChangeState(new IdleAttackState());
+    }
 
     private void Awake()
     {
@@ -105,11 +124,14 @@ public class IdleAttackState : State<CombatController>
     public override void UpdateState(CombatController owner)
     {
         owner._animationOver = false;
-
-
+        
         if (Input.GetMouseButtonDown(0))
         {
             owner.stateMachine.ChangeState(new FirstAttackState());
+        }
+        else if (Input.GetMouseButtonDown(1))
+        {
+            owner.stateMachine.ChangeState(new ParryState());
         }
     }
 }
@@ -229,4 +251,30 @@ public class ThirdAttackState : State<CombatController>
     }
 }
 
+public class ParryState : State<CombatController>
+{
+    private Timer _timer;
+    public override void EnterState(CombatController owner)
+    {
+        float parryTime = 1.0f;
+        _timer = new Timer(parryTime);
+        owner.anim.SetBool("Parry", true);
+    }
 
+    public override void ExitState(CombatController owner)
+    {
+        owner.anim.SetBool("Parry", false);
+        _timer.Reset();
+    }
+
+    public override void UpdateState(CombatController owner)
+    {
+        _timer.Time += Time.deltaTime;
+        if (_timer.Expired)
+        {
+            //Lag men det gör man sen typ
+            owner.stateMachine.ChangeState(new IdleAttackState());
+        }
+
+    }
+}

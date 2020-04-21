@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// DW och Dennis
+// DW
 public class HitboxGroup : MonoBehaviour
 {
     public delegate void OnEnableHitboxes(int id);
@@ -11,19 +11,43 @@ public class HitboxGroup : MonoBehaviour
     public delegate void OnDisableHitboxes(int id);
     public event OnDisableHitboxes onDisableHitboxes;
 
-    private HitboxEventHandler _hitboxEventHandler;
-    public List<GameObject> _alreadyHit;
+    public HitboxEventHandler hitboxEventHandler;
+    public LayerMask targetLayerMask;
+
+    [HideInInspector] public List<GameObject> _alreadyHit;
     private List<Hitbox> _hitTimes;
-    
+
+    [SerializeField] private bool _eventLess;
+
     void Awake() {
         _alreadyHit = new List<GameObject>();
         _hitTimes = new List<Hitbox>();
-        // print(GlobalState.state.PlayerMesh);
-        // print(GlobalState.state.PlayerMesh.GetComponent<HitboxEventHandler>());
-        _hitboxEventHandler = GlobalState.state.PlayerMesh.GetComponent<HitboxEventHandler>();
-        _hitboxEventHandler.onEnableHitboxes += EnableEvent;
-        _hitboxEventHandler.onDisableHitboxes += DisableEvent;
-        _hitboxEventHandler.onEndAnim += ResetList;
+
+        _eventLess = GetComponentInChildren<HitboxController>() != null ? false : true;
+
+        if (!_eventLess)
+        {
+            if (hitboxEventHandler == null)
+            {
+                Debug.LogWarning("HitboxEventHandler missing! Resorting to finding in parent...", this);
+                hitboxEventHandler = GetComponentInParent<HitboxEventHandler>();
+                if (hitboxEventHandler == null)
+                {
+                    Debug.LogError("Unable to find HitboxEventHandler in parent!", this);
+                }
+                else
+                {
+                    Debug.Log("HitboxEventHandler found. Please add this component as a reference after game session", this);
+                }
+            }
+            hitboxEventHandler.onEnableHitboxes += EnableEvent;
+            hitboxEventHandler.onDisableHitboxes += DisableEvent;
+            hitboxEventHandler.onEndAnim += ResetList;
+        }
+        else
+        {
+            EnableEvent(0);
+        }
     }
 
     private void EnableEvent(int id)
@@ -42,64 +66,79 @@ public class HitboxGroup : MonoBehaviour
             Debug.LogWarning("No object is subscribed to the \"onDisableHitboxes\" event!", this);
     }
 
-    void LateUpdate() {
-        if (_hitTimes.Count > 0) {
+    void LateUpdate()
+    {
+        if (_hitTimes.Count > 0)
+        {
             int highestPriorityIndex = 0;
-            for (int i = 1; i < _hitTimes.Count; i++) {
-                if (_hitTimes[i].priority < _hitTimes[highestPriorityIndex].priority) {
+            for (int i = 1; i < _hitTimes.Count; i++)
+            {
+                if (_hitTimes[i].priority < _hitTimes[highestPriorityIndex].priority)
+                {
                     highestPriorityIndex = i;
                 }
             }
 
-            foreach (Collider enemy in _hitTimes[highestPriorityIndex].isHit) {
-                enemy.gameObject.GetComponent<EnemyHealth>().Damage(_hitTimes[highestPriorityIndex].damageValue);
-                _alreadyHit.Add(enemy.gameObject);
+            foreach (Collider enemy in _hitTimes[highestPriorityIndex].isHit)
+            {
+                if (!_alreadyHit.Contains(enemy.gameObject))
+                {
+                    Hitbox hit = _hitTimes[highestPriorityIndex];
+                    var entity = enemy.gameObject.GetComponent<Entity>();
+                    if (entity == null)
+                    {
+                        Debug.LogWarning("Object derived from Entity class is missing! Resorting to find in children...", this);
+                        entity = enemy.gameObject.GetComponentInChildren<Entity>();
+                        if (entity == null)
+                        {
+                            Debug.LogError("Object derived from Entity class is missing from \"" + enemy.gameObject.name + "\"!", this);
+                        }
+                        else
+                        {
+                            entity.TakeDamage(hit);
+                        }
+                    }
+                    else
+                    {
+                        entity.TakeDamage(hit);
+                    }
+                    _alreadyHit.Add(enemy.gameObject);
+                }
             }
 
             _hitTimes.Clear();
         }
     }
 
-    public void AddHitbox(Hitbox hitbox) {
+    public void AddHitbox(Hitbox hitbox)
+    {
         _hitTimes.Add(hitbox);
     }
 
     private void OnEnable()
     {
-        _hitboxEventHandler.onEnableHitboxes += EnableEvent;
-        _hitboxEventHandler.onDisableHitboxes += DisableEvent;
-        _hitboxEventHandler.onEndAnim += ResetList;
+        if (!_eventLess)
+        {
+            hitboxEventHandler.onEnableHitboxes += EnableEvent;
+            hitboxEventHandler.onDisableHitboxes += DisableEvent;
+            hitboxEventHandler.onEndAnim += ResetList;
+        }
 
         ResetList();
     }
 
     private void OnDisable() {
-        _hitboxEventHandler.onEnableHitboxes -= EnableEvent;
-        _hitboxEventHandler.onDisableHitboxes -= DisableEvent;
-        _hitboxEventHandler.onEndAnim -= ResetList;
+        if (!_eventLess)
+        {
+            hitboxEventHandler.onEnableHitboxes -= EnableEvent;
+            hitboxEventHandler.onDisableHitboxes -= DisableEvent;
+            hitboxEventHandler.onEndAnim -= ResetList;
+        }
     }
 
-    private void ResetList() {
+    private void ResetList()
+    {
         DisableEvent(0);
         _alreadyHit.Clear();
     }
-
-
-
-    /*
-    private void EnableChildren(int id) {
-        Transform[] children = GetComponentsInChildren<Transform>(true);
-        foreach (Transform child in children) {
-            child.gameObject.SetActive(true);
-        }
-    }
-
-    private void DisableChildren(int id) {
-        for (int i = 0; i < transform.childCount; i++) {
-            transform.GetChild(i).gameObject.SetActive(false);
-        }
-        ResetList();
-    }
-    */
-
 }

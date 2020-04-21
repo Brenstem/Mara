@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
+// DW
 public class StateMachine<T> {
     public State<T> currentState { get; private set; }
     public State<T> previousState { get; private set; }

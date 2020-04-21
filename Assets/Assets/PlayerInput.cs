@@ -65,13 +65,21 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Parry"",
+                    ""type"": ""Button"",
+                    ""id"": ""957b424e-f522-4dac-b987-612086619734"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": ""WASD"",
                     ""id"": ""fc4ab01c-a4fc-44a8-82cc-c77c1a4e0e00"",
-                    ""path"": ""2DVector"",
+                    ""path"": ""2DVector(mode=2)"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -276,6 +284,17 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""b00775b5-6a42-44b9-ac9c-5662b5b6d53a"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Parry"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -318,6 +337,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_PlayerControls_Jump = m_PlayerControls.FindAction("Jump", throwIfNotFound: true);
         m_PlayerControls_Test = m_PlayerControls.FindAction("Test", throwIfNotFound: true);
         m_PlayerControls_Attack = m_PlayerControls.FindAction("Attack", throwIfNotFound: true);
+        m_PlayerControls_Parry = m_PlayerControls.FindAction("Parry", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -373,6 +393,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_PlayerControls_Jump;
     private readonly InputAction m_PlayerControls_Test;
     private readonly InputAction m_PlayerControls_Attack;
+    private readonly InputAction m_PlayerControls_Parry;
     public struct PlayerControlsActions
     {
         private @PlayerInput m_Wrapper;
@@ -383,6 +404,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @Jump => m_Wrapper.m_PlayerControls_Jump;
         public InputAction @Test => m_Wrapper.m_PlayerControls_Test;
         public InputAction @Attack => m_Wrapper.m_PlayerControls_Attack;
+        public InputAction @Parry => m_Wrapper.m_PlayerControls_Parry;
         public InputActionMap Get() { return m_Wrapper.m_PlayerControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -410,6 +432,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Attack.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnAttack;
                 @Attack.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnAttack;
                 @Attack.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnAttack;
+                @Parry.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnParry;
+                @Parry.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnParry;
+                @Parry.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnParry;
             }
             m_Wrapper.m_PlayerControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -432,6 +457,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Attack.started += instance.OnAttack;
                 @Attack.performed += instance.OnAttack;
                 @Attack.canceled += instance.OnAttack;
+                @Parry.started += instance.OnParry;
+                @Parry.performed += instance.OnParry;
+                @Parry.canceled += instance.OnParry;
             }
         }
     }
@@ -462,5 +490,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnTest(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
+        void OnParry(InputAction.CallbackContext context);
     }
 }
