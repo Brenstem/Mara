@@ -18,24 +18,30 @@ public abstract class BaseAIMovementController : MonoBehaviour
     [SerializeField] public LayerMask targetLayers;
 
     [SerializeField] public bool cyclePathing;
+    [SerializeField] public bool waitAtPoints;
+    [SerializeField] public float waitTime;
     [SerializeField] public Vector3[] idlePathingPoints;
-    [SerializeField] public float attackRange;
+    [SerializeField] public float attackRange = 12f;
 
     [NonSerialized] public Vector3 idlePosition;
 
     [NonSerialized] public GameObject target;
     [NonSerialized] public NavMeshAgent agent;
 
+    [NonSerialized] public RangedEnemyAI rangedAI;
+    [NonSerialized] public Timer waitTimer;
+
     virtual protected void Awake()
     {
         idlePosition = this.transform.position;
         stateMachine = new StateMachine<BaseAIMovementController>(this);
+        waitTimer = new Timer(waitTime);
 
         agent = GetComponent<NavMeshAgent>();
 
-        //borde inte göras såhär at the end of the day men måste göra skit med spelaren då och vet inte om jag får det
         target = GlobalState.state.Player;
     }
+
     virtual protected void Update()
     {
         stateMachine.Update();
@@ -85,11 +91,17 @@ public class BaseIdleState : State<BaseAIMovementController>
 
     public override void UpdateState(BaseAIMovementController owner)
     {
+        if (owner.waitAtPoints)
+        {
+            owner.waitTimer.Time += Time.deltaTime;
+        }
+
         //idle pathing
         if (owner.idlePathingPoints.Length > 1)
         {
             if (owner.agent.stoppingDistance > Vector3.Distance(owner.transform.position, owner.idlePathingPoints[_pathingIndex]))
             {
+
                 if (!owner.cyclePathing)
                 {
                     if (_pathingIndex == owner.idlePathingPoints.Length - 1)
@@ -100,7 +112,18 @@ public class BaseIdleState : State<BaseAIMovementController>
                 _pathingIndex = (_pathingIndex + 1) % owner.idlePathingPoints.Length;
             }
             //flyttar monstret mot nästa position i positions arrayen
-            owner.agent.SetDestination(owner.idlePathingPoints[_pathingIndex]);
+            if (owner.waitAtPoints)
+            {
+                if (owner.waitTimer.Expired())
+                {
+                    owner.agent.SetDestination(owner.idlePathingPoints[_pathingIndex]);
+                    owner.waitTimer.Reset();
+                }
+            }
+            else
+            {
+                owner.agent.SetDestination(owner.idlePathingPoints[_pathingIndex]);
+            }
         }
 
         //aggro detection
@@ -122,16 +145,14 @@ public class BaseChasingState : State<BaseAIMovementController>
     protected static BaseReturnToIdlePosState _returnToIdleState = new BaseReturnToIdlePosState();
     protected static BaseAttackingState _attackingState = new BaseAttackingState();
 
-
     public override void EnterState(BaseAIMovementController owner) { }
 
     public override void ExitState(BaseAIMovementController owner) { }
 
     public override void UpdateState(BaseAIMovementController owner)
     {
-        float range = owner.agent.stoppingDistance + owner.attackRange;
+        float range = owner.attackRange - owner.agent.stoppingDistance;
 
-        //
         Vector3 vectorToPlayer = (owner.target.transform.position - owner.transform.position).normalized * range;
         Vector3 targetPosition = owner.target.transform.position - vectorToPlayer; 
 
