@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 7514865833590956478}
   - component: {fileID: 1604520631144556562}
   - component: {fileID: 2586571097027963035}
+  - component: {fileID: 2144411368}
   m_Layer: 0
   m_Name: GlobalState
   m_TagString: Untagged
@@ -50,6 +51,7 @@ MonoBehaviour:
   _camera: {fileID: 0}
   _audioManager: {fileID: 1604520631144556562}
   _playerMesh: {fileID: 0}
+  _checkpointHandler: {fileID: 2586571097027963035}
   _playerMask:
     serializedVersion: 2
     m_Bits: 2048
@@ -73,7 +75,7 @@ MonoBehaviour:
   playerSwordSwingAudio: 
   playerDodgeAudio: 
   playerJumpAudio: 
-  playerHeartBeatAudio: event:/SFX/Environment and ambience/Checkpoint
+  playerHeartBeatAudio: 
 --- !u!114 &2586571097027963035
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -87,3 +89,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   respawnTime: 3
+--- !u!114 &2144411368
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6563267733136721347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 311
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.1
+  m_BuildHeightMesh: 0
+  m_NavMeshData: {fileID: 23800000, guid: 1fc3f19cf6f1b6e4eb52d667d4d6c267, type: 2}
