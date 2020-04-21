@@ -30,7 +30,7 @@ public class RangedEnemyAI : BaseAIMovementController
 
     public void Attack()
     {
-        if (firerateTimer.Expired())
+        if (firerateTimer.Expired)
         {
             Instantiate(_projectile, _projectileSpawnPos.position, _projectileSpawnPos.rotation);
             firerateTimer.Reset();

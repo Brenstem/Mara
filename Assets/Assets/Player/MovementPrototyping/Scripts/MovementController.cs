@@ -161,8 +161,6 @@ public class MovementController : MonoBehaviour
         _dashCooldownTimer.Time += Time.deltaTime;
 
         _hasJumped = false;
-
-        print(_playerInput.PlayerControls.Move.ReadValue<Vector2>());
     }
 
     private void OnDrawGizmosSelected()

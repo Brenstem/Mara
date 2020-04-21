@@ -114,7 +114,7 @@ public class BaseIdleState : State<BaseAIMovementController>
             //flyttar monstret mot nästa position i positions arrayen
             if (owner.waitAtPoints)
             {
-                if (owner.waitTimer.Expired())
+                if (owner.waitTimer.Expired)
                 {
                     owner.agent.SetDestination(owner.idlePathingPoints[_pathingIndex]);
                     owner.waitTimer.Reset();

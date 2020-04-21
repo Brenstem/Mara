@@ -31,7 +31,7 @@ public class ProjectileBehaviour : MonoBehaviour
     {
         lifespanTimer.Time += Time.deltaTime;
 
-        if (lifespanTimer.Expired())
+        if (lifespanTimer.Expired)
         {
             Destroy(this.gameObject);
         }
@@ -47,8 +47,7 @@ public class ProjectileBehaviour : MonoBehaviour
 
     IEnumerator DestroyProjectile()
     {
-        yield return 0;
-
-        Destroy(gameObject);
+        yield return StartCoroutine(WaitFor.Frames(2));
+        Destroy(this.gameObject);
     }
 }
