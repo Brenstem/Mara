@@ -58,6 +58,11 @@ public class Player : Entity
         print("DOOOOOOOOM");
     }
 
+    public void ResetAnim()
+    {
+        combatController.anim.SetTrigger("Reset");
+    }
+
     public void EnableHitstun(float duration)
     {
         if (duration > 0.0f)
