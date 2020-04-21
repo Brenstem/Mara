@@ -22,15 +22,17 @@ public class Hitbox : MonoBehaviour
         _parent = transform.parent.GetComponent<HitboxGroup>();
     }
 
-    void Update()
+    void FixedUpdate()
     {
         //Lägger in objekt som är i hitboxen i arrayn
         isHit = Physics.OverlapBox(transform.position + _offset, _size * 0.5f, transform.rotation, _parent.targetLayerMask);
-
+        print("Hitbox Update");
         foreach (Collider enemy in isHit)
         {
+            print(enemy.gameObject.name);
             if (isHit.Length != 0 && !_parent._alreadyHit.Contains(enemy.gameObject))
-            { 
+            {
+                print("damage!!!");
                 _parent.AddHitbox(this);
             }
         }

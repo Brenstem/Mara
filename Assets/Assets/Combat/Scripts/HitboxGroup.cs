@@ -43,12 +43,13 @@ public class HitboxGroup : MonoBehaviour
             hitboxEventHandler.onEnableHitboxes += EnableEvent;
             hitboxEventHandler.onDisableHitboxes += DisableEvent;
             hitboxEventHandler.onEndAnim += ResetList;
+            enabled = false;
         }
         else
         {
+            enabled = true;
             EnableEvent(0);
         }
-        enabled = false;
     }
 
     private void EnableEvent(int id)
@@ -69,8 +70,16 @@ public class HitboxGroup : MonoBehaviour
 
     void LateUpdate()
     {
+        if (!_eventLess)
+            HitDetection();
+    }
+
+    private void HitDetection()
+    {
+        print("update, hittimes: " + _hitTimes.Count);
         if (_hitTimes.Count > 0)
         {
+            print("enter");
             int highestPriorityIndex = 0;
             for (int i = 1; i < _hitTimes.Count; i++)
             {
@@ -114,6 +123,10 @@ public class HitboxGroup : MonoBehaviour
     public void AddHitbox(Hitbox hitbox)
     {
         _hitTimes.Add(hitbox);
+        if (_eventLess)
+        {
+            HitDetection();
+        }
     }
 
     private void OnEnable()
