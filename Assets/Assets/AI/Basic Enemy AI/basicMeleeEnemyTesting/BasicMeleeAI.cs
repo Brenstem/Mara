@@ -42,12 +42,13 @@ public class BasicMeleeAttackingState : BaseAttackingState
     public override void EnterState(BaseAIMovementController owner)
     {
         _chasingState = new BasicMeleeChasingState();
+       
     }
 
     public override void UpdateState(BaseAIMovementController owner)
     {
         //lägg in attack metod här
-        owner.meleeEnemy.Attack();
+        //owner.meleeEnemy.Attack();
 
         base.UpdateState(owner);
     }

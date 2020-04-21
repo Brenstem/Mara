@@ -185,7 +185,7 @@ public class BaseAttackingState : State<BaseAIMovementController>
     {
         //lägg in attack metod här
 
-        float range = owner.agent.stoppingDistance + owner.attackRange;
+        float range = owner.attackRange - owner.agent.stoppingDistance;
 
         Vector3 vectorToPlayer = (owner.target.transform.position - owner.transform.position).normalized * range;
         Vector3 targetPosition = owner.target.transform.position - vectorToPlayer; // target position - (vector between enemy and player with length of range)
