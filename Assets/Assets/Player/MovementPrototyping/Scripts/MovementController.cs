@@ -219,6 +219,7 @@ public class MovementController : MonoBehaviour
         if (_hasJumped && _isGrounded)
         {
             _velocity.y = Mathf.Sqrt(_jumpHeight) * -_gravity;
+            GlobalState.state.Player.EndAnim();
             playerAnimator.SetTrigger("Jump");
         }
         if (stateMachine.currentState.GetType() == typeof(DashMovementState))
@@ -239,6 +240,7 @@ public class MovementController : MonoBehaviour
         {
             _hasDashed = true;
             _dashCooldownTimer.Reset();
+            GlobalState.state.Player.EndAnim();
             stateMachine.ChangeState(new DashMovementState());
         }
     }

@@ -48,6 +48,7 @@ public class HitboxGroup : MonoBehaviour
         {
             EnableEvent(0);
         }
+        enabled = false;
     }
 
     private void EnableEvent(int id)
@@ -134,6 +135,7 @@ public class HitboxGroup : MonoBehaviour
             hitboxEventHandler.onDisableHitboxes -= DisableEvent;
             hitboxEventHandler.onEndAnim -= ResetList;
         }
+        DisableEvent(0);
     }
 
     private void ResetList()

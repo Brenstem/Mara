@@ -19,7 +19,7 @@ public class Hitbox : MonoBehaviour
 
     private void Awake()
     {
-        _parent = GetComponentInParent<HitboxGroup>();
+        _parent = transform.parent.GetComponent<HitboxGroup>();
     }
 
     void Update()

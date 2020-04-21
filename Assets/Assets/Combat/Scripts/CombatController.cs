@@ -43,6 +43,7 @@ public class CombatController : MonoBehaviour
         foreach (HitboxGroup group in hitboxGroups)
         {
             group.hitboxEventHandler.EndAnim();
+            group.enabled = false;
         }
         stateMachine.ChangeState(new IdleAttackState());
     }
@@ -113,7 +114,10 @@ public class CombatController : MonoBehaviour
         {
             var t = GlobalState.state.Player.lockonFunctionality.Target;
             if (t != null)
-                _target = t.gameObject;
+            {
+                if (Vector3.Distance(transform.position, t.position) <= TargetFinder.trackRadius)
+                    _target = t.gameObject;
+            }
         }
         return _target;
     }
@@ -168,7 +172,7 @@ public class FirstAttackState : State<CombatController>
     {
         if (_doubleCombo)
         {
-            owner.anim.SetBool("DoubleCombo", true); // Set animation bool
+            owner.anim.SetBool("DoubleCombo", _doubleCombo); // Set animation bool
             _doubleCombo = false; // Reset member variable
         }
         owner.hitboxGroups[0].enabled = false;
@@ -215,7 +219,7 @@ public class SecondAttackState : State<CombatController>
     {
         if (_tripleCombo)
         {
-            owner.anim.SetBool("TripleCombo", true);
+            owner.anim.SetBool("TripleCombo", _tripleCombo);
             _tripleCombo = false;
         }
 

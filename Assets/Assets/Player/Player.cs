@@ -60,7 +60,13 @@ public class Player : Entity
 
     public void ResetAnim()
     {
+        combatController.EndAnim();
         combatController.anim.SetTrigger("Reset");
+    }
+
+    public void EndAnim()
+    {
+        combatController.EndAnim();
     }
 
     public void EnableHitstun(float duration)

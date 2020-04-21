@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TargetFinder : MonoBehaviour
 {
-    [SerializeField] float _trackRadius;
+    [SerializeField] public float trackRadius;
     [SerializeField] float _playerAngle;
 
     [SerializeField] LayerMask targets;
@@ -13,7 +13,7 @@ public class TargetFinder : MonoBehaviour
 
     public GameObject FindTarget()
     {
-        Collider[] toHit = Physics.OverlapSphere(transform.position, _trackRadius, targets);
+        Collider[] toHit = Physics.OverlapSphere(transform.position, trackRadius, targets);
         GameObject targetToHit = null;
         float temp = Mathf.Infinity;
         Vector3 playerRotation = transform.forward;
@@ -50,6 +50,6 @@ public class TargetFinder : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawWireSphere(transform.position, _trackRadius);
+        Gizmos.DrawWireSphere(transform.position, trackRadius);
     }
 }
