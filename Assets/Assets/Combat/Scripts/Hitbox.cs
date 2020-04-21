@@ -12,6 +12,7 @@ public class Hitbox : MonoBehaviour
     [Tooltip("Lower numbers are prioritized"), Range(0, 15)] public int priority;
     public int id;
     public float damageValue;
+    public float hitstunTime;
     public bool isParryable;
     [SerializeField] private Vector3 _size;
     [SerializeField] private Vector3 _offset;
@@ -35,7 +36,7 @@ public class Hitbox : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         if (enabled)
         {

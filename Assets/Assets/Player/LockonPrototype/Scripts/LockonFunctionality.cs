@@ -28,6 +28,10 @@ public class LockonFunctionality : MonoBehaviour
     private PlayerInput _playerInput;
     private MovementController _movementController;
 
+    public Transform Target
+    {
+        get { return _pointOfInterest; }
+    }
 
     private void Awake()
     {

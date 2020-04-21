@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct InputInfo
+{
+    public Vector2 direction;
+    public bool jump;
+}
+
 public class Player : Entity
 {
     public PlayerInsanity playerInsanity;
@@ -10,9 +16,11 @@ public class Player : Entity
     public MovementController movementController;
     public CombatController combatController;
 
+    public InputInfo input;
 
     private bool _useHitstun;
     private Timer _hitstunTimer;
+    private PlayerInput _playerInput;
 
     public override void TakeDamage(Hitbox hitbox)
     {
@@ -23,8 +31,7 @@ public class Player : Entity
         }
         else
         {
-            // hitstun?
-            EnableHitstun(0.3f);
+            EnableHitstun(hitbox.hitstunTime);
             playerInsanity.IncrementInsanity(hitbox.damageValue);
         }
     }
@@ -36,8 +43,15 @@ public class Player : Entity
 
     private void Awake()
     {
+        input = new InputInfo();
+        _playerInput = new PlayerInput();
+        _playerInput.PlayerControls.Move.performed += ctx => input.direction = ctx.ReadValue<Vector2>();
+        _playerInput.PlayerControls.Jump.performed += ctx => input.jump = true;
+
         PlayerInsanity.OnImpendingDoom += ImpendingDoom;
     }
+    private void OnEnable() { _playerInput.PlayerControls.Enable(); }
+    private void OnDisable() { _playerInput.PlayerControls.Disable(); }
 
     public void ImpendingDoom()
     {
@@ -46,13 +60,16 @@ public class Player : Entity
 
     public void EnableHitstun(float duration)
     {
-        DisableCombatController();
-        DisableMovementController();
-        _hitstunTimer = new Timer(duration);
-        _useHitstun = true;
-        combatController.anim.SetTrigger("Hitstun");
-        combatController.anim.SetBool("InHitstun", true);
-        // play animation
+        if (duration > 0.0f)
+        {
+            DisableCombatController();
+            DisableMovementController();
+            _hitstunTimer = new Timer(duration);
+            _useHitstun = true;
+            combatController.anim.SetTrigger("Hitstun");
+            combatController.anim.SetBool("InHitstun", true);
+            // play animation
+        }
     }
 
     public void DisableHitstun()

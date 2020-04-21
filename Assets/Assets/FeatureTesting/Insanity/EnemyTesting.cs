@@ -11,7 +11,7 @@ public class EnemyTesting : MonoBehaviour
 
     void Start()
     {
-        player = GlobalState.state.Player.GetComponent<PlayerInsanity>(); 
+        player = GlobalState.state.PlayerGameObject.GetComponent<PlayerInsanity>(); 
     }
 
     void Update()

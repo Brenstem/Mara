@@ -60,6 +60,7 @@ public class MovementController : MonoBehaviour
     private Timer _dashCooldownTimer;
     private bool _doSnapCamera;
     private bool _hasJumped;
+    private bool _hasDashed;
     private bool _isGrounded;
     private Vector3 _velocity;
     private PlayerInput _playerInput;
@@ -142,14 +143,13 @@ public class MovementController : MonoBehaviour
         stateMachine.ChangeState(new IdleMovementState());
 
         // Input
-        _playerInput.PlayerControls.Move.performed += ctx => input = ctx.ReadValue<Vector2>();
-        //_playerInput.PlayerControls.Test.performed += _ => ToggleLockon();
-        _playerInput.PlayerControls.Jump.performed += ctx => _hasJumped = true;
         _playerInput.PlayerControls.Dash.performed += Dash;
     }
 
     void Update()
     {
+        InputHandling();
+
         GroundCheck();
 
         stateMachine.Update();
@@ -160,9 +160,7 @@ public class MovementController : MonoBehaviour
 
         _dashCooldownTimer.Time += Time.deltaTime;
 
-        _hasJumped = false;
-
-        print(_playerInput.PlayerControls.Move.ReadValue<Vector2>());
+        GlobalState.state.Player.input.jump = false;
     }
 
     private void OnDrawGizmosSelected()
@@ -172,15 +170,7 @@ public class MovementController : MonoBehaviour
         Gizmos.DrawWireSphere(_lockOnOrigin + _lockOnDirection * _lockOnCurrentHitDistance, _lockOnRadius);
     }
 
-    private void OnEnable()
-    {
-        _playerInput.PlayerControls.Enable();
-        var e = _playerInput.PlayerControls.Get();
-        /*
-        input = _playerInput.PlayerControls.Move.ReadValue<Vector2>();
-        print(input);
-        */
-    }
+    private void OnEnable() { _playerInput.PlayerControls.Enable(); }
 
     private void OnDisable()
     {
@@ -198,6 +188,13 @@ public class MovementController : MonoBehaviour
             ToggleLockon();
         }
     }
+
+    void InputHandling()
+    {
+        input = GlobalState.state.Player.input.direction;
+        _hasJumped = GlobalState.state.Player.input.jump;
+    }
+
     /// <summary>
     /// Snaps camera after returning to free look camera
     /// </summary>
@@ -218,6 +215,7 @@ public class MovementController : MonoBehaviour
         if (_isGrounded && _velocity.y < 0)
         {
             _velocity.y = -2f;
+            _hasDashed = false;
         }
         playerAnimator.SetBool("Grounded", _isGrounded);
     }
@@ -243,8 +241,9 @@ public class MovementController : MonoBehaviour
     /* === PLACEHOLDERS === */
     private void Dash(InputAction.CallbackContext c)
     { // Placeholder
-        if (_dashCooldownTimer.Expired)
+        if (_dashCooldownTimer.Expired && !_hasDashed)
         {
+            _hasDashed = true;
             _dashCooldownTimer.Reset();
             stateMachine.ChangeState(new DashMovementState());
         }
@@ -305,11 +304,12 @@ public class GeneralMovementState : State<MovementController>
             if (owner.input.magnitude >= movingThreshold)
             {
                 Vector3 baseInputDirection = Camera.main.transform.right * owner.input.normalized.x + Camera.main.transform.forward * owner.input.normalized.y;
-                Vector3 resultingDirection = Vector3.RotateTowards(owner.transform.forward, baseInputDirection, owner.rotationSpeed * Time.deltaTime, 0.0f);
 
                 // The angle between baseInputDirection and resultingDirection
                 float angle = Vector2.Angle(new Vector2(owner.transform.forward.x, owner.transform.forward.z),
                                             new Vector2(baseInputDirection.x, baseInputDirection.z));
+
+                Vector3 resultingDirection = Vector3.RotateTowards(owner.transform.forward, baseInputDirection, owner.rotationSpeed * Time.deltaTime * (angle > 135 ? 5 : 1), 0.0f);
 
                 owner.transform.rotation = Quaternion.LookRotation(resultingDirection);
                 owner.transform.eulerAngles = new Vector3(0, owner.transform.eulerAngles.y, 0); // Limits rotation to the Y-axis
@@ -319,7 +319,6 @@ public class GeneralMovementState : State<MovementController>
                 {
                     _isMoving = true;
                 }
-
                 if (_isMoving)
                 {
                     owner.controller.Move(move * owner.maxSpeed * Time.deltaTime);

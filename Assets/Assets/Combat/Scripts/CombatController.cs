@@ -82,7 +82,7 @@ public class CombatController : MonoBehaviour
             group.enabled = true;
         }
         
-        if (target && autoaim && !GlobalState.state.Player.GetComponent<MovementController>().isLockedOn) // If there is target swing
+        if (target && autoaim && !GlobalState.state.PlayerGameObject.GetComponent<MovementController>().isLockedOn) // If there is target swing
         {
             direction = target.transform.position - transform.position;
             hit = Physics.Raycast(transform.position + offset, direction, stoppingDistance, enemyLayer);
@@ -106,12 +106,24 @@ public class CombatController : MonoBehaviour
         }
     }
 
+    public GameObject FindTarget()
+    {
+        GameObject _target = TargetFinder.FindTarget(); // Find target to pass to attack function in first frame of attack
+        if (_target != null)
+        {
+            var t = GlobalState.state.Player.lockonFunctionality.Target;
+            if (t != null)
+                _target = t.gameObject;
+        }
+        return _target;
+    }
+
     // Character looks at enemy
     private void FaceEnemy(GameObject target)
     {
         Vector3 _direction = (target.transform.position - transform.position);
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(_direction.x, 0, _direction.z));
-        GlobalState.state.Player.GetComponent<Transform>().rotation = lookRotation;
+        GlobalState.state.PlayerGameObject.GetComponent<Transform>().rotation = lookRotation;
     }
 }
 
@@ -145,7 +157,7 @@ public class FirstAttackState : State<CombatController>
     {
         owner.anim.SetBool("DoubleCombo", false); // Reset the double combo animation bool upon entering state
         owner.anim.SetTrigger("Attack"); // Set animation trigger for first attack
-        _target = owner.TargetFinder.FindTarget(); // Find target to pass to attack function in first frame of attack
+        _target = owner.FindTarget();
     }
 
     public override void ExitState(CombatController owner)
@@ -189,7 +201,7 @@ public class SecondAttackState : State<CombatController>
         // Animation bool was set to true in last states exit
 
         owner.anim.SetBool("TripleCombo", false); // Reset triple combo animation bool upon entering state
-        _target = owner.TargetFinder.FindTarget(); // Find target to pass to attack function in first frame of attack
+        _target = owner.FindTarget(); // Find target to pass to attack function in first frame of attack
         owner._animationOver = false;
     }
 
@@ -230,7 +242,7 @@ public class ThirdAttackState : State<CombatController>
 
     public override void EnterState(CombatController owner)
     {
-        _target = owner.TargetFinder.FindTarget();
+        _target = owner.FindTarget();
         owner._animationOver = false;
     }
 

@@ -22,16 +22,27 @@ public class TargetFinder : MonoBehaviour
         {
             if (target != null)
             {
-                if (temp > Vector3.Distance(transform.position, target.transform.position))
+                Vector2 input = GlobalState.state.Player.input.direction;
+                /* INPUT DEPENDANT */
+                /*if (input != Vector2.zero)
                 {
-                    temp = Vector3.Distance(transform.position, target.transform.position);
-                    Vector3 targetRotation = target.transform.position - transform.position;
 
-                    if (_playerAngle * Mathf.Deg2Rad > Mathf.Acos((Vector3.Dot(playerRotation, targetRotation)) / (playerRotation.magnitude * targetRotation.magnitude)))
-                    {
-                        targetToHit = target.gameObject;
-                    }
                 }
+                else
+                {
+                    */
+                    /* DISTANCE DEPENDANT */
+                    if (temp > Vector3.Distance(transform.position, target.transform.position))
+                    {
+                        temp = Vector3.Distance(transform.position, target.transform.position);
+                        Vector3 targetRotation = target.transform.position - transform.position;
+
+                        if (_playerAngle * Mathf.Deg2Rad > Mathf.Acos((Vector3.Dot(playerRotation, targetRotation)) / (playerRotation.magnitude * targetRotation.magnitude)))
+                        {
+                            targetToHit = target.gameObject;
+                        }
+                    }
+                //}
             }
         }
         return targetToHit;

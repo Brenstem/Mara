@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class GlobalState : MonoBehaviour
 {
-    [SerializeField] private GameObject _player;
-    
+    [SerializeField] private GameObject _playerGameObject;
+
+    [SerializeField] private Player _player;
+
     [SerializeField] private Camera _camera;
 
     [SerializeField] private AudioManager _audioManager;
@@ -16,7 +18,12 @@ public class GlobalState : MonoBehaviour
 
     [SerializeField] private LayerMask _enemyMask;
 
-    public GameObject Player
+    public GameObject PlayerGameObject
+    {
+        get { return _playerGameObject; }
+    }
+
+    public Player Player
     {
         get { return _player; }
     }
