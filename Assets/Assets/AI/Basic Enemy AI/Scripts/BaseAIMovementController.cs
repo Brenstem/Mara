@@ -39,7 +39,6 @@ public abstract class BaseAIMovementController : MonoBehaviour
 
         agent = GetComponent<NavMeshAgent>();
 
-        //borde inte göras såhär at the end of the day men måste göra skit med spelaren då och vet inte om jag får det
         target = GlobalState.state.Player;
     }
 
@@ -63,8 +62,6 @@ public abstract class BaseAIMovementController : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, aggroRange);
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, unaggroRange);
-        Gizmos.color = Color.white;
-        Gizmos.DrawWireSphere(transform.position, agent.stoppingDistance + attackRange);
 
         Gizmos.color = Color.blue;
         if (idlePathingPoints.Length > 1)
@@ -94,12 +91,16 @@ public class BaseIdleState : State<BaseAIMovementController>
 
     public override void UpdateState(BaseAIMovementController owner)
     {
+        if (owner.waitAtPoints)
+        {
+            owner.waitTimer.Time += Time.deltaTime;
+        }
+
         //idle pathing
         if (owner.idlePathingPoints.Length > 1)
         {
             if (owner.agent.stoppingDistance > Vector3.Distance(owner.transform.position, owner.idlePathingPoints[_pathingIndex]))
             {
-                owner.waitTimer.Time += Time.deltaTime;
 
                 if (!owner.cyclePathing)
                 {
@@ -118,6 +119,10 @@ public class BaseIdleState : State<BaseAIMovementController>
                     owner.agent.SetDestination(owner.idlePathingPoints[_pathingIndex]);
                     owner.waitTimer.Reset();
                 }
+            }
+            else
+            {
+                owner.agent.SetDestination(owner.idlePathingPoints[_pathingIndex]);
             }
         }
 

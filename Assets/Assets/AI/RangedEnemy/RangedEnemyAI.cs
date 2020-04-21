@@ -8,7 +8,7 @@ public class RangedEnemyAI : BaseAIMovementController
     [SerializeField] private Transform _projectileSpawnPos;
     [SerializeField] private float _firerate;
 
-    private Timer firerateTimer;
+    [HideInInspector] public Timer firerateTimer;
 
     protected override void Awake()
     {
@@ -65,6 +65,7 @@ public class RangedEnemyAttackingState : BaseAttackingState
     public override void EnterState(BaseAIMovementController owner)
     {
         _chasingState = new RangedEnemyChasingState();
+        owner.rangedAI.firerateTimer.Reset();
     }
 
     public override void UpdateState(BaseAIMovementController owner)
