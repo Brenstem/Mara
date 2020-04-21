@@ -6,7 +6,6 @@ public class ProjectileBehaviour : MonoBehaviour
 {
     [SerializeField] private float _speed;
     [SerializeField] private float _lifeSpan;
-    [SerializeField] private float _damage;
 
     private Rigidbody _rb;
     private Timer lifespanTimer;
@@ -47,7 +46,7 @@ public class ProjectileBehaviour : MonoBehaviour
 
     IEnumerator DestroyProjectile()
     {
-        yield return StartCoroutine(WaitFor.Frames(2));
+        yield return StartCoroutine(WaitFor.Frames(3));
         Destroy(this.gameObject);
     }
 }
