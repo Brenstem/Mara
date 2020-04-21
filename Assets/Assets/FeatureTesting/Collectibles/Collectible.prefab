@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4130683122775444159}
   - component: {fileID: 4130683122775444158}
   - component: {fileID: 4130683122775444157}
+  - component: {fileID: 2101105288}
   m_Layer: 0
   m_Name: Collectible
   m_TagString: Untagged
@@ -107,3 +108,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   incrementAmount: 20
   destroyOnPickup: 1
+--- !u!114 &2101105288
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4130683122775444156}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: Player
+  Event: event:/SFX/Environment and ambience/Checkpoint
+  PlayEvent: 3
+  StopEvent: 4
+  AllowFadeout: 1
+  TriggerOnce: 1
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 5.6
+  OverrideMaxDistance: 10
