@@ -163,18 +163,12 @@ public class MovementController : MonoBehaviour
         GlobalState.state.Player.input.jump = false;
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Debug.DrawLine(_lockOnOrigin, _lockOnOrigin + _lockOnDirection * _lockOnCurrentHitDistance);
-        Gizmos.DrawWireSphere(_lockOnOrigin + _lockOnDirection * _lockOnCurrentHitDistance, _lockOnRadius);
-    }
-
     private void OnEnable() { _playerInput.PlayerControls.Enable(); }
 
     private void OnDisable()
     {
         _playerInput.PlayerControls.Disable();
+        _velocity.y = 0;
         stateMachine.ChangeState(new IdleMovementState());
     }
 
@@ -248,6 +242,14 @@ public class MovementController : MonoBehaviour
             stateMachine.ChangeState(new DashMovementState());
         }
     }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Debug.DrawLine(_lockOnOrigin, _lockOnOrigin + _lockOnDirection * _lockOnCurrentHitDistance);
+        Gizmos.DrawWireSphere(_lockOnOrigin + _lockOnDirection * _lockOnCurrentHitDistance, _lockOnRadius);
+    }
+
 }
 
 public class IdleMovementState : State<MovementController>
