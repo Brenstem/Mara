@@ -33,6 +33,8 @@ public abstract class BaseAIMovementController : MonoBehaviour
 
     [NonSerialized] public GameObject target;
     [NonSerialized] public NavMeshAgent agent;
+    [NonSerialized] public BasicMeleeAI meleeEnemy;
+
 
     virtual protected void Awake()
     {
