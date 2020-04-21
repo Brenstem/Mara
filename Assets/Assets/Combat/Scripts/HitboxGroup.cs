@@ -66,11 +66,15 @@ public class HitboxGroup : MonoBehaviour
             Debug.LogWarning("No object is subscribed to the \"onDisableHitboxes\" event!", this);
     }
 
-    void LateUpdate() {
-        if (_hitTimes.Count > 0) {
+    void LateUpdate()
+    {
+        if (_hitTimes.Count > 0)
+        {
             int highestPriorityIndex = 0;
-            for (int i = 1; i < _hitTimes.Count; i++) {
-                if (_hitTimes[i].priority < _hitTimes[highestPriorityIndex].priority) {
+            for (int i = 1; i < _hitTimes.Count; i++)
+            {
+                if (_hitTimes[i].priority < _hitTimes[highestPriorityIndex].priority)
+                {
                     highestPriorityIndex = i;
                 }
             }
@@ -106,7 +110,8 @@ public class HitboxGroup : MonoBehaviour
         }
     }
 
-    public void AddHitbox(Hitbox hitbox) {
+    public void AddHitbox(Hitbox hitbox)
+    {
         _hitTimes.Add(hitbox);
     }
 
@@ -131,7 +136,8 @@ public class HitboxGroup : MonoBehaviour
         }
     }
 
-    private void ResetList() {
+    private void ResetList()
+    {
         DisableEvent(0);
         _alreadyHit.Clear();
     }
