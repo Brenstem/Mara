@@ -39,7 +39,7 @@ public abstract class BaseAIMovementController : MonoBehaviour
 
         agent = GetComponent<NavMeshAgent>();
 
-        target = GlobalState.state.Player;
+        target = GlobalState.state.PlayerGameObject;
     }
 
     virtual protected void Update()
