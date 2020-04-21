@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4441726425550478374}
   - component: {fileID: 7514865833590956478}
   - component: {fileID: 1604520631144556562}
+  - component: {fileID: 2586571097027963035}
   m_Layer: 0
   m_Name: GlobalState
   m_TagString: Untagged
@@ -44,10 +45,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 472b6d0e019343e4c876554e79c44ed1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerGameObject: {fileID: 0}
   _player: {fileID: 0}
   _camera: {fileID: 0}
   _audioManager: {fileID: 1604520631144556562}
   _playerMesh: {fileID: 0}
+  _playerMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  _enemyMask:
+    serializedVersion: 2
+    m_Bits: 4096
 --- !u!114 &1604520631144556562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -60,8 +68,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8798d1d51161f8c47a9ae254063dbe54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InsanityEventAudio: event:/Insanity manager
+  InsanityEventAudio: event:/SFX/Player/Insanity manager
   PlayerFootsteps: 
   playerSwordSwingAudio: 
   playerDodgeAudio: 
   playerJumpAudio: 
+  playerHeartBeatAudio: event:/SFX/Environment and ambience/Checkpoint
+--- !u!114 &2586571097027963035
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6563267733136721347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cbfb955a1b677845ab3697fba9b64f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  respawnTime: 3

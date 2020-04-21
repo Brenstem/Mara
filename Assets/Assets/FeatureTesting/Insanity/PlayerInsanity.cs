@@ -161,53 +161,60 @@ public class PlayerInsanity : MonoBehaviour
                 _timer = new Timer(_impendingDoomTimer);
                 _playerDying = true;
                 break;
-            /*case float n when (n > staticInsanityValues[5]):
-                OnMonsters();
+            case float n when (n > staticInsanityValues[5]):
+                //OnMonsters();
                 break;
             case float n when (n > staticInsanityValues[4]):
-                OnShadowClone();
+                //OnShadowClone();
                 break;
             case float n when (n > staticInsanityValues[3]):
-                OnHallucination();
+                //OnHallucination();
                 break;
             case float n when (n > staticInsanityValues[2]):
-                OnSlow();
+                //OnSlow();
                 break;
             case float n when (n > staticInsanityValues[1]):
-                OnParanoia();
+                //OnParanoia();
                 break;
             case float n when (n > staticInsanityValues[0]):
-                OnTutorialDebuff();
-                break;*/
+                //OnTutorialDebuff();
+                break;
         }
 
         // Percentage based debuffs
         float currentInsanityPercentage = _currentInsanity / _maxInsanity * 100;
 
-        /*switch (currentInsanityPercentage)
+        switch (currentInsanityPercentage)
         {
             case float n when (n > dynamicInsanityValues[6]):
-                OnImpendingDoom();
+                //OnImpendingDoom();
+                GlobalState.state.AudioManager.PlayerInsanityHeartBeat();
                 break;
             case float n when (n > dynamicInsanityValues[5]):
-                OnMonsters();
+                //OnMonsters();
+                GlobalState.state.AudioManager.PlayerInsanityHeartBeat();
                 break;
             case float n when (n > dynamicInsanityValues[4]):
-                OnShadowClone();
+                //OnShadowClone();
+                GlobalState.state.AudioManager.PlayerInsanityHeartBeat();
                 break;
             case float n when (n > dynamicInsanityValues[3]):
-                OnHallucination();
+                //OnHallucination();
+                GlobalState.state.AudioManager.PlayerInsanityHeartBeat();
                 break;
             case float n when (n > dynamicInsanityValues[2]):
-                OnSlow();
+                //OnSlow();
+                GlobalState.state.AudioManager.PlayerInsanityHeartBeat();
                 break;
             case float n when (n > dynamicInsanityValues[1]):
-                OnParanoia();
+                //OnParanoia();
+                GlobalState.state.AudioManager.PlayerInsanityHeartBeat();
                 break;
             case float n when (n > dynamicInsanityValues[0]):
-                OnTutorialDebuff();
+                //OnTutorialDebuff();
+                GlobalState.state.AudioManager.PlayerInsanityHeartBeat();
                 break;
-        }*/
+        }
     }
 
     public void KillPlayer()

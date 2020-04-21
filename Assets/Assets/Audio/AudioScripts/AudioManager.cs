@@ -7,17 +7,19 @@ using FMODUnity;
 public class AudioManager : MonoBehaviour
 {
     [EventRef]
-    public string InsanityEventAudio;
+    [SerializeField] string InsanityEventAudio;
     EventInstance InsanityEvent;
     [EventRef]
-    public string PlayerFootsteps;
+    [SerializeField] string PlayerFootsteps;
     EventInstance PlayerFootstepsAudio;
     [EventRef]
-    public string playerSwordSwingAudio;
+    [SerializeField] string playerSwordSwingAudio;
     [EventRef]
-    public string playerDodgeAudio;
+    [SerializeField] string playerDodgeAudio;
     [EventRef]
-    public string playerJumpAudio;
+    [SerializeField] string playerJumpAudio;
+    [EventRef]
+    [SerializeField] string playerHeartBeatAudio;
 
 
     //Player sounds
@@ -66,6 +68,11 @@ public class AudioManager : MonoBehaviour
     public void PlayerInsanityAudioUpdate(float insanityPercentage)
     {
         InsanityEvent.setParameterByName("InsanityBar", insanityPercentage);
+    }
+
+    public void PlayerInsanityHeartBeat()
+    {
+        RuntimeManager.PlayOneShot(playerHeartBeatAudio, transform.position);
     }
 
     //Enemy sound
