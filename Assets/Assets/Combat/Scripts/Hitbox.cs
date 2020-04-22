@@ -68,8 +68,6 @@ public class Hitbox : MonoBehaviour
 
     void Update()
     {
-        print(hitstunTime);
-
         //Lägger in objekt som är i hitboxen i arrayn
         isHit = Physics.OverlapBox(transform.position + _offset, _size * 0.5f, transform.rotation, _parent.targetLayerMask);
 

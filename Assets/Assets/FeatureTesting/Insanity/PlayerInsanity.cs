@@ -124,8 +124,6 @@ public class PlayerInsanity : MonoBehaviour
                 KillPlayer();
             }
         }
-
-        print(_buffState);
     }
 
     public float GetInsanity()
