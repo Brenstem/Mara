@@ -47,7 +47,6 @@ public abstract class BaseAIMovementController : MonoBehaviour
     virtual protected void Update()
     {
         stateMachine.Update();
-        print(stateMachine.currentState);
     }
 
     //vänder monstret mot spelaren

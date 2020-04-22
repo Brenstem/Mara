@@ -7,23 +7,18 @@ public class EnemyTesting : MonoBehaviour
     [SerializeField]
     float damageAmount;
 
-    private PlayerInsanity player;
+    private Player player;
 
     void Start()
     {
-        player = GlobalState.state.PlayerGameObject.GetComponent<PlayerInsanity>(); 
+        player = GlobalState.state.PlayerGameObject.GetComponent<Player>(); 
     }
 
     void Update()
-    { 
-        if (Input.GetKeyDown(KeyCode.F))
+    {
+        if (Input.GetKeyDown(KeyCode.Return))
         {
-            player.IncrementInsanity(damageAmount);
-        }
-
-        if (Input.GetKeyDown(KeyCode.G))
-        {
-            player.SetMaxInsanity(120);
+            player.TakeDamage(damageAmount);
         }
     }
 }
