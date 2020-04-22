@@ -48,7 +48,7 @@ public class Player : Entity
         _playerInput.PlayerControls.Move.performed += ctx => input.direction = ctx.ReadValue<Vector2>();
         _playerInput.PlayerControls.Jump.performed += ctx => input.jump = true;
 
-        PlayerInsanity.OnImpendingDoom += ImpendingDoom;
+        PlayerInsanity.onImpendingDoom += ImpendingDoom;
     }
     private void OnEnable() { _playerInput.PlayerControls.Enable(); }
     private void OnDisable() { _playerInput.PlayerControls.Disable(); }

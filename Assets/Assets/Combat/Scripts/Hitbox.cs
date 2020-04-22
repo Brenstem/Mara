@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,16 +15,61 @@ public class Hitbox : MonoBehaviour
     public float damageValue;
     public float hitstunTime;
     public bool isParryable;
+    [Tooltip("How many seconds to increase the weapons hitstun effect")]
+    [SerializeField] private float hitStunIncrease;
+    [Tooltip("Percentage multiplier for damage value")]
+    [SerializeField] private float damageBuffMultiplier;
     [SerializeField] private Vector3 _size;
     [SerializeField] private Vector3 _offset;
 
+
+
+    private float originalDamageValue;
+    private float originalHitStun;
+
     private void Awake()
     {
+        originalDamageValue = damageValue;
+        originalHitStun = hitstunTime;
+
+        PlayerInsanity.onPlayerDamageBuff += BuffDamage;
+        PlayerInsanity.onDefaultBuff += ResetDamage;
+        PlayerInsanity.onIncreaseHitstun += IncreaseHitstun;
+        PlayerInsanity.onHeightenedSenses += ResetHitstun;
+
         _parent = transform.parent.GetComponent<HitboxGroup>();
+    }
+
+    private void IncreaseHitstun()
+    {
+        if (gameObject.CompareTag("Player"))
+        {
+            hitstunTime += hitStunIncrease;
+        }
+    }
+
+    private void BuffDamage()
+    {
+        if (gameObject.CompareTag("Player"))
+        {
+            damageValue *= damageBuffMultiplier;
+        }
+    }
+
+    private void ResetDamage()
+    {
+        damageValue = originalDamageValue;
+    }
+
+    private void ResetHitstun()
+    {
+        hitstunTime = originalHitStun;
     }
 
     void Update()
     {
+        print(hitstunTime);
+
         //Lägger in objekt som är i hitboxen i arrayn
         isHit = Physics.OverlapBox(transform.position + _offset, _size * 0.5f, transform.rotation, _parent.targetLayerMask);
 

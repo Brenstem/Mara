@@ -127,6 +127,9 @@ public class MovementController : MonoBehaviour
 
     private void Awake()
     {
+        PlayerInsanity.onSlow += Slow;
+        PlayerInsanity.onIncreaseMovementSpeed += IncreaseMoveSpeed;
+
         // Debug
         if (lockCursor)
             Cursor.lockState = CursorLockMode.Locked;
@@ -144,6 +147,84 @@ public class MovementController : MonoBehaviour
 
         // Input
         _playerInput.PlayerControls.Dash.performed += Dash;
+    }
+
+    private void IncreaseMoveSpeed()
+    {
+        float currentInsanity = GlobalState.state.PlayerGameObject.GetComponent<PlayerInsanity>().GetInsanity(); ;
+
+        switch (currentInsanity)
+        {
+            case 75:
+                maxSpeed *= 1.01f;
+                break;
+            case 76:
+                maxSpeed *= 1.02f;
+                break;
+            case 77:
+                maxSpeed *= 1.03f;
+                break;
+            case 78:
+                maxSpeed *= 1.04f;
+                break;
+            case 79:
+                maxSpeed *= 1.05f;
+                break;
+            case 80:
+                maxSpeed *= 1.06f;
+                break;
+            case 81:
+                maxSpeed *= 1.07f;
+                break;
+            case 82:
+                maxSpeed *= 1.08f;
+                break;
+            case 83:
+                maxSpeed *= 1.09f;
+                break;
+            case float n when (n >= 84):
+                maxSpeed *= 1.1f;
+                break;
+        }
+    }
+
+    private void Slow()
+    {
+        float currentInsanity = GlobalState.state.PlayerGameObject.GetComponent<PlayerInsanity>().GetInsanityPercentage(); ;
+
+        switch (currentInsanity - 50)
+        {
+            case 1:
+                maxSpeed *= 0.99f;
+                break;
+            case 2:
+                maxSpeed *= 0.98f;
+                break;
+            case 3:
+                maxSpeed *= 0.97f;
+                break;
+            case 4:
+                maxSpeed *= 0.96f;
+                break;
+            case 5:
+                maxSpeed *= 0.95f;
+                break;
+            case 6:
+                maxSpeed *= 0.94f;
+                break;
+            case 7:
+                maxSpeed *= 0.93f;
+                break;
+            case 8:
+                maxSpeed *= 0.92f;
+                break;
+            case 9:
+                maxSpeed *= 0.91f;
+                break;
+            case float n when (n >= 10):
+                maxSpeed *= 0.90f;
+                break;
+        }
     }
 
     void Update()
