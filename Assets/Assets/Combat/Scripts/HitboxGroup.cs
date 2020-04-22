@@ -17,13 +17,14 @@ public class HitboxGroup : MonoBehaviour
     [HideInInspector] public List<GameObject> _alreadyHit;
     private List<Hitbox> _hitTimes;
 
-    [SerializeField] private bool _eventLess;
+    private bool _eventLess;
+    [SerializeField] private bool _enabledByDefault;    
 
     void Awake() {
         _alreadyHit = new List<GameObject>();
         _hitTimes = new List<Hitbox>();
 
-        _eventLess = GetComponentInChildren<HitboxController>() != null ? false : true;
+        _eventLess = GetComponentInChildren<HitboxController>() == null ? true : false;
 
         if (!_eventLess)
         {
@@ -43,13 +44,13 @@ public class HitboxGroup : MonoBehaviour
             hitboxEventHandler.onEnableHitboxes += EnableEvent;
             hitboxEventHandler.onDisableHitboxes += DisableEvent;
             hitboxEventHandler.onEndAnim += ResetList;
-            enabled = false;
         }
         else
         {
-            enabled = true;
+            Debug.Log("Eventless HitboxGroup", this);
             EnableEvent(0);
         }
+        enabled = _enabledByDefault;
     }
 
     private void EnableEvent(int id)
@@ -76,10 +77,8 @@ public class HitboxGroup : MonoBehaviour
 
     private void HitDetection()
     {
-        print("update, hittimes: " + _hitTimes.Count);
         if (_hitTimes.Count > 0)
         {
-            print("enter");
             int highestPriorityIndex = 0;
             for (int i = 1; i < _hitTimes.Count; i++)
             {
@@ -111,6 +110,10 @@ public class HitboxGroup : MonoBehaviour
                     else
                     {
                         entity.TakeDamage(hit);
+                        if (hit.hitstunTime > 0 && hit.hitstopTime > 0)
+                        {
+                            StartCoroutine(HitStop(hit.hitstopTime));
+                        }
                     }
                     _alreadyHit.Add(enemy.gameObject);
                 }
@@ -118,6 +121,17 @@ public class HitboxGroup : MonoBehaviour
 
             _hitTimes.Clear();
         }
+    }
+
+    bool hitstopRunning;
+    public IEnumerator HitStop(float duration)
+    {
+        hitstopRunning = true;
+        Time.timeScale = 0.0f;
+        yield return new WaitForSecondsRealtime(duration);
+        Time.timeScale = 1f;
+        hitstopRunning = false;
+        yield return 0;
     }
 
     public void AddHitbox(Hitbox hitbox)

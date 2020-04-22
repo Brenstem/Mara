@@ -13,6 +13,7 @@ public class Hitbox : MonoBehaviour
     public int id;
     public float damageValue;
     public float hitstunTime;
+    public float hitstopTime;
     public bool isParryable;
     [SerializeField] private Vector3 _size;
     [SerializeField] private Vector3 _offset;
@@ -26,13 +27,10 @@ public class Hitbox : MonoBehaviour
     {
         //Lägger in objekt som är i hitboxen i arrayn
         isHit = Physics.OverlapBox(transform.position + _offset, _size * 0.5f, transform.rotation, _parent.targetLayerMask);
-        print("Hitbox Update");
         foreach (Collider enemy in isHit)
         {
-            print(enemy.gameObject.name);
             if (isHit.Length != 0 && !_parent._alreadyHit.Contains(enemy.gameObject))
             {
-                print("damage!!!");
                 _parent.AddHitbox(this);
             }
         }

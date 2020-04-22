@@ -79,6 +79,7 @@ public class Player : Entity
             _useHitstun = true;
             combatController.anim.SetTrigger("Hitstun");
             combatController.anim.SetBool("InHitstun", true);
+
             // play animation
         }
     }

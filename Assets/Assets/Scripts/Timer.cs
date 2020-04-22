@@ -35,11 +35,11 @@ public class Timer {
     // Constructors
     public Timer(float duration, float time = 0) {
         if (duration <= 0)
-            throw new Exception("Duration can not be 0 or less");
+            Debug.Log("Duration can not be 0 or less");
         else
             _duration = duration;
         if (time < 0)
-            throw new Exception("Time can not be less than 0");
+            Debug.Log("Time can not be less than 0");
         else
             _time = time;
     }
