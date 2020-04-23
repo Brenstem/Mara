@@ -9,11 +9,16 @@ public class EnemyHealth : Entity
     private TrackingHealthBar _healthBar;
     private float _currentHealth;
 
-    private void Start() {
+    private void Awake()
+    {
         _healthBar = GetComponentInChildren<TrackingHealthBar>();
         _healthBar.SetMaxValue(maxHealth);
         _currentHealth = maxHealth;
         _healthBar.SetValue(_currentHealth);
+    }
+
+    private void Start() {
+
 
         if (!_healthBar)
         {

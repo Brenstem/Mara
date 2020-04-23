@@ -22,8 +22,6 @@ public class Hitbox : MonoBehaviour
     [SerializeField] private Vector3 _size;
     [SerializeField] private Vector3 _offset;
 
-
-
     private float originalDamageValue;
     private float originalHitStun;
 

@@ -6,15 +6,12 @@ public class ShadowAI : BaseAIMovementController
 {
     protected override void Awake()
     {
-        PlayerInsanity.onHallucination += EnableThis;
-        PlayerInsanity.onDisableShadows += DisableThis;
         base.Awake();
     }
 
     private void DisableThis()
     {
-        print("disable");
-        print(this.transform.GetComponent<CapsuleCollider>());
+        GetComponent<CapsuleCollider>().enabled = false;
 
         foreach (Transform child in this.transform)
         {
@@ -24,6 +21,8 @@ public class ShadowAI : BaseAIMovementController
 
     private void EnableThis()
     {
+        GetComponent<CapsuleCollider>().enabled = true;
+
         foreach (Transform child in this.transform)
         {
             child.gameObject.SetActive(true);
@@ -33,12 +32,12 @@ public class ShadowAI : BaseAIMovementController
     private void Start()
     {
         stateMachine.ChangeState(new ShadowEnemyIdleState());
+        PlayerInsanity.onHallucination += EnableThis;
+        PlayerInsanity.onDisableShadows += DisableThis;
     }
 
     protected override void Update()
     {
-        print(this.transform.GetComponent<CapsuleCollider>());
-
         base.Update();
         print(stateMachine.currentState);
     }
