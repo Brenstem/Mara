@@ -11,40 +11,45 @@ public class MurkyWaterScript : MonoBehaviour
     [SerializeField] private float _damagePerSecond = 1f;
 
 
-    [SerializeField] private bool _destroyAfterCertainTime = false;
-    [Tooltip("Om Destroy After Certain Time är true spelar detta värde inte roll")]
-    [SerializeField] private float _timeToLive = 0f;
+    //[SerializeField] private bool _destroyAfterCertainTime = false;
+    //[Tooltip("Om Destroy After Certain Time är true spelar detta värde inte roll")]
+    //[SerializeField] private float _timeToLive = 0f;
 
+    [NonSerialized] private bool _destroyAfterCertainTime;
+    [NonSerialized] private float _timeToLive;
 
-    [NonSerialized] private Timer timer;
+    //kanske kommer behöva lägga in en base offset som flyttar upp objektet lite 
 
-    //får inte har en konstruktor för unity är dumma och låter mig inte göra som jag vill, får göra i awake eller något istället
-    public MurkyWaterScript(float timeToLive = 0f, bool destroyAfterCertainTime = false)
+    public float timeToLive
     {
-        if (destroyAfterCertainTime && timeToLive < 0.01f)
+        get { return _timeToLive; }
+        set
         {
-            Debug.LogError("timeToLive värdet är för litet för att det ska kunna förstöras efter en viss mängd tid");
-        }
-        else
-        {
-            _destroyAfterCertainTime = destroyAfterCertainTime;
-            _timeToLive = timeToLive;
+            if (!_destroyAfterCertainTime)
+                _destroyAfterCertainTime = true;
+            _timeToLive = value;
         }
     }
 
+    [NonSerialized] private Timer timer;
+
     void Start()
     {
-        print("nu körs start för murky water");
+        //print("nu körs start för murky water");
         if (_destroyAfterCertainTime)
         {
+            //print("kms in " + _timeToLive);
             timer = new Timer(_timeToLive);
+        }
+        else
+        {
+            //print("IM GONNA LIVE FOREVER!!!");
         }
     }
 
 
     void Update()
     {
-
         if (_destroyAfterCertainTime)
         {
             timer.Time += Time.deltaTime;
@@ -53,8 +58,9 @@ public class MurkyWaterScript : MonoBehaviour
 
             if (timer.Expired())
             {
+                print("nu ska murky water dö");
                 //kanske spela någon animation här för att förtydliga att den försvinner
-                Destroy(this.gameObject);
+                Destroy(this.transform.parent.gameObject);
             }
         }
     }

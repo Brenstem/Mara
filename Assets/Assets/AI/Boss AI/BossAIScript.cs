@@ -49,6 +49,7 @@ public class BossAIScript : MonoBehaviour
     public BossPhaseOneState bossPhaseOneState = new BossPhaseOneState();
     public BossPhaseTwoState bossPhaseTwoState = new BossPhaseTwoState();
 
+    [SerializeField] public GameObject murkyWaterPrefab;
 
     [SerializeField] public LayerMask targetLayers;
     [SerializeField] public LayerMask dashCollisionLayers;
@@ -182,6 +183,54 @@ public class BossAIScript : MonoBehaviour
         dashCheckOffsetVector = Quaternion.AngleAxis(dashCheckAngle, Vector3.up) * dashCheckOffsetVector;
 
         return Physics.OverlapBox(transform.TransformPoint(dashCheckOffsetVector), dashCheckBoxSize, Quaternion.LookRotation(dashCheckVector.normalized), dashCollisionLayers).Length <= 0;
+    }
+
+    public void MurkyWaterAbility(int layers)
+    {
+        Vector3 testVec = Vector3.forward;
+        //int testInt = 0;
+        for (int i = 0; i < layers; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                testVec = Quaternion.AngleAxis(46f, Vector3.up) * testVec;
+                print(testVec);
+                SpawnMurkyWater(testVec * (i + 1));
+            }
+            //testInt += 1 % 4;
+        }
+    }
+
+    //hur fan ska det funka med olika Y nivå? får typ raycasta upp och ner när den spawnas för att hitta vart marken är och sen flytta den dit och rotera den baserat på normalen eller något, låter jobbigt :(
+    public void SpawnMurkyWater(Vector3 spawnPositionOffset, float timeToLive = 0f)
+    {
+        GameObject murkyWater = (GameObject)Instantiate(murkyWaterPrefab, transform.TransformPoint(spawnPositionOffset), Quaternion.identity);
+        if (timeToLive > 0.01f)
+        {
+            murkyWater.GetComponentInChildren<MurkyWaterScript>().timeToLive = timeToLive;
+
+            //print("spawned murky water for " + timeToLive);
+        }
+        else
+        {
+            //print("spawned murky water for ever >:) " + timeToLive);
+        }
+    }
+    
+    //hur fan ska det funka med olika Y nivå? får typ raycasta upp och ner när den spawnas för att hitta vart marken är och sen flytta den dit och rotera den baserat på normalen eller något, låter jobbigt :(
+    public void SpawnMurkyWater(float timeToLive = 0f)
+    {
+        GameObject murkyWater = (GameObject)Instantiate(murkyWaterPrefab, transform.position, Quaternion.identity);
+        if (timeToLive > 0.1f)
+        {
+            murkyWater.GetComponentInChildren<MurkyWaterScript>().timeToLive = timeToLive;
+
+            //print("spawned murky water for " + timeToLive);
+        }
+        else
+        {
+            //print("spawned murky water for ever >:) " + timeToLive);
+        }
     }
 
     void OnDrawGizmosSelected()
@@ -392,6 +441,8 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
         {
             _minAttackCooldown += timer.Time;
         }
+
+        //_ownerParentScript.MurkyWaterAbility(10);
     }
 
     public override void ExitState(BossPhaseOneState owner)
