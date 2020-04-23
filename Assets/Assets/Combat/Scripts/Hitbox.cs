@@ -23,8 +23,6 @@ public class Hitbox : MonoBehaviour
     [SerializeField] private Vector3 _size;
     [SerializeField] private Vector3 _offset;
 
-
-
     private float originalDamageValue;
     private float originalHitStun;
 
@@ -34,7 +32,7 @@ public class Hitbox : MonoBehaviour
         originalHitStun = hitstunTime;
 
         PlayerInsanity.onPlayerDamageBuff += BuffDamage;
-        PlayerInsanity.onDefaultBuff += ResetDamage;
+        PlayerInsanity.onResetDamageBuff += ResetDamage;
         PlayerInsanity.onIncreaseHitstun += IncreaseHitstun;
         PlayerInsanity.onHeightenedSenses += ResetHitstun;
 

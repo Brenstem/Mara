@@ -64,7 +64,11 @@ public class PlayerInsanity : MonoBehaviour
     public static event IncreaseAttackSpeed onIncreaseAttackSpeed;
 
     public delegate void ResetDamageBuff();
-    public static event ResetDamageBuff onDefaultBuff;
+    public static event ResetDamageBuff onResetDamageBuff;
+
+    public delegate void DisableShadows();
+    public static event DisableShadows onDisableShadows;
+
 
     private float _currentInsanity;
 
@@ -124,6 +128,8 @@ public class PlayerInsanity : MonoBehaviour
                 KillPlayer();
             }
         }
+
+        print(_debuffState);
     }
 
     public float GetInsanity()
@@ -230,7 +236,7 @@ public class PlayerInsanity : MonoBehaviour
                 _buffState = BuffStates.playerDamage;
                 break;
             case float n when (n < staticInsanityValues[0]):
-                onDefaultBuff();
+                onResetDamageBuff();
                 _buffState = BuffStates.defaultState;
                 break;
         }
@@ -253,7 +259,7 @@ public class PlayerInsanity : MonoBehaviour
                 _debuffState = DebuffStates.impendingDoom;
                 break;
             case float n when (n >= dynamicInsanityValues[3]):
-                //onHallucination();
+                onHallucination();
                 if (_debuffState != DebuffStates.hallucinations)
                 {
                     PlayHeartBeat();
@@ -261,13 +267,14 @@ public class PlayerInsanity : MonoBehaviour
 
                 _debuffState = DebuffStates.hallucinations;
                 break;
+            // Slow state requires update so event is called on every insanity change
             case float n when (n >= dynamicInsanityValues[2]):
                 if (_debuffState != DebuffStates.slow)
                 {
                     PlayHeartBeat();
                 }
-
                 _debuffState = DebuffStates.slow;
+                onDisableShadows();
                 break;
             case float n when (n >= dynamicInsanityValues[1]):
                 //onParanoia();
@@ -275,8 +282,8 @@ public class PlayerInsanity : MonoBehaviour
                 {
                     PlayHeartBeat();
                 }
-
                 _debuffState = DebuffStates.paranoia;
+                onDisableShadows();
                 break;
             case float n when (n >= dynamicInsanityValues[0]):
                 if (_debuffState != DebuffStates.tutorialDebuff)
@@ -284,11 +291,12 @@ public class PlayerInsanity : MonoBehaviour
                     // onTutorialDebuff();
                     PlayHeartBeat();
                 }
-
                 _debuffState = DebuffStates.tutorialDebuff;
+                onDisableShadows();
                 break;
             case float n when (n < dynamicInsanityValues[0]):
                 _debuffState = DebuffStates.defaultState;
+                onDisableShadows();
                 break;
         }
     }

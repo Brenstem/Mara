@@ -44,11 +44,6 @@ public class RangedEnemyIdleState : BaseIdleState
     {
         _chasingState = new RangedEnemyChasingState();
     }
-
-    public override void UpdateState(BaseAIMovementController owner)
-    {
-        base.UpdateState(owner);
-    }
 }
 
 public class RangedEnemyChasingState : BaseChasingState
