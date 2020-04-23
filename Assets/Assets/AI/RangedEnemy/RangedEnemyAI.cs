@@ -36,6 +36,17 @@ public class RangedEnemyAI : BaseAIMovementController
             firerateTimer.Reset();
         }
     }
+
+    public override void TakeDamage(Hitbox hitbox)
+    {
+        // hitstun logic here
+        GetComponent<EnemyHealth>().Damage(hitbox.damageValue);
+    }
+
+    public override void TakeDamage(float damage)
+    {
+        GetComponent<EnemyHealth>().Damage(damage);
+    }
 }
 
 public class RangedEnemyIdleState : BaseIdleState

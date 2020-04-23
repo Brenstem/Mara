@@ -102,8 +102,6 @@ public class PlayerInsanity : MonoBehaviour
 
     private void Start()
     {
-        ActivateBuffs();
-
         if (!InsanityBar)
         {
             throw new System.Exception("Healthbar prefab missing!");

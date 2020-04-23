@@ -90,7 +90,7 @@ public class BaseIdleState : State<BaseAIMovementController>
 {
     private RaycastHit _hit;
     private int _pathingIndex = 0;
-    protected static BaseChasingState _chasingState = new BaseChasingState();
+    protected BaseChasingState _chasingState;
 
     public override void EnterState(BaseAIMovementController owner) { }
 
@@ -108,7 +108,7 @@ public class BaseIdleState : State<BaseAIMovementController>
         }
 
         //idle pathing
-        if (owner.idlePathingPoints.Length > 1)
+        if (owner.idlePathingPoints != null && owner.idlePathingPoints.Length > 1)
         {
             if (owner.agent.stoppingDistance > Vector3.Distance(owner.transform.position, owner.idlePathingPoints[_pathingIndex]))
             {
@@ -153,8 +153,8 @@ public class BaseIdleState : State<BaseAIMovementController>
 
 public class BaseChasingState : State<BaseAIMovementController>
 {
-    protected static BaseReturnToIdlePosState _returnToIdleState = new BaseReturnToIdlePosState();
-    protected static BaseAttackingState _attackingState = new BaseAttackingState();
+    protected BaseReturnToIdlePosState _returnToIdleState;
+    protected BaseAttackingState _attackingState;
 
 
     public override void EnterState(BaseAIMovementController owner) { }
@@ -185,7 +185,7 @@ public class BaseChasingState : State<BaseAIMovementController>
 
 public class BaseAttackingState : State<BaseAIMovementController>
 {
-    protected static BaseChasingState _chasingState = new BaseChasingState();
+    protected BaseChasingState _chasingState;
 
 
     public override void EnterState(BaseAIMovementController owner) { }
@@ -213,8 +213,8 @@ public class BaseAttackingState : State<BaseAIMovementController>
 public class BaseReturnToIdlePosState : State<BaseAIMovementController>
 {
     private RaycastHit _hit;
-    protected static BaseChasingState _chasingState = new BaseChasingState();
-    protected static BaseIdleState _idleState = new BaseIdleState();
+    protected BaseChasingState _chasingState;
+    protected BaseIdleState _idleState;
 
 
     public override void EnterState(BaseAIMovementController owner) { }

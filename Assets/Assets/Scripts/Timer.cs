@@ -34,10 +34,7 @@ public class Timer {
 
     // Constructors
     public Timer(float duration, float time = 0) {
-        if (duration <= 0)
-            Debug.Log("Duration can not be 0 or less");
-        else
-            _duration = duration;
+        _duration = duration;
         if (time < 0)
             Debug.Log("Time can not be less than 0");
         else
