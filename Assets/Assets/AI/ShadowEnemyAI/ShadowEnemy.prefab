@@ -1,35 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1136161099
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1136161100}
-  m_Layer: 12
-  m_Name: ProjectileSpawnPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1136161100
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1136161099}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.549, z: 0.647}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4046142792535498037}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &376841181652998366
 GameObject:
   m_ObjectHideFlags: 0
@@ -243,7 +213,7 @@ GameObject:
   - component: {fileID: 4046142792535498036}
   - component: {fileID: 4046142792535498035}
   - component: {fileID: 5110708100326114543}
-  - component: {fileID: 36749512522211484}
+  - component: {fileID: 7425555295332381345}
   m_Layer: 12
   m_Name: ShadowEnemy
   m_TagString: Lockon
@@ -264,8 +234,6 @@ Transform:
   m_Children:
   - {fileID: 9033233079230499947}
   - {fileID: 5435087057831066777}
-  - {fileID: 1136161100}
-  - {fileID: 8442526076453952214}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -318,7 +286,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 1
---- !u!114 &36749512522211484
+--- !u!114 &7425555295332381345
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -327,7 +295,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4046142792535498039}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7879170ad691e44384ddc93ece34111, type: 3}
+  m_Script: {fileID: 11500000, guid: e8453ab775fa3d04da64ef8e544c7d94, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   aggroRange: 10
@@ -340,37 +308,7 @@ MonoBehaviour:
   waitAtPoints: 0
   waitTime: 0
   idlePathingPoints: []
-  attackRange: 12
---- !u!1 &5225525414357100541
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8442526076453952214}
-  m_Layer: 12
-  m_Name: ProjectileSpawnPoint
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8442526076453952214
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5225525414357100541}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.549, z: 0.647}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4046142792535498037}
-  m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  attackRange: 2
 --- !u!1 &5399679732295568653
 GameObject:
   m_ObjectHideFlags: 0
