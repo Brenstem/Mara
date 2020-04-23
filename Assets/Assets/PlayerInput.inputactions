@@ -38,7 +38,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Test",
+                    "name": "Lockon",
                     "type": "Button",
                     "id": "cb80da12-d920-4873-af47-06698c38f5b4",
                     "expectedControlType": "",
@@ -180,7 +180,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Test",
+                    "action": "Lockon",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -191,7 +191,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
-                    "action": "Test",
+                    "action": "Lockon",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -274,11 +274,33 @@
                 },
                 {
                     "name": "",
+                    "id": "7d5af1b5-7f09-4ea4-9c5d-b4323f4e3759",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
                     "id": "b00775b5-6a42-44b9-ac9c-5662b5b6d53a",
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
+                    "action": "Parry",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1f717fe3-0c7d-4d27-a67f-72ef003463a7",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
                     "action": "Parry",
                     "isComposite": false,
                     "isPartOfComposite": false

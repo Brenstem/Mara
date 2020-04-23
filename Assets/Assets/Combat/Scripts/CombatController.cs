@@ -212,7 +212,14 @@ public class SecondAttackState : State<CombatController>
         _target = owner.FindTarget(); // Find target to pass to attack function in first frame of attack
         owner._animationOver = false;
         owner._interruptable = false;
-        owner.hitboxGroups[1].enabled = true;
+        if (owner.hitboxGroups.Count >= 2)
+        {
+            owner.hitboxGroups[1].enabled = true;
+        }
+        else
+        {
+            owner.hitboxGroups[owner.hitboxGroups.Count].enabled = true;
+        }
     }
 
     public override void ExitState(CombatController owner)
@@ -223,7 +230,14 @@ public class SecondAttackState : State<CombatController>
             _tripleCombo = false;
         }
 
-        owner.hitboxGroups[1].enabled = false;
+        if (owner.hitboxGroups.Count >= 2)
+        {
+            owner.hitboxGroups[1].enabled = false;
+        }
+        else
+        {
+            owner.hitboxGroups[owner.hitboxGroups.Count].enabled = false;
+        }
         owner._control.enabled = true;
     }
 
@@ -257,12 +271,26 @@ public class ThirdAttackState : State<CombatController>
         _target = owner.FindTarget(); // Find target to pass to attack function in first frame of attack
         owner._animationOver = false;
         owner._interruptable = false;
-        owner.hitboxGroups[2].enabled = true;
+        if (owner.hitboxGroups.Count >= 3)
+        {
+            owner.hitboxGroups[2].enabled = true;
+        }
+        else
+        {
+            owner.hitboxGroups[owner.hitboxGroups.Count].enabled = true;
+        }
     }
 
     public override void ExitState(CombatController owner)
     {
-        owner.hitboxGroups[2].enabled = false;
+        if (owner.hitboxGroups.Count >= 3)
+        {
+            owner.hitboxGroups[2].enabled = false;
+        }
+        else
+        {
+            owner.hitboxGroups[owner.hitboxGroups.Count].enabled = false;
+        }
         owner._control.enabled = true;
     }
 

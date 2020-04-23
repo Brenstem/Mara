@@ -18,7 +18,8 @@ public class HitboxGroup : MonoBehaviour
     private List<Hitbox> _hitTimes;
 
     private bool _eventLess;
-    [SerializeField] private bool _enabledByDefault;    
+    [SerializeField] private bool _enabledByDefault;
+    private Entity _parentEntity;
 
     void Awake() {
         _alreadyHit = new List<GameObject>();
@@ -41,15 +42,14 @@ public class HitboxGroup : MonoBehaviour
                     Debug.Log("HitboxEventHandler found. Please add this component as a reference after game session", this);
                 }
             }
-            hitboxEventHandler.onEnableHitboxes += EnableEvent;
-            hitboxEventHandler.onDisableHitboxes += DisableEvent;
-            hitboxEventHandler.onEndAnim += ResetList;
         }
         else
         {
             Debug.Log("Eventless HitboxGroup", this);
             EnableEvent(0);
         }
+
+        _parentEntity = GetComponentInParent<Entity>();
         enabled = _enabledByDefault;
     }
 
@@ -90,36 +90,48 @@ public class HitboxGroup : MonoBehaviour
 
             foreach (Collider enemy in _hitTimes[highestPriorityIndex].isHit)
             {
-                if (!_alreadyHit.Contains(enemy.gameObject))
+                if (enemy != null && !_alreadyHit.Contains(enemy.gameObject))
                 {
-                    Hitbox hit = _hitTimes[highestPriorityIndex];
-                    var entity = enemy.gameObject.GetComponent<Entity>();
-                    if (entity == null)
+                    Hitbox hitbox = _hitTimes[highestPriorityIndex];
+                    var targetEntity = enemy.gameObject.GetComponent<Entity>();
+                    if (targetEntity == null)
                     {
                         Debug.LogWarning("Object derived from Entity class is missing! Resorting to find in children...", this);
-                        entity = enemy.gameObject.GetComponentInChildren<Entity>();
-                        if (entity == null)
+                        targetEntity = enemy.gameObject.GetComponentInChildren<Entity>();
+                        if (targetEntity == null)
                         {
                             Debug.LogError("Object derived from Entity class is missing from \"" + enemy.gameObject.name + "\"!", this);
                         }
                         else
                         {
-                            entity.TakeDamage(hit);
+                            TakeDamage(targetEntity, hitbox);
                         }
                     }
                     else
                     {
-                        entity.TakeDamage(hit);
-                        if (hit.hitstunTime > 0 && hit.hitstopTime > 0)
-                        {
-                            StartCoroutine(HitStop(hit.hitstopTime));
-                        }
+                        TakeDamage(targetEntity, hitbox);
                     }
                     _alreadyHit.Add(enemy.gameObject);
                 }
             }
 
             _hitTimes.Clear();
+        }
+    }
+
+    private void TakeDamage(Entity target, Hitbox hitbox)
+    {
+        if (_parentEntity != null && _parentEntity.modifier != null)
+        {
+            if (_parentEntity.modifier.IsModified)
+                hitbox *= _parentEntity.modifier; // overloaded * operator
+        }
+        
+        target.TakeDamage(hitbox);
+
+        if (hitbox.hitstopTime > 0)
+        {
+            StartCoroutine(HitStop(hitbox.hitstopTime));
         }
     }
 

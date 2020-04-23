@@ -44,6 +44,7 @@ public class Player : Entity
     private void Awake()
     {
         input = new InputInfo();
+        modifier = new HitboxModifier();
         _playerInput = new PlayerInput();
         _playerInput.PlayerControls.Move.performed += ctx => input.direction = ctx.ReadValue<Vector2>();
         _playerInput.PlayerControls.Jump.performed += ctx => input.jump = true;

@@ -107,4 +107,11 @@ public class Hitbox : MonoBehaviour
             Gizmos.DrawWireCube(Vector3.zero, _size);
         }
     }
+
+    public static Hitbox operator *(Hitbox h, HitboxModifier m)
+    {
+        h.damageValue *= m.DamageMultiplier;
+        h.hitstunTime *= m.HitstunMultiplier;
+        return h;
+    }
 }

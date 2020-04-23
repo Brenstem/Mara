@@ -38,7 +38,7 @@ public class LockonFunctionality : MonoBehaviour
         _playerInput = new PlayerInput();
         targetList = new List<GameObject>();
         _movementController = GetComponent<MovementController>();
-        _playerInput.PlayerControls.Test.performed += LockOnInput;
+        _playerInput.PlayerControls.Lockon.performed += LockOnInput;
     }
 
     private void LockOnInput(InputAction.CallbackContext c)

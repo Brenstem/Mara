@@ -198,8 +198,8 @@ public class PlayerInsanity : MonoBehaviour
 
     public void ActivateBuffs()
     {
-        onIncreaseMovementSpeed();
         onSlow();
+        onIncreaseMovementSpeed();
 
         // Static based buffs
         switch (_currentInsanity)
@@ -210,6 +210,7 @@ public class PlayerInsanity : MonoBehaviour
             case float n when (n >= staticInsanityValues[3]):
                 if (_buffState != BuffStates.hitStun)
                 {
+                    GlobalState.state.Player.modifier.HitstunMultiplier = 2.5f;
                     onIncreaseHitstun();
                 }
                 _buffState = BuffStates.hitStun;
@@ -223,6 +224,7 @@ public class PlayerInsanity : MonoBehaviour
             case float n when (n >= staticInsanityValues[0]):
                 if (_buffState != BuffStates.playerDamage)
                 {
+                    GlobalState.state.Player.modifier.DamageMultiplier = 1.1f;
                     onPlayerDamageBuff();
                 }
                 _buffState = BuffStates.playerDamage;
@@ -240,7 +242,8 @@ public class PlayerInsanity : MonoBehaviour
         {
 
             case float n when (n >= dynamicInsanityValues[4]):
-
+                print(n);
+                print(dynamicInsanityValues[4]);
                 if (_debuffState != DebuffStates.impendingDoom)
                 {
                     PlayHeartBeat();

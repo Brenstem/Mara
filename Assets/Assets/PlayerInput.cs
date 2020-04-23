@@ -51,7 +51,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Test"",
+                    ""name"": ""Lockon"",
                     ""type"": ""Button"",
                     ""id"": ""cb80da12-d920-4873-af47-06698c38f5b4"",
                     ""expectedControlType"": """",
@@ -193,7 +193,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Test"",
+                    ""action"": ""Lockon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -204,7 +204,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""Test"",
+                    ""action"": ""Lockon"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -287,11 +287,33 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 },
                 {
                     ""name"": """",
+                    ""id"": ""7d5af1b5-7f09-4ea4-9c5d-b4323f4e3759"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
                     ""id"": ""b00775b5-6a42-44b9-ac9c-5662b5b6d53a"",
                     ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
+                    ""action"": ""Parry"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1f717fe3-0c7d-4d27-a67f-72ef003463a7"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
                     ""action"": ""Parry"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
@@ -335,7 +357,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_PlayerControls_Look = m_PlayerControls.FindAction("Look", throwIfNotFound: true);
         m_PlayerControls_Dash = m_PlayerControls.FindAction("Dash", throwIfNotFound: true);
         m_PlayerControls_Jump = m_PlayerControls.FindAction("Jump", throwIfNotFound: true);
-        m_PlayerControls_Test = m_PlayerControls.FindAction("Test", throwIfNotFound: true);
+        m_PlayerControls_Lockon = m_PlayerControls.FindAction("Lockon", throwIfNotFound: true);
         m_PlayerControls_Attack = m_PlayerControls.FindAction("Attack", throwIfNotFound: true);
         m_PlayerControls_Parry = m_PlayerControls.FindAction("Parry", throwIfNotFound: true);
     }
@@ -391,7 +413,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_PlayerControls_Look;
     private readonly InputAction m_PlayerControls_Dash;
     private readonly InputAction m_PlayerControls_Jump;
-    private readonly InputAction m_PlayerControls_Test;
+    private readonly InputAction m_PlayerControls_Lockon;
     private readonly InputAction m_PlayerControls_Attack;
     private readonly InputAction m_PlayerControls_Parry;
     public struct PlayerControlsActions
@@ -402,7 +424,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @Look => m_Wrapper.m_PlayerControls_Look;
         public InputAction @Dash => m_Wrapper.m_PlayerControls_Dash;
         public InputAction @Jump => m_Wrapper.m_PlayerControls_Jump;
-        public InputAction @Test => m_Wrapper.m_PlayerControls_Test;
+        public InputAction @Lockon => m_Wrapper.m_PlayerControls_Lockon;
         public InputAction @Attack => m_Wrapper.m_PlayerControls_Attack;
         public InputAction @Parry => m_Wrapper.m_PlayerControls_Parry;
         public InputActionMap Get() { return m_Wrapper.m_PlayerControls; }
@@ -426,9 +448,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Jump.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnJump;
                 @Jump.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnJump;
                 @Jump.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnJump;
-                @Test.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnTest;
-                @Test.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnTest;
-                @Test.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnTest;
+                @Lockon.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnLockon;
+                @Lockon.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnLockon;
+                @Lockon.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnLockon;
                 @Attack.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnAttack;
                 @Attack.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnAttack;
                 @Attack.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnAttack;
@@ -451,9 +473,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Jump.started += instance.OnJump;
                 @Jump.performed += instance.OnJump;
                 @Jump.canceled += instance.OnJump;
-                @Test.started += instance.OnTest;
-                @Test.performed += instance.OnTest;
-                @Test.canceled += instance.OnTest;
+                @Lockon.started += instance.OnLockon;
+                @Lockon.performed += instance.OnLockon;
+                @Lockon.canceled += instance.OnLockon;
                 @Attack.started += instance.OnAttack;
                 @Attack.performed += instance.OnAttack;
                 @Attack.canceled += instance.OnAttack;
@@ -488,7 +510,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
-        void OnTest(InputAction.CallbackContext context);
+        void OnLockon(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
         void OnParry(InputAction.CallbackContext context);
     }
