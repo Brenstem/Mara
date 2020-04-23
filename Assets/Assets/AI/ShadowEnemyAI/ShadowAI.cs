@@ -39,7 +39,6 @@ public class ShadowAI : BaseAIMovementController
     protected override void Update()
     {
         base.Update();
-        print(stateMachine.currentState);
     }
 }
 

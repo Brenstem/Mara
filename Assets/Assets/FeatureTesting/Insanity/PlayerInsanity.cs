@@ -128,8 +128,6 @@ public class PlayerInsanity : MonoBehaviour
                 KillPlayer();
             }
         }
-
-        print(_debuffState);
     }
 
     public float GetInsanity()

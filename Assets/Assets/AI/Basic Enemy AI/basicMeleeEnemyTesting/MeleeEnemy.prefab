@@ -301,7 +301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac2019947aa47dc45b41d13851ab1ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 500
 --- !u!195 &7915258470840588273
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -348,6 +348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d28072a81aa1a5a46aa65be825b60182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  invulerable: 0
   aggroRange: 10
   unaggroRange: 20
   turnSpeed: 5
@@ -359,6 +360,7 @@ MonoBehaviour:
   waitTime: 1
   idlePathingPoints: []
   attackRange: 4
+  _useHitStun: 0
 --- !u!1 &2298667751383344207
 GameObject:
   m_ObjectHideFlags: 0
@@ -878,7 +880,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 2048
   _alreadyHit: []
-  _eventLess: 0
+  _enabledByDefault: 0
 --- !u!1 &7915258470197688614
 GameObject:
   m_ObjectHideFlags: 0
@@ -928,7 +930,11 @@ MonoBehaviour:
   priority: 0
   id: 0
   damageValue: 50
+  hitstunTime: 0
+  hitstopTime: 0
   isParryable: 0
+  hitStunIncrease: 0
+  damageBuffMultiplier: 0
   _size: {x: 1, y: 1.25, z: 1}
   _offset: {x: 0, y: 0, z: 0.2}
 --- !u!114 &7915258470197688608
@@ -992,7 +998,11 @@ MonoBehaviour:
   priority: 1
   id: 0
   damageValue: 20
+  hitstunTime: 0
+  hitstopTime: 0
   isParryable: 0
+  hitStunIncrease: 0
+  damageBuffMultiplier: 0
   _size: {x: 1, y: 1, z: 1}
   _offset: {x: 0, y: 0, z: 0}
 --- !u!114 &7915258471042638361
