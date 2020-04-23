@@ -138,6 +138,7 @@ public class HitboxGroup : MonoBehaviour
 
     private void ResetList()
     {
+        print("i reset");
         DisableEvent(0);
         _alreadyHit.Clear();
     }

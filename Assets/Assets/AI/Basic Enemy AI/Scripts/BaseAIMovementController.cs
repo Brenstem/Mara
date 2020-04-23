@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 
-public abstract class BaseAIMovementController : MonoBehaviour
+public abstract class BaseAIMovementController : Entity
 {
     public StateMachine<BaseAIMovementController> stateMachine;
 
@@ -73,6 +73,16 @@ public abstract class BaseAIMovementController : MonoBehaviour
                 Gizmos.DrawLine(idlePathingPoints[i], idlePathingPoints[i + 1]);
             }
         }
+    }
+
+    public override void TakeDamage(Hitbox hitbox)
+    {
+        GetComponent<EnemyHealth>().Damage(hitbox.damageValue);
+    }
+
+    public override void TakeDamage(float damage)
+    {
+        GetComponent<EnemyHealth>().Damage(damage);
     }
 }
 
@@ -147,6 +157,7 @@ public class BaseChasingState : State<BaseAIMovementController>
     protected static BaseReturnToIdlePosState _returnToIdleState = new BaseReturnToIdlePosState();
     protected static BaseAttackingState _attackingState = new BaseAttackingState();
 
+
     public override void EnterState(BaseAIMovementController owner) { }
 
     public override void ExitState(BaseAIMovementController owner) { }
@@ -177,6 +188,7 @@ public class BaseAttackingState : State<BaseAIMovementController>
 {
     protected static BaseChasingState _chasingState = new BaseChasingState();
 
+
     public override void EnterState(BaseAIMovementController owner) { }
 
     public override void ExitState(BaseAIMovementController owner)  { }
@@ -204,6 +216,7 @@ public class BaseReturnToIdlePosState : State<BaseAIMovementController>
     private RaycastHit _hit;
     protected static BaseChasingState _chasingState = new BaseChasingState();
     protected static BaseIdleState _idleState = new BaseIdleState();
+
 
     public override void EnterState(BaseAIMovementController owner) { }
 
