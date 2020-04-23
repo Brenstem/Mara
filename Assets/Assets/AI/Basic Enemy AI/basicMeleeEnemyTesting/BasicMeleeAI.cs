@@ -22,7 +22,6 @@ public class BasicMeleeAI : BaseAIMovementController
     {
         anim.SetTrigger("Attack");
     }
-    }
 
     public override void TakeDamage(Hitbox hitbox)
     {
