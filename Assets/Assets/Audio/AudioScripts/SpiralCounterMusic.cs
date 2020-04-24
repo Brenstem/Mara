@@ -8,11 +8,11 @@ public class SpiralCounterMusic : MonoBehaviour
 {
     private Vector3 topPosition;
     private Vector3 playerPosition;
-    [Range(0,100)] public float verticalDiff;
+    [Range(0,180)] public float verticalDiff;
 
-    [EventRef]
-    //[SerializeField] string InsanityEventAudio;
-    EventInstance spiralEvent;
+  //  [EventRef]
+  //  [SerializeField] string spiralEventAudio;
+  //  EventInstance spiralEvent;
 
     // Update is called once per frame
     void Update()
@@ -23,12 +23,12 @@ public class SpiralCounterMusic : MonoBehaviour
 
         verticalDiff = verticalDiff / topPosition.y;
 
-        if (verticalDiff > 1)
+        if (verticalDiff > 1.8f)
         {
-            verticalDiff = 1;
+            verticalDiff = 1.8f;
         }
-
-        spiralEvent.setParameterByName("SpiralStairsProgress", verticalDiff);
+      
+        FMODUnity.RuntimeManager.StudioSystem.setParameterByName("SpiralStairsProgress", verticalDiff);       
     }
 
     private void OnTriggerEnter(Collider other)
@@ -36,6 +36,8 @@ public class SpiralCounterMusic : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             topPosition = other.transform.position;
+            //spiralEvent = RuntimeManager.CreateInstance(spiralEventAudio);
+           // spiralEvent.start();
         }
     }
 }
