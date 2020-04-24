@@ -10,10 +10,16 @@ public class RangedEnemyAI : BaseAIMovementController
 
     [HideInInspector] public Timer firerateTimer;
 
+    [HideInInspector] public Timer _hitStunTimer;
+    [HideInInspector] public bool _useHitStun;
+
+    [HideInInspector] public Animator _anim;
+
     protected override void Awake()
     {
         base.Awake();
         firerateTimer = new Timer(_firerate);
+        _anim = GetComponentInChildren<Animator>();
     }
 
     private void Start()
@@ -26,10 +32,12 @@ public class RangedEnemyAI : BaseAIMovementController
     {
         base.Update();
         firerateTimer.Time += Time.deltaTime;
+        _anim.SetFloat("Blend", agent.velocity.magnitude);
     }
 
     public void Attack()
     {
+        _anim.SetTrigger("Attack");
         if (firerateTimer.Expired)
         {
             Instantiate(_projectile, _projectileSpawnPos.position, _projectileSpawnPos.rotation);
@@ -39,13 +47,23 @@ public class RangedEnemyAI : BaseAIMovementController
 
     public override void TakeDamage(Hitbox hitbox)
     {
-        // hitstun logic here
-        GetComponent<EnemyHealth>().Damage(hitbox.damageValue);
+        stateMachine.ChangeState(new RangedEnemyIdleState());
+        EnableHitstun(hitbox.hitstunTime);
+        base.TakeDamage(hitbox);
     }
 
-    public override void TakeDamage(float damage)
+    public void EnableHitstun(float duration)
     {
-        GetComponent<EnemyHealth>().Damage(damage);
+        _hitStunTimer = new Timer(duration);
+        _useHitStun = true;
+        _anim.SetTrigger("Hurt");
+        _anim.SetBool("InHitstun", true);
+    }
+
+    public void DisableHitStun()
+    {
+        _useHitStun = false;
+        _anim.SetBool("InHitstun", false);
     }
 }
 
@@ -55,6 +73,23 @@ public class RangedEnemyIdleState : BaseIdleState
     {
         _chasingState = new RangedEnemyChasingState();
     }
+
+    public override void UpdateState(BaseAIMovementController owner)
+    {
+        if (owner.rangedAI._useHitStun)
+        {
+            owner.rangedAI._hitStunTimer.Time += Time.deltaTime;
+            if (owner.rangedAI._hitStunTimer.Expired)
+            {
+                owner.rangedAI._hitStunTimer.Reset();
+                owner.rangedAI.DisableHitStun();
+            }
+        }
+        else
+        {
+            base.UpdateState(owner);
+        }
+    }
 }
 
 public class RangedEnemyChasingState : BaseChasingState
@@ -63,6 +98,11 @@ public class RangedEnemyChasingState : BaseChasingState
     {
         _attackingState = new RangedEnemyAttackingState();
         _returnToIdleState = new RangedEnemyReturnToIdleState();
+    }
+
+    public override void UpdateState(BaseAIMovementController owner)
+    {
+        base.UpdateState(owner);
     }
 }
 
@@ -88,5 +128,10 @@ public class RangedEnemyReturnToIdleState : BaseReturnToIdlePosState
     {
         _chasingState = new RangedEnemyChasingState();
         _idleState = new RangedEnemyIdleState();
+    }
+
+    public override void UpdateState(BaseAIMovementController owner)
+    {
+        base.UpdateState(owner);
     }
 }
