@@ -303,12 +303,13 @@ public class PreBossFightState : State<BossAIScript>
 
     public override void EnterState(BossAIScript owner)
     {
-
+        owner.bossAnimator.SetBool("idleBool", true);
     }
 
     public override void ExitState(BossAIScript owner)
     {
         //kanske köra någon funktion som stänger en dörr eller något så man inte kan springa iväg
+        owner.bossAnimator.SetBool("idleBool", false);
     }
 
     public override void UpdateState(BossAIScript owner)
@@ -760,7 +761,7 @@ public class PhaseOneMeleeAttackOneState : State<BossPhaseOneState>
 
     public override void EnterState(BossPhaseOneState owner)
     {
-        owner.parentScript.bossAnimator.SetTrigger("testMelee1Trigger");
+        owner.parentScript.bossAnimator.SetTrigger("melee1Trigger");
         //Debug.Log("nu ska jag fan göra PhaseOneMeleeAttackState >:(, med dessa stats:  damage " + _damage + " range " + _range + " totalDurration " + _totalDurration + " chargeTime " + _chargeTime);
     }
 
@@ -806,20 +807,22 @@ public class PhaseOneChaseToAttackState : State<BossPhaseOneState>
 
     public override void EnterState(BossPhaseOneState owner)
     {
-        Debug.Log("hunt time");
+        //Debug.Log("hunt time");
 
         _oldSpeed = owner.parentScript.agent.speed;
         _oldAcceleration = owner.parentScript.agent.acceleration;
 
         owner.parentScript.agent.speed = owner.parentScript.chasingSpeed;
         owner.parentScript.agent.acceleration = owner.parentScript.chasingAcceleration;
+        owner.parentScript.bossAnimator.SetTrigger("runningTrigger");
     }
 
     //ändra speed och acceleration i detta state
 
     public override void ExitState(BossPhaseOneState owner)
     {
-        Debug.Log("no more hunt time");
+
+        //Debug.Log("no more hunt time");
 
         owner.parentScript.agent.speed = _oldSpeed;
         owner.parentScript.agent.acceleration = _oldAcceleration;
@@ -869,7 +872,7 @@ public class PhaseOneDrainAttackState : State<BossPhaseOneState>
 
     public override void EnterState(BossPhaseOneState owner)
     {
-        owner.parentScript.bossAnimator.SetTrigger("testDrainTrigger");
+        owner.parentScript.bossAnimator.SetTrigger("drainTrigger");
         Debug.Log("nu ska jag fan göra PhaseOneDrainAttack >:(, med dessa stats:  damage " + _damagePerSecond + " range " + _range + " totalDurration " + _totalDurration + " chargeTime " + _chargeTime);
     }
 
