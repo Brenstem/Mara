@@ -255,7 +255,7 @@ public class PlayerInsanity : MonoBehaviour
                 _debuffState = DebuffStates.impendingDoom;
                 break;
             case float n when (n >= dynamicInsanityValues[3]):
-                onHallucination();
+                // onHallucination();
                 if (_debuffState != DebuffStates.hallucinations)
                 {
                     PlayHeartBeat();
