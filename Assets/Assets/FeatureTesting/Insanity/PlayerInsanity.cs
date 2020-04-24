@@ -23,6 +23,8 @@ public class PlayerInsanity : MonoBehaviour
     [SerializeField] 
     private int[] dynamicInsanityValues;
 
+
+    #region events
     // Events for each stage of insanity 
     public delegate void TutorialDebuff();
     public static event TutorialDebuff onTutorialDebuff;
@@ -68,7 +70,7 @@ public class PlayerInsanity : MonoBehaviour
 
     public delegate void DisableShadows();
     public static event DisableShadows onDisableShadows;
-
+    #endregion
 
     private float _currentInsanity;
 
