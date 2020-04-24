@@ -252,8 +252,15 @@ public class MovementController : MonoBehaviour
             _velocity.y = -2f;
             _hasDashed = false;
         }
-        print(_isGrounded);
         playerAnimator.SetBool("Grounded", _isGrounded);
+        if (playerAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Landing")
+        {
+            playerAnimator.SetLayerWeight(1, 1.0f);
+        }
+        else
+        {
+            playerAnimator.SetLayerWeight(1, 0.0f);
+        }
     }
 
     void Jump()
@@ -469,7 +476,7 @@ public class DashMovementState : State<MovementController>
         else
         {
             _timer.Time += Time.deltaTime;
-            owner.controller.Move(_dashDirection * owner.dashSpeed * Time.deltaTime);
+            owner.controller.Move(_dashDirection.normalized * owner.dashSpeed * Time.deltaTime);
         }
     }
 }
