@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Experimental.GlobalIllumination;
 
-public class BossAIScript : MonoBehaviour
+public class BossAIScript : Entity
 {
     [System.Serializable]
     public struct PhaseOneStats
@@ -55,7 +56,6 @@ public class BossAIScript : MonoBehaviour
     [SerializeField] public LayerMask dashCollisionLayers;
 
     //galet nog är alla variabler som heter test något, inte planerat att vara permanenta
-    [SerializeField] public float testMaxHP = 500f;
     [SerializeField] [Range(0, 1)] public float testP2TransitionHP = 0.5f;
 
     //lägga till ranomness på attack speed, kan göra det med 2 randoms för att få en normal distribution
@@ -88,10 +88,6 @@ public class BossAIScript : MonoBehaviour
     [SerializeField] public float chasingSpeed = 5f;
     [SerializeField] public float chasingAcceleration = 20f;
 
-    //borde vara nonserialized men har den som serialized för testning
-    /*[NonSerialized]*/
-    public float testCurrentHP;
-
     [NonSerialized] public Animator bossAnimator;
     [NonSerialized] public float turnSpeed;
 
@@ -121,9 +117,8 @@ public class BossAIScript : MonoBehaviour
         phaseControllingStateMachine = new StateMachine<BossAIScript>(this);
 
         //borde inte göras såhär at the end of the day men måste göra skit med spelaren då och vet inte om jag får det
-        player = GameObject.FindGameObjectWithTag("Player");
+        player = GlobalState.state.PlayerGameObject;
 
-        testCurrentHP = testMaxHP;
         testDrainDPS = phaseOneStats.testP1value1;
 
         bossAnimator = GetComponent<Animator>();
@@ -164,9 +159,15 @@ public class BossAIScript : MonoBehaviour
         this.transform.rotation = Quaternion.Slerp(this.transform.rotation, lookRotation, Time.deltaTime * turnSpeed);
     }
 
-    public void TakeDamage(float damage)
+    public override void TakeDamage(float damage)
     {
-        testCurrentHP -= damage;
+        GetComponent<EnemyHealth>().Damage(damage);
+        //testCurrentHP -= damage;
+    }
+
+    public override void TakeDamage(Hitbox hitbox)
+    {
+        GetComponent<EnemyHealth>().Damage(hitbox.damageValue);
     }
 
     public bool CheckDashPath(Vector3 dashCheckVector)
@@ -289,8 +290,9 @@ public class BossAIScript : MonoBehaviour
     {
         meleeHitboxActive = !meleeHitboxActive;
     }
-
     #endregion
+
+
 
 
 }
@@ -387,7 +389,7 @@ public class BossPhaseOneState : State<BossAIScript>
     public override void UpdateState(BossAIScript owner)
     {
         //kolla om man ska gå över till nästa phase
-        if ((owner.testCurrentHP / owner.testMaxHP) < owner.testP2TransitionHP)
+        if ((owner.GetComponent<EnemyHealth>().GetHealth() / owner.GetComponent<EnemyHealth>().GetMaxHealth()) < owner.testP2TransitionHP)
         {
             owner.phaseControllingStateMachine.ChangeState(owner.bossPhaseTwoState);
         }
@@ -441,7 +443,6 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
         {
             _minAttackCooldown += timer.Time;
         }
-
         //_ownerParentScript.MurkyWaterAbility(10);
     }
 
@@ -607,6 +608,7 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
             {
                 //gör så att den byter mellan att gå höger och vänster
                 int strafeSign = 0;
+                //Debug.Log(timer.Ratio);
                 if (timer.Ratio > 0.5f)
                 {
                     strafeSign = -1;
@@ -895,7 +897,7 @@ public class PhaseOneDrainAttackState : State<BossPhaseOneState>
             if (owner.parentScript.drainHitboxActive)
             {
                 //här ska attacken kunna skada med _damagePerSecond * time.deltatime
-                Debug.Log("pew pew pew");
+                //Debug.Log("pew pew pew");
             }
         }
     }
