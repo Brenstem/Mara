@@ -270,7 +270,8 @@ public class PlayerInsanity : MonoBehaviour
                     PlayHeartBeat();
                 }
                 _debuffState = DebuffStates.slow;
-                onDisableShadows();
+                if (onDisableShadows != null)
+                    onDisableShadows();
                 break;
             case float n when (n >= dynamicInsanityValues[1]):
                 //onParanoia();
@@ -279,7 +280,8 @@ public class PlayerInsanity : MonoBehaviour
                     PlayHeartBeat();
                 }
                 _debuffState = DebuffStates.paranoia;
-                onDisableShadows();
+                if (onDisableShadows != null)
+                    onDisableShadows();
                 break;
             case float n when (n >= dynamicInsanityValues[0]):
                 if (_debuffState != DebuffStates.tutorialDebuff)
@@ -288,11 +290,13 @@ public class PlayerInsanity : MonoBehaviour
                     PlayHeartBeat();
                 }
                 _debuffState = DebuffStates.tutorialDebuff;
-                onDisableShadows();
+                if (onDisableShadows != null)
+                    onDisableShadows();
                 break;
             case float n when (n < dynamicInsanityValues[0]):
                 _debuffState = DebuffStates.defaultState;
-                onDisableShadows();
+                if (onDisableShadows != null)
+                    onDisableShadows();
                 break;
         }
     }

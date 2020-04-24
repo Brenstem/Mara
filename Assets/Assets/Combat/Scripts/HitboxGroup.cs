@@ -45,7 +45,6 @@ public class HitboxGroup : MonoBehaviour
         }
         else
         {
-            Debug.Log("Eventless HitboxGroup", this);
             EnableEvent(0);
         }
 

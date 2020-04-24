@@ -41,28 +41,32 @@ public class Hitbox : MonoBehaviour
 
     private void IncreaseHitstun()
     {
+        /*
         if (gameObject.CompareTag("Player"))
         {
             hitstunTime += hitStunIncrease;
         }
+        */
     }
 
     private void BuffDamage()
     {
+        /*
         if (gameObject.CompareTag("Player"))
         {
             damageValue *= damageBuffMultiplier;
         }
+        */
     }
 
     private void ResetDamage()
     {
-        damageValue = originalDamageValue;
+        //damageValue = originalDamageValue;
     }
 
     private void ResetHitstun()
     {
-        hitstunTime = originalHitStun;
+        //hitstunTime = originalHitStun;
     }
 
     void FixedUpdate()

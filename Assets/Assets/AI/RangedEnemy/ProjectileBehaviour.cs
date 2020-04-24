@@ -46,7 +46,6 @@ public class ProjectileBehaviour : MonoBehaviour
 
     IEnumerator DestroyProjectile()
     {
-        print("destroy projectile");
         yield return StartCoroutine(WaitFor.Frames(3));
         Destroy(this.gameObject);
     }
