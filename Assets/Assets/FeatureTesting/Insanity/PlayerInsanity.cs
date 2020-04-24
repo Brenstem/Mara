@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Experimental.Rendering.HDPipeline;
 
 public class PlayerInsanity : MonoBehaviour
 {
@@ -23,6 +25,9 @@ public class PlayerInsanity : MonoBehaviour
     [SerializeField] 
     private int[] dynamicInsanityValues;
 
+    [SerializeField] private Volume vol;
+
+    #region Events
     // Events for each stage of insanity 
     public delegate void TutorialDebuff();
     public static event TutorialDebuff OnTutorialDebuff;
@@ -48,14 +53,26 @@ public class PlayerInsanity : MonoBehaviour
     public delegate void PlayerDead();
     public static event PlayerDead onPlayerDeath;
 
-    private float _currentInsanity;
+    #endregion
 
     private Timer _timer;
 
     private bool _playerDying;
 
+    private ChromaticAberration _chromaticAberration;
+
+    private float _currentInsanity;
+
     private void Start()
     {
+        ChromaticAberration tmp;
+
+        if (vol.profile.TryGet<ChromaticAberration>(out tmp))
+        {
+            _chromaticAberration = tmp;
+
+        }
+
         if (!InsanityBar)
         {
             throw new System.Exception("Healthbar prefab missing!");
@@ -68,6 +85,8 @@ public class PlayerInsanity : MonoBehaviour
     private void Update()
     {
         GlobalState.state.AudioManager.PlayerInsanityAudioUpdate(GetInsanityPercentage());
+
+        _chromaticAberration.intensity.value = GetInsanityPercentage() / 100;
 
         // if a timer exists and the player is "dead" wait for timer to kill player
         if (!Object.ReferenceEquals( _timer, null) && _playerDying) 
