@@ -14,7 +14,7 @@ public class EnemyHealth : MonoBehaviour
     private void Awake()
     {
         _healthBar = GetComponentInChildren<TrackingHealthBar>();
-        // _anim = GetComponentInChildren<Animator>();
+        _anim = GetComponentInChildren<Animator>();
         _healthBar.SetMaxValue(maxHealth);
         _currentHealth = maxHealth;
         _healthBar.SetValue(_currentHealth);
@@ -26,11 +26,6 @@ public class EnemyHealth : MonoBehaviour
         {
             throw new System.Exception("Please add a trackingHealthbar prefab as a child to this component!");
         }
-    }
-
-    private void Update()
-    {
-        print(GetComponentInChildren<Animator>());
     }
 
     public float GetHealth() {
@@ -91,12 +86,18 @@ public class EnemyHealth : MonoBehaviour
 
     private void KillEnemy()
     {
-        print("kill0");
-        _anim.SetTrigger("Dead");
-        if (_anim.GetCurrentAnimatorStateInfo(0).IsName("anim_basic_death"))
+        if (!Object.ReferenceEquals(_anim, null))
         {
-            print("kill");
-            // Destroy(this.gameObject);
+            _anim.SetTrigger("Dead");
         }
+        else
+        {
+            DestroyThis();
+        }
+    }
+
+    public void DestroyThis()
+    {
+        Destroy(this.gameObject);
     }
 }
