@@ -8,7 +8,7 @@ public class SpiralCounterMusic : MonoBehaviour
 {
     private Vector3 topPosition;
     private Vector3 playerPosition;
-    private float verticalDiff;
+    [Range(0,100)] public float verticalDiff;
 
     [EventRef]
     //[SerializeField] string InsanityEventAudio;
@@ -19,11 +19,16 @@ public class SpiralCounterMusic : MonoBehaviour
     {
         playerPosition = GlobalState.state.Player.transform.position;
 
-        verticalDiff = topPosition.y - playerPosition.y;
+        verticalDiff = playerPosition.y - topPosition.y;
 
-        verticalDiff = verticalDiff / topPosition.y * 100;
+        verticalDiff = verticalDiff / topPosition.y;
 
-        
+        if (verticalDiff > 1)
+        {
+            verticalDiff = 1;
+        }
+
+        spiralEvent.setParameterByName("SpiralStairsProgress", verticalDiff);
     }
 
     private void OnTriggerEnter(Collider other)
