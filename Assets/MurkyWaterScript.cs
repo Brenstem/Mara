@@ -56,7 +56,7 @@ public class MurkyWaterScript : MonoBehaviour
 
             //kanske lägga till att den typ börjar bubbla eller något, när det är någon sec tills den försvinner
 
-            if (timer.Expired())
+            if (timer.Expired)
             {
                 print("nu ska murky water dö");
                 //kanske spela någon animation här för att förtydliga att den försvinner

@@ -432,7 +432,7 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
     public override void EnterState(BossPhaseOneState owner)
     {
         //Debug.Log("in i PhaseOneCombatState");
-        if (timer.Expired())
+        if (timer.Expired)
         {
             timer = new Timer(_attackSpeed);
             _minAttackCooldown = _baseMinAttackCooldown;
@@ -461,7 +461,7 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
         //kanske borde dela upp detta i olika movement states pga animationer men vet inte om det behövs
 
         //kolla om man ska attackera
-        if (timer.Expired())
+        if (timer.Expired)
         {
             //nära nog för att göra melee attacken
             if (_drainAttackRange > Vector3.Distance(_ownerParentScript.transform.position, _ownerParentScript.player.transform.position))
@@ -607,7 +607,7 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
             {
                 //gör så att den byter mellan att gå höger och vänster
                 int strafeSign = 0;
-                if (timer.Ratio() > 0.5f)
+                if (timer.Ratio > 0.5f)
                 {
                     strafeSign = -1;
                 }
@@ -722,7 +722,7 @@ public class PhaseOneDashState : State<BossPhaseOneState>
     {
         _dashTimer.Time += Time.deltaTime;
 
-        if (_dashTimer.Expired())
+        if (_dashTimer.Expired)
         {
             _lagTimer.Time += Time.deltaTime;
 
@@ -731,7 +731,7 @@ public class PhaseOneDashState : State<BossPhaseOneState>
                 owner.parentScript.dashAttack = false;
                 owner.phaseOneStateMashine.ChangeState(owner.phaseOneMeleeAttackOneState);
             }
-            else if (_lagTimer.Expired())
+            else if (_lagTimer.Expired)
             {
                 owner.phaseOneStateMashine.ChangeState(owner.phaseOneCombatState);
             }
@@ -935,7 +935,7 @@ public class Phase1Attack1State : State<BossPhaseOneState>
 
         _timer.Time += Time.deltaTime;
 
-        if (_timer.Expired())
+        if (_timer.Expired)
         {
             owner.phaseOneStateMashine.ChangeState(owner.phaseOneCombatState);
         }
