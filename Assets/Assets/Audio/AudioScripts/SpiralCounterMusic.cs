@@ -6,49 +6,31 @@ using FMOD.Studio;
 
 public class SpiralCounterMusic : MonoBehaviour
 {
-    
+    private Vector3 topPosition;
+    private Vector3 playerPosition;
+    private float verticalDiff;
 
-    private Transform player;
-    private Transform distanceToPlayer;
-    private float playerVerticalDistance;
-    private float spiralTopVerticalDistance;
     [EventRef]
     //[SerializeField] string InsanityEventAudio;
     EventInstance spiralEvent;
 
-    // Start is called before the first frame update
-    private float TheMeme()
-    {
-        return playerVerticalDistance + spiralTopVerticalDistance * 100;
-    }
-    void Start()
-    {
-        distanceToPlayer = FindObjectOfType<Transform>();
-        spiralTopVerticalDistance = distanceToPlayer.position.y;
-        //spiralEvent = 
-    }
-
     // Update is called once per frame
     void Update()
     {
-        player = GlobalState.state.Player.GetComponent<Transform>();
+        playerPosition = GlobalState.state.Player.transform.position;
 
-        playerVerticalDistance = player.position.y;
+        verticalDiff = topPosition.y - playerPosition.y;
 
-        Debug.Log(playerVerticalDistance + spiralTopVerticalDistance);
-     
-         
+        verticalDiff = verticalDiff / topPosition.y * 100;
 
-
-
-
-
+        
     }
-    public void PlayerInsanityAudio(float insanityPercentage)
+
+    private void OnTriggerEnter(Collider other)
     {
-       // InsanityEvent = RuntimeManager.CreateInstance(InsanityEventAudio); // Create a new FMOD::Studio::EventInstance.
-      //  InsanityEvent.setParameterByName("InsanityBar", insanityPercentage); // string-värdet är parameternamnet och insanitypercentage är float-värdet
-      //  InsanityEvent.start(); // spelar upp ljudet
+        if (other.CompareTag("Player"))
+        {
+            topPosition = other.transform.position;
+        }
     }
-
 }
