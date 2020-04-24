@@ -29,6 +29,10 @@ public class EnemyHealth : MonoBehaviour
     public float GetHealth() {
         return _currentHealth;
     }
+    
+    public float GetMaxHealth() {
+        return maxHealth;
+    }
 
     public void SetMaxHealth(float amount) {
         maxHealth = amount;
