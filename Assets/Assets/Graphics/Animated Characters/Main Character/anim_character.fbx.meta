@@ -42,7 +42,12 @@ ModelImporter:
   - first:
       74: -8812635216167514445
     second: anim_char_attack02
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: initialShadingGroup
+    second: {fileID: 2100000, guid: 16f4b5c880643c24aadeb985e7499b88, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
