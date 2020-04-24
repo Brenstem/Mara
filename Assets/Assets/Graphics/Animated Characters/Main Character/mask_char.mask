@@ -7,5 +7,237 @@ AvatarMask:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: mask_char
-  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
-  m_Elements: []
+  m_Mask: 00000000010000000100000000000000000000000100000001000000010000000100000000000000000000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Character_Low
+    m_Weight: 1
+  - m_Path: rig_character
+    m_Weight: 1
+  - m_Path: rig_character/root
+    m_Weight: 0
+  - m_Path: rig_character/root/l.elbow
+    m_Weight: 1
+  - m_Path: rig_character/root/l.elbow/l.elbow_end
+    m_Weight: 1
+  - m_Path: rig_character/root/l.foot_main
+    m_Weight: 1
+  - m_Path: rig_character/root/l.foot_main/l.foot_heel
+    m_Weight: 1
+  - m_Path: rig_character/root/l.foot_main/l.foot_heel/l.knee
+    m_Weight: 1
+  - m_Path: rig_character/root/l.foot_main/l.foot_heel/l.knee/l.knee_end
+    m_Weight: 1
+  - m_Path: rig_character/root/l.ik-fk_switch
+    m_Weight: 1
+  - m_Path: rig_character/root/l.ik-fk_switch/l.ik-fk_switch_end
+    m_Weight: 1
+  - m_Path: rig_character/root/r.elbow
+    m_Weight: 1
+  - m_Path: rig_character/root/r.elbow/r.elbow_end
+    m_Weight: 1
+  - m_Path: rig_character/root/r.foot_main
+    m_Weight: 1
+  - m_Path: rig_character/root/r.foot_main/r.foot_heel
+    m_Weight: 1
+  - m_Path: rig_character/root/r.foot_main/r.foot_heel/r.knee
+    m_Weight: 1
+  - m_Path: rig_character/root/r.foot_main/r.foot_heel/r.knee/r.knee_end
+    m_Weight: 1
+  - m_Path: rig_character/root/r.ik-fk_switch
+    m_Weight: 1
+  - m_Path: rig_character/root/r.ik-fk_switch/r.ik-fk_switch_end
+    m_Weight: 1
+  - m_Path: rig_character/root/torso
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_01
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_01/l.hip
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_01/l.hip/l.leg_01
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_01/l.hip/l.leg_01/l.leg_02
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_01/l.hip/l.leg_01/l.leg_02/l.foot
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_01/l.hip/l.leg_01/l.leg_02/l.foot/l.toe
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_01/l.hip/l.leg_01/l.leg_02/l.foot/l.toe/l.toe_end
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_01/r.hip
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_01/r.hip/r.leg_01
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_01/r.hip/r.leg_01/r.leg_02
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_01/r.hip/r.leg_01/r.leg_02/r.foot
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_01/r.hip/r.leg_01/r.leg_02/r.foot/r.toe
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_01/r.hip/r.leg_01/r.leg_02/r.foot/r.toe/r.toe_end
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.breast.001
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.breast.001/l.breast
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.breast.001/l.breast/l.breast_end
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.breast.001/r.breast
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.breast.001/r.breast/r.breast_end
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.foreArm_twist_01
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.foreArm_twist_01/l.foreArm_twist_02
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.foreArm_twist_01/l.foreArm_twist_02/l.foreArm_twist_03
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.foreArm_twist_01/l.foreArm_twist_02/l.foreArm_twist_03/l.foreArm_twist_03_end
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.hand_fk
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.hand_fk/l.index_01
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.hand_fk/l.index_01/l.index_02
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.hand_fk/l.index_01/l.index_02/l.index_03
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.hand_fk/l.index_01/l.index_02/l.index_03/l.index_03_end
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.hand_fk/l.long_01
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.hand_fk/l.long_01/l.long:_02
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.hand_fk/l.long_01/l.long:_02/l.long_03
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.hand_fk/l.long_01/l.long:_02/l.long_03/l.long_03_end
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.hand_fk/l.pinky_01
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.hand_fk/l.pinky_01/l.pinky_02
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.hand_fk/l.pinky_01/l.pinky_02/l.pinky_03
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.hand_fk/l.pinky_01/l.pinky_02/l.pinky_03/l.pinky_03_end
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.hand_fk/l.ring_01
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.hand_fk/l.ring_01/l.ring_02
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.hand_fk/l.ring_01/l.ring_02/l.ring_03
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.hand_fk/l.ring_01/l.ring_02/l.ring_03/l.ring_03_end
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.hand_fk/l.thumb_01
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.hand_fk/l.thumb_01/l.thumb_02
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.hand_fk/l.thumb_01/l.thumb_02/l.thumb_03
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/l.shoulder/l.upperArm/l.foreArm/l.hand_fk/l.thumb_01/l.thumb_02/l.thumb_03/l.thumb_03_end
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/neck_rot
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/neck_rot/neck
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/neck_rot/neck/head_rot
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/neck_rot/neck/head_rot/head
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/neck_rot/neck/head_rot/head/hair_main_01
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/neck_rot/neck/head_rot/head/hair_main_01/hair_main_02
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/neck_rot/neck/head_rot/head/hair_main_01/hair_main_02/hair_main_02_end
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/neck_rot/neck/head_rot/head/hair_tail_01
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/neck_rot/neck/head_rot/head/hair_tail_01/hair_tail_02
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/neck_rot/neck/head_rot/head/hair_tail_01/hair_tail_02/hair_tail_02_end
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/neck_rot/neck/head_rot/head/jaw
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/neck_rot/neck/head_rot/head/jaw/jaw_end
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/neck_rot/neck/head_rot/head/l.eye
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/neck_rot/neck/head_rot/head/l.eye/l.eye_end
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/neck_rot/neck/head_rot/head/r.eye
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/neck_rot/neck/head_rot/head/r.eye/r.eye_end
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.foreArm_twist_01
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.foreArm_twist_01/r.foreArm_twist_02
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.foreArm_twist_01/r.foreArm_twist_02/r.foreArm_twist_03
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.foreArm_twist_01/r.foreArm_twist_02/r.foreArm_twist_03/r.foreArm_twist_03_end
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.hand_fk
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.hand_fk/r.index_01
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.hand_fk/r.index_01/r.index_02
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.hand_fk/r.index_01/r.index_02/r.index_03
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.hand_fk/r.index_01/r.index_02/r.index_03/r.index_03_end
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.hand_fk/r.long_01
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.hand_fk/r.long_01/r.long:_02
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.hand_fk/r.long_01/r.long:_02/r.long_03
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.hand_fk/r.long_01/r.long:_02/r.long_03/r.long_03_end
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.hand_fk/r.pinky_01
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.hand_fk/r.pinky_01/r.pinky_02
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.hand_fk/r.pinky_01/r.pinky_02/r.pinky_03
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.hand_fk/r.pinky_01/r.pinky_02/r.pinky_03/r.pinky_03_end
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.hand_fk/r.ring_01
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.hand_fk/r.ring_01/r.ring_02
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.hand_fk/r.ring_01/r.ring_02/r.ring_03
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.hand_fk/r.ring_01/r.ring_02/r.ring_03/r.ring_03_end
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.hand_fk/r.thumb_01
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.hand_fk/r.thumb_01/r.thumb_02
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.hand_fk/r.thumb_01/r.thumb_02/r.thumb_03
+    m_Weight: 1
+  - m_Path: rig_character/root/torso/spine_02/spine_03/spine_04/r.shoulder/r.upperArm/r.foreArm/r.hand_fk/r.thumb_01/r.thumb_02/r.thumb_03/r.thumb_03_end
+    m_Weight: 1
+  - m_Path: rig_character/weapon
+    m_Weight: 1
+  - m_Path: rig_character/weapon/weapon_end
+    m_Weight: 1
