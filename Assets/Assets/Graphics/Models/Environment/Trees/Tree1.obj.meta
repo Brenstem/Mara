@@ -3,7 +3,12 @@ guid: dc01e4b0942837d40a4d1857aad8eb19
 ModelImporter:
   serializedVersion: 26
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: birchBlowing1MainMat
+    second: {fileID: 2100000, guid: 387066df003c4f2468f72adeed6cb165, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
