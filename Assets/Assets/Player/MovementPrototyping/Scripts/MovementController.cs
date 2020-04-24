@@ -252,6 +252,7 @@ public class MovementController : MonoBehaviour
             _velocity.y = -2f;
             _hasDashed = false;
         }
+        print(_isGrounded);
         playerAnimator.SetBool("Grounded", _isGrounded);
     }
 
@@ -334,6 +335,7 @@ public class GeneralMovementState : State<MovementController>
     public override void ExitState(MovementController owner)
     {
         _isMoving = false;
+        owner.playerAnimator.SetBool("Running", _isMoving);
     }
 
     public float movingThreshold = 0.09f;
@@ -360,13 +362,17 @@ public class GeneralMovementState : State<MovementController>
                 owner.transform.eulerAngles = new Vector3(0, owner.transform.eulerAngles.y, 0); // Limits rotation to the Y-axis
                 Vector3 move = owner.transform.forward * owner.input.magnitude;                 // Constant forward facing force
                 owner.playerAnimator.SetFloat("Blend", owner.input.magnitude);
+                owner.playerAnimator.SetBool("Running", true);
                 if (angle < owner.rotationAngleUntilMove)
                 {
                     _isMoving = true;
                 }
                 if (_isMoving)
                 {
-                    owner.controller.Move(move.normalized * owner.maxSpeed * Time.deltaTime);
+                    float analogSpeed = move.magnitude;
+                    if (analogSpeed > 1)
+                        analogSpeed = 1;
+                    owner.controller.Move(move.normalized * analogSpeed * owner.maxSpeed * Time.deltaTime);
                 }
             }
         }
@@ -424,7 +430,7 @@ public class DashMovementState : State<MovementController>
 
     public override void ExitState(MovementController owner)
     {
-        owner.playerAnimator.SetBool("Dash", false);
+        owner.playerAnimator.SetBool("IsDashing", false);
     }
 
     public override void EnterState(MovementController owner)
@@ -432,7 +438,8 @@ public class DashMovementState : State<MovementController>
         _timer = new Timer(owner.dashTime);
         _lagTimer = new Timer(owner.dashLag);
 
-        owner.playerAnimator.SetBool("Dash", true);
+        owner.playerAnimator.SetTrigger("Dash");
+        owner.playerAnimator.SetBool("IsDashing", true);
 
         _dashDirection += Camera.main.transform.right * owner.input.x;
         _dashDirection += Camera.main.transform.forward * owner.input.y;

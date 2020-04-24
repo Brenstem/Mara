@@ -84,24 +84,32 @@ public class CombatController : MonoBehaviour
         Vector3 direction; // Direction of enemy
         bool hit; // Cast a ray with a length of stoppingdistance from player towards enemy
         
-        if (target && autoaim && !_control.isLockedOn) // If there is target swing
+        if (_interruptable && GlobalState.state.Player.input.direction != Vector2.zero)
         {
-            _control.enabled = false;
-            direction = target.transform.position - transform.position;
-            hit = Physics.Raycast(transform.position + offset, direction, stoppingDistance, enemyLayer);
-
-            if (hit) // If target is in attack range face target and swing
+            _control.enabled = true;
+        }
+        else
+        {
+            if (target && autoaim && !_control.isLockedOn) // If there is target swing
             {
-                FaceEnemy(target);
-                _control.enabled = true;
-            }
-            else
-            {
-                FaceEnemy(target);
+                _control.enabled = false;
+                direction = target.transform.position - transform.position;
+                hit = Physics.Raycast(transform.position + offset, direction, stoppingDistance, enemyLayer);
 
-                if (!hit) // If raycast missed move towards enemy
+
+                if (hit) // If target is in attack range face target and swing
                 {
-                    characterController.Move(new Vector3(direction.normalized.x, 0, direction.normalized.z) * _dashAttackSpeed * Time.deltaTime);
+                    FaceEnemy(target);
+                    _control.enabled = true;
+                }
+                else
+                {
+                    FaceEnemy(target);
+
+                    if (!hit) // If raycast missed move towards enemy
+                    {
+                        characterController.Move(new Vector3(direction.normalized.x, 0, direction.normalized.z) * _dashAttackSpeed * Time.deltaTime);
+                    }
                 }
             }
         }
@@ -182,7 +190,7 @@ public class FirstAttackState : State<CombatController>
     public override void UpdateState(CombatController owner)
     {
         owner.Attack(_target, true); // Attack using target found in first frame
-         
+
         if (!owner._animationOver && Input.GetMouseButtonDown(0)) // If the player presses mouse0 when animation is running set doublecombo to true
         {
             _doubleCombo = true;
