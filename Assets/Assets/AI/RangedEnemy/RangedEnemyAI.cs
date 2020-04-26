@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -13,13 +14,17 @@ public class RangedEnemyAI : BaseAIMovementController
     [HideInInspector] public Timer _hitStunTimer;
     [HideInInspector] public bool _useHitStun;
 
-    [HideInInspector] public Animator _anim;
-
     protected override void Awake()
     {
         base.Awake();
         firerateTimer = new Timer(_firerate);
-        _anim = GetComponentInChildren<Animator>();
+
+    }
+
+    private void KillThis()
+    {
+        _anim.SetTrigger("Dead");
+        stateMachine.ChangeState(new DeadState());
     }
 
     private void Start()
@@ -32,16 +37,19 @@ public class RangedEnemyAI : BaseAIMovementController
     {
         base.Update();
         firerateTimer.Time += Time.deltaTime;
-        _anim.SetFloat("Blend", agent.velocity.magnitude);
+        _anim.SetFloat("Blend", _agent.velocity.magnitude);
+
+        if (_health.GetHealth() <= 0)
+        {
+            KillThis();
+        }
     }
 
     public void Attack()
     {
-        _anim.SetTrigger("Attack");
         if (firerateTimer.Expired)
         {
-            Instantiate(_projectile, _projectileSpawnPos.position, _projectileSpawnPos.rotation);
-            firerateTimer.Reset();
+            _anim.SetTrigger("Attack");
         }
     }
 
@@ -64,6 +72,12 @@ public class RangedEnemyAI : BaseAIMovementController
     {
         _useHitStun = false;
         _anim.SetBool("InHitstun", false);
+    }
+
+    public void Fire()
+    {
+        Instantiate(_projectile, _projectileSpawnPos.position, _projectileSpawnPos.rotation);
+        firerateTimer.Reset();
     }
 }
 
