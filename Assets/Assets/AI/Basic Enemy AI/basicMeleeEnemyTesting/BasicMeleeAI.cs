@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class BasicMeleeAI : BaseAIMovementController
 {
-
-    Animator anim;
-
     [HideInInspector]public Timer _hitStunTimer;
     [HideInInspector]public bool _useHitStun;
 
@@ -14,21 +11,35 @@ public class BasicMeleeAI : BaseAIMovementController
     void Start()
     {
         stateMachine.ChangeState(new BasicMeleeIdleState());
-        anim = GetComponent<Animator>();
         _meleeEnemy = this;
+    }
+
+    protected override void Update()
+    {
+        if (_health.GetHealth() <= 0)
+        {
+            KillThis();
+        }
+
+        base.Update();
+    }
+
+    private void KillThis()
+    {
+        stateMachine.ChangeState(new DeadState());
+        //_anim.SetTrigger("Dead");
+        _agent.SetDestination(transform.position);
     }
 
     public void Attack()
     {
-        anim.SetTrigger("Attack");
+        _anim.SetTrigger("Attack");
     }
 
     public override void TakeDamage(Hitbox hitbox)
     {
-
-        print("i took damage");
         stateMachine.ChangeState(new BasicMeleeIdleState());
-        EnableHitstun(1f);
+        EnableHitstun(hitbox.hitstunTime);
         base.TakeDamage(hitbox);
     }
 
@@ -36,14 +47,14 @@ public class BasicMeleeAI : BaseAIMovementController
     {
         _hitStunTimer = new Timer(duration);
         _useHitStun = true;
-        anim.SetTrigger("Hitstun");
-        anim.SetBool("InHitstun", true);
+        _anim.SetTrigger("Hitstun");
+        _anim.SetBool("InHitstun", true);
     }
 
     public void DisabelHitStun()
     {
         _useHitStun = false;
-        anim.SetBool("InHitstun", false);
+        _anim.SetBool("InHitstun", false);
     }
 
 }
