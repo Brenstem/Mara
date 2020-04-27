@@ -34,12 +34,14 @@ public class Player : Entity
         {
             EnableHitstun(hitbox.hitstunTime);
             playerInsanity.IncrementInsanity(hitbox.damageValue);
+            GlobalState.state.AudioManager.PlayerHurtAudio(this.transform.position);
         }
     }
 
     public override void TakeDamage(float damage)
     {
         playerInsanity.IncrementInsanity(damage);
+        GlobalState.state.AudioManager.PlayerHurtAudio(this.transform.position);
     }
 
     private void Awake()

@@ -184,7 +184,7 @@ public class BaseChasingState : State<BaseAIMovementController>
             owner.stateMachine.ChangeState(_returnToIdleState);
         }
 
-        if(range > Vector3.Distance(targetPosition, owner.transform.position))
+        if(range > Vector3.Distance(owner._target.transform.position, owner.transform.position))
         {
             owner.stateMachine.ChangeState(_attackingState);
         }
@@ -194,7 +194,6 @@ public class BaseChasingState : State<BaseAIMovementController>
 public class BaseAttackingState : State<BaseAIMovementController>
 {
     protected BaseChasingState _chasingState;
-
 
     public override void EnterState(BaseAIMovementController owner) { }
 
@@ -206,12 +205,9 @@ public class BaseAttackingState : State<BaseAIMovementController>
 
         float range = owner._attackRange - owner._agent.stoppingDistance;
 
-        Vector3 vectorToPlayer = (owner._target.transform.position - owner.transform.position).normalized * range;
-        Vector3 targetPosition = owner._target.transform.position - vectorToPlayer; // target position - (vector between enemy and player with length of range)
-
         owner.FacePlayer();
 
-        if (range < Vector3.Distance(targetPosition, owner.transform.position))
+        if (range < Vector3.Distance(owner._target.transform.position, owner.transform.position))
         {
             owner.stateMachine.ChangeState(_chasingState);
         }

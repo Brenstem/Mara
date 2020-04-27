@@ -181,6 +181,7 @@ public class FirstAttackState : State<CombatController>
         GlobalState.state.Player.ResetAnim();
         owner.anim.SetBool("DoubleCombo", false); // Reset the double combo animation bool upon entering state
         owner.anim.SetTrigger("Attack"); // Set animation trigger for first attack
+        GlobalState.state.AudioManager.PlayerSwordSwingAudio(owner.transform.position);
         _target = owner.FindTarget();
         owner._animationOver = false;
         owner._interruptable = false;
@@ -226,8 +227,8 @@ public class SecondAttackState : State<CombatController>
     public override void EnterState(CombatController owner)
     {
         // Animation bool was set to true in last states exit
-
         owner.anim.SetBool("TripleCombo", false); // Reset triple combo animation bool upon entering state
+        GlobalState.state.AudioManager.PlayerSwordSwingAudio(owner.transform.position);
         _target = owner.FindTarget(); // Find target to pass to attack function in first frame of attack
         owner._animationOver = false;
         owner._interruptable = false;
@@ -288,6 +289,7 @@ public class ThirdAttackState : State<CombatController>
     public override void EnterState(CombatController owner)
     {
         _target = owner.FindTarget(); // Find target to pass to attack function in first frame of attack
+        GlobalState.state.AudioManager.PlayerSwordSwingAudio(owner.transform.position);
         owner._animationOver = false;
         owner._interruptable = false;
         if (owner.hitboxGroups.Count >= 3)

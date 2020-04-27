@@ -273,6 +273,7 @@ public class MovementController : MonoBehaviour
             _velocity.y = Mathf.Sqrt(_jumpHeight) * -_gravity;
             GlobalState.state.Player.EndAnim();
             playerAnimator.SetTrigger("Jump");
+            GlobalState.state.AudioManager.PlayerJumpAudio(this.transform.position);
         }
 
         if (playerAnimator.GetBool("IsDashing"))
@@ -453,6 +454,7 @@ public class DashMovementState : State<MovementController>
 
         owner.playerAnimator.SetTrigger("Dash");
         owner.playerAnimator.SetBool("IsDashing", true);
+        GlobalState.state.AudioManager.PlayerDodgeAudio(owner.transform.position);
 
         _dashDirection += Camera.main.transform.right * owner.input.x;
         _dashDirection += Camera.main.transform.forward * owner.input.y;

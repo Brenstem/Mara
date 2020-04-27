@@ -6,28 +6,59 @@ using FMODUnity;
 
 public class AudioManager : MonoBehaviour
 {
+    // Player audio
+    [Header("Player Audio")]
     [EventRef]
     [SerializeField] string InsanityEventAudio;
     EventInstance InsanityEvent;
+
     [EventRef]
     [SerializeField] string PlayerFootsteps;
     EventInstance PlayerFootstepsAudio;
+
     [EventRef]
     [SerializeField] string playerSwordSwingAudio;
+
     [EventRef]
     [SerializeField] string playerDodgeAudio;
+
     [EventRef]
     [SerializeField] string playerJumpAudio;
+
+    [EventRef]
+    [SerializeField] string playerHurtAudio;
+
     [EventRef]
     [SerializeField] string playerHeartBeatAudio;
 
+    // Enemy audio
+    [Header("Enemy Audio")]
+    [EventRef]
+    [SerializeField] string rangedEnemyFireAudio;
 
-    //Player sounds
-    public void PlayerFootStepsAudio(string GroundMaterial)
+    [EventRef]
+    [SerializeField] string rangedEnemyAlertAudio;
+
+    [EventRef]
+    [SerializeField] string floatingEnemyHurtAudio;
+
+    // Boss audio
+    [EventRef]
+    [SerializeField] string bossHurtAudio;
+
+    [EventRef]
+    [SerializeField] string bossDashAudio;
+
+    #region Player Audio
+    public void PlayerFootStepsAudio(Transform transform, string groundMaterial, Rigidbody rb)
     {
+        //RuntimeManager.PlayOneShot(PlayerFootsteps, position);
+
         // playerMovementAudio.AudioPlayerFootsteps(obj.tag); // något liknande kan användas för att jämföra med tags istälelt för strings methinks
         PlayerFootstepsAudio = RuntimeManager.CreateInstance(PlayerFootsteps);
-        switch (GroundMaterial)
+        RuntimeManager.AttachInstanceToGameObject(PlayerFootstepsAudio, transform, rb);
+
+        switch (groundMaterial)
         {
             case "Gravel":
                 PlayerFootstepsAudio.setParameterByName("Surface", 0f);
@@ -42,19 +73,24 @@ public class AudioManager : MonoBehaviour
         PlayerFootstepsAudio.start();
     }
 
-    public void PlayerSwordSwingAudio()
+    public void PlayerSwordSwingAudio(Vector3 position)
     {
-        RuntimeManager.PlayOneShot(playerSwordSwingAudio, transform.position);
+        RuntimeManager.PlayOneShot(playerSwordSwingAudio, position);
     }
 
-    public void PlayerDodgeAudio()
+    public void PlayerDodgeAudio(Vector3 position)
     {
-        RuntimeManager.PlayOneShot(playerDodgeAudio, transform.position);
+        RuntimeManager.PlayOneShot(playerDodgeAudio, position);
     }
 
-    public void PlayerJumpAudio()
+    public void PlayerJumpAudio(Vector3 position)
     {
-        RuntimeManager.PlayOneShot(playerJumpAudio, transform.position);
+        RuntimeManager.PlayOneShot(playerJumpAudio, position);
+    }
+
+    public void PlayerHurtAudio(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(playerHurtAudio, position);
     }
 
     public void PlayerInsanityAudio(float insanityPercentage)
@@ -69,23 +105,42 @@ public class AudioManager : MonoBehaviour
         InsanityEvent.setParameterByName("InsanityBar", insanityPercentage);
     }
 
-    public void PlayerInsanityHeartBeat()
+    public void PlayerInsanityHeartBeat(Vector3 position)
     {
-        RuntimeManager.PlayOneShot(playerHeartBeatAudio, transform.position);
+        RuntimeManager.PlayOneShot(playerHeartBeatAudio, position);
+    }
+    #endregion
+
+    #region Enemy Audio
+    public void RangedEnemyFireAudio(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(rangedEnemyFireAudio, position);
     }
 
-    //Enemy sound
-    public void EnemyStalkerIdleAudio()
+    public void RangedEnemyAlertAudio(Vector3 position)
     {
-
+        RuntimeManager.PlayOneShot(rangedEnemyAlertAudio, position);
     }
 
-    public void EnemyStalkerDieAudio()
+    public void FloatingEnemyHurtAudio(Vector3 position)
     {
+        RuntimeManager.PlayOneShot(floatingEnemyHurtAudio, position);
+    }
+    #endregion
 
+    #region Boss Audio
+    public void BossDash(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(bossDashAudio, position);
     }
 
-    //Music
+    public void BossHurt(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(bossHurtAudio, position);
+    }
+    #endregion
+
+    #region Music
     public void MenuMusicAudio()
     {
 
@@ -105,16 +160,5 @@ public class AudioManager : MonoBehaviour
     {
 
     }
-
-    //Stingers
-
-    public void PlayerDeathStingerAudio()
-    {
-
-    }
-
-    public void PlayerRespawnStingerAudio()
-    {
-
-    }
+    #endregion
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FMODUnity;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -19,7 +20,6 @@ public class RangedEnemyAI : BaseAIMovementController
     {
         base.Awake();
         firerateTimer = new Timer(_firerate);
-
     }
 
     private void KillThis()
@@ -55,6 +55,12 @@ public class RangedEnemyAI : BaseAIMovementController
         }
     }
 
+    private void KillThis()
+    {
+        _anim.SetTrigger("Dead");
+        stateMachine.ChangeState(new DeadState());
+    }
+
     public override void TakeDamage(Hitbox hitbox)
     {
         stateMachine.ChangeState(new RangedEnemyIdleState());
@@ -66,6 +72,7 @@ public class RangedEnemyAI : BaseAIMovementController
     {
         _hitStunTimer = new Timer(duration);
         _useHitStun = true;
+        GlobalState.state.AudioManager.FloatingEnemyHurtAudio(this.transform.position);
         _anim.SetTrigger("Hurt");
         _anim.SetBool("InHitstun", true);
     }
@@ -78,6 +85,7 @@ public class RangedEnemyAI : BaseAIMovementController
 
     public void Fire()
     {
+        GlobalState.state.AudioManager.RangedEnemyFireAudio(this.transform.position);
         Instantiate(_projectile, _projectileSpawnPos.position, _projectileSpawnPos.rotation);
         firerateTimer.Reset();
     }
@@ -114,6 +122,7 @@ public class RangedEnemyChasingState : BaseChasingState
     {
         _attackingState = new RangedEnemyAttackingState();
         _returnToIdleState = new RangedEnemyReturnToIdleState();
+        GlobalState.state.AudioManager.RangedEnemyAlertAudio(owner.rangedAI.transform.position);
     }
 
     public override void UpdateState(BaseAIMovementController owner)

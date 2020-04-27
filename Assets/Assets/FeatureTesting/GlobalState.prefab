@@ -71,11 +71,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InsanityEventAudio: event:/SFX/Player/Insanity manager
-  PlayerFootsteps: 
-  playerSwordSwingAudio: 
-  playerDodgeAudio: 
-  playerJumpAudio: 
-  playerHeartBeatAudio: 
+  PlayerFootsteps: event:/SFX/Player/movement/Footsteps
+  playerSwordSwingAudio: event:/SFX/Player/Attacks/Sword
+  playerDodgeAudio: event:/SFX/Player/movement/Dash
+  playerJumpAudio: event:/SFX/Player/movement/Jump
+  playerHurtAudio: event:/SFX/Player/Hurt
+  playerHeartBeatAudio: event:/SFX/Player/Heartbeats
+  rangedEnemyFireAudio: event:/SFX/Fiender/Ranged enemy/Fire shoot
+  rangedEnemyAlertAudio: event:/SFX/Fiender/Basic Enemy/Basic Enemy Alerted
+  floatingEnemyHurtAudio: event:/SFX/Fiender/Basic Enemy/Basic Enemy hurt
+  bossHurtAudio: event:/SFX/Fiender/BirdBoss/Birdhurt
+  bossDashAudio: event:/SFX/Fiender/BirdBoss/Wings OR Dash
 --- !u!114 &2586571097027963035
 MonoBehaviour:
   m_ObjectHideFlags: 0
