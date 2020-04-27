@@ -55,12 +55,6 @@ public class RangedEnemyAI : BaseAIMovementController
         }
     }
 
-    private void KillThis()
-    {
-        _anim.SetTrigger("Dead");
-        stateMachine.ChangeState(new DeadState());
-    }
-
     public override void TakeDamage(Hitbox hitbox)
     {
         stateMachine.ChangeState(new RangedEnemyIdleState());

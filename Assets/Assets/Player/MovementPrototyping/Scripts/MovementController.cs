@@ -16,9 +16,9 @@ public class MovementController : MonoBehaviour
     [SerializeField] private float _jumpHeight = 3f;
 
     public float maxSpeed = 12f;
-    public float acceleration = 8f;
-    public float deceleration = 2f;
-    public float rotationSpeed;
+    public float airSpeed = 8f;
+    public float rotationSpeed = 15f;
+    public float airRotationSpeed = 4f;
     public float rotationAngleUntilMove = 30;
 
     [Header("Dash Properties")]
@@ -64,6 +64,10 @@ public class MovementController : MonoBehaviour
     private bool _hasJumped;
     private bool _hasDashed;
     private bool _isGrounded;
+    public bool IsGrounded
+    {
+        get { return _isGrounded; }
+    }
     private Vector3 _velocity;
     private PlayerInput _playerInput;
     [HideInInspector] public Vector2 input;
@@ -368,7 +372,11 @@ public class GeneralMovementState : State<MovementController>
                 float angle = Vector2.Angle(new Vector2(owner.transform.forward.x, owner.transform.forward.z),
                                             new Vector2(baseInputDirection.x, baseInputDirection.z));
 
-                Vector3 resultingDirection = Vector3.RotateTowards(owner.transform.forward, baseInputDirection, owner.rotationSpeed * Time.deltaTime * (angle > 135 ? 5 : 1), 0.0f);
+                float rotationSpeed = owner.rotationSpeed * (angle > 135 ? 5 : 1);
+                if (!owner.IsGrounded)
+                    rotationSpeed = owner.airRotationSpeed * (angle > 135 ? 2 : 1);
+
+                Vector3 resultingDirection = Vector3.RotateTowards(owner.transform.forward, baseInputDirection, rotationSpeed * Time.deltaTime, 0.0f);
 
                 owner.transform.rotation = Quaternion.LookRotation(resultingDirection);
                 owner.transform.eulerAngles = new Vector3(0, owner.transform.eulerAngles.y, 0); // Limits rotation to the Y-axis
@@ -384,7 +392,15 @@ public class GeneralMovementState : State<MovementController>
                     float analogSpeed = move.magnitude;
                     if (analogSpeed > 1)
                         analogSpeed = 1;
-                    owner.controller.Move(move.normalized * analogSpeed * owner.maxSpeed * Time.deltaTime);
+
+                    Vector3 speed = move.normalized * analogSpeed;
+
+                    if (owner.IsGrounded)
+                        speed *= owner.maxSpeed;
+                    else
+                        speed *= owner.airSpeed;
+
+                    owner.controller.Move(speed * Time.deltaTime);
                 }
             }
         }
