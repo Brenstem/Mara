@@ -44,13 +44,12 @@ public class AudioManager : MonoBehaviour
 
     public void PlayerSwordSwingAudio()
     {
-     RuntimeManager.PlayOneShot(playerSwordSwingAudio, transform.position);
+        RuntimeManager.PlayOneShot(playerSwordSwingAudio, transform.position);
     }
 
     public void PlayerDodgeAudio()
     {
-    RuntimeManager.PlayOneShot(playerDodgeAudio, transform.position);
-
+        RuntimeManager.PlayOneShot(playerDodgeAudio, transform.position);
     }
 
     public void PlayerJumpAudio()
