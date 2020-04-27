@@ -70,12 +70,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8798d1d51161f8c47a9ae254063dbe54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  InsanityEventAudio: event:/SFX/Player/Insanity manager
+  InsanityEventAudio: event:/SFX/Player/Insanity Bar
   PlayerFootsteps: 
-  playerSwordSwingAudio: 
-  playerDodgeAudio: 
-  playerJumpAudio: 
-  playerHeartBeatAudio: 
+  playerSwordSwingAudio: event:/SFX/Player/Attacks/Sword
+  playerDodgeAudio: event:/SFX/Player/movement/Dash
+  playerJumpAudio: event:/SFX/Player/movement/Jump
+  playerHeartBeatAudio: event:/SFX/Player/Heartbeats
+  rangedEnemyFireAudio: event:/SFX/Fiender/Ranged enemy/Fire shoot
+  rangedEnemyAlertAudio: event:/SFX/Fiender/Basic Enemy/Basic Enemy Alerted
+  floatingEnemyHurtAudio: event:/SFX/Fiender/Basic Enemy/Basic Enemy hurt
 --- !u!114 &2586571097027963035
 MonoBehaviour:
   m_ObjectHideFlags: 0

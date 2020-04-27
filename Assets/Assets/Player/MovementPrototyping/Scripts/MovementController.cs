@@ -253,6 +253,7 @@ public class MovementController : MonoBehaviour
             _hasDashed = false;
         }
         playerAnimator.SetBool("Grounded", _isGrounded);
+
         if (playerAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Landing")
         {
             playerAnimator.SetLayerWeight(1, 1.0f);
