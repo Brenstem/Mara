@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Cinemachine;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -97,6 +98,9 @@ public class GlobalState : MonoBehaviour
     private IEnumerator HitStopCoroutine(float duration)
     {
         _hitstopRunning = true;
+        CinemachineImpulseManager.Instance.IgnoreTimeScale = true;
+        GetComponent<CinemachineImpulseSource>().m_ImpulseDefinition.m_TimeEnvelope.m_DecayTime = duration;
+        GetComponent<CinemachineImpulseSource>().GenerateImpulse();
         yield return new WaitForEndOfFrame();
         Time.timeScale = 0.0f;
         yield return new WaitForSecondsRealtime(duration);

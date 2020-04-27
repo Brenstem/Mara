@@ -15,8 +15,8 @@ public class MovementController : MonoBehaviour
     [SerializeField] private float _gravity = -9.82f;
     [SerializeField] private float _jumpHeight = 3f;
 
-    public float maxSpeed = 12f;
-    public float airSpeed = 8f;
+    public float maxSpeed = 5f;
+    public float airSpeed = 5f;
     public float rotationSpeed = 15f;
     public float airRotationSpeed = 4f;
     public float rotationAngleUntilMove = 30;

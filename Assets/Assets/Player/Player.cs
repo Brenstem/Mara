@@ -22,6 +22,8 @@ public class Player : Entity
     private Timer _hitstunTimer;
     private PlayerInput _playerInput;
 
+    [SerializeField] private GameObject hitEffect;
+
     public override void TakeDamage(Hitbox hitbox)
     {
         if (combatController.IsParrying)
@@ -52,6 +54,9 @@ public class Player : Entity
         _playerInput.PlayerControls.Move.performed += ctx => input.direction = ctx.ReadValue<Vector2>();
         _playerInput.PlayerControls.Jump.performed += ctx => input.jump = true;
 
+        if (hitEffect != null)
+            hitEffect.SetActive(false);
+
         PlayerInsanity.onImpendingDoom += ImpendingDoom;
     }
     private void OnEnable() { _playerInput.PlayerControls.Enable(); }
@@ -77,6 +82,9 @@ public class Player : Entity
     {
         if (duration > 0.0f)
         {
+            if (hitEffect != null)
+                hitEffect.SetActive(true);
+
             DisableCombatController();
             DisableMovementController();
             _hitstunTimer = new Timer(duration);
@@ -97,6 +105,10 @@ public class Player : Entity
     public void DisableHitstun()
     {
         _useHitstun = false;
+
+        if (hitEffect != null)
+            hitEffect.SetActive(false);
+
         EnableMovementController();
         EnableCombatController();
         //combatController.anim.SetLayerWeight(1, 0.0f);
