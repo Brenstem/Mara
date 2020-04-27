@@ -50,11 +50,15 @@ public class AudioManager : MonoBehaviour
     [SerializeField] string bossDashAudio;
 
     #region Player Audio
-    public void PlayerFootStepsAudio(string GroundMaterial)
+    public void PlayerFootStepsAudio(Transform transform, string groundMaterial, Rigidbody rb)
     {
+        //RuntimeManager.PlayOneShot(PlayerFootsteps, position);
+
         // playerMovementAudio.AudioPlayerFootsteps(obj.tag); // något liknande kan användas för att jämföra med tags istälelt för strings methinks
         PlayerFootstepsAudio = RuntimeManager.CreateInstance(PlayerFootsteps);
-        switch (GroundMaterial)
+        RuntimeManager.AttachInstanceToGameObject(PlayerFootstepsAudio, transform, rb);
+
+        switch (groundMaterial)
         {
             case "Gravel":
                 PlayerFootstepsAudio.setParameterByName("Surface", 0f);
@@ -115,7 +119,6 @@ public class AudioManager : MonoBehaviour
 
     public void RangedEnemyAlertAudio(Vector3 position)
     {
-        print("play");
         RuntimeManager.PlayOneShot(rangedEnemyAlertAudio, position);
     }
 

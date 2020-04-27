@@ -305,7 +305,6 @@ public class PlayerInsanity : MonoBehaviour
         GlobalState.state.AudioManager.PlayerInsanityHeartBeat(this.transform.position);
     }
 
-
     public void KillPlayer()
     { 
         print("Killing Player");
