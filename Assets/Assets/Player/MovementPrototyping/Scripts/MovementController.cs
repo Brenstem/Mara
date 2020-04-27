@@ -21,6 +21,7 @@ public class MovementController : MonoBehaviour
     public float rotationSpeed;
     public float rotationAngleUntilMove = 30;
 
+    [Header("Dash Properties")]
     [SerializeField] private float _dashCooldownTime = 0.25f;
     public float dashTime = 0.25f;
     public float dashLag = 0.15f;
@@ -246,13 +247,6 @@ public class MovementController : MonoBehaviour
 
     void GroundCheck()
     {
-        _isGrounded = Physics.CheckSphere(_groundCheckPosition.position, _groundDistance, groundMask);
-        if (_isGrounded && _velocity.y < 0)
-        {
-            _velocity.y = -2f;
-            _hasDashed = false;
-        }
-        playerAnimator.SetBool("Grounded", _isGrounded);
         if (playerAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Landing")
         {
             playerAnimator.SetLayerWeight(1, 1.0f);
@@ -261,17 +255,27 @@ public class MovementController : MonoBehaviour
         {
             playerAnimator.SetLayerWeight(1, 0.0f);
         }
+        
+        _isGrounded = Physics.CheckSphere(_groundCheckPosition.position, _groundDistance, groundMask);
+        if (_isGrounded && _velocity.y < 0)
+        {
+            _velocity.y = -2f;
+            _hasDashed = false;
+        }
+
+        playerAnimator.SetBool("Grounded", _isGrounded);
     }
 
     void Jump()
     {
-        if (_hasJumped && _isGrounded)
+        if (_hasJumped && _isGrounded && !playerAnimator.GetBool("IsDashing") && playerAnimator.GetBool("CombatIdle"))
         {
             _velocity.y = Mathf.Sqrt(_jumpHeight) * -_gravity;
             GlobalState.state.Player.EndAnim();
             playerAnimator.SetTrigger("Jump");
         }
-        if (stateMachine.currentState.GetType() == typeof(DashMovementState))
+
+        if (playerAnimator.GetBool("IsDashing"))
         {
             _velocity.y = 0;
         }
@@ -281,7 +285,7 @@ public class MovementController : MonoBehaviour
         }
         controller.Move(_velocity * Time.deltaTime); // T^2
     }
-
+    
     /* === PLACEHOLDERS === */
     private void Dash(InputAction.CallbackContext c)
     { // Placeholder
@@ -437,11 +441,13 @@ public class DashMovementState : State<MovementController>
 
     public override void ExitState(MovementController owner)
     {
+        GlobalState.state.Player.invulerable = false;
         owner.playerAnimator.SetBool("IsDashing", false);
     }
 
     public override void EnterState(MovementController owner)
     {
+        GlobalState.state.Player.invulerable = true;
         _timer = new Timer(owner.dashTime);
         _lagTimer = new Timer(owner.dashLag);
 

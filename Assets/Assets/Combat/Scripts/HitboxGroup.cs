@@ -89,28 +89,31 @@ public class HitboxGroup : MonoBehaviour
 
             foreach (Collider enemy in _hitTimes[highestPriorityIndex].isHit)
             {
-                if (enemy != null && !_alreadyHit.Contains(enemy.gameObject))
+                if (enemy != null && !_alreadyHit.Contains(enemy.gameObject) && enemy)
                 {
-                    Hitbox hitbox = _hitTimes[highestPriorityIndex];
                     var targetEntity = enemy.gameObject.GetComponent<Entity>();
-                    if (targetEntity == null)
+                    if (!targetEntity.invulerable) // intangible behavior atm, stöd för båda borde finnas! Man blir samt slagen om invun. tar slut medans man blir träffad
                     {
-                        Debug.LogWarning("Object derived from Entity class is missing! Resorting to find in children...", this);
-                        targetEntity = enemy.gameObject.GetComponentInChildren<Entity>();
+                        Hitbox hitbox = _hitTimes[highestPriorityIndex];
                         if (targetEntity == null)
                         {
-                            Debug.LogError("Object derived from Entity class is missing from \"" + enemy.gameObject.name + "\"!", this);
+                            Debug.LogWarning("Object derived from Entity class is missing! Resorting to find in children...", this);
+                            targetEntity = enemy.gameObject.GetComponentInChildren<Entity>();
+                            if (targetEntity == null)
+                            {
+                                Debug.LogError("Object derived from Entity class is missing from \"" + enemy.gameObject.name + "\"!", this);
+                            }
+                            else
+                            {
+                                TakeDamage(targetEntity, hitbox);
+                            }
                         }
                         else
                         {
                             TakeDamage(targetEntity, hitbox);
                         }
+                        _alreadyHit.Add(enemy.gameObject);
                     }
-                    else
-                    {
-                        TakeDamage(targetEntity, hitbox);
-                    }
-                    _alreadyHit.Add(enemy.gameObject);
                 }
             }
 
@@ -138,6 +141,7 @@ public class HitboxGroup : MonoBehaviour
     public IEnumerator HitStop(float duration)
     {
         hitstopRunning = true;
+        yield return new WaitForEndOfFrame();
         Time.timeScale = 0.0f;
         yield return new WaitForSecondsRealtime(duration);
         Time.timeScale = 1f;
@@ -178,7 +182,6 @@ public class HitboxGroup : MonoBehaviour
 
     private void ResetList()
     {
-        print("i reset");
         DisableEvent(0);
         _alreadyHit.Clear();
     }

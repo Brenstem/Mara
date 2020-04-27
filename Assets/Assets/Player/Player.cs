@@ -28,6 +28,7 @@ public class Player : Entity
         {
             print("Parry successful");
             // Parry logic
+            combatController.SuccessfulParry();
         }
         else
         {
@@ -78,7 +79,13 @@ public class Player : Entity
             DisableMovementController();
             _hitstunTimer = new Timer(duration);
             _useHitstun = true;
-            combatController.anim.SetTrigger("Hitstun");
+            if (duration > 1.0f)
+                combatController.anim.SetTrigger("HitstunHeavy");
+            else
+            {
+                //combatController.anim.SetLayerWeight(1, 1.0f);
+                combatController.anim.SetTrigger("HitstunLight");
+            }
             combatController.anim.SetBool("InHitstun", true);
 
             // play animation
@@ -90,6 +97,7 @@ public class Player : Entity
         _useHitstun = false;
         EnableMovementController();
         EnableCombatController();
+        //combatController.anim.SetLayerWeight(1, 0.0f);
         combatController.anim.SetBool("InHitstun", false);
     }
 

@@ -6,6 +6,7 @@ using UnityEngine.InputSystem.Interactions;
 
 public class CombatController : MonoBehaviour
 {
+    public bool successfulParry;
     public float _dashAttackSpeed;
     public LayerMask enemyLayer;
     public float stoppingDistance;
@@ -78,6 +79,11 @@ public class CombatController : MonoBehaviour
         _interruptable = true;
     }
 
+    public void SuccessfulParry()
+    {
+        successfulParry = true;
+    }
+
     public void Attack(GameObject target, bool autoaim)
     {
         Vector3 offset = new Vector3(0, 0.5f, 0);
@@ -141,9 +147,14 @@ public class CombatController : MonoBehaviour
 
 public class IdleAttackState : State<CombatController>
 {
-    public override void EnterState(CombatController owner) { }
+    public override void EnterState(CombatController owner) {
+        owner.anim.SetBool("CombatIdle", true);
+    }
 
-    public override void ExitState(CombatController owner) { }
+    public override void ExitState(CombatController owner)
+    {
+        owner.anim.SetBool("CombatIdle", false);
+    }
 
     public override void UpdateState(CombatController owner)
     {
@@ -320,19 +331,23 @@ public class ParryState : State<CombatController>
     {
         float parryTime = 1.0f;
         _timer = new Timer(parryTime);
-        owner.anim.SetBool("Parry", true);
+        GlobalState.state.Player.DisableMovementController();
+        owner.anim.SetTrigger("Parry");
     }
 
     public override void ExitState(CombatController owner)
     {
-        owner.anim.SetBool("Parry", false);
+        owner.anim.SetBool("IsParrying", false);
+        owner.successfulParry = false;
+        GlobalState.state.Player.EnableMovementController();
         _timer.Reset();
     }
 
     public override void UpdateState(CombatController owner)
     {
         _timer.Time += Time.deltaTime;
-        if (_timer.Expired)
+        owner.anim.SetBool("IsParrying", true);
+        if (_timer.Expired || owner.successfulParry) // Mathf.Lerp time on successful parry
         {
             //Lag men det gör man sen typ
             owner.stateMachine.ChangeState(new IdleAttackState());
