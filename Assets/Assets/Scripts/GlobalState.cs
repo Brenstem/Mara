@@ -87,6 +87,24 @@ public class GlobalState : MonoBehaviour
             _state = null;
         }
     }
+
+    private bool _hitstopRunning;
+    public void HitStop(float duration)
+    {
+        StartCoroutine(HitStopCoroutine(duration));
+    }
+
+    private IEnumerator HitStopCoroutine(float duration)
+    {
+        _hitstopRunning = true;
+        yield return new WaitForEndOfFrame();
+        Time.timeScale = 0.0f;
+        yield return new WaitForSecondsRealtime(duration);
+        Time.timeScale = 1f;
+        _hitstopRunning = false;
+        yield return 0;
+    }
+
     /*
     private IEnumerator _ProcessShake(float shakeIntensity = 5f, float shakeTiming = 0.5f)
     {

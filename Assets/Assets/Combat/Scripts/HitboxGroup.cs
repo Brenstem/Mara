@@ -133,21 +133,11 @@ public class HitboxGroup : MonoBehaviour
 
         if (hitbox.hitstopTime > 0)
         {
-            StartCoroutine(HitStop(hitbox.hitstopTime));
+            GlobalState.state.HitStop(hitbox.hitstopTime);
         }
     }
 
-    bool hitstopRunning;
-    public IEnumerator HitStop(float duration)
-    {
-        hitstopRunning = true;
-        yield return new WaitForEndOfFrame();
-        Time.timeScale = 0.0f;
-        yield return new WaitForSecondsRealtime(duration);
-        Time.timeScale = 1f;
-        hitstopRunning = false;
-        yield return 0;
-    }
+
 
     public void AddHitbox(Hitbox hitbox)
     {

@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class RangedEnemyAI : BaseAIMovementController 
 {
@@ -23,8 +24,9 @@ public class RangedEnemyAI : BaseAIMovementController
 
     private void KillThis()
     {
-        _anim.SetTrigger("Dead");
         stateMachine.ChangeState(new DeadState());
+        _anim.SetTrigger("Dead");
+        GetComponent<NavMeshAgent>().SetDestination(transform.position);
     }
 
     private void Start()
