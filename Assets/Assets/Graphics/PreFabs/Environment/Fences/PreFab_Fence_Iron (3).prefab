@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 78610218714422099}
   - component: {fileID: 8956605419472511333}
   - component: {fileID: 3418452326727589276}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PreFab_Fence_Iron (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -90,6 +90,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PreFab_Fence_Iron
+      objectReference: {fileID: 0}
+    - target: {fileID: 6153972285787082694, guid: 605548290a912b24391e4e860070775e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7150613298183339477, guid: 605548290a912b24391e4e860070775e,
         type: 3}
@@ -180,6 +185,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PreFab_Fence_Iron
+      objectReference: {fileID: 0}
+    - target: {fileID: 6153972285787082694, guid: 605548290a912b24391e4e860070775e,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 7150613298183339477, guid: 605548290a912b24391e4e860070775e,
         type: 3}
