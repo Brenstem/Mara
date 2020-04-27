@@ -51,6 +51,9 @@ public class AudioManager : MonoBehaviour
     [EventRef]
     [SerializeField] string checkpointAudio;
 
+    [EventRef]
+    [SerializeField] string collectibleAudio;
+
 
     #region Player Audio
     public void PlayerFootStepsAudio(Transform transform, string groundMaterial, Rigidbody rb)
@@ -147,6 +150,11 @@ public class AudioManager : MonoBehaviour
     public void CheckpointAudio(Vector3 position)
     {
         RuntimeManager.PlayOneShot(checkpointAudio, position);
+    }
+
+    public void CollectibleAudio(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(collectibleAudio, position);
     }
 
     #endregion

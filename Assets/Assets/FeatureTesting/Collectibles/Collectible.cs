@@ -15,8 +15,9 @@ public class Collectible : MonoBehaviour
     {
         if (hitInfo.CompareTag("Player"))
         {
+            GlobalState.state.AudioManager.CollectibleAudio(this.transform.position);
             _playerInsanity = hitInfo.GetComponent<PlayerInsanity>();
-
+            
             _playerInsanity.IncrementMaxInsanity(incrementAmount);
 
             if (destroyOnPickup)
