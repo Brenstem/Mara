@@ -6,22 +6,37 @@ using FMODUnity;
 
 public class AudioManager : MonoBehaviour
 {
+    [Header("Player Audio")]
     [EventRef]
     [SerializeField] string InsanityEventAudio;
     EventInstance InsanityEvent;
+
     [EventRef]
     [SerializeField] string PlayerFootsteps;
     EventInstance PlayerFootstepsAudio;
+
     [EventRef]
     [SerializeField] string playerSwordSwingAudio;
+
     [EventRef]
     [SerializeField] string playerDodgeAudio;
+
     [EventRef]
     [SerializeField] string playerJumpAudio;
+
     [EventRef]
     [SerializeField] string playerHeartBeatAudio;
 
+    [Header("Enemy Audio")]
+    [EventRef]
+    [SerializeField] string rangedEnemyFireAudio;
 
+    [EventRef]
+    [SerializeField] string rangedEnemyAlertAudio;
+
+    [EventRef]
+    [SerializeField] string floatingEnemyHurtAudio;
+    
     //Player sounds
     public void PlayerFootStepsAudio(string GroundMaterial)
     {
@@ -42,19 +57,19 @@ public class AudioManager : MonoBehaviour
         PlayerFootstepsAudio.start();
     }
 
-    public void PlayerSwordSwingAudio()
+    public void PlayerSwordSwingAudio(Vector3 position)
     {
-        RuntimeManager.PlayOneShot(playerSwordSwingAudio, transform.position);
+        RuntimeManager.PlayOneShot(playerSwordSwingAudio, position);
     }
 
-    public void PlayerDodgeAudio()
+    public void PlayerDodgeAudio(Vector3 position)
     {
-        RuntimeManager.PlayOneShot(playerDodgeAudio, transform.position);
+        RuntimeManager.PlayOneShot(playerDodgeAudio, position);
     }
 
-    public void PlayerJumpAudio()
+    public void PlayerJumpAudio(Vector3 position)
     {
-        RuntimeManager.PlayOneShot(playerJumpAudio, transform.position);
+        RuntimeManager.PlayOneShot(playerJumpAudio, position);
     }
 
     public void PlayerInsanityAudio(float insanityPercentage)
@@ -69,9 +84,9 @@ public class AudioManager : MonoBehaviour
         InsanityEvent.setParameterByName("InsanityBar", insanityPercentage);
     }
 
-    public void PlayerInsanityHeartBeat()
+    public void PlayerInsanityHeartBeat(Vector3 position)
     {
-        RuntimeManager.PlayOneShot(playerHeartBeatAudio, transform.position);
+        RuntimeManager.PlayOneShot(playerHeartBeatAudio, position);
     }
 
     //Enemy sound
@@ -84,6 +99,23 @@ public class AudioManager : MonoBehaviour
     {
 
     }
+
+    public void RangedEnemyFireAudio(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(rangedEnemyFireAudio, position);
+    }
+
+    public void RangedEnemyAlertAudio(Vector3 position)
+    {
+        print("play");
+        RuntimeManager.PlayOneShot(rangedEnemyAlertAudio, position);
+    }
+
+    public void FloatingEnemyHurtAudio(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(floatingEnemyHurtAudio, position);
+    }
+
 
     //Music
     public void MenuMusicAudio()

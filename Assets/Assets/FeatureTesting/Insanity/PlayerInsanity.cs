@@ -302,7 +302,7 @@ public class PlayerInsanity : MonoBehaviour
 
     public void PlayHeartBeat()
     {
-        GlobalState.state.AudioManager.PlayerInsanityHeartBeat();
+        GlobalState.state.AudioManager.PlayerInsanityHeartBeat(this.transform.position);
     }
 
 
