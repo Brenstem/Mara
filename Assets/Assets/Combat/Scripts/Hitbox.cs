@@ -72,7 +72,8 @@ public class Hitbox : MonoBehaviour
     void FixedUpdate()
     {
         //Lägger in objekt som är i hitboxen i arrayn
-        isHit = Physics.OverlapBox(transform.position + _offset, _size * 0.5f, transform.rotation, _parent.targetLayerMask);
+        //isHit = Physics.OverlapBox(transform.position + _offset, _size * 0.5f, transform.rotation, _parent.targetLayerMask);
+        isHit = Physics.OverlapBox(transform.TransformPoint(_offset), _size * 0.5f, transform.rotation, _parent.targetLayerMask);
         foreach (Collider enemy in isHit)
         {
             if (isHit.Length != 0 && !_parent._alreadyHit.Contains(enemy.gameObject))
@@ -86,7 +87,8 @@ public class Hitbox : MonoBehaviour
     {
         if (enabled)
         {
-            Gizmos.matrix = Matrix4x4.TRS(transform.position + _offset, transform.rotation, transform.localScale);
+            //Gizmos.matrix = Matrix4x4.TRS(transform.position + _offset, transform.rotation, transform.localScale);
+            Gizmos.matrix = Matrix4x4.TRS(transform.TransformPoint(_offset), transform.rotation, transform.localScale);
 
             switch (priority)
             {
