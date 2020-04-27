@@ -38,13 +38,7 @@ public class BossAIScript : Entity
     [NonSerialized] public List<float> desiredDistanceOffsetValues = new List<float>();
     [NonSerialized] public List<float> desiredDistanceAngleValues = new List<float>();
 
-
-    //[NonSerialized] public Dictionary<float, float> desierdDistanceOffsetToAngleDictionary = new Dictionary<float, float>();
-
-
-
     public StateMachine<BossAIScript> phaseControllingStateMachine;
-
 
     public PreBossFightState preBossFightState = new PreBossFightState();
     public BossPhaseOneState bossPhaseOneState = new BossPhaseOneState();
@@ -58,13 +52,15 @@ public class BossAIScript : Entity
     //galet nog är alla variabler som heter test något, inte planerat att vara permanenta
     [SerializeField] [Range(0, 1)] public float testP2TransitionHP = 0.5f;
 
+    [SerializeField] public HitboxGroup meleeAttackHitboxGroup;
+    [SerializeField] public HitboxGroup drainAttackHitboxGroup;
+
     //lägga till ranomness på attack speed, kan göra det med 2 randoms för att få en normal distribution
     [SerializeField] public float testAttackSpeed = 5f;
     [SerializeField] public float testMinAttackCooldown = 1f;
 
     [SerializeField] public float testDrainDPS = 5f;
     [SerializeField] public float testDrainRange = 6f;
-
     [SerializeField] public float testDrainChargeTime = 7f;
     [SerializeField] public float testDrainAttackTime = 8f;
 
@@ -81,18 +77,18 @@ public class BossAIScript : Entity
     [SerializeField] public float testDashAcceleration = 2000f;
     [SerializeField] [Range(1, 180)] public float maxAngleDashAttackToPlayer = 90f;
 
-
     [SerializeField] public float aggroRange = 10f;
     [SerializeField] public float defaultTurnSpeed = 5f;
+    [SerializeField] public float drainActiveTurnSpeed = 0.1f;
 
     [SerializeField] public float chasingSpeed = 5f;
     [SerializeField] public float chasingAcceleration = 20f;
 
+    [SerializeField] public GameObject placeholoderDranBeam;
+    
+
     [NonSerialized] public Animator bossAnimator;
     [NonSerialized] public float turnSpeed;
-
-    //[SerializeField] public State<BossPhaseOneState>[] stateArray;
-
 
     [NonSerialized] public Vector3 movementDirection = new Vector3(0f, 0f, 1f);
     [NonSerialized] public Vector3 dashCheckOffsetVector;
@@ -100,8 +96,6 @@ public class BossAIScript : Entity
     [NonSerialized] public Vector3 dashCheckBoxSize;
 
     [NonSerialized] public bool dashAttack;
-
-
 
     [NonSerialized] public NavMeshAgent agent;
     [NonSerialized] public GameObject player;
@@ -132,15 +126,10 @@ public class BossAIScript : Entity
 
     void Start()
     {
-
         for (int i = 0; i < desiredDistanceToAngleValues.Length; i++)
         {
             desiredDistanceOffsetValues.Add(desiredDistanceToAngleValues[i].desiredDistanceOffset);
             desiredDistanceAngleValues.Add(desiredDistanceToAngleValues[i].angle);
-
-            //print("added " + desiredDistanceAngleValues[i] + " with " + desiredDistanceOffsetValues[i]);
-
-            //desierdDistanceOffsetToAngleDictionary.Add(desierdDistanceToAngleValues[i].desierdDistanceOffset, desierdDistanceToAngleValues[i].angle);
         }
 
         agent.updateRotation = false;
@@ -162,23 +151,17 @@ public class BossAIScript : Entity
     public override void TakeDamage(float damage)
     {
         GetComponent<EnemyHealth>().Damage(damage);
-        //testCurrentHP -= damage;
+        //spela hurtljud här
     }
 
     public override void TakeDamage(Hitbox hitbox)
     {
         GetComponent<EnemyHealth>().Damage(hitbox.damageValue);
+        //spela hurtljud här
     }
 
     public bool CheckDashPath(Vector3 dashCheckVector)
     {
-        //private float dashCheckAngle;
-        //dashCheckAngle = Vector3.SignedAngle(transform.forward, movementDirection, transform.up);
-
-        //dashCheckOffsetVector = Quaternion.AngleAxis(dashCheckAngle, Vector3.up) * dashCheckOffsetVector;
-
-        //return Physics.OverlapBox(transform.TransformPoint(dashCheckOffsetVector), dashCheckBoxSize, Quaternion.LookRotation(movementDirection.normalized), dashCollisionLayers).Length <= 0;
-
         float dashCheckAngle = Vector3.SignedAngle(transform.forward, dashCheckVector.normalized, transform.up);
 
         dashCheckOffsetVector = Quaternion.AngleAxis(dashCheckAngle, Vector3.up) * dashCheckOffsetVector;
@@ -189,7 +172,6 @@ public class BossAIScript : Entity
     public void MurkyWaterAbility(int layers)
     {
         Vector3 testVec = Vector3.forward;
-        //int testInt = 0;
         for (int i = 0; i < layers; i++)
         {
             for (int j = 0; j < 8; j++)
@@ -198,7 +180,6 @@ public class BossAIScript : Entity
                 print(testVec);
                 SpawnMurkyWater(testVec * (i + 1));
             }
-            //testInt += 1 % 4;
         }
     }
 
@@ -217,7 +198,7 @@ public class BossAIScript : Entity
             //print("spawned murky water for ever >:) " + timeToLive);
         }
     }
-    
+
     //hur fan ska det funka med olika Y nivå? får typ raycasta upp och ner när den spawnas för att hitta vart marken är och sen flytta den dit och rotera den baserat på normalen eller något, låter jobbigt :(
     public void SpawnMurkyWater(float timeToLive = 0f)
     {
@@ -239,12 +220,9 @@ public class BossAIScript : Entity
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, aggroRange);
 
-
         Gizmos.color = Color.blue;
 
         Vector3 dashCheckOffsetVectorGizmo = new Vector3(0f, 1f, testDashDistance / 2);
-        //Vector3 testDashDir = new Vector3(-0.7f, 0f, 1f);
-        //Vector3 testDashDir = movementDirection;
         Vector3 dashCheckBoxSizeGizmo = new Vector3(1.5f, 1.5f, testDashDistance);
 
         float dashCheckAngleGizmo = Vector3.SignedAngle(transform.forward, movementDirection, transform.up);
@@ -253,24 +231,12 @@ public class BossAIScript : Entity
 
         Gizmos.matrix = Matrix4x4.TRS(transform.TransformPoint(dashCheckOffsetVectorGizmo), Quaternion.LookRotation(movementDirection.normalized), transform.localScale);
         Gizmos.DrawWireCube(Vector3.zero, dashCheckBoxSizeGizmo);
-
-        //Physics.OverlapBox(transform.TransformPoint(dashCheckOffsetVectorGizmo), new Vector3(1f, 1.5f, testDashDistance) /** 0.5f*/, Quaternion.LookRotation(movementDirection.normalized), dashCollisionLayers);
-
-        //Physics.BoxCast(_ownerParentScript.transform.position, new Vector3(1f, 2.5f, _ownerParentScript.testDashDistance / 2), _ownerParentScript.movementDirection, Quaternion.identity, 2f, _ownerParentScript.dashCollisionLayers);
-
-        //Gizmos.matrix = Matrix4x4.TRS(/*transform.position +*/ transform.TransformPoint(new Vector3(0f, 1f, testDashDistance/(2 * transform.localScale.z))), transform.rotation, transform.localScale);
-        //Gizmos.DrawWireCube(Vector3.zero, new Vector3(1f, 1f, testDashDistance/transform.localScale.z));
-
     }
 
     //Animation attack events
     #region Animation attack events
+    
     //Generella
-    public void TestBossEvent1()
-    {
-        print("hahahhahahha 1");
-    }
-
     public void EndAnimation()
     {
         animationEnded = true;
@@ -291,10 +257,6 @@ public class BossAIScript : Entity
         meleeHitboxActive = !meleeHitboxActive;
     }
     #endregion
-
-
-
-
 }
 
 public class PreBossFightState : State<BossAIScript>
@@ -303,12 +265,13 @@ public class PreBossFightState : State<BossAIScript>
 
     public override void EnterState(BossAIScript owner)
     {
-
+        owner.bossAnimator.SetBool("idleBool", true);
     }
 
     public override void ExitState(BossAIScript owner)
     {
         //kanske köra någon funktion som stänger en dörr eller något så man inte kan springa iväg
+        owner.bossAnimator.SetBool("idleBool", false);
     }
 
     public override void UpdateState(BossAIScript owner)
@@ -351,14 +314,11 @@ public class BossPhaseOneState : State<BossAIScript>
     public Phase1Attack1State phase1Attack1State;
 
     public PhaseOneCombatState phaseOneCombatState;
-    public PhaseOneDrainAttackState phaseOneDrainAttackState;
+    public PhaseOneChargeDrainAttackState phaseOneChargeDrainAttackState;
+    public PhaseOneActiveDrainAttackState phaseOneActiveDrainAttackState;
     public PhaseOneMeleeAttackOneState phaseOneMeleeAttackOneState;
     public PhaseOneDashState phaseOneDashState;
     public PhaseOneChaseToAttackState phaseOneChaseToAttackState;
-
-    //public Vector3 movementDirection;
-
-
     public override void EnterState(BossAIScript owner)
     {
         //fixa detta i konstruktor kanske?
@@ -371,7 +331,8 @@ public class BossPhaseOneState : State<BossAIScript>
         phaseOneChaseToAttackState = new PhaseOneChaseToAttackState();
 
 
-        phaseOneDrainAttackState = new PhaseOneDrainAttackState(owner.testDrainDPS, owner.testDrainRange, owner.testDrainAttackTime, owner.testDrainChargeTime);
+        phaseOneChargeDrainAttackState = new PhaseOneChargeDrainAttackState(owner.testDrainChargeTime);
+        phaseOneActiveDrainAttackState = new PhaseOneActiveDrainAttackState(owner.testDrainDPS, owner.testDrainRange, owner.testDrainAttackTime);
         phaseOneMeleeAttackOneState = new PhaseOneMeleeAttackOneState(owner.testDrainDPS, owner.testMeleeRange, owner.testDrainAttackTime, owner.testDrainChargeTime);
 
         parentScript = owner;
@@ -454,7 +415,6 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
 
     public override void UpdateState(BossPhaseOneState owner)
     {
-
         _ownerParentScript.FacePlayer();
 
         timer.Time += Time.deltaTime;
@@ -477,8 +437,7 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
                     //är spelaren innom en bra range och innom LOS?
                     if (_hit.transform == _ownerParentScript.player.transform && _bossToPlayer.magnitude < _ownerParentScript.testDashDistance + _ownerParentScript.testMeleeRange / 2 && _bossToPlayer.magnitude > _ownerParentScript.testDashDistance - _ownerParentScript.testMeleeRange / 2)
                     {
-                        Debug.Log("_bossToPlayer " + _bossToPlayer.magnitude);
-
+                        //Debug.Log("_bossToPlayer " + _bossToPlayer.magnitude);
 
                         int dashSign = 0;
 
@@ -493,53 +452,31 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
 
                         _dashAttackAngle = Mathf.Rad2Deg * Mathf.Acos((Mathf.Pow(_bossToPlayer.magnitude, 2) + Mathf.Pow(_ownerParentScript.testDashDistance, 2) - Mathf.Pow(_ownerParentScript.testMeleeRange / 2, 2)) / (2 * _bossToPlayer.magnitude * _ownerParentScript.testDashDistance));
 
-                        //Debug.Log("_dashAttackAngle " + _dashAttackAngle);
-
-                        //ranomize mellan 0 och _dashAttackAngle ?
-
                         _dashAttackDirection = _bossToPlayer;
 
                         _dashAttackDirection = Quaternion.AngleAxis(_dashAttackAngle * dashSign, Vector3.up) * _dashAttackDirection;
 
-
-
                         Vector3 _playerToDashPos = (_ownerParentScript.transform.position + _dashAttackDirection.normalized * _ownerParentScript.testDashDistance) - _ownerParentScript.player.transform.position;
-
-                        //Vector3 testVec = (_ownerParentScript.transform.position + _dashAttackDirection) - (_ownerParentScript.transform.position + _bossToPlayer);
-
-
-                        //Debug.Log("testVec " + testVec);
-                        //Debug.Log("testVec mag " + testVec.magnitude);
 
                         Vector3 _playerToBoss = _ownerParentScript.transform.position - _ownerParentScript.player.transform.position;
 
-                        //Debug.Log("_playerToBoss " + _playerToBoss);
-
-                        //float testAngle = Vector3.SignedAngle(_ownerParentScript.transform.position - _ownerParentScript.player.transform.position, testVec, Vector3.up);
                         float _angleDashAttackToPlayer = Vector3.Angle(_playerToBoss, _playerToDashPos);
 
-                        //Debug.Log("angleDashAttackToPlayer " + angleDashAttackToPlayer);
-
-                        //Debug.Log("_dashAttackDirection " + _dashAttackDirection);
-
-                        //Debug.Log("testAngle " + Vector3.Angle(_playerToBoss, testVec));
-                        //if (Vector3.Angle(_playerToBoss, testVec) < _ownerParentScript.maxAngleDashAttackToPlayer)
                         if (_angleDashAttackToPlayer < _ownerParentScript.maxAngleDashAttackToPlayer)
                         {
                             //ändra så det inte är en siffra utan att det beror på deras hittboxes storlek eller en parameter
+
                             //ranomizar vart bossen kommer dasha, sålänge den inte skulle kunna krocka med spelaren
                             if (_bossToPlayer.magnitude - 0.45f > _ownerParentScript.testDashDistance)
                             {
                                 _dashAttackAngle = UnityEngine.Random.Range(0, _dashAttackAngle);
                                 _dashAttackDirection = _bossToPlayer;
                                 _dashAttackDirection = Quaternion.AngleAxis(_dashAttackAngle * dashSign * -1, Vector3.up) * _dashAttackDirection;
-                                //Debug.Log("new _dashAttackAngle " + _dashAttackAngle);
                             }
 
                             //är det något i vägen för dashen?
                             if (_ownerParentScript.CheckDashPath(_dashAttackDirection))
                             {
-                                //Debug.Log("dash attack dags, funka på 1a försöket");
                                 _ownerParentScript.movementDirection = _dashAttackDirection;
                                 _ownerParentScript.dashAttack = true;
                                 owner.phaseOneStateMashine.ChangeState(owner.phaseOneDashState);
@@ -552,7 +489,6 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
                                 //är något i vägen om den dashar till andra sidan av spelaren?
                                 if (_ownerParentScript.CheckDashPath(_dashAttackDirection))
                                 {
-                                    //Debug.Log("dash attack dags, funka på 2a försöket");
                                     _ownerParentScript.movementDirection = _dashAttackDirection;
                                     _ownerParentScript.dashAttack = true;
                                     owner.phaseOneStateMashine.ChangeState(owner.phaseOneDashState);
@@ -588,7 +524,7 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
             //drain
             else
             {
-                owner.phaseOneStateMashine.ChangeState(owner.phaseOneDrainAttackState);
+                owner.phaseOneStateMashine.ChangeState(owner.phaseOneChargeDrainAttackState);
             }
         }
         //kolla om spelaren är nära nog att slå
@@ -608,7 +544,7 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
             {
                 //gör så att den byter mellan att gå höger och vänster
                 int strafeSign = 0;
-                //Debug.Log(timer.Ratio);
+
                 if (timer.Ratio > 0.5f)
                 {
                     strafeSign = -1;
@@ -634,6 +570,7 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
                     }
                 }
 
+                //random dash in combat
                 if (UnityEngine.Random.Range(0f, 100f) > 100f - _ownerParentScript.testDashChansePerFrame)
                 {
                     if (_ownerParentScript.CheckDashPath(_ownerParentScript.movementDirection))
@@ -648,7 +585,6 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
                 else
                 {
                     //ändra 5an till typ destinationAmplifier
-                    //_destination = _ownerParentScript.transform.position + _ownerParentScript.movementDirection * 5 * sign;
                     _destination = _ownerParentScript.transform.position + _ownerParentScript.movementDirection * 5;
                     _ownerParentScript.agent.SetDestination(_destination);
                 }
@@ -656,8 +592,6 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
             //om bossen inte kan se spelaren
             else
             {
-                //Debug.Log("vart e du!?!?!"); 
-
                 _destination = _ownerParentScript.player.transform.position;
                 _ownerParentScript.agent.SetDestination(_destination);
             }
@@ -760,23 +694,21 @@ public class PhaseOneMeleeAttackOneState : State<BossPhaseOneState>
 
     public override void EnterState(BossPhaseOneState owner)
     {
-        owner.parentScript.bossAnimator.SetTrigger("testMelee1Trigger");
+        owner.parentScript.bossAnimator.SetTrigger("melee1Trigger");
+        owner.parentScript.meleeAttackHitboxGroup.enabled = true;
         //Debug.Log("nu ska jag fan göra PhaseOneMeleeAttackState >:(, med dessa stats:  damage " + _damage + " range " + _range + " totalDurration " + _totalDurration + " chargeTime " + _chargeTime);
     }
 
     public override void ExitState(BossPhaseOneState owner)
     {
         //Debug.Log("hej då PhaseOneMeleeAttackState");
+        owner.parentScript.meleeAttackHitboxGroup.enabled = false;
         owner.parentScript.animationEnded = false;
         owner.parentScript.facePlayerBool = true;
     }
 
     public override void UpdateState(BossPhaseOneState owner)
     {
-        //kör cool animation som bestämmer när attacken är över istället för durration
-
-        //kolla om det va en träff isåfall slå igen?
-
         if (owner.parentScript.animationEnded)
         {
             owner.phaseOneStateMashine.ChangeState(owner.phaseOneCombatState);
@@ -785,12 +717,8 @@ public class PhaseOneMeleeAttackOneState : State<BossPhaseOneState>
         {
             if (owner.parentScript.facePlayerBool)
             {
+                //spela attackljud här
                 owner.parentScript.FacePlayer();
-            }
-            if (owner.parentScript.meleeHitboxActive)
-            {
-                //här ska attacken kunna skada
-                //Debug.Log("bAp");
             }
         }
     }
@@ -806,21 +734,18 @@ public class PhaseOneChaseToAttackState : State<BossPhaseOneState>
 
     public override void EnterState(BossPhaseOneState owner)
     {
-        Debug.Log("hunt time");
-
         _oldSpeed = owner.parentScript.agent.speed;
         _oldAcceleration = owner.parentScript.agent.acceleration;
 
         owner.parentScript.agent.speed = owner.parentScript.chasingSpeed;
         owner.parentScript.agent.acceleration = owner.parentScript.chasingAcceleration;
+        owner.parentScript.bossAnimator.SetTrigger("runningTrigger");
     }
 
     //ändra speed och acceleration i detta state
 
     public override void ExitState(BossPhaseOneState owner)
     {
-        Debug.Log("no more hunt time");
-
         owner.parentScript.agent.speed = _oldSpeed;
         owner.parentScript.agent.acceleration = _oldAcceleration;
 
@@ -829,7 +754,6 @@ public class PhaseOneChaseToAttackState : State<BossPhaseOneState>
 
     public override void UpdateState(BossPhaseOneState owner)
     {
-
         owner.parentScript.FacePlayer();
 
         _playerPos = owner.parentScript.player.transform.position;
@@ -837,7 +761,7 @@ public class PhaseOneChaseToAttackState : State<BossPhaseOneState>
 
         if (_distanceToPlayer > owner.parentScript.testDrainRange)
         {
-            owner.phaseOneStateMashine.ChangeState(owner.phaseOneDrainAttackState);
+            owner.phaseOneStateMashine.ChangeState(owner.phaseOneChargeDrainAttackState);
         }
         else if (_distanceToPlayer < owner.parentScript.testMeleeRange)
         {
@@ -850,60 +774,98 @@ public class PhaseOneChaseToAttackState : State<BossPhaseOneState>
     }
 }
 
-public class PhaseOneDrainAttackState : State<BossPhaseOneState>
+public class PhaseOneChargeDrainAttackState : State<BossPhaseOneState>
 {
-    private float _damagePerSecond;
-    private float _range;
-    private float _totalDurration;
     private float _chargeTime;
+    private Timer _timer;
 
-
-    public PhaseOneDrainAttackState(float damagePerSecond, float range, float attackTime, float chargeTime)
+    public PhaseOneChargeDrainAttackState(float chargeTime)
     {
-        _damagePerSecond = damagePerSecond;
-        _range = range;
         _chargeTime = chargeTime;
-        _totalDurration = chargeTime + attackTime;
     }
-
 
     public override void EnterState(BossPhaseOneState owner)
     {
-        owner.parentScript.bossAnimator.SetTrigger("testDrainTrigger");
-        Debug.Log("nu ska jag fan göra PhaseOneDrainAttack >:(, med dessa stats:  damage " + _damagePerSecond + " range " + _range + " totalDurration " + _totalDurration + " chargeTime " + _chargeTime);
+        owner.parentScript.bossAnimator.SetTrigger("drainStartTrigger");
+        //Debug.Log("nu ska jag fan göra PhaseOneChargeDrainAttackState >:(, med dessa stats: chargeTime " + _chargeTime);
+        _timer = new Timer(_chargeTime);
     }
 
     public override void ExitState(BossPhaseOneState owner)
     {
-        Debug.Log("hej då PhaseOneDrainAttack");
+        //Debug.Log("hej då PhaseOneChargeDrainAttackState");
+    }
+
+    public override void UpdateState(BossPhaseOneState owner)
+    {
+        _timer.Time += Time.deltaTime;
+
+        if (_timer.Expired)
+        {
+            owner.phaseOneStateMashine.ChangeState(owner.phaseOneActiveDrainAttackState);
+        }
+        else if (owner.parentScript.facePlayerBool)
+        {
+            owner.parentScript.FacePlayer();
+        }
+    }
+}
+
+//dela upp detta state så man kan hålla animationen
+public class PhaseOneActiveDrainAttackState : State<BossPhaseOneState>
+{
+    private float _damagePerSecond;
+    private float _range;
+    private float _durration;
+    private Timer _timer;
+
+    public PhaseOneActiveDrainAttackState(float damagePerSecond, float range, float durration)
+    {
+        _damagePerSecond = damagePerSecond;
+        _range = range;
+        _durration = durration;
+    }
+
+    public override void EnterState(BossPhaseOneState owner)
+    {
+        //ändra så den sätts i drain loopen
+        owner.parentScript.placeholoderDranBeam.SetActive(true);
+
+        owner.parentScript.bossAnimator.SetBool("drainActiveBool", true);
+        owner.parentScript.drainAttackHitboxGroup.enabled = true;
+        owner.parentScript.turnSpeed = owner.parentScript.drainActiveTurnSpeed;
+        //Debug.Log("nu ska jag fan göra PhaseOneActiveDrainAttackState >:(, med dessa stats:  damage " + _damagePerSecond + " range " + _range + " durration " + _durration);
+        _timer = new Timer(_durration);
+    }
+
+    public override void ExitState(BossPhaseOneState owner)
+    {
+        //ändra så den sätts i drain loopen
+        owner.parentScript.placeholoderDranBeam.SetActive(false);
+
+        //Debug.Log("hej då PhaseOneActiveDrainAttackState");
+        owner.parentScript.turnSpeed = owner.parentScript.defaultTurnSpeed;
+        owner.parentScript.drainAttackHitboxGroup.enabled = false;
         owner.parentScript.animationEnded = false;
         owner.parentScript.facePlayerBool = true;
     }
 
     public override void UpdateState(BossPhaseOneState owner)
     {
-        //kör cool animation som bestämmer när attacken är över istället för durration
+        _timer.Time += Time.deltaTime;
 
-        if (owner.parentScript.animationEnded)
+        if (owner.parentScript.facePlayerBool)
         {
-            owner.phaseOneStateMashine.ChangeState(owner.phaseOneCombatState);
+            owner.parentScript.FacePlayer();
         }
-        else
+        if (_timer.Expired)
         {
-            if (owner.parentScript.facePlayerBool)
-            {
-                owner.parentScript.FacePlayer();
-            }
-            if (owner.parentScript.drainHitboxActive)
-            {
-                //här ska attacken kunna skada med _damagePerSecond * time.deltatime
-                //Debug.Log("pew pew pew");
-            }
+            owner.parentScript.bossAnimator.SetBool("drainActiveBool", false);
+            owner.phaseOneStateMashine.ChangeState(owner.phaseOneCombatState);
         }
     }
 }
 
-//kan döpa de bättre när vi vet vad de är typ "P1HeavyAttack"
 public class Phase1Attack1State : State<BossPhaseOneState>
 {
     private float _damage;
@@ -943,8 +905,6 @@ public class Phase1Attack1State : State<BossPhaseOneState>
         }
     }
 }
-
-
 
 #endregion
 
