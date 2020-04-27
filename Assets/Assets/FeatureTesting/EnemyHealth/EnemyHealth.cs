@@ -11,6 +11,7 @@ public class EnemyHealth : MonoBehaviour
 
     public Animator _anim;
 
+
     private void Awake()
     {
         _healthBar = GetComponentInChildren<TrackingHealthBar>();
@@ -75,29 +76,11 @@ public class EnemyHealth : MonoBehaviour
         else if (_currentHealth - amount <= 0)
         {
             _currentHealth = 0;
-            KillEnemy();
         }
         else
         {
             _currentHealth -= amount;
         }
         _healthBar.SetValue(_currentHealth);
-    }
-
-    private void KillEnemy()
-    {
-        if (!Object.ReferenceEquals(_anim, null))
-        {
-            _anim.SetTrigger("Dead");
-        }
-        else
-        {
-            DestroyThis();
-        }
-    }
-
-    public void DestroyThis()
-    {
-        Destroy(this.gameObject);
     }
 }

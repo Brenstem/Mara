@@ -244,7 +244,6 @@ public class PlayerInsanity : MonoBehaviour
 
         switch (currentInsanityPercentage)
         {
-
             case float n when (n >= dynamicInsanityValues[4]):
                 print(n);
                 print(dynamicInsanityValues[4]);
@@ -253,16 +252,14 @@ public class PlayerInsanity : MonoBehaviour
                     PlayHeartBeat();
                     KillPlayer();
                 }
-
                 _debuffState = DebuffStates.impendingDoom;
                 break;
             case float n when (n >= dynamicInsanityValues[3]):
-                // onHallucination();
+                onHallucination();
                 if (_debuffState != DebuffStates.hallucinations)
                 {
                     PlayHeartBeat();
                 }
-
                 _debuffState = DebuffStates.hallucinations;
                 break;
             // Slow state requires update so event is called on every insanity change

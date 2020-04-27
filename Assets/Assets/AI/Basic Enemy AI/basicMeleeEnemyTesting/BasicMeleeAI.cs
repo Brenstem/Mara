@@ -15,7 +15,7 @@ public class BasicMeleeAI : BaseAIMovementController
     {
         stateMachine.ChangeState(new BasicMeleeIdleState());
         anim = GetComponent<Animator>();
-        meleeEnemy = this;
+        _meleeEnemy = this;
     }
 
     public void Attack()
@@ -56,13 +56,13 @@ public class BasicMeleeIdleState : BaseIdleState
     }
     public override void UpdateState(BaseAIMovementController owner)
     {
-        if (owner.meleeEnemy._useHitStun)
+        if (owner._meleeEnemy._useHitStun)
         {
-            owner.meleeEnemy._hitStunTimer.Time += Time.deltaTime;
-            if (owner.meleeEnemy._hitStunTimer.Expired)
+            owner._meleeEnemy._hitStunTimer.Time += Time.deltaTime;
+            if (owner._meleeEnemy._hitStunTimer.Expired)
             {
-                owner.meleeEnemy._hitStunTimer.Reset();
-                owner.meleeEnemy.DisabelHitStun();
+                owner._meleeEnemy._hitStunTimer.Reset();
+                owner._meleeEnemy.DisabelHitStun();
             }
         }
         else
@@ -92,7 +92,7 @@ public class BasicMeleeAttackingState : BaseAttackingState
     public override void UpdateState(BaseAIMovementController owner)
     {
         //lägg in attack metod här
-        owner.meleeEnemy.Attack();
+        owner._meleeEnemy.Attack();
         base.UpdateState(owner);
     }
 }

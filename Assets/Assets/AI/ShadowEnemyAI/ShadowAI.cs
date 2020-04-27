@@ -1,12 +1,41 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ShadowAI : BaseAIMovementController
 {
+
+
     protected override void Awake()
     {
         base.Awake();
+        _anim = GetComponentInChildren<Animator>();
+    }
+
+    private void Start()
+    {
+        PlayerInsanity.onHallucination += EnableThis;
+        PlayerInsanity.onDisableShadows += DisableThis;
+        stateMachine.ChangeState(new ShadowEnemyIdleState());
+        DisableThis();
+    }
+
+    protected override void Update()
+    {
+        if (_health.GetHealth() <= 0)
+        {
+            KillThis();
+        }
+
+        _anim.SetFloat("Blend", _agent.velocity.magnitude);
+        base.Update();
+    }
+
+    private void KillThis()
+    {
+        _anim.SetTrigger("Dead");
+        stateMachine.ChangeState(new DeadState());
     }
 
     private void DisableThis()
@@ -21,6 +50,7 @@ public class ShadowAI : BaseAIMovementController
 
     private void EnableThis()
     {
+        print("enable this");
         GetComponent<CapsuleCollider>().enabled = true;
 
         foreach (Transform child in this.transform)
@@ -29,18 +59,7 @@ public class ShadowAI : BaseAIMovementController
         }
     }
 
-    private void Start()
-    {
-        PlayerInsanity.onHallucination += EnableThis;
-        PlayerInsanity.onDisableShadows += DisableThis;
-        stateMachine.ChangeState(new ShadowEnemyIdleState());
-        DisableThis();
-    }
 
-    protected override void Update()
-    {
-        base.Update();
-    }
 }
 
 public class ShadowEnemyIdleState : BaseIdleState
