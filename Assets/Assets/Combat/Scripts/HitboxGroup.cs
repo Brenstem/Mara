@@ -172,7 +172,6 @@ public class HitboxGroup : MonoBehaviour
 
     private void ResetList()
     {
-        DisableEvent(0);
         _alreadyHit.Clear();
     }
 }
