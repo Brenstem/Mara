@@ -26,7 +26,7 @@ public class RangedEnemyAI : BaseAIMovementController
     {
         stateMachine.ChangeState(new DeadState());
         _anim.SetTrigger("Dead");
-        GetComponent<NavMeshAgent>().SetDestination(transform.position);
+        _agent.SetDestination(transform.position);
     }
 
     private void Start()

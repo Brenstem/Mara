@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class BasicMeleeAI : BaseAIMovementController
 {
-
-
     [HideInInspector]public Timer _hitStunTimer;
     [HideInInspector]public bool _useHitStun;
 
@@ -16,6 +14,23 @@ public class BasicMeleeAI : BaseAIMovementController
         _meleeEnemy = this;
     }
 
+    protected override void Update()
+    {
+        if (_health.GetHealth() <= 0)
+        {
+            KillThis();
+        }
+
+        base.Update();
+    }
+
+    private void KillThis()
+    {
+        stateMachine.ChangeState(new DeadState());
+        //_anim.SetTrigger("Dead");
+        _agent.SetDestination(transform.position);
+    }
+
     public void Attack()
     {
         _anim.SetTrigger("Attack");
@@ -23,7 +38,6 @@ public class BasicMeleeAI : BaseAIMovementController
 
     public override void TakeDamage(Hitbox hitbox)
     {
-
         stateMachine.ChangeState(new BasicMeleeIdleState());
         EnableHitstun(hitbox.hitstunTime);
         base.TakeDamage(hitbox);

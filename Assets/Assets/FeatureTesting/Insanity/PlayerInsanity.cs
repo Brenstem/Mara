@@ -106,8 +106,6 @@ public class PlayerInsanity : MonoBehaviour
 
     private ChromaticAberration _chromaticAberration;
 
-    private float _currentInsanity;
-
     private void Start()
     {
         ChromaticAberration tmp;
@@ -132,7 +130,10 @@ public class PlayerInsanity : MonoBehaviour
     {
         GlobalState.state.AudioManager.PlayerInsanityAudioUpdate(GetInsanityPercentage());
 
-        _chromaticAberration.intensity.value = GetInsanityPercentage() / 100;
+        if (_chromaticAberration != null)
+        {
+            _chromaticAberration.intensity.value = GetInsanityPercentage() / 100;
+        }
 
         // if a timer exists and the player is "dead" wait for timer to kill player
         if (!Object.ReferenceEquals( _timer, null) && _playerDying) 
