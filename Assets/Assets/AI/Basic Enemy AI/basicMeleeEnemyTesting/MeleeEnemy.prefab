@@ -301,7 +301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac2019947aa47dc45b41d13851ab1ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 500
+  maxHealth: 200
   _anim: {fileID: 5055311108480665011}
 --- !u!195 &7915258470840588273
 NavMeshAgent:
@@ -360,7 +360,7 @@ MonoBehaviour:
   _waitAtPoints: 0
   _waitTime: 0
   _idlePathingPoints: []
-  _attackRange: 5
+  _attackRange: 4.5
   _anim: {fileID: 0}
   _useHitStun: 0
 --- !u!1 &2298667751383344207
@@ -1019,16 +1019,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2927921858668341449}
     m_Modifications:
-    - target: {fileID: 5247772433813855365, guid: b807af36e0443f34ca0390bead88dd65,
-        type: 3}
-      propertyPath: m_Name
-      value: TrackingHealthBarPrefab
-      objectReference: {fileID: 0}
-    - target: {fileID: 5247772433813855365, guid: b807af36e0443f34ca0390bead88dd65,
-        type: 3}
-      propertyPath: m_Layer
-      value: 12
-      objectReference: {fileID: 0}
     - target: {fileID: 973251482362619951, guid: b807af36e0443f34ca0390bead88dd65,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1133,6 +1123,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5247772433813855365, guid: b807af36e0443f34ca0390bead88dd65,
+        type: 3}
+      propertyPath: m_Name
+      value: TrackingHealthBarPrefab
+      objectReference: {fileID: 0}
+    - target: {fileID: 5247772433813855365, guid: b807af36e0443f34ca0390bead88dd65,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 4888146114267909224, guid: b807af36e0443f34ca0390bead88dd65,
         type: 3}
