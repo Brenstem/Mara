@@ -54,6 +54,7 @@ public class HitboxGroup : MonoBehaviour
 
     private void EnableEvent(int id)
     {
+        
         if (onEnableHitboxes != null)
             onEnableHitboxes(id);
         else

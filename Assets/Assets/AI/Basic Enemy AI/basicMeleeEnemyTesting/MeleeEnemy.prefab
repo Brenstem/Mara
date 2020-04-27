@@ -302,6 +302,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 500
+  _anim: {fileID: 5055311108480665011}
 --- !u!195 &7915258470840588273
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -349,17 +350,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   invulerable: 0
-  aggroRange: 10
-  unaggroRange: 20
-  turnSpeed: 5
-  targetLayers:
+  _aggroRange: 10
+  _unaggroRange: 20
+  _turnSpeed: 5
+  _targetLayers:
     serializedVersion: 2
-    m_Bits: 2048
-  cyclePathing: 0
-  waitAtPoints: 0
-  waitTime: 1
-  idlePathingPoints: []
-  attackRange: 3
+    m_Bits: 2359
+  _cyclePathing: 0
+  _waitAtPoints: 0
+  _waitTime: 0
+  _idlePathingPoints: []
+  _attackRange: 5
+  _anim: {fileID: 0}
   _useHitStun: 0
 --- !u!1 &2298667751383344207
 GameObject:
@@ -934,8 +936,8 @@ MonoBehaviour:
   isParryable: 0
   hitStunIncrease: 0
   damageBuffMultiplier: 0
-  _size: {x: 0.92, y: 1.68, z: 1.19}
-  _offset: {x: 0, y: 0, z: 0.2}
+  _size: {x: 0.91, y: 1.68, z: 1.19}
+  _offset: {x: 0, y: 0, z: 0}
 --- !u!114 &7915258470197688608
 MonoBehaviour:
   m_ObjectHideFlags: 0
