@@ -106,14 +106,29 @@ public class PlayerInsanity : MonoBehaviour
 
     private ChromaticAberration _chromaticAberration;
 
+    private Vignette _vignette;
+
+    private FilmGrain _filmGrain;
+
     private void Start()
     {
-        ChromaticAberration tmp;
+        ChromaticAberration chroTmp;
+        Vignette vigTmp;
+        FilmGrain filTmp;
 
-        if (vol.profile.TryGet<ChromaticAberration>(out tmp))
+        if (vol.profile.TryGet<ChromaticAberration>(out chroTmp))
         {
-            _chromaticAberration = tmp;
+            _chromaticAberration = chroTmp;
+        }
 
+        if (vol.profile.TryGet<Vignette>(out vigTmp))
+        {
+            _vignette = vigTmp;
+        }
+
+        if (vol.profile.TryGet<FilmGrain>(out filTmp))
+        {
+            _filmGrain = filTmp;
         }
 
         if (!InsanityBar)
@@ -133,6 +148,16 @@ public class PlayerInsanity : MonoBehaviour
         if (_chromaticAberration != null)
         {
             _chromaticAberration.intensity.value = GetInsanityPercentage() / 100;
+        }
+
+        if (_vignette != null)
+        {
+            _vignette.intensity.value = GetInsanityPercentage() / 200;
+        }
+
+        if (_filmGrain != null)
+        {
+            _filmGrain.intensity.value = GetInsanityPercentage() / 100;
         }
 
         // if a timer exists and the player is "dead" wait for timer to kill player
@@ -272,7 +297,10 @@ public class PlayerInsanity : MonoBehaviour
                 _debuffState = DebuffStates.impendingDoom;
                 break;
             case float n when (n >= dynamicInsanityValues[3]):
-                onHallucination();
+                if (onHallucination != null)
+                {
+                    onHallucination();
+                }
                 if (_debuffState != DebuffStates.hallucinations)
                 {
                     PlayHeartBeat();

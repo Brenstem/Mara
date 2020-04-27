@@ -6,7 +6,6 @@ using FMODUnity;
 
 public class AudioManager : MonoBehaviour
 {
-    // Player audio
     [Header("Player Audio")]
     [EventRef]
     [SerializeField] string InsanityEventAudio;
@@ -31,7 +30,6 @@ public class AudioManager : MonoBehaviour
     [EventRef]
     [SerializeField] string playerHeartBeatAudio;
 
-    // Enemy audio
     [Header("Enemy Audio")]
     [EventRef]
     [SerializeField] string rangedEnemyFireAudio;
@@ -42,12 +40,17 @@ public class AudioManager : MonoBehaviour
     [EventRef]
     [SerializeField] string floatingEnemyHurtAudio;
 
-    // Boss audio
+    [Header("Boss audio")]
     [EventRef]
     [SerializeField] string bossHurtAudio;
 
     [EventRef]
     [SerializeField] string bossDashAudio;
+
+    [Header("SFX audio")]
+    [EventRef]
+    [SerializeField] string checkpointAudio;
+
 
     #region Player Audio
     public void PlayerFootStepsAudio(Transform transform, string groundMaterial, Rigidbody rb)
@@ -138,6 +141,14 @@ public class AudioManager : MonoBehaviour
     {
         RuntimeManager.PlayOneShot(bossHurtAudio, position);
     }
+    #endregion
+
+    #region SFX
+    public void CheckpointAudio(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(checkpointAudio, position);
+    }
+
     #endregion
 
     #region Music
