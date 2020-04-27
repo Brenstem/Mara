@@ -52,10 +52,10 @@ public class AudioManager : MonoBehaviour
     #region Player Audio
     public void PlayerFootStepsAudio(Transform transform, string groundMaterial, Rigidbody rb)
     {
-        //RuntimeManager.PlayOneShot(PlayerFootsteps, position);
+        RuntimeManager.PlayOneShot(PlayerFootsteps, transform.position);
 
         // playerMovementAudio.AudioPlayerFootsteps(obj.tag); // något liknande kan användas för att jämföra med tags istälelt för strings methinks
-        PlayerFootstepsAudio = RuntimeManager.CreateInstance(PlayerFootsteps);
+        /*PlayerFootstepsAudio = RuntimeManager.CreateInstance(PlayerFootsteps);
         RuntimeManager.AttachInstanceToGameObject(PlayerFootstepsAudio, transform, rb);
 
         switch (groundMaterial)
@@ -70,7 +70,7 @@ public class AudioManager : MonoBehaviour
                 PlayerFootstepsAudio.setParameterByName("Surface", 2f);
                 break;
         }
-        PlayerFootstepsAudio.start();
+        PlayerFootstepsAudio.start();*/
     }
 
     public void PlayerSwordSwingAudio(Vector3 position)
