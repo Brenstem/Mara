@@ -112,24 +112,28 @@ public class PlayerInsanity : MonoBehaviour
 
     private void Start()
     {
-        ChromaticAberration chroTmp;
-        Vignette vigTmp;
-        FilmGrain filTmp;
-
-        if (vol.profile.TryGet<ChromaticAberration>(out chroTmp))
+        if (vol != null)
         {
-            _chromaticAberration = chroTmp;
-        }
+            ChromaticAberration chroTmp;
+            Vignette vigTmp;
+            FilmGrain filTmp;
 
-        if (vol.profile.TryGet<Vignette>(out vigTmp))
-        {
-            _vignette = vigTmp;
-        }
+            if (vol.profile.TryGet<ChromaticAberration>(out chroTmp))
+            {
+                _chromaticAberration = chroTmp;
+            }
 
-        if (vol.profile.TryGet<FilmGrain>(out filTmp))
-        {
-            _filmGrain = filTmp;
+            if (vol.profile.TryGet<Vignette>(out vigTmp))
+            {
+                _vignette = vigTmp;
+            }
+
+            if (vol.profile.TryGet<FilmGrain>(out filTmp))
+            {
+                _filmGrain = filTmp;
+            }
         }
+        
 
         if (!InsanityBar)
         {

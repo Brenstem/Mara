@@ -179,13 +179,14 @@ public class BaseChasingState : State<BaseAIMovementController>
         //flyttar monstret mot spelaren
         owner._agent.SetDestination(targetPosition);
         
-        if (owner._unaggroRange < Vector3.Distance(owner._target.transform.position, owner.transform.position))
+        if (owner._unaggroRange <= Vector3.Distance(owner._target.transform.position, owner.transform.position))
         {
             owner.stateMachine.ChangeState(_returnToIdleState);
         }
 
-        if(range > Vector3.Distance(owner._target.transform.position, owner.transform.position))
+        if(owner._attackRange >= Vector3.Distance(owner._target.transform.position, owner.transform.position))
         {
+            owner._agent.SetDestination(targetPosition);
             owner.stateMachine.ChangeState(_attackingState);
         }
     }
@@ -204,6 +205,9 @@ public class BaseAttackingState : State<BaseAIMovementController>
         //lägg in attack metod här
 
         float range = owner._attackRange - owner._agent.stoppingDistance;
+
+        Vector3 vectorToPlayer = (owner._target.transform.position - owner.transform.position).normalized * range;
+        Vector3 targetPosition = owner._target.transform.position - vectorToPlayer;
 
         owner.FacePlayer();
 

@@ -22,17 +22,11 @@ public class RangedEnemyAI : BaseAIMovementController
         firerateTimer = new Timer(_firerate);
     }
 
-    private void KillThis()
-    {
-        stateMachine.ChangeState(new DeadState());
-        _anim.SetTrigger("Dead");
-        _agent.SetDestination(transform.position);
-    }
-
     private void Start()
     {
         stateMachine.ChangeState(new RangedEnemyIdleState());
         rangedAI = this;
+
     }
 
     protected override void Update()
@@ -46,6 +40,14 @@ public class RangedEnemyAI : BaseAIMovementController
             KillThis();
         }
     }
+
+    private void KillThis()
+    {
+        stateMachine.ChangeState(new DeadState());
+        _anim.SetTrigger("Dead");
+        _agent.SetDestination(transform.position);
+    }
+
 
     public void Attack()
     {
@@ -137,7 +139,14 @@ public class RangedEnemyAttackingState : BaseAttackingState
     {
         owner.rangedAI.Attack();
 
-        base.UpdateState(owner);
+        float range = owner._attackRange;
+
+        owner.FacePlayer();
+
+        if (range < Vector3.Distance(owner._target.transform.position, owner.transform.position))
+        {
+            owner.stateMachine.ChangeState(_chasingState);
+        }
     }
 }
 

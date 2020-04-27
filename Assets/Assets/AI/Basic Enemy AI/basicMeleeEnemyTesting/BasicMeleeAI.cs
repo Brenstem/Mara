@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class BasicMeleeAI : BaseAIMovementController
 {
-    [HideInInspector]public Timer _hitStunTimer;
-    [HideInInspector]public bool _useHitStun;
+    [HideInInspector] public Timer _hitStunTimer;
+    [HideInInspector] public bool _useHitStun;
 
     // Start is called before the first frame update
     void Start()
@@ -16,18 +16,20 @@ public class BasicMeleeAI : BaseAIMovementController
 
     protected override void Update()
     {
+        base.Update();
+
+        _anim.SetFloat("Blend", _agent.velocity.magnitude);
+
         if (_health.GetHealth() <= 0)
         {
             KillThis();
         }
-
-        base.Update();
     }
 
     private void KillThis()
     {
         stateMachine.ChangeState(new DeadState());
-        //_anim.SetTrigger("Dead");
+        _anim.SetTrigger("Dead");
         _agent.SetDestination(transform.position);
     }
 
@@ -47,7 +49,7 @@ public class BasicMeleeAI : BaseAIMovementController
     {
         _hitStunTimer = new Timer(duration);
         _useHitStun = true;
-        _anim.SetTrigger("Hitstun");
+        _anim.SetTrigger("Hurt");
         _anim.SetBool("InHitstun", true);
     }
 

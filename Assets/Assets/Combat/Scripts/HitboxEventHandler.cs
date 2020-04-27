@@ -20,8 +20,6 @@ public class HitboxEventHandler : MonoBehaviour
 
     public void EnableHitboxes(int id)
     {
-        print("hello");
-
         if (onEnableHitboxes != null)
         {
             onEnableHitboxes(id);
@@ -34,8 +32,6 @@ public class HitboxEventHandler : MonoBehaviour
 
     public void DisableHitboxes(int id)
     {
-
-        print("bey");
         if (onDisableHitboxes != null)
             onDisableHitboxes(id);
         else
