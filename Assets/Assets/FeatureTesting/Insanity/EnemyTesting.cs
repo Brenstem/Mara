@@ -18,7 +18,12 @@ public class EnemyTesting : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            player.TakeDamage(damageAmount);
+            HitboxValues h = new HitboxValues()
+            {
+                damageValue = damageAmount
+            };
+
+            player.TakeDamage(h);
         }
     }
 }

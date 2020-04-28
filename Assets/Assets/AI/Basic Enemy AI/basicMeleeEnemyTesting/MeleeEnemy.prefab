@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7915258470840588272}
   - component: {fileID: 7915258470840588278}
   - component: {fileID: 7915258470840588273}
-  - component: {fileID: 7915258470840588275}
   - component: {fileID: 7915258470840588285}
   m_Layer: 12
   m_Name: MeleeEnemy
@@ -88,18 +87,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &7915258470840588275
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2231895019740060378}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1b649a18ff3fcac4499acfa2aa5c2c4e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &7915258470840588285
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -125,6 +112,7 @@ MonoBehaviour:
   _idlePathingPoints: []
   _attackRange: 1
   _anim: {fileID: 0}
+  _fill: {fileID: 5418900163542067587}
   _useHitStun: 0
 --- !u!1 &4503388721576541945
 GameObject:
@@ -228,6 +216,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8110ed44227a88249bb9c7362bbf781e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _billBoarding: 1
 --- !u!1 &5418900163542067587
 GameObject:
   m_ObjectHideFlags: 0
@@ -315,6 +304,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b649a18ff3fcac4499acfa2aa5c2c4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8011225541171167082
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6529857940015022465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7357897f05e7064bb7d53d77c105d3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parentAI: {fileID: 7915258470840588285}
 --- !u!1 &7389673750630986752
 GameObject:
   m_ObjectHideFlags: 0
@@ -571,6 +573,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: anim_basicEnemy_melee
       objectReference: {fileID: 0}
+    - target: {fileID: -6057140222963153312, guid: 225aa5a660074c74fbccd6278afae392,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 220354ee46eb79f4994401ca19da8d35, type: 2}
     - target: {fileID: -4216859302048453862, guid: 225aa5a660074c74fbccd6278afae392,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -641,11 +648,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.01
       objectReference: {fileID: 0}
-    - target: {fileID: -6057140222963153312, guid: 225aa5a660074c74fbccd6278afae392,
-        type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 220354ee46eb79f4994401ca19da8d35, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 225aa5a660074c74fbccd6278afae392, type: 3}
 --- !u!1 &6529857940015022465 stripped
