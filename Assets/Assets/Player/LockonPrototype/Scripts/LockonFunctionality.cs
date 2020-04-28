@@ -56,7 +56,11 @@ public class LockonFunctionality : MonoBehaviour
 
     private void OnEnable() { _playerInput.Enable(); }
 
-    private void OnDisable() { _playerInput.Disable(); }
+    private void OnDisable()
+    {
+        _playerInput.Disable();
+        _movementController.DisableLockon();
+    }
 
     public bool IsVisibleFrom(Renderer renderer, Camera camera)
     {
@@ -167,6 +171,10 @@ public class LockonFunctionality : MonoBehaviour
     }
     private void Update()
     {
+        if (_pointOfInterest != null && !_pointOfInterest.CompareTag(lockonTag))
+        {
+            _movementController.DisableLockon();
+        }
         TargetRecognition();
     }
 

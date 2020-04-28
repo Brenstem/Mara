@@ -47,6 +47,7 @@ public class RangedEnemyAI : BaseAIMovementController
         stateMachine.ChangeState(new DeadState());
         _anim.SetTrigger("Dead");
         _agent.SetDestination(transform.position);
+        transform.tag = "Untagged";
     }
 
 

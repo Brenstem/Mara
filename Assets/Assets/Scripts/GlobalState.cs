@@ -95,11 +95,31 @@ public class GlobalState : MonoBehaviour
         StartCoroutine(HitStopCoroutine(duration));
     }
 
+    public void HitStop(float duration, HitboxValues values)
+    {
+        StartCoroutine(HitStopCoroutine(duration, values));
+    }
+
     private IEnumerator HitStopCoroutine(float duration)
     {
         _hitstopRunning = true;
         CinemachineImpulseManager.Instance.IgnoreTimeScale = true;
         GetComponent<CinemachineImpulseSource>().m_ImpulseDefinition.m_TimeEnvelope.m_DecayTime = duration;
+        GetComponent<CinemachineImpulseSource>().GenerateImpulse();
+        yield return new WaitForEndOfFrame();
+        Time.timeScale = 0.0f;
+        yield return new WaitForSecondsRealtime(duration);
+        Time.timeScale = 1f;
+        _hitstopRunning = false;
+        yield return 0;
+    }
+
+    private IEnumerator HitStopCoroutine(float duration, HitboxValues values)
+    {
+        _hitstopRunning = true;
+        CinemachineImpulseManager.Instance.IgnoreTimeScale = true;
+        GetComponent<CinemachineImpulseSource>().m_ImpulseDefinition.m_TimeEnvelope.m_DecayTime = duration;
+        //GetComponent<CinemachineImpulseSource>().m_ImpulseDefinition.m_AmplitudeGain = 1.5f + values.damageValue / 100; // todo nästa
         GetComponent<CinemachineImpulseSource>().GenerateImpulse();
         yield return new WaitForEndOfFrame();
         Time.timeScale = 0.0f;

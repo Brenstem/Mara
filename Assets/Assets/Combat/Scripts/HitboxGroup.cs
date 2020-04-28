@@ -131,7 +131,18 @@ public class HitboxGroup : MonoBehaviour
 
         if (hitbox.hitstopTime > 0)
         {
-            GlobalState.state.HitStop(hitbox.hitstopTime);
+            if (_parentEntity != null && _parentEntity.CompareTag("Player")) // temporär lösninggggg 
+            {
+                HitboxValues h = new HitboxValues()
+                {
+                    damageValue = hitbox.damageValue * -1.0f
+                };
+                GlobalState.state.HitStop(hitbox.hitstopTime, h);
+            }
+            else
+            {
+                GlobalState.state.HitStop(hitbox.hitstopTime, hitbox);
+            }
         }
     }
 

@@ -26,6 +26,7 @@ public class MovementController : MonoBehaviour
     public float dashTime = 0.25f;
     public float dashLag = 0.15f;
     public float dashSpeed = 10.0f;
+    public bool invulerableWhenDashing;
 
     /* === HIDDEN REFERENCES === */
     [HideInInspector] public Camera mainCamera;
@@ -120,6 +121,12 @@ public class MovementController : MonoBehaviour
         }
     }
 
+    public void ResetController()
+    {
+        DisableLockon();
+        stateMachine.ChangeState(new IdleMovementState());
+    }
+
     private void Awake()
     {
         _originalMaxSpeed = maxSpeed;
@@ -198,7 +205,7 @@ public class MovementController : MonoBehaviour
         GlobalState.state.Player.input.jump = false;
     }
 
-    private void OnEnable() { _playerInput.PlayerControls.Enable(); }
+    private void OnEnable() { print("enabled"); _playerInput.PlayerControls.Enable(); }
 
     private void OnDisable()
     {
@@ -441,14 +448,17 @@ public class DashMovementState : State<MovementController>
     public override void ExitState(MovementController owner)
     {
         GlobalState.state.Player.EnableCombatController();
-        GlobalState.state.Player.invulerable = false;
+        if (owner.invulerableWhenDashing)
+            GlobalState.state.Player.invulerable = false;
+
         owner.playerAnimator.SetBool("IsDashing", false);
     }
 
     public override void EnterState(MovementController owner)
     {
         GlobalState.state.Player.DisableCombatController();
-        GlobalState.state.Player.invulerable = true;
+        if (owner.invulerableWhenDashing)
+            GlobalState.state.Player.invulerable = true;
         _timer = new Timer(owner.dashTime);
         _lagTimer = new Timer(owner.dashLag);
 

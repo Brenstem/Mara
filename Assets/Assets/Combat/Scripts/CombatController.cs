@@ -358,6 +358,7 @@ public class ParryState : State<CombatController>
         _parryTimer.Time += Time.deltaTime;
         if (_parryTimer.Expired) // Mathf.Lerp time on successful parry
         {
+            Debug.Log("expired");
             owner.anim.SetBool("IsParrying", false);
             _parryLagTimer.Time += Time.deltaTime;
             if (_parryLagTimer.Expired)
@@ -368,8 +369,9 @@ public class ParryState : State<CombatController>
         }
         else if (owner.successfulParry)
         {
+            Debug.Log("Successful parry");
             owner.anim.SetTrigger("ParrySuccessful");
-            Debug.Log("Parry sycc");
+            owner.anim.SetBool("IsParrying", false);
             owner.stateMachine.ChangeState(new IdleAttackState()); // successful parry state, no logic atm
         }
     }
