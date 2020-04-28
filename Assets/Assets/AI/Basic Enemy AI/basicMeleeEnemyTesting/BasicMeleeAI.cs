@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class BasicMeleeAI : BaseAIMovementController
 {
+    [SerializeField] public GameObject _fill;
+
     [HideInInspector] public Timer _hitStunTimer;
     [HideInInspector] public bool _useHitStun;
 
     // Start is called before the first frame update
     void Start()
     {
+        _fill.SetActive(false);
         stateMachine.ChangeState(new BasicMeleeIdleState());
         _meleeEnemy = this;
     }
@@ -38,12 +41,12 @@ public class BasicMeleeAI : BaseAIMovementController
         _anim.SetTrigger("Attack");
     }
 
-    public override void TakeDamage(Hitbox hitbox)
+    public override void TakeDamage(HitboxValues hitbox, Entity attacker)
     {
         stateMachine.ChangeState(new BasicMeleeIdleState());
         EnableHitstun(hitbox.hitstunTime);
         GlobalState.state.AudioManager.FloatingEnemyHurtAudio(this.transform.position);
-        base.TakeDamage(hitbox);
+        base.TakeDamage(hitbox, attacker);
     }
 
     public void EnableHitstun(float duration)
@@ -83,7 +86,6 @@ public class BasicMeleeIdleState : BaseIdleState
         {
             base.UpdateState(owner);
         }
-
     }
 }
 
@@ -93,7 +95,8 @@ public class BasicMeleeChasingState : BaseChasingState
     {
         _attackingState = new BasicMeleeAttackingState();
         _returnToIdleState = new BasicMeleeReturnToIdleState();
-        GlobalState.state.AudioManager.RangedEnemyAlertAudio(owner._meleeEnemy.transform.position);
+        // GlobalState.state.AudioManager.RangedEnemyAlertAudio(owner._meleeEnemy.transform.position);
+        owner._meleeEnemy._fill.SetActive(true);
     }
 }
 
@@ -118,6 +121,11 @@ public class BasicMeleeReturnToIdleState : BaseReturnToIdlePosState
     {
         _chasingState = new BasicMeleeChasingState();
         _idleState = new BasicMeleeIdleState();
+    }
 
+    public override void ExitState(BaseAIMovementController owner)
+    {
+        owner._meleeEnemy._fill.SetActive(false);
+        base.ExitState(owner);
     }
 }
