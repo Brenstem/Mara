@@ -95,7 +95,7 @@ public class BasicMeleeChasingState : BaseChasingState
     {
         _attackingState = new BasicMeleeAttackingState();
         _returnToIdleState = new BasicMeleeReturnToIdleState();
-        GlobalState.state.AudioManager.RangedEnemyAlertAudio(owner._meleeEnemy.transform.position);
+        // GlobalState.state.AudioManager.RangedEnemyAlertAudio(owner._meleeEnemy.transform.position);
         owner._meleeEnemy._fill.SetActive(true);
     }
 }
