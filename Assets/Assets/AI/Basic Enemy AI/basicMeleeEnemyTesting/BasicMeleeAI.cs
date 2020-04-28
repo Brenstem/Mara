@@ -51,10 +51,13 @@ public class BasicMeleeAI : BaseAIMovementController
 
     public void EnableHitstun(float duration)
     {
-        _hitStunTimer = new Timer(duration);
-        _useHitStun = true;
-        _anim.SetTrigger("Hurt");
-        _anim.SetBool("InHitstun", true);
+        if (duration > 0.0f)
+        {
+            _hitStunTimer = new Timer(duration);
+            _useHitStun = true;
+            _anim.SetTrigger("Hurt");
+            _anim.SetBool("InHitstun", true);
+        }
     }
 
     public void DisabelHitStun()

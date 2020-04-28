@@ -68,11 +68,14 @@ public class RangedEnemyAI : BaseAIMovementController
 
     public void EnableHitstun(float duration)
     {
-        _hitStunTimer = new Timer(duration);
-        _useHitStun = true;
-        GlobalState.state.AudioManager.FloatingEnemyHurtAudio(this.transform.position);
-        _anim.SetTrigger("Hurt");
-        _anim.SetBool("InHitstun", true);
+        if (duration > 0.0f)
+        {
+            _hitStunTimer = new Timer(duration);
+            _useHitStun = true;
+            GlobalState.state.AudioManager.FloatingEnemyHurtAudio(this.transform.position);
+            _anim.SetTrigger("Hurt");
+            _anim.SetBool("InHitstun", true);
+        }
     }
 
     public void DisableHitStun()
