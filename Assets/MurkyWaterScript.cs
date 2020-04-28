@@ -65,13 +65,12 @@ public class MurkyWaterScript : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay(Collider other)
-    {
-        print("nu ser jag något");
-        if (_collisionLayers == (_collisionLayers | 1 << other.gameObject.layer))
-        {
-            //gör skada/slow/blind eller whatever som ska hända
-            print("thing found, do damage or watever");
-        }
-    }
+	private void OnTriggerStay(Collider other) {
+		print("nu ser jag något");
+		if (_collisionLayers == (_collisionLayers | 1 << other.gameObject.layer)) {
+			if (other.CompareTag("Player")) {
+				other.GetComponent<PlayerInsanity>().IncrementInsanity(_damagePerSecond);
+			}
+		}
+	}
 }

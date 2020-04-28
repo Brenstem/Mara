@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 4614874529309991390}
   - component: {fileID: 4614874529309991389}
   - component: {fileID: 552188042}
+  - component: {fileID: 5441360604459458402}
   m_Layer: 0
   m_Name: SpiralMusicTopCounter
   m_TagString: Untagged
@@ -104,6 +105,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   verticalDiff: 0
 --- !u!65 &552188042
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4614874529309991384}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &5441360604459458402
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
