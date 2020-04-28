@@ -6,6 +6,8 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Slider))]
 public class TrackingHealthBar : MonoBehaviour
 {
+    [SerializeField] private bool _billBoarding;
+
     private Transform _cam;
 
     // Get transform component if null
@@ -43,7 +45,10 @@ public class TrackingHealthBar : MonoBehaviour
     // Health bar billboarding
     private void LateUpdate()
     {
-        transform.LookAt(transform.position + _cam.forward);
+        if (_billBoarding)
+        {
+            transform.LookAt(transform.position + _cam.forward);
+        }
     }
 
     public void SetValue(float amount)
