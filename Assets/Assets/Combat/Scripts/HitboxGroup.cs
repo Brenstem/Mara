@@ -106,12 +106,12 @@ public class HitboxGroup : MonoBehaviour
                             }
                             else
                             {
-                                TakeDamage(targetEntity, hitbox);
+                                TakeDamage(targetEntity, hitbox.hitboxValues);
                             }
                         }
                         else
                         {
-                            TakeDamage(targetEntity, hitbox);
+                            TakeDamage(targetEntity, hitbox.hitboxValues);
                         }
                         _alreadyHit.Add(enemy.gameObject);
                     }
@@ -122,15 +122,12 @@ public class HitboxGroup : MonoBehaviour
         }
     }
 
-    private void TakeDamage(Entity target, Hitbox hitbox)
+    private void TakeDamage(Entity target, HitboxValues hitbox)
     {
         if (_parentEntity != null && _parentEntity.modifier != null)
-        {
-            if (_parentEntity.modifier.IsModified)
-                hitbox *= _parentEntity.modifier; // overloaded * operator
-        }
-        
-        target.TakeDamage(hitbox);
+            target.TakeDamage(hitbox * _parentEntity.modifier);
+        else
+            target.TakeDamage(hitbox);
 
         if (hitbox.hitstopTime > 0)
         {

@@ -55,11 +55,11 @@ public class RangedEnemyAI : BaseAIMovementController
         }
     }
 
-    public override void TakeDamage(Hitbox hitbox)
+    public override void TakeDamage(HitboxValues hitbox, Entity attacker)
     {
         stateMachine.ChangeState(new RangedEnemyIdleState());
         EnableHitstun(hitbox.hitstunTime);
-        base.TakeDamage(hitbox);
+        base.TakeDamage(hitbox, attacker);
     }
 
     public void EnableHitstun(float duration)

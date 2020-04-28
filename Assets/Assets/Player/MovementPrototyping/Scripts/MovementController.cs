@@ -47,17 +47,6 @@ public class MovementController : MonoBehaviour
     #endregion
 
     #region Variables
-    /* === SCRIPT EXCLUSIVES === */
-    [Header("Placeholder lock on")]
-    [SerializeField] private Vector3 _lockOnOffset;
-    [SerializeField] private float _lockOnRadius;
-    [SerializeField] private float _lockOnMaxDistance;
-    private Vector3 _lockOnOrigin;
-    private Vector3 _lockOnDirection;
-    private float _lockOnCurrentHitDistance;
-    private RaycastHit _lockOnCastHit;
-
-
     private Timer _dashCooldownTimer;
     private float _originalMaxSpeed;
     private bool _doSnapCamera;
@@ -251,7 +240,8 @@ public class MovementController : MonoBehaviour
 
     void GroundCheck()
     {
-        if (playerAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Landing")
+        if (playerAnimator.GetCurrentAnimatorClipInfo(0).Length > 0 && 
+            playerAnimator.GetCurrentAnimatorClipInfo(0)[0].clip.name == "Landing")
         {
             playerAnimator.SetLayerWeight(1, 1.0f);
         }
@@ -298,18 +288,10 @@ public class MovementController : MonoBehaviour
         {
             _hasDashed = true;
             _dashCooldownTimer.Reset();
-            GlobalState.state.Player.EndAnim();
+            //GlobalState.state.Player.ResetAnim();
             stateMachine.ChangeState(new DashMovementState());
         }
     }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.red;
-        Debug.DrawLine(_lockOnOrigin, _lockOnOrigin + _lockOnDirection * _lockOnCurrentHitDistance);
-        Gizmos.DrawWireSphere(_lockOnOrigin + _lockOnDirection * _lockOnCurrentHitDistance, _lockOnRadius);
-    }
-
 }
 
 public class IdleMovementState : State<MovementController>
@@ -458,12 +440,14 @@ public class DashMovementState : State<MovementController>
 
     public override void ExitState(MovementController owner)
     {
+        GlobalState.state.Player.EnableCombatController();
         GlobalState.state.Player.invulerable = false;
         owner.playerAnimator.SetBool("IsDashing", false);
     }
 
     public override void EnterState(MovementController owner)
     {
+        GlobalState.state.Player.DisableCombatController();
         GlobalState.state.Player.invulerable = true;
         _timer = new Timer(owner.dashTime);
         _lagTimer = new Timer(owner.dashLag);
@@ -488,8 +472,9 @@ public class DashMovementState : State<MovementController>
     {
         if (_timer.Expired)
         {
+            owner.playerAnimator.SetTrigger("DashLag");
             _lagTimer.Time += Time.deltaTime;
-            if (_lagTimer.Expired)
+            if (_lagTimer.Expired) // input buffer here?
             {
                 if (owner.isLockedOn)
                     owner.stateMachine.ChangeState(new StrafeMovementState());

@@ -81,14 +81,9 @@ public abstract class BaseAIMovementController : Entity
         }
     }
 
-    public override void TakeDamage(Hitbox hitbox)
+    public override void TakeDamage(HitboxValues hitbox, Entity attacker)
     {
         _health.Damage(hitbox.damageValue);
-    }
-
-    public override void TakeDamage(float damage)
-    {
-        _health.Damage(damage);
     }
 }
 

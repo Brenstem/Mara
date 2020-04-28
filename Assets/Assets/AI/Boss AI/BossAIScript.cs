@@ -148,13 +148,7 @@ public class BossAIScript : Entity
         this.transform.rotation = Quaternion.Slerp(this.transform.rotation, lookRotation, Time.deltaTime * turnSpeed);
     }
 
-    public override void TakeDamage(float damage)
-    {
-        GetComponent<EnemyHealth>().Damage(damage);
-        //spela hurtljud här
-    }
-
-    public override void TakeDamage(Hitbox hitbox)
+    public override void TakeDamage(HitboxValues hitbox, Entity attacker)
     {
         GetComponent<EnemyHealth>().Damage(hitbox.damageValue);
         //spela hurtljud här

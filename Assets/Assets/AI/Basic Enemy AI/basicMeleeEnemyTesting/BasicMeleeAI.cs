@@ -36,11 +36,11 @@ public class BasicMeleeAI : BaseAIMovementController
         _anim.SetTrigger("Attack");
     }
 
-    public override void TakeDamage(Hitbox hitbox)
+    public override void TakeDamage(HitboxValues hitbox, Entity attacker)
     {
         stateMachine.ChangeState(new BasicMeleeIdleState());
         EnableHitstun(hitbox.hitstunTime);
-        base.TakeDamage(hitbox);
+        base.TakeDamage(hitbox, attacker);
     }
 
     public void EnableHitstun(float duration)

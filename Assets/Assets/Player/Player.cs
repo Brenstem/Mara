@@ -24,7 +24,7 @@ public class Player : Entity
 
     [SerializeField] private GameObject hitEffect;
 
-    public override void TakeDamage(Hitbox hitbox)
+    public override void TakeDamage(HitboxValues hitbox, Entity attacker = null)
     {
         if (combatController.IsParrying)
         {
@@ -40,14 +40,9 @@ public class Player : Entity
         }
     }
 
-    public override void TakeDamage(float damage)
+    protected override void Awake()
     {
-        playerInsanity.IncrementInsanity(damage);
-        GlobalState.state.AudioManager.PlayerHurtAudio(this.transform.position);
-    }
-
-    private void Awake()
-    {
+        base.Awake();
         input = new InputInfo();
         modifier = new HitboxModifier();
         _playerInput = new PlayerInput();
@@ -69,8 +64,12 @@ public class Player : Entity
 
     public void ResetAnim()
     {
-        combatController.EndAnim();
         combatController.anim.SetTrigger("Reset");
+    }
+
+    public void ResetCombatController()
+    {
+        combatController.ResetController();
     }
 
     public void EndAnim()

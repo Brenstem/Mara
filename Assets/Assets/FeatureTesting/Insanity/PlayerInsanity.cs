@@ -52,25 +52,16 @@ public class PlayerInsanity : MonoBehaviour
 
     public delegate void PlayerDead();
     public static event PlayerDead onPlayerDeath;
-
-    public delegate void DamageBuff();
-    public static event DamageBuff onPlayerDamageBuff;
-
+    
     public delegate void IncreaseMovementSpeed();
     public static event IncreaseMovementSpeed onIncreaseMovementSpeed;
 
-    public delegate void HeightenedSenses();
-    public static event HeightenedSenses onHeightenedSenses;
-
-    public delegate void IncreaseHitstun();
-    public static event IncreaseHitstun onIncreaseHitstun;
+    //public delegate void HeightenedSenses();
+    //public static event HeightenedSenses onHeightenedSenses;
 
     public delegate void IncreaseAttackSpeed();
     public static event IncreaseAttackSpeed onIncreaseAttackSpeed;
-
-    public delegate void ResetDamageBuff();
-    public static event ResetDamageBuff onResetDamageBuff;
-
+    
     public delegate void DisableShadows();
     public static event DisableShadows onDisableShadows;
     #endregion
@@ -256,13 +247,13 @@ public class PlayerInsanity : MonoBehaviour
             case float n when (n >= staticInsanityValues[3]):
                 if (_buffState != BuffStates.hitStun)
                 {
-                    GlobalState.state.Player.modifier.HitstunMultiplier = 2.5f;
-                    onIncreaseHitstun();
+                    if (GlobalState.state.Player.modifier.HitstunMultiplier == 1.0f)
+                        GlobalState.state.Player.modifier.HitstunMultiplier = 1.5f;
                 }
                 _buffState = BuffStates.hitStun;
                 break;
             case float n when (n >= staticInsanityValues[2]):
-                onHeightenedSenses();
+                //onHeightenedSenses();
                 break;
             case float n when (n >= staticInsanityValues[1]):
                 _buffState = BuffStates.movementSpeed;
@@ -270,13 +261,13 @@ public class PlayerInsanity : MonoBehaviour
             case float n when (n >= staticInsanityValues[0]):
                 if (_buffState != BuffStates.playerDamage)
                 {
-                    GlobalState.state.Player.modifier.DamageMultiplier = 1.1f;
-                    onPlayerDamageBuff();
+                    if (GlobalState.state.Player.modifier.DamageMultiplier == 1.0f)
+                        GlobalState.state.Player.modifier.DamageMultiplier = 1.1f;
                 }
                 _buffState = BuffStates.playerDamage;
                 break;
             case float n when (n < staticInsanityValues[0]):
-                onResetDamageBuff();
+                GlobalState.state.Player.modifier.Reset();
                 _buffState = BuffStates.defaultState;
                 break;
         }
@@ -287,8 +278,6 @@ public class PlayerInsanity : MonoBehaviour
         switch (currentInsanityPercentage)
         {
             case float n when (n >= dynamicInsanityValues[4]):
-                print(n);
-                print(dynamicInsanityValues[4]);
                 if (_debuffState != DebuffStates.impendingDoom)
                 {
                     PlayHeartBeat();
