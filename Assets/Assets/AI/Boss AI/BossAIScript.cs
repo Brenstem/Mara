@@ -495,7 +495,7 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
         _attackSpeed = _minAttackSpeed;
         _attackSpeed += UnityEngine.Random.Range(0f, _attackSpeedIncreaseMax);
         _attackSpeed += UnityEngine.Random.Range(0f, _attackSpeedIncreaseMax);
-        Debug.Log("new attack speed " + _attackSpeed);
+        //Debug.Log("new attack speed " + _attackSpeed);
     }
 
     public override void ExitState(BossPhaseOneState owner)
@@ -512,8 +512,14 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
 
         //kanske borde dela upp detta i olika movement states pga animationer men vet inte om det behövs
 
+        //kolla om spelaren är nära nog att slå
+        if (_timer.Time > _minAttackCooldown && _meleeAttackRange > Vector3.Distance(_ownerParentScript.transform.position, _ownerParentScript.player.transform.position))
+        {
+            //kanske göra AOE attack här för att tvinga iväg spelaren?
+            owner.phaseOneStateMashine.ChangeState(owner.phaseOneMeleeAttackOneState);
+        }
         //kolla om man ska attackera
-        if (_timer.Expired)
+        else if (_timer.Expired && _timer.Time > _minAttackCooldown)
         {
             //nära nog för att göra melee attacken
             if (_drainAttackRange > Vector3.Distance(_ownerParentScript.transform.position, _ownerParentScript.player.transform.position))
@@ -523,10 +529,12 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
                 {
                     _bossToPlayer = _ownerParentScript.player.transform.position - _ownerParentScript.transform.position;
 
-                    Physics.Raycast(_ownerParentScript.transform.position + new Vector3(0, 1, 0), _bossToPlayer.normalized, out _hit, _ownerParentScript.testDashDistance + _ownerParentScript.testMeleeRange, _ownerParentScript.targetLayers);
+                    //Physics.Raycast(_ownerParentScript.transform.position + new Vector3(0, 1, 0), _bossToPlayer.normalized, out _hit, _ownerParentScript.testDashDistance + _ownerParentScript.testMeleeRange, _ownerParentScript.targetLayers);
+                    Physics.Raycast(_ownerParentScript.transform.position + new Vector3(0, 1, 0), _bossToPlayer.normalized, out _hit, _ownerParentScript.testDashDistance + _meleeAttackRange, _ownerParentScript.targetLayers);
 
                     //är spelaren innom en bra range och innom LOS?
-                    if (_hit.transform == _ownerParentScript.player.transform && _bossToPlayer.magnitude < _ownerParentScript.testDashDistance + _ownerParentScript.testMeleeRange / 2 && _bossToPlayer.magnitude > _ownerParentScript.testDashDistance - _ownerParentScript.testMeleeRange / 2)
+                    //if (_hit.transform == _ownerParentScript.player.transform && _bossToPlayer.magnitude < _ownerParentScript.testDashDistance + _ownerParentScript.testMeleeRange / 2 && _bossToPlayer.magnitude > _ownerParentScript.testDashDistance - _ownerParentScript.testMeleeRange / 2)
+                    if (_hit.transform == _ownerParentScript.player.transform && _bossToPlayer.magnitude < _ownerParentScript.testDashDistance + _meleeAttackRange / 2 && _bossToPlayer.magnitude > _ownerParentScript.testDashDistance - _meleeAttackRange / 2)
                     {
                         //Debug.Log("_bossToPlayer " + _bossToPlayer.magnitude);
 
@@ -541,7 +549,8 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
                             dashSign = -1;
                         }
 
-                        _dashAttackAngle = Mathf.Rad2Deg * Mathf.Acos((Mathf.Pow(_bossToPlayer.magnitude, 2) + Mathf.Pow(_ownerParentScript.testDashDistance, 2) - Mathf.Pow(_ownerParentScript.testMeleeRange / 2, 2)) / (2 * _bossToPlayer.magnitude * _ownerParentScript.testDashDistance));
+                        //_dashAttackAngle = Mathf.Rad2Deg * Mathf.Acos((Mathf.Pow(_bossToPlayer.magnitude, 2) + Mathf.Pow(_ownerParentScript.testDashDistance, 2) - Mathf.Pow(_ownerParentScript.testMeleeRange / 2, 2)) / (2 * _bossToPlayer.magnitude * _ownerParentScript.testDashDistance));
+                        _dashAttackAngle = Mathf.Rad2Deg * Mathf.Acos((Mathf.Pow(_bossToPlayer.magnitude, 2) + Mathf.Pow(_ownerParentScript.testDashDistance, 2) - Mathf.Pow(_meleeAttackRange / 2, 2)) / (2 * _bossToPlayer.magnitude * _ownerParentScript.testDashDistance));
 
                         _dashAttackDirection = _bossToPlayer;
 
@@ -618,12 +627,6 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
             {
                 owner.phaseOneStateMashine.ChangeState(owner.phaseOneChargeDrainAttackState);
             }
-        }
-        //kolla om spelaren är nära nog att slå
-        else if (_timer.Time > _minAttackCooldown && _meleeAttackRange > Vector3.Distance(_ownerParentScript.transform.position, _ownerParentScript.player.transform.position))
-        {
-            //kanske göra AOE attack här för att tvinga iväg spelaren?
-            owner.phaseOneStateMashine.ChangeState(owner.phaseOneMeleeAttackOneState);
         }
         //idle movement
         else
@@ -731,6 +734,13 @@ public class PhaseOneDashState : State<BossPhaseOneState>
 
         owner.parentScript.agent.speed = _dashSpeed;
         owner.parentScript.agent.acceleration = _dashAcceleration;
+
+
+        //if (owner.parentScript.dashAttack)
+        //{
+        //    owner.parentScript.bossAnimator.SetTrigger("dashForwardTrigger");
+        //}
+
 
         _dashDirection = owner.parentScript.movementDirection.normalized;
         _dashDestination = owner.parentScript.transform.position + _dashDirection * _dashDistance;
@@ -850,6 +860,8 @@ public class PhaseOneChaseToAttackState : State<BossPhaseOneState>
 
         _playerPos = owner.parentScript.player.transform.position;
         _distanceToPlayer = Vector3.Distance(owner.parentScript.transform.position, _playerPos);
+
+        //Debug.Log("asdasdgsghsr");
 
         if (_distanceToPlayer > owner.parentScript.testDrainRange)
         {
