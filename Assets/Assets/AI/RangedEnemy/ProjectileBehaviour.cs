@@ -38,10 +38,8 @@ public class ProjectileBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider hitInfo)
     {
-        print(hitInfo.gameObject);
         if (!hitInfo.CompareTag("Player"))
         {
-            print(hitInfo.gameObject);
             StartCoroutine(DestroyProjectile());
         }
     }
