@@ -46,7 +46,7 @@ public class BasicMeleeAI : BaseAIMovementController
         stateMachine.ChangeState(new BasicMeleeIdleState());
         EnableHitstun(hitbox.hitstunTime);
         GlobalState.state.AudioManager.FloatingEnemyHurtAudio(this.transform.position);
-        base.TakeDamage(hitbox);
+        base.TakeDamage(hitbox, attacker);
     }
 
     public void EnableHitstun(float duration)
