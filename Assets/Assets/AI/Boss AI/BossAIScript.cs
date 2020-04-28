@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Experimental.GlobalIllumination;
 
 public class BossAIScript : Entity
 {
@@ -43,6 +42,7 @@ public class BossAIScript : Entity
     public PreBossFightState preBossFightState = new PreBossFightState();
     public BossPhaseOneState bossPhaseOneState = new BossPhaseOneState();
     public BossPhaseTwoState bossPhaseTwoState = new BossPhaseTwoState();
+    public BossDeadState bossDeadState = new BossDeadState();
 
     [SerializeField] public GameObject murkyWaterPrefab;
 
@@ -56,7 +56,8 @@ public class BossAIScript : Entity
     [SerializeField] public HitboxGroup drainAttackHitboxGroup;
 
     //lägga till ranomness på attack speed, kan göra det med 2 randoms för att få en normal distribution
-    [SerializeField] public float testAttackSpeed = 5f;
+    [SerializeField] public float minAttackSpeed = 5f;
+    [SerializeField] public float attackSpeedIncreaseMax = 5f;
     [SerializeField] public float testMinAttackCooldown = 1f;
 
     [SerializeField] public float testDrainDPS = 5f;
@@ -169,19 +170,74 @@ public class BossAIScript : Entity
         return Physics.OverlapBox(transform.TransformPoint(dashCheckOffsetVector), dashCheckBoxSize, Quaternion.LookRotation(dashCheckVector.normalized), dashCollisionLayers).Length <= 0;
     }
 
-    public void MurkyWaterAbility(int layers)
+    public void MurkyWaterSpiralAbility(int layers, int poolsPerLayer, float spiralIntensity)
     {
-        Vector3 testVec = Vector3.forward;
+        Vector3 spawnPos = Vector3.forward;
+        //float rotationAmount
         for (int i = 0; i < layers; i++)
         {
-            for (int j = 0; j < 8; j++)
+            for (int j = 0; j < poolsPerLayer; j++)
             {
-                testVec = Quaternion.AngleAxis(46f, Vector3.up) * testVec;
-                print(testVec);
-                SpawnMurkyWater(testVec * (i + 1));
+                spawnPos = Quaternion.AngleAxis(360f / poolsPerLayer + spiralIntensity, Vector3.up) * spawnPos;
+                //print(testVec);
+                SpawnMurkyWater(spawnPos * (i + 1));
             }
         }
     }
+    
+    public void MurkyWaterCircleAbility(int layers, int poolsPerLayer)
+    {
+        Vector3 spawnPos;
+        float poolAmount = 0;
+        for (int i = 0; i < layers; i++)
+        {
+            spawnPos = Vector3.forward;
+            poolAmount += poolsPerLayer;
+            for (int j = 0; j < poolAmount; j++)
+            {
+                spawnPos = Quaternion.AngleAxis(360f / poolAmount, Vector3.up) * spawnPos;
+                //print(testVec);
+                SpawnMurkyWater(spawnPos * (i + 1));
+            }
+        }
+    }
+    
+    public void MurkyWaterPolygonAbility(int layers, int sides, int poolsPerSide)
+    {
+        Vector3 spawnPos;
+        Vector3 currentCornerPos;
+        Vector3 nextCornerPos;
+        Vector3 cornerToCorner;
+
+        float poolAmount = 0;
+        for (int i = 0; i < layers; i++)
+        {
+            poolAmount += poolsPerSide;
+
+            currentCornerPos = Vector3.forward * (i * 2 + 2);
+            nextCornerPos = Quaternion.AngleAxis(360f / sides, Vector3.up) * currentCornerPos;
+
+            for (int k = 0; k < sides; k++)
+            {
+                cornerToCorner = nextCornerPos - currentCornerPos;
+                spawnPos = currentCornerPos;
+                for (int j = 0; j < poolAmount; j++)
+                {
+                    SpawnMurkyWater(spawnPos);
+                    spawnPos += cornerToCorner.normalized * (cornerToCorner.magnitude / poolAmount);
+                }
+                currentCornerPos = nextCornerPos;
+                nextCornerPos = Quaternion.AngleAxis(360f / sides, Vector3.up) * nextCornerPos;
+            }
+        }
+    }
+
+    //public void drainBeamTest()
+    //{
+    //    Physics.BoxCast(transform.TransformPoint(new Vector3(0f, 1f, 0f)), new Vector3 ()  );
+
+    //}
+
 
     //hur fan ska det funka med olika Y nivå? får typ raycasta upp och ner när den spawnas för att hitta vart marken är och sen flytta den dit och rotera den baserat på normalen eller något, låter jobbigt :(
     public void SpawnMurkyWater(Vector3 spawnPositionOffset, float timeToLive = 0f)
@@ -248,14 +304,26 @@ public class BossAIScript : Entity
         //print("rotation stopped");
     }
     //P1
-    public void FlipDrainHitboxActivation()
+
+    public void EnableDrainBeam()
     {
-        drainHitboxActive = !drainHitboxActive;
+        placeholoderDranBeam.SetActive(true);
     }
-    public void FlipMeleeHitboxActivation()
+    
+    public void DisableDrainBeam()
     {
-        meleeHitboxActive = !meleeHitboxActive;
+        placeholoderDranBeam.SetActive(false);
     }
+
+    //old
+    //public void FlipDrainHitboxActivation()
+    //{
+    //    drainHitboxActive = !drainHitboxActive;
+    //}
+    //public void FlipMeleeHitboxActivation()
+    //{
+    //    meleeHitboxActive = !meleeHitboxActive;
+    //}
     #endregion
 }
 
@@ -326,13 +394,13 @@ public class BossPhaseOneState : State<BossAIScript>
 
         phase1Attack1State = new Phase1Attack1State(owner.testDrainDPS, owner.testDrainRange, owner.testDrainChargeTime);
 
-        phaseOneCombatState = new PhaseOneCombatState(owner.testAttackSpeed, owner.testMinAttackCooldown, owner.testMeleeRange, owner.testDrainRange, owner);
+        phaseOneCombatState = new PhaseOneCombatState(owner.minAttackSpeed, owner.attackSpeedIncreaseMax,  owner.testMinAttackCooldown, owner.testMeleeRange, owner.testDrainRange, owner);
         phaseOneDashState = new PhaseOneDashState(owner.testDashSpeed, owner.testDashDistance, owner.testDashLagDurration, owner.testDashAcceleration);
         phaseOneChaseToAttackState = new PhaseOneChaseToAttackState();
 
 
         phaseOneChargeDrainAttackState = new PhaseOneChargeDrainAttackState(owner.testDrainChargeTime);
-        phaseOneActiveDrainAttackState = new PhaseOneActiveDrainAttackState(owner.testDrainDPS, owner.testDrainRange, owner.testDrainAttackTime);
+        phaseOneActiveDrainAttackState = new PhaseOneActiveDrainAttackState(owner.testDrainAttackTime);
         phaseOneMeleeAttackOneState = new PhaseOneMeleeAttackOneState(owner.testDrainDPS, owner.testMeleeRange, owner.testDrainAttackTime, owner.testDrainChargeTime);
 
         parentScript = owner;
@@ -340,6 +408,12 @@ public class BossPhaseOneState : State<BossAIScript>
         phaseOneStateMashine.ChangeState(phaseOneCombatState);
 
         //spela cool animation :)
+
+        //owner.MurkyWaterSpiralAbility(10, 6, 2f);
+        //owner.MurkyWaterCircleAbility(10, 6);
+        //owner.MurkyWaterCircleAbility(10, 1);
+        //owner.MurkyWaterPolygonAbility(5, 4, 2);
+
     }
 
     public override void ExitState(BossAIScript owner)
@@ -350,9 +424,15 @@ public class BossPhaseOneState : State<BossAIScript>
     public override void UpdateState(BossAIScript owner)
     {
         //kolla om man ska gå över till nästa phase
-        if ((owner.GetComponent<EnemyHealth>().GetHealth() / owner.GetComponent<EnemyHealth>().GetMaxHealth()) < owner.testP2TransitionHP)
+        //if ((owner.GetComponent<EnemyHealth>().GetHealth() / owner.GetComponent<EnemyHealth>().GetMaxHealth()) < owner.testP2TransitionHP)
+        //{
+        //    owner.phaseControllingStateMachine.ChangeState(owner.bossPhaseTwoState);
+        //}
+        
+        //kan skapa problem (?)
+        if (owner.GetComponent<EnemyHealth>().GetHealth() <= 0)
         {
-            owner.phaseControllingStateMachine.ChangeState(owner.bossPhaseTwoState);
+            owner.phaseControllingStateMachine.ChangeState(owner.bossDeadState);
         }
 
         phaseOneStateMashine.Update();
@@ -362,7 +442,9 @@ public class BossPhaseOneState : State<BossAIScript>
 //vet inte om allt detta typ egentligen borde göras i parent statet (borde typ det tror jag)
 public class PhaseOneCombatState : State<BossPhaseOneState>
 {
-    private Timer timer;
+    private Timer _timer;
+    private float _minAttackSpeed;
+    private float _attackSpeedIncreaseMax;
     private float _attackSpeed;
     private float _baseMinAttackCooldown;
     private float _minAttackCooldown;
@@ -380,31 +462,41 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
 
     private BossAIScript _ownerParentScript;
 
-    public PhaseOneCombatState(float attackSpeed, float minAttackCooldown, float meleeAttackRange, float drainAttackRange, BossAIScript ownerParentScript)
+    public PhaseOneCombatState(float minAttackSpeed, float attackSpeedIncreaseMax, float minAttackCooldown, float meleeAttackRange, float drainAttackRange, BossAIScript ownerParentScript)
     {
-        _attackSpeed = attackSpeed;
+        _minAttackSpeed = minAttackSpeed;
+        _attackSpeedIncreaseMax = attackSpeedIncreaseMax/2;
         _baseMinAttackCooldown = minAttackCooldown;
         _meleeAttackRange = meleeAttackRange;
         _drainAttackRange = drainAttackRange;
 
         _ownerParentScript = ownerParentScript;
 
-        timer = new Timer(_attackSpeed);
+        GenarateNewAttackSpeed();
+        _timer = new Timer(_attackSpeed);
     }
 
     public override void EnterState(BossPhaseOneState owner)
     {
         //Debug.Log("in i PhaseOneCombatState");
-        if (timer.Expired)
+        if (_timer.Expired)
         {
-            timer = new Timer(_attackSpeed);
+            GenarateNewAttackSpeed();
+            _timer = new Timer(_attackSpeed);
             _minAttackCooldown = _baseMinAttackCooldown;
         }
         else
         {
-            _minAttackCooldown += timer.Time;
+            _minAttackCooldown += _timer.Time;
         }
-        //_ownerParentScript.MurkyWaterAbility(10);
+    }
+
+    private void GenarateNewAttackSpeed()
+    {
+        _attackSpeed = _minAttackSpeed;
+        _attackSpeed += UnityEngine.Random.Range(0f, _attackSpeedIncreaseMax);
+        _attackSpeed += UnityEngine.Random.Range(0f, _attackSpeedIncreaseMax);
+        Debug.Log("new attack speed " + _attackSpeed);
     }
 
     public override void ExitState(BossPhaseOneState owner)
@@ -417,12 +509,12 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
     {
         _ownerParentScript.FacePlayer();
 
-        timer.Time += Time.deltaTime;
+        _timer.Time += Time.deltaTime;
 
         //kanske borde dela upp detta i olika movement states pga animationer men vet inte om det behövs
 
         //kolla om man ska attackera
-        if (timer.Expired)
+        if (_timer.Expired)
         {
             //nära nog för att göra melee attacken
             if (_drainAttackRange > Vector3.Distance(_ownerParentScript.transform.position, _ownerParentScript.player.transform.position))
@@ -528,7 +620,7 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
             }
         }
         //kolla om spelaren är nära nog att slå
-        else if (timer.Time > _minAttackCooldown && _meleeAttackRange > Vector3.Distance(_ownerParentScript.transform.position, _ownerParentScript.player.transform.position))
+        else if (_timer.Time > _minAttackCooldown && _meleeAttackRange > Vector3.Distance(_ownerParentScript.transform.position, _ownerParentScript.player.transform.position))
         {
             //kanske göra AOE attack här för att tvinga iväg spelaren?
             owner.phaseOneStateMashine.ChangeState(owner.phaseOneMeleeAttackOneState);
@@ -545,7 +637,7 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
                 //gör så att den byter mellan att gå höger och vänster
                 int strafeSign = 0;
 
-                if (timer.Ratio > 0.5f)
+                if (_timer.Ratio > 0.5f)
                 {
                     strafeSign = -1;
                 }
@@ -814,23 +906,16 @@ public class PhaseOneChargeDrainAttackState : State<BossPhaseOneState>
 //dela upp detta state så man kan hålla animationen
 public class PhaseOneActiveDrainAttackState : State<BossPhaseOneState>
 {
-    private float _damagePerSecond;
-    private float _range;
     private float _durration;
     private Timer _timer;
 
-    public PhaseOneActiveDrainAttackState(float damagePerSecond, float range, float durration)
+    public PhaseOneActiveDrainAttackState(float durration)
     {
-        _damagePerSecond = damagePerSecond;
-        _range = range;
         _durration = durration;
     }
 
     public override void EnterState(BossPhaseOneState owner)
     {
-        //ändra så den sätts i drain loopen
-        owner.parentScript.placeholoderDranBeam.SetActive(true);
-
         owner.parentScript.bossAnimator.SetBool("drainActiveBool", true);
         owner.parentScript.drainAttackHitboxGroup.enabled = true;
         owner.parentScript.turnSpeed = owner.parentScript.drainActiveTurnSpeed;
@@ -840,12 +925,10 @@ public class PhaseOneActiveDrainAttackState : State<BossPhaseOneState>
 
     public override void ExitState(BossPhaseOneState owner)
     {
-        //ändra så den sätts i drain loopen
-        owner.parentScript.placeholoderDranBeam.SetActive(false);
-
         //Debug.Log("hej då PhaseOneActiveDrainAttackState");
-        owner.parentScript.turnSpeed = owner.parentScript.defaultTurnSpeed;
+        owner.parentScript.bossAnimator.SetBool("drainActiveBool", false);
         owner.parentScript.drainAttackHitboxGroup.enabled = false;
+        owner.parentScript.turnSpeed = owner.parentScript.defaultTurnSpeed;
         owner.parentScript.animationEnded = false;
         owner.parentScript.facePlayerBool = true;
     }
@@ -860,7 +943,6 @@ public class PhaseOneActiveDrainAttackState : State<BossPhaseOneState>
         }
         if (_timer.Expired)
         {
-            owner.parentScript.bossAnimator.SetBool("drainActiveBool", false);
             owner.phaseOneStateMashine.ChangeState(owner.phaseOneCombatState);
         }
     }
@@ -911,7 +993,7 @@ public class Phase1Attack1State : State<BossPhaseOneState>
 //////////////////
 //PHASE 2 STATES//
 //////////////////
-
+//används inte atm
 #region Phase 2 States
 public class BossPhaseTwoState : State<BossAIScript>
 {
@@ -932,3 +1014,28 @@ public class BossPhaseTwoState : State<BossAIScript>
     }
 }
 #endregion
+
+public class BossDeadState : State<BossAIScript>
+{
+
+    public override void EnterState(BossAIScript owner)
+    {
+        owner.bossAnimator.SetBool("deathBool", true);
+        owner.GetComponent<HitboxEventHandler>().DisableHitboxes(0);
+        owner.GetComponent<HitboxEventHandler>().EndAnim();
+    }
+
+    public override void ExitState(BossAIScript owner)
+    {
+
+    }
+
+    public override void UpdateState(BossAIScript owner)
+    {
+        if (owner.animationEnded)
+        {
+            GameObject.Destroy(owner.gameObject);
+            //owner.Destroy(owner.gameObject);
+        }
+    }
+}
