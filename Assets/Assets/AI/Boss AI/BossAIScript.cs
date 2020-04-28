@@ -44,6 +44,8 @@ public class BossAIScript : Entity
     public BossPhaseTwoState bossPhaseTwoState = new BossPhaseTwoState();
     public BossDeadState bossDeadState = new BossDeadState();
 
+    [SerializeField] public GameObject _fill;
+
     [SerializeField] public GameObject murkyWaterPrefab;
 
     [SerializeField] public LayerMask targetLayers;
@@ -135,6 +137,8 @@ public class BossAIScript : Entity
 
         agent.updateRotation = false;
         phaseControllingStateMachine.ChangeState(preBossFightState);
+
+        _fill.SetActive(false);
     }
 
     void Update()
@@ -149,13 +153,7 @@ public class BossAIScript : Entity
         this.transform.rotation = Quaternion.Slerp(this.transform.rotation, lookRotation, Time.deltaTime * turnSpeed);
     }
 
-    public override void TakeDamage(float damage)
-    {
-        GetComponent<EnemyHealth>().Damage(damage);
-        //spela hurtljud här
-    }
-
-    public override void TakeDamage(Hitbox hitbox)
+    public override void TakeDamage(HitboxValues hitbox, Entity attacker)
     {
         GetComponent<EnemyHealth>().Damage(hitbox.damageValue);
         //spela hurtljud här
@@ -340,6 +338,7 @@ public class PreBossFightState : State<BossAIScript>
     {
         //kanske köra någon funktion som stänger en dörr eller något så man inte kan springa iväg
         owner.bossAnimator.SetBool("idleBool", false);
+        owner._fill.SetActive(true);
     }
 
     public override void UpdateState(BossAIScript owner)

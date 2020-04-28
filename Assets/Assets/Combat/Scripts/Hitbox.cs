@@ -3,6 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct HitboxValues
+{
+    public float damageValue;
+    public float hitstunTime;
+    public float hitstopTime;
+
+    public static HitboxValues operator *(HitboxValues h, HitboxModifier m)
+    {
+        h.damageValue *= m.DamageMultiplier;
+        h.hitstunTime *= m.HitstunMultiplier;
+        return h;
+    }
+}
+
 // DW
 public class Hitbox : MonoBehaviour
 {
@@ -23,50 +37,24 @@ public class Hitbox : MonoBehaviour
     [SerializeField] private Vector3 _size;
     [SerializeField] private Vector3 _offset;
 
+    [HideInInspector] public HitboxValues hitboxValues;
+
     private float originalDamageValue;
     private float originalHitStun;
 
     private void Awake()
     {
+        hitboxValues = new HitboxValues()
+        {
+            damageValue = this.damageValue,
+            hitstopTime = this.hitstopTime,
+            hitstunTime = this.hitstunTime
+        };
+
         originalDamageValue = damageValue;
         originalHitStun = hitstunTime;
 
-        PlayerInsanity.onPlayerDamageBuff += BuffDamage;
-        PlayerInsanity.onResetDamageBuff += ResetDamage;
-        PlayerInsanity.onIncreaseHitstun += IncreaseHitstun;
-        PlayerInsanity.onHeightenedSenses += ResetHitstun;
-
         _parent = transform.parent.GetComponent<HitboxGroup>();
-    }
-
-    private void IncreaseHitstun()
-    {
-        /*
-        if (gameObject.CompareTag("Player"))
-        {
-            hitstunTime += hitStunIncrease;
-        }
-        */
-    }
-
-    private void BuffDamage()
-    {
-        /*
-        if (gameObject.CompareTag("Player"))
-        {
-            damageValue *= damageBuffMultiplier;
-        }
-        */
-    }
-
-    private void ResetDamage()
-    {
-        //damageValue = originalDamageValue;
-    }
-
-    private void ResetHitstun()
-    {
-        //hitstunTime = originalHitStun;
     }
 
     void FixedUpdate()
@@ -110,12 +98,5 @@ public class Hitbox : MonoBehaviour
 
             Gizmos.DrawWireCube(Vector3.zero, _size);
         }
-    }
-
-    public static Hitbox operator *(Hitbox h, HitboxModifier m)
-    {
-        h.damageValue *= m.DamageMultiplier;
-        h.hitstunTime *= m.HitstunMultiplier;
-        return h;
     }
 }

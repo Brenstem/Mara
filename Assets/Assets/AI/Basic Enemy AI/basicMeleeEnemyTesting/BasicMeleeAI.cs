@@ -41,12 +41,12 @@ public class BasicMeleeAI : BaseAIMovementController
         _anim.SetTrigger("Attack");
     }
 
-    public override void TakeDamage(Hitbox hitbox)
+    public override void TakeDamage(HitboxValues hitbox, Entity attacker)
     {
         stateMachine.ChangeState(new BasicMeleeIdleState());
         EnableHitstun(hitbox.hitstunTime);
         GlobalState.state.AudioManager.FloatingEnemyHurtAudio(this.transform.position);
-        base.TakeDamage(hitbox);
+        base.TakeDamage(hitbox, attacker);
     }
 
     public void EnableHitstun(float duration)
@@ -95,7 +95,7 @@ public class BasicMeleeChasingState : BaseChasingState
     {
         _attackingState = new BasicMeleeAttackingState();
         _returnToIdleState = new BasicMeleeReturnToIdleState();
-        GlobalState.state.AudioManager.RangedEnemyAlertAudio(owner._meleeEnemy.transform.position);
+        // GlobalState.state.AudioManager.RangedEnemyAlertAudio(owner._meleeEnemy.transform.position);
         owner._meleeEnemy._fill.SetActive(true);
     }
 }

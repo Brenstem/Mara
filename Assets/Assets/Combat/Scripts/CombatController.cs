@@ -6,12 +6,14 @@ using UnityEngine.InputSystem.Interactions;
 
 public class CombatController : MonoBehaviour
 {
-    public bool successfulParry;
-    public float _dashAttackSpeed;
-    public LayerMask enemyLayer;
-    public float stoppingDistance;
+    public float parryDuration;
+    public float parryLag; // borde vara tied till animationen, samt tror inte att cooldown behövs med tanke på att det ska vara få active frames och mycket lag
 
-    private bool _temp;
+    [HideInInspector] public bool successfulParry;
+    public float succSpeed;
+    public float stoppingDistance;
+    public LayerMask enemyLayer;
+    
     private PlayerInput _playerInput;
 
     [SerializeField] public List<HitboxGroup> hitboxGroups;
@@ -29,10 +31,7 @@ public class CombatController : MonoBehaviour
     {
         get
         {
-            if (stateMachine.currentState.GetType() == typeof(ParryState))
-                return true;
-            else
-                return false;
+            return anim.GetBool("IsParrying");
         }
     }
 
@@ -84,6 +83,12 @@ public class CombatController : MonoBehaviour
         successfulParry = true;
     }
 
+    public void ResetController()
+    {
+        _animationOver = true;
+        stateMachine.ChangeState(new IdleAttackState());
+    }
+
     public void Attack(GameObject target, bool autoaim)
     {
         Vector3 offset = new Vector3(0, 0.5f, 0);
@@ -114,7 +119,7 @@ public class CombatController : MonoBehaviour
 
                     if (!hit) // If raycast missed move towards enemy
                     {
-                        characterController.Move(new Vector3(direction.normalized.x, 0, direction.normalized.z) * _dashAttackSpeed * Time.deltaTime);
+                        characterController.Move(new Vector3(direction.normalized.x, 0, direction.normalized.z) * succSpeed * Time.deltaTime);
                     }
                 }
             }
@@ -328,32 +333,44 @@ public class ThirdAttackState : State<CombatController>
 
 public class ParryState : State<CombatController>
 {
-    private Timer _timer;
+    private Timer _parryTimer;
+    private Timer _parryLagTimer;
+
     public override void EnterState(CombatController owner)
     {
-        float parryTime = 1.0f;
-        _timer = new Timer(parryTime);
+        _parryTimer = new Timer(owner.parryDuration);
+        _parryLagTimer = new Timer(owner.parryLag);
         GlobalState.state.Player.DisableMovementController();
+        owner.anim.SetBool("IsParrying", true);
         owner.anim.SetTrigger("Parry");
     }
 
     public override void ExitState(CombatController owner)
     {
-        owner.anim.SetBool("IsParrying", false);
         owner.successfulParry = false;
         GlobalState.state.Player.EnableMovementController();
-        _timer.Reset();
+        _parryTimer.Reset();
+        _parryLagTimer.Reset();
     }
 
     public override void UpdateState(CombatController owner)
     {
-        _timer.Time += Time.deltaTime;
-        owner.anim.SetBool("IsParrying", true);
-        if (_timer.Expired || owner.successfulParry) // Mathf.Lerp time on successful parry
+        _parryTimer.Time += Time.deltaTime;
+        if (_parryTimer.Expired) // Mathf.Lerp time on successful parry
         {
-            //Lag men det gör man sen typ
-            owner.stateMachine.ChangeState(new IdleAttackState());
+            owner.anim.SetBool("IsParrying", false);
+            _parryLagTimer.Time += Time.deltaTime;
+            if (_parryLagTimer.Expired)
+            {
+                owner.anim.SetTrigger("ParryOver");
+                owner.stateMachine.ChangeState(new IdleAttackState());
+            }
         }
-
+        else if (owner.successfulParry)
+        {
+            owner.anim.SetTrigger("ParrySuccessful");
+            Debug.Log("Parry sycc");
+            owner.stateMachine.ChangeState(new IdleAttackState()); // successful parry state, no logic atm
+        }
     }
 }
