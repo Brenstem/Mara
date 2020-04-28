@@ -145,31 +145,37 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: melee1Trigger
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: runningTrigger
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: idleBool
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
   - m_Name: drainActiveBool
     m_Type: 4
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
-    m_Controller: {fileID: 9100000}
+    m_Controller: {fileID: 0}
+  - m_Name: deathBool
+    m_Type: 4
+    m_DefaultFloat: 0
+    m_DefaultInt: 0
+    m_DefaultBool: 0
+    m_Controller: {fileID: 0}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -437,6 +443,31 @@ AnimatorState:
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
+--- !u!1101 &5061537457086990083
+AnimatorStateTransition:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_Conditions:
+  - m_ConditionMode: 1
+    m_ConditionEvent: deathBool
+    m_EventTreshold: 0
+  m_DstStateMachine: {fileID: 0}
+  m_DstState: {fileID: 8026447311779324911}
+  m_Solo: 0
+  m_Mute: 0
+  m_IsExit: 0
+  serializedVersion: 3
+  m_TransitionDuration: 0.25
+  m_TransitionOffset: 0
+  m_ExitTime: 0.75
+  m_HasExitTime: 0
+  m_HasFixedDuration: 1
+  m_InterruptionSource: 0
+  m_OrderedInterruption: 1
+  m_CanTransitionToSelf: 0
 --- !u!1101 &5354003392109704538
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -566,7 +597,7 @@ AnimatorStateMachine:
     m_Position: {x: -20, y: 460, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 7879398892380040736}
-    m_Position: {x: 770, y: 110, z: 0}
+    m_Position: {x: 160, y: 10, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 3252848874672160811}
     m_Position: {x: 520, y: 220, z: 0}
@@ -575,7 +606,7 @@ AnimatorStateMachine:
     m_Position: {x: 500, y: 530, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8026447311779324911}
-    m_Position: {x: 770, y: 170, z: 0}
+    m_Position: {x: -150, y: 10, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 198600240817165677}
     m_Position: {x: -10, y: 220, z: 0}
@@ -586,13 +617,14 @@ AnimatorStateMachine:
     m_State: {fileID: 4864466241819327009}
     m_Position: {x: -270, y: 330, z: 0}
   m_ChildStateMachines: []
-  m_AnyStateTransitions: []
+  m_AnyStateTransitions:
+  - {fileID: 5061537457086990083}
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: 50, y: 90, z: 0}
-  m_EntryPosition: {x: 290, y: 90, z: 0}
-  m_ExitPosition: {x: 530, y: 90, z: 0}
+  m_AnyStatePosition: {x: 20, y: 90, z: 0}
+  m_EntryPosition: {x: 400, y: 100, z: 0}
+  m_ExitPosition: {x: 580, y: 20, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: -230821299596073492}
 --- !u!1102 &7137680089277229314
@@ -683,7 +715,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: anim_boss_death
-  m_Speed: 1
+  m_Speed: 0.75
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []

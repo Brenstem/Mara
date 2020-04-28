@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.Experimental.GlobalIllumination;
 
 public class BossAIScript : Entity
 {
@@ -43,6 +42,7 @@ public class BossAIScript : Entity
     public PreBossFightState preBossFightState = new PreBossFightState();
     public BossPhaseOneState bossPhaseOneState = new BossPhaseOneState();
     public BossPhaseTwoState bossPhaseTwoState = new BossPhaseTwoState();
+    public BossDeadState bossDeadState = new BossDeadState();
 
     [SerializeField] public GameObject murkyWaterPrefab;
 
@@ -412,7 +412,7 @@ public class BossPhaseOneState : State<BossAIScript>
         //owner.MurkyWaterSpiralAbility(10, 6, 2f);
         //owner.MurkyWaterCircleAbility(10, 6);
         //owner.MurkyWaterCircleAbility(10, 1);
-        //owner.MurkyWaterPolygonAbility(5, 6, 2);
+        //owner.MurkyWaterPolygonAbility(5, 4, 2);
 
     }
 
@@ -424,9 +424,15 @@ public class BossPhaseOneState : State<BossAIScript>
     public override void UpdateState(BossAIScript owner)
     {
         //kolla om man ska gå över till nästa phase
-        if ((owner.GetComponent<EnemyHealth>().GetHealth() / owner.GetComponent<EnemyHealth>().GetMaxHealth()) < owner.testP2TransitionHP)
+        //if ((owner.GetComponent<EnemyHealth>().GetHealth() / owner.GetComponent<EnemyHealth>().GetMaxHealth()) < owner.testP2TransitionHP)
+        //{
+        //    owner.phaseControllingStateMachine.ChangeState(owner.bossPhaseTwoState);
+        //}
+        
+        //kan skapa problem (?)
+        if (owner.GetComponent<EnemyHealth>().GetHealth() <= 0)
         {
-            owner.phaseControllingStateMachine.ChangeState(owner.bossPhaseTwoState);
+            owner.phaseControllingStateMachine.ChangeState(owner.bossDeadState);
         }
 
         phaseOneStateMashine.Update();
@@ -987,7 +993,7 @@ public class Phase1Attack1State : State<BossPhaseOneState>
 //////////////////
 //PHASE 2 STATES//
 //////////////////
-
+//används inte atm
 #region Phase 2 States
 public class BossPhaseTwoState : State<BossAIScript>
 {
@@ -1008,3 +1014,28 @@ public class BossPhaseTwoState : State<BossAIScript>
     }
 }
 #endregion
+
+public class BossDeadState : State<BossAIScript>
+{
+
+    public override void EnterState(BossAIScript owner)
+    {
+        owner.bossAnimator.SetBool("deathBool", true);
+        owner.GetComponent<HitboxEventHandler>().DisableHitboxes(0);
+        owner.GetComponent<HitboxEventHandler>().EndAnim();
+    }
+
+    public override void ExitState(BossAIScript owner)
+    {
+
+    }
+
+    public override void UpdateState(BossAIScript owner)
+    {
+        if (owner.animationEnded)
+        {
+            GameObject.Destroy(owner.gameObject);
+            //owner.Destroy(owner.gameObject);
+        }
+    }
+}
