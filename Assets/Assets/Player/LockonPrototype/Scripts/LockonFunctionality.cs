@@ -89,10 +89,25 @@ public class LockonFunctionality : MonoBehaviour
                     float angle = Vector3.Angle(cForward, direction);
                     if (angle < _fieldOfViewAngle / 2) // Is object within the view-cone
                     {
-                        RaycastHit hit;
-                        if (Physics.Raycast(_lockonThreshold.position, direction.normalized, out hit)) // is the view of the object obstructed?
+                        RaycastHit firstHit;
+                        if (Physics.Raycast(_lockonThreshold.position, direction.normalized, out firstHit)) // is the view of the object obstructed?
                         {
-                            if (hit.collider == collider) // 
+                            bool hit = false;
+                            RaycastHit secondHit;
+                            if (firstHit.collider == collider)
+                            {
+                                hit = true;
+                            }
+                            else if (Physics.Raycast(_lockonThreshold.position, direction.normalized, out secondHit, Mathf.Infinity, _enemyMask))
+                            {
+                                if (!secondHit.collider.CompareTag(lockonTag))
+                                {
+                                    print(secondHit.collider.name);
+                                    hit = true;
+                                }
+                            }
+
+                            if (hit)
                             {
                                 if (_closestTarget == null) // if it is the first col
                                 {
