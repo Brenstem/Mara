@@ -39,6 +39,30 @@ ModelImporter:
   - first:
       74: -2116197746738579817
     second: anim_boss_drain_cast_end
+  - first:
+      74: -7495368067811482331
+    second: anim_boss_dash_left_start
+  - first:
+      74: 2078403977715227443
+    second: anim_boss_dash_left_end
+  - first:
+      74: 30706940749035742
+    second: anim_boss_dash_right_start
+  - first:
+      74: -3407545003403534172
+    second: anim_boss_dash_right_end
+  - first:
+      74: 4166857110445619357
+    second: anim_boss_dash_front_start
+  - first:
+      74: 7929990344463942400
+    second: anim_boss_dash_front_end
+  - first:
+      74: 4611327929172095805
+    second: anim_boss_dash_back_start
+  - first:
+      74: -4305200256723703152
+    second: anim_boss_dash_back_end
   externalObjects: {}
   materials:
     importMaterials: 1
@@ -100,7 +124,44 @@ ModelImporter:
       'anim_boss_run' has import animation warnings that might lower retargeting quality:\n\t'spine_01'
       is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'neck_rot'
       is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'head_rot'
-      is inbetween humanoid transforms and has rotation animation that will be discarded.\n"
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'anim_boss_dash_left_start' has import animation warnings that might lower retargeting
+      quality:\n\t'spine_01' is inbetween humanoid transforms and has rotation animation
+      that will be discarded.\n\t'neck_rot' is inbetween humanoid transforms and has
+      rotation animation that will be discarded.\n\t'head_rot' is inbetween humanoid
+      transforms and has rotation animation that will be discarded.\n\nClip 'anim_boss_dash_left_end'
+      has import animation warnings that might lower retargeting quality:\n\t'spine_01'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'neck_rot'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'head_rot'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'anim_boss_dash_right_start' has import animation warnings that might lower
+      retargeting quality:\n\t'spine_01' is inbetween humanoid transforms and has
+      rotation animation that will be discarded.\n\t'neck_rot' is inbetween humanoid
+      transforms and has rotation animation that will be discarded.\n\t'head_rot'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'anim_boss_dash_right_end' has import animation warnings that might lower retargeting
+      quality:\n\t'spine_01' is inbetween humanoid transforms and has rotation animation
+      that will be discarded.\n\t'neck_rot' is inbetween humanoid transforms and has
+      rotation animation that will be discarded.\n\t'head_rot' is inbetween humanoid
+      transforms and has rotation animation that will be discarded.\n\nClip 'anim_boss_dash_front_start'
+      has import animation warnings that might lower retargeting quality:\n\t'spine_01'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'neck_rot'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'head_rot'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'anim_boss_dash_front_end' has import animation warnings that might lower retargeting
+      quality:\n\t'spine_01' is inbetween humanoid transforms and has rotation animation
+      that will be discarded.\n\t'neck_rot' is inbetween humanoid transforms and has
+      rotation animation that will be discarded.\n\t'head_rot' is inbetween humanoid
+      transforms and has rotation animation that will be discarded.\n\nClip 'anim_boss_dash_back_start'
+      has import animation warnings that might lower retargeting quality:\n\t'spine_01'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'neck_rot'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'head_rot'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'anim_boss_dash_back_end' has import animation warnings that might lower retargeting
+      quality:\n\t'spine_01' is inbetween humanoid transforms and has rotation animation
+      that will be discarded.\n\t'neck_rot' is inbetween humanoid transforms and has
+      rotation animation that will be discarded.\n\t'head_rot' is inbetween humanoid
+      transforms and has rotation animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -416,6 +477,238 @@ ModelImporter:
       loop: 0
       hasAdditiveReferencePose: 0
       loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: anim_boss_dash_left_start
+      takeName: anim_boss_dash_left_start
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 30
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: anim_boss_dash_left_end
+      takeName: anim_boss_dash_left_end
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 30
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: anim_boss_dash_right_start
+      takeName: anim_boss_dash_right_start
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 30
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: anim_boss_dash_right_end
+      takeName: anim_boss_dash_right_end
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 30
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: anim_boss_dash_front_start
+      takeName: anim_boss_dash_front_start
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 30
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: anim_boss_dash_front_end
+      takeName: anim_boss_dash_front_end
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 30
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: anim_boss_dash_back_start
+      takeName: anim_boss_dash_back_start
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 30
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: anim_boss_dash_back_end
+      takeName: anim_boss_dash_back_end
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 30
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
