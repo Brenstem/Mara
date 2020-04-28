@@ -17,7 +17,7 @@ public class CombatController : MonoBehaviour
     private PlayerInput _playerInput;
 
     [SerializeField] public List<HitboxGroup> hitboxGroups;
-    
+    [SerializeField] private bool succFunctionality;
     [HideInInspector] public bool _attack;
     [HideInInspector] public bool _animationOver;
     [HideInInspector] public bool _interruptable; // Interruptible As Soon As (IASA)
@@ -94,12 +94,8 @@ public class CombatController : MonoBehaviour
         Vector3 offset = new Vector3(0, 0.5f, 0);
         Vector3 direction; // Direction of enemy
         bool hit; // Cast a ray with a length of stoppingdistance from player towards enemy
-        
-        if (_interruptable && GlobalState.state.Player.input.direction != Vector2.zero)
-        {
-            _control.enabled = true;
-        }
-        else
+
+        if (succFunctionality && !_interruptable)
         {
             if (target && autoaim && !_control.isLockedOn) // If there is target swing
             {
@@ -123,6 +119,10 @@ public class CombatController : MonoBehaviour
                     }
                 }
             }
+        }
+        else
+        {
+            _control.enabled = true;
         }
     }
 
@@ -201,7 +201,7 @@ public class FirstAttackState : State<CombatController>
             _doubleCombo = false; // Reset member variable
         }
         owner.hitboxGroups[0].enabled = false;
-        owner._control.enabled = true; // Enable movement controls disabled by attack function
+        //owner._control.enabled = true; // Enable movement controls disabled by attack function
     }
 
     public override void UpdateState(CombatController owner)
@@ -263,7 +263,7 @@ public class SecondAttackState : State<CombatController>
         {
             owner.hitboxGroups[owner.hitboxGroups.Count].enabled = false;
         }
-        owner._control.enabled = true;
+        //owner._control.enabled = true;
     }
 
     public override void UpdateState(CombatController owner)
@@ -317,7 +317,7 @@ public class ThirdAttackState : State<CombatController>
         {
             owner.hitboxGroups[owner.hitboxGroups.Count].enabled = false;
         }
-        owner._control.enabled = true;
+        //owner._control.enabled = true;
     }
 
     public override void UpdateState(CombatController owner)
