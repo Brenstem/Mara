@@ -420,7 +420,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   invulerable: 0
   _aggroRange: 30
-  _unaggroRange: 20
+  _unaggroRange: 35
   _turnSpeed: 5
   _targetLayers:
     serializedVersion: 2
@@ -435,6 +435,7 @@ MonoBehaviour:
     type: 3}
   _projectileSpawnPos: {fileID: 3882684762693499996}
   _firerate: 1
+  _fill: {fileID: 730838367674231687}
   _useHitStun: 0
 --- !u!1001 &4669090988226794240
 PrefabInstance:
@@ -443,11 +444,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8713683434502732735}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: adf34ba624f6f3549ace6940ab49be95,
-        type: 3}
-      propertyPath: m_Name
-      value: anim_basicEnemy_Ranged
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: adf34ba624f6f3549ace6940ab49be95,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -503,20 +499,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: adf34ba624f6f3549ace6940ab49be95,
+    - target: {fileID: -927199367670048503, guid: adf34ba624f6f3549ace6940ab49be95,
         type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: adf34ba624f6f3549ace6940ab49be95,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: -4216859302048453862, guid: adf34ba624f6f3549ace6940ab49be95,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
+      propertyPath: m_Name
+      value: anim_basicEnemy_Ranged
       objectReference: {fileID: 0}
     - target: {fileID: -6057140222963153312, guid: adf34ba624f6f3549ace6940ab49be95,
         type: 3}
