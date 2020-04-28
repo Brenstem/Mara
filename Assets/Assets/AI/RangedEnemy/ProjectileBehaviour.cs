@@ -38,7 +38,7 @@ public class ProjectileBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider hitInfo)
     {
-        if (!hitInfo.CompareTag("Lockon"))
+        if (!hitInfo.CompareTag("Player"))
         {
             StartCoroutine(DestroyProjectile());
         }

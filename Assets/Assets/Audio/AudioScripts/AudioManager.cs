@@ -40,6 +40,9 @@ public class AudioManager : MonoBehaviour
     [EventRef]
     [SerializeField] string floatingEnemyHurtAudio;
 
+    [EventRef]
+    [SerializeField] string basicEnemyAttack;
+
     [Header("Boss audio")]
     [EventRef]
     [SerializeField] string bossHurtAudio;
@@ -131,6 +134,11 @@ public class AudioManager : MonoBehaviour
     public void FloatingEnemyHurtAudio(Vector3 position)
     {
         RuntimeManager.PlayOneShot(floatingEnemyHurtAudio, position);
+    }
+
+    public void BasicEnemyAttack(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(basicEnemyAttack, position);
     }
     #endregion
 

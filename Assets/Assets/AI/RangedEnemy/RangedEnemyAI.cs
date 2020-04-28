@@ -10,6 +10,7 @@ public class RangedEnemyAI : BaseAIMovementController
     [SerializeField] private GameObject _projectile;
     [SerializeField] private Transform _projectileSpawnPos;
     [SerializeField] private float _firerate;
+    [SerializeField] public GameObject _fill;
 
     [HideInInspector] public Timer firerateTimer;
 
@@ -22,15 +23,9 @@ public class RangedEnemyAI : BaseAIMovementController
         firerateTimer = new Timer(_firerate);
     }
 
-    private void KillThis()
-    {
-        stateMachine.ChangeState(new DeadState());
-        _anim.SetTrigger("Dead");
-        _agent.SetDestination(transform.position);
-    }
-
     private void Start()
     {
+        _fill.SetActive(false);
         stateMachine.ChangeState(new RangedEnemyIdleState());
         rangedAI = this;
     }
@@ -46,6 +41,14 @@ public class RangedEnemyAI : BaseAIMovementController
             KillThis();
         }
     }
+
+    private void KillThis()
+    {
+        stateMachine.ChangeState(new DeadState());
+        _anim.SetTrigger("Dead");
+        _agent.SetDestination(transform.position);
+    }
+
 
     public void Attack()
     {
@@ -117,6 +120,7 @@ public class RangedEnemyChasingState : BaseChasingState
         _attackingState = new RangedEnemyAttackingState();
         _returnToIdleState = new RangedEnemyReturnToIdleState();
         GlobalState.state.AudioManager.RangedEnemyAlertAudio(owner.rangedAI.transform.position);
+        owner.rangedAI._fill.SetActive(true);
     }
 
     public override void UpdateState(BaseAIMovementController owner)
@@ -131,13 +135,21 @@ public class RangedEnemyAttackingState : BaseAttackingState
     {
         _chasingState = new RangedEnemyChasingState();
         owner.rangedAI.firerateTimer.Reset();
+        owner.rangedAI._fill.SetActive(true);
     }
 
     public override void UpdateState(BaseAIMovementController owner)
     {
         owner.rangedAI.Attack();
 
-        base.UpdateState(owner);
+        float range = owner._attackRange;
+
+        owner.FacePlayer();
+
+        if (range < Vector3.Distance(owner._target.transform.position, owner.transform.position))
+        {
+            owner.stateMachine.ChangeState(_chasingState);
+        }
     }
 }
 
@@ -152,5 +164,11 @@ public class RangedEnemyReturnToIdleState : BaseReturnToIdlePosState
     public override void UpdateState(BaseAIMovementController owner)
     {
         base.UpdateState(owner);
+    }
+
+    public override void ExitState(BaseAIMovementController owner)
+    {
+        owner.rangedAI._fill.SetActive(false);
+        base.ExitState(owner);
     }
 }
