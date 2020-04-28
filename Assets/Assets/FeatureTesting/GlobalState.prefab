@@ -80,8 +80,11 @@ MonoBehaviour:
   rangedEnemyFireAudio: event:/SFX/Fiender/Ranged enemy/Fire shoot
   rangedEnemyAlertAudio: event:/SFX/Fiender/Basic Enemy/Basic Enemy Alerted
   floatingEnemyHurtAudio: event:/SFX/Fiender/Basic Enemy/Basic Enemy hurt
+  basicEnemyAttack: event:/SFX/Fiender/Basic Enemy/Basic Enemy Attack
   bossHurtAudio: event:/SFX/Fiender/BirdBoss/Birdhurt
   bossDashAudio: event:/SFX/Fiender/BirdBoss/Wings OR Dash
+  checkpointAudio: event:/SFX/Environment and ambience/Checkpoint
+  collectibleAudio: event:/SFX/Object/Pickup Collectible
 --- !u!114 &2586571097027963035
 MonoBehaviour:
   m_ObjectHideFlags: 0

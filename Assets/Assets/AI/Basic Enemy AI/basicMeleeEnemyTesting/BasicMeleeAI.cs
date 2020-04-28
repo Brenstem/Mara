@@ -19,7 +19,7 @@ public class BasicMeleeAI : BaseAIMovementController
         base.Update();
 
         _anim.SetFloat("Blend", _agent.velocity.magnitude);
-
+        
         if (_health.GetHealth() <= 0)
         {
             KillThis();
@@ -42,6 +42,7 @@ public class BasicMeleeAI : BaseAIMovementController
     {
         stateMachine.ChangeState(new BasicMeleeIdleState());
         EnableHitstun(hitbox.hitstunTime);
+        GlobalState.state.AudioManager.FloatingEnemyHurtAudio(this.transform.position);
         base.TakeDamage(hitbox);
     }
 
@@ -92,6 +93,7 @@ public class BasicMeleeChasingState : BaseChasingState
     {
         _attackingState = new BasicMeleeAttackingState();
         _returnToIdleState = new BasicMeleeReturnToIdleState();
+        GlobalState.state.AudioManager.RangedEnemyAlertAudio(owner._meleeEnemy.transform.position);
     }
 }
 
