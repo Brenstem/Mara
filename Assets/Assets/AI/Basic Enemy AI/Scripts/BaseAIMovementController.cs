@@ -171,7 +171,6 @@ public class BaseChasingState : State<BaseAIMovementController>
         Vector3 vectorToPlayer = (owner._target.transform.position - owner.transform.position).normalized * range;
         Vector3 targetPosition = owner._target.transform.position - vectorToPlayer; 
 
-        //flyttar monstret mot spelaren
         owner._agent.SetDestination(targetPosition);
         
         if (owner._unaggroRange <= Vector3.Distance(owner._target.transform.position, owner.transform.position))
@@ -181,7 +180,6 @@ public class BaseChasingState : State<BaseAIMovementController>
 
         if(owner._attackRange >= Vector3.Distance(owner._target.transform.position, owner.transform.position))
         {
-            owner._agent.SetDestination(targetPosition);
             owner.stateMachine.ChangeState(_attackingState);
         }
     }

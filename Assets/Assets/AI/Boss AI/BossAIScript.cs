@@ -44,6 +44,8 @@ public class BossAIScript : Entity
     public BossPhaseTwoState bossPhaseTwoState = new BossPhaseTwoState();
     public BossDeadState bossDeadState = new BossDeadState();
 
+    [SerializeField] public GameObject _fill;
+
     [SerializeField] public GameObject murkyWaterPrefab;
 
     [SerializeField] public LayerMask targetLayers;
@@ -135,6 +137,8 @@ public class BossAIScript : Entity
 
         agent.updateRotation = false;
         phaseControllingStateMachine.ChangeState(preBossFightState);
+
+        _fill.SetActive(false);
     }
 
     void Update()
@@ -334,6 +338,7 @@ public class PreBossFightState : State<BossAIScript>
     {
         //kanske köra någon funktion som stänger en dörr eller något så man inte kan springa iväg
         owner.bossAnimator.SetBool("idleBool", false);
+        owner._fill.SetActive(true);
     }
 
     public override void UpdateState(BossAIScript owner)
@@ -548,6 +553,7 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
 
                         float _angleDashAttackToPlayer = Vector3.Angle(_playerToBoss, _playerToDashPos);
 
+                        //är vinkeln mellan spelaren till dit bossen kommer dasha en ok vinkel 
                         if (_angleDashAttackToPlayer < _ownerParentScript.maxAngleDashAttackToPlayer)
                         {
                             //ändra så det inte är en siffra utan att det beror på deras hittboxes storlek eller en parameter
@@ -559,7 +565,6 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
                                 _dashAttackDirection = _bossToPlayer;
                                 _dashAttackDirection = Quaternion.AngleAxis(_dashAttackAngle * dashSign * -1, Vector3.up) * _dashAttackDirection;
                             }
-
                             //är det något i vägen för dashen?
                             if (_ownerParentScript.CheckDashPath(_dashAttackDirection))
                             {
@@ -572,6 +577,7 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
                                 _dashAttackDirection = _bossToPlayer;
                                 //"*-1" för att få andra sidan av spelaren
                                 _dashAttackDirection = Quaternion.AngleAxis(_dashAttackAngle * dashSign * -1, Vector3.up) * _dashAttackDirection;
+
                                 //är något i vägen om den dashar till andra sidan av spelaren?
                                 if (_ownerParentScript.CheckDashPath(_dashAttackDirection))
                                 {

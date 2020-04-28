@@ -47,6 +47,7 @@ GameObject:
   - component: {fileID: 4614874529309991391}
   - component: {fileID: 4614874529309991390}
   - component: {fileID: 4614874529309991389}
+  - component: {fileID: 552188042}
   m_Layer: 0
   m_Name: SpiralMusicTopCounter
   m_TagString: Untagged
@@ -61,13 +62,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4614874529309991384}
-  m_LocalRotation: {x: 0, y: 0.22580124, z: 0, w: 0.9741734}
-  m_LocalPosition: {x: 272.38, y: -39.77, z: -34.055}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0.0111997165, y: 0.28448805, z: -0.023616634, w: 0.95832324}
+  m_LocalPosition: {x: 269.5, y: -41.3, z: -38.8}
+  m_LocalScale: {x: 4.1511, y: 30.01036, z: 38.835953}
   m_Children: []
   m_Father: {fileID: 4614874529162583396}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 26.1, z: 0}
+  m_LocalEulerAnglesHint: {x: -0.46, y: 33.08, z: -2.96}
 --- !u!114 &4614874529309991390
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,7 +76,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4614874529309991384}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
   m_Name: 
@@ -101,6 +102,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fd469796417572d42b4f4d6bd861d562, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  verticalDiff: 0
+--- !u!65 &552188042
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4614874529309991384}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4614874530295238825
 GameObject:
   m_ObjectHideFlags: 0
@@ -149,6 +164,8 @@ MonoBehaviour:
   Emitters:
   - Target: {fileID: 4614874530639040514}
     Params:
+    - Name: To Beginning
+      Value: 0
     - Name: To SpiralStairs
       Value: 1
     - Name: To Graveyard
@@ -262,7 +279,7 @@ Transform:
   m_GameObject: {fileID: 4614874530588399034}
   m_LocalRotation: {x: 0, y: 0.22580124, z: 0, w: 0.9741734}
   m_LocalPosition: {x: 173.28, y: -35.68, z: -11.44}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1.2879217, z: 1.8466225}
   m_Children: []
   m_Father: {fileID: 4614874529162583396}
   m_RootOrder: 4
@@ -384,7 +401,7 @@ Transform:
   m_GameObject: {fileID: 4614874530718734605}
   m_LocalRotation: {x: 0, y: 0.22580124, z: 0, w: 0.9741734}
   m_LocalPosition: {x: 178.19, y: -36.02, z: -11.17}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 2.1395, z: 2.6403196}
   m_Children: []
   m_Father: {fileID: 4614874529162583396}
   m_RootOrder: 1
