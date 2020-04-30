@@ -13,7 +13,7 @@ public class CombatController : MonoBehaviour
     public float succSpeed;
     public float stoppingDistance;
     public LayerMask enemyLayer;
-    
+
     private PlayerInput _playerInput;
 
     [SerializeField] public List<HitboxGroup> hitboxGroups;
@@ -48,7 +48,7 @@ public class CombatController : MonoBehaviour
     }
 
     private void Awake()
-    {   
+    {
         _playerInput = new PlayerInput();
         _playerInput.PlayerControls.Attack.performed += ctx => _attack = true;
 
@@ -88,21 +88,22 @@ public class CombatController : MonoBehaviour
         stateMachine.ChangeState(new IdleAttackState());
     }
 
-    /*
+
     [SerializeField] private bool succFunctionality;
     public void Attack(GameObject target, bool autoaim)
     {
         Vector3 offset = new Vector3(0, 0.5f, 0);
         Vector3 direction; // Direction of enemy
         bool hit; // Cast a ray with a length of stoppingdistance from player towards enemy
-        
+
         if (succFunctionality && !_interruptable)
         {
             if (target && autoaim && !_control.isLockedOn) // If there is target swing
             {
-                //_control.enabled = false;
+                _control.enabled = false;
                 direction = target.transform.position - transform.position;
                 hit = Physics.Raycast(transform.position + offset, direction, stoppingDistance, enemyLayer);
+
 
                 if (hit) // If target is in attack range face target and swing
                 {
@@ -112,7 +113,7 @@ public class CombatController : MonoBehaviour
                 else
                 {
                     FaceEnemy(target);
-                    
+
                     if (!hit) // If raycast missed move towards enemy
                     {
                         characterController.Move(new Vector3(direction.normalized.x, 0, direction.normalized.z) * succSpeed * Time.deltaTime);
@@ -125,7 +126,7 @@ public class CombatController : MonoBehaviour
             _control.enabled = true;
         }
     }
-    */
+
 
     public GameObject FindTarget()
     {
@@ -153,7 +154,8 @@ public class CombatController : MonoBehaviour
 
 public class IdleAttackState : State<CombatController>
 {
-    public override void EnterState(CombatController owner) {
+    public override void EnterState(CombatController owner)
+    {
         owner.anim.SetBool("CombatIdle", true);
     }
 
@@ -165,7 +167,7 @@ public class IdleAttackState : State<CombatController>
     public override void UpdateState(CombatController owner)
     {
         owner._animationOver = false;
-        
+
         if (Input.GetMouseButtonDown(0))
         {
             owner.stateMachine.ChangeState(new FirstAttackState());
@@ -207,6 +209,7 @@ public class FirstAttackState : State<CombatController>
 
     public override void UpdateState(CombatController owner)
     {
+        owner.Attack(_target, true);
         if (!owner._animationOver && Input.GetMouseButtonDown(0)) // If the player presses mouse0 when animation is running set doublecombo to true
         {
             _doubleCombo = true;
@@ -267,6 +270,7 @@ public class SecondAttackState : State<CombatController>
 
     public override void UpdateState(CombatController owner)
     {
+        owner.Attack(_target, true);
         if (!owner._animationOver && Input.GetMouseButtonDown(0))
         {
             _tripleCombo = true;
@@ -319,6 +323,7 @@ public class ThirdAttackState : State<CombatController>
 
     public override void UpdateState(CombatController owner)
     {
+        owner.Attack(_target, true);
         if (owner._animationOver)
         {
             owner.stateMachine.ChangeState(new IdleAttackState());
