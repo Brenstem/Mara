@@ -28,14 +28,16 @@ public class BossAIScript : Entity
     {
         public float desiredDistanceOffset;
         public float angle;
+        public float speedIncrese;
     }
 
     //lägga till en speed change variabel, beroende på hur nära man e desiredDistance
     [Tooltip("Elementen MÅSTE vara i ordnade utifrån Desired Distance Offset (från störst till minst)")]
-    [SerializeField] public DesiredDistanceToAngleValues[] desiredDistanceToAngleValues;
+    [SerializeField] public DesiredDistanceToAngleValues[] desiredDistanceValues;
 
     [NonSerialized] public List<float> desiredDistanceOffsetValues = new List<float>();
     [NonSerialized] public List<float> desiredDistanceAngleValues = new List<float>();
+    [NonSerialized] public List<float> desiredDistanceSpeedIncreseValues = new List<float>();
 
     public StateMachine<BossAIScript> phaseControllingStateMachine;
 
@@ -91,7 +93,9 @@ public class BossAIScript : Entity
     
 
     [NonSerialized] public Animator bossAnimator;
+
     [NonSerialized] public float turnSpeed;
+    [NonSerialized] public float defaultSpeed;
 
     [NonSerialized] public Vector3 movementDirection = new Vector3(0f, 0f, 1f);
     [NonSerialized] public Vector3 dashCheckOffsetVector;
@@ -125,14 +129,16 @@ public class BossAIScript : Entity
 
         dashCheckOffsetVector = new Vector3(0f, 1f, testDashDistance / 2);
         dashCheckBoxSize = new Vector3(0.75f, 0.75f, testDashDistance / 2);
+        defaultSpeed = agent.speed;
     }
 
     void Start()
     {
-        for (int i = 0; i < desiredDistanceToAngleValues.Length; i++)
+        for (int i = 0; i < desiredDistanceValues.Length; i++)
         {
-            desiredDistanceOffsetValues.Add(desiredDistanceToAngleValues[i].desiredDistanceOffset);
-            desiredDistanceAngleValues.Add(desiredDistanceToAngleValues[i].angle);
+            desiredDistanceOffsetValues.Add(desiredDistanceValues[i].desiredDistanceOffset);
+            desiredDistanceAngleValues.Add(desiredDistanceValues[i].angle);
+            desiredDistanceSpeedIncreseValues.Add(desiredDistanceValues[i].speedIncrese);
         }
 
         agent.updateRotation = false;
@@ -495,7 +501,6 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
         _attackSpeed = _minAttackSpeed;
         _attackSpeed += UnityEngine.Random.Range(0f, _attackSpeedIncreaseMax);
         _attackSpeed += UnityEngine.Random.Range(0f, _attackSpeedIncreaseMax);
-        //Debug.Log("new attack speed " + _attackSpeed);
     }
 
     public override void ExitState(BossPhaseOneState owner)
@@ -655,12 +660,13 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
                 //kanske slurpa mellan de olika värdena (kan bli jobbigt och vet inte om det behövs)
                 float compairValue = Vector3.Distance(_ownerParentScript.transform.position, _ownerParentScript.player.transform.position);
 
-                for (int i = 0; i < _ownerParentScript.desiredDistanceToAngleValues.Length; i++)
+                for (int i = 0; i < _ownerParentScript.desiredDistanceValues.Length; i++)
                 {
                     if (compairValue > _ownerParentScript.desiredDistanceToPlayer + _ownerParentScript.desiredDistanceOffsetValues[i])
                     {
                         _ownerParentScript.movementDirection = Quaternion.AngleAxis(_ownerParentScript.desiredDistanceAngleValues[i] * strafeSign * -1, Vector3.up) * _ownerParentScript.movementDirection;
                         _ownerParentScript.movementDirection *= strafeSign;
+                        _ownerParentScript.agent.speed = _ownerParentScript.defaultSpeed + _ownerParentScript.desiredDistanceSpeedIncreseValues[i];
                         break;
                     }
                 }
