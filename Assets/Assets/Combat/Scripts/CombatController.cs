@@ -50,7 +50,7 @@ public class CombatController : MonoBehaviour
     private void Awake()
     {
         _playerInput = new PlayerInput();
-        _playerInput.PlayerControls.Attack.performed += ctx => _attack = true;
+        //_playerInput.PlayerControls.Attack.performed += ctx => _attack = true;
 
         stateMachine = new StateMachine<CombatController>(this);
 

@@ -6,12 +6,13 @@ public class PlayerRevamp : Entity
 {
     #region Inspector
     /* === INSPECTOR VARIABLES === */
-    [Header("References")]
+    [Header("References and logic")]
     public Animator playerAnimator;
     public Animator cameraAnimator;
     [SerializeField] private Transform _groundCheckPosition;
     [SerializeField] private Cinemachine.CinemachineFreeLook _freeLookCam;
     [SerializeField] private Cinemachine.CinemachineFreeLook _lockonCam;
+    [SerializeField, Range(1, 20)] private int inputBufferSize = 1;
 
     [Header("Ground Check")]
     [SerializeField] private float _groundDistance = 0.4f;
@@ -30,7 +31,6 @@ public class PlayerRevamp : Entity
     [SerializeField] private float _jumpHeight = 3f;
     public float airRotationSpeed = 4f;
     public float airSpeed = 5f;
-    private bool _hasJumped;
 
     [Header("Dash Properties")]
     [SerializeField] private float _dashCooldownTime = 0.25f;
@@ -41,8 +41,16 @@ public class PlayerRevamp : Entity
     public float dashAnimationNumerator = 5;
     private Timer _dashCooldownTimer;
     private int _airDashes;
-
     public bool invulerableWhenDashing;
+
+    [Header("Light Attack 1")]
+    public HitboxGroup light1HitboxGroup;
+    public float light1StepSpeed;
+
+    [Header("Light Attack 2")]
+    public HitboxGroup light2HitboxGroup;
+    public float light2StepSpeed;
+
     #endregion
 
     /* === COMPONENT REFERENCES === */
@@ -56,6 +64,15 @@ public class PlayerRevamp : Entity
     private Vector2 _input;
     public Vector2 Input { get { return _input; } }
 
+    public enum InputType
+    {
+        Idle = -1,
+        Dash = 0,
+        Jump = 1,
+        AttackLight = 2,
+        AttackHeavy = 3,
+    }
+    [HideInInspector] public CircularBuffer<InputType> inputBuffer;
     [HideInInspector] public bool dashPerformed;
     [HideInInspector] public bool jumpPerformed;
     [HideInInspector] public bool useGravity = true;
@@ -69,6 +86,11 @@ public class PlayerRevamp : Entity
     private void OnEnable() { _playerInput.PlayerControls.Enable(); }
     private void OnDisable() { _playerInput.PlayerControls.Disable(); }
 
+    /* === COMBAT === */
+    [HideInInspector] public bool interruptable;
+    [HideInInspector] public bool attackAnimationOver;
+    [HideInInspector] public bool attackStep;
+
     private new void Awake()
     {
         base.Awake();
@@ -77,30 +99,53 @@ public class PlayerRevamp : Entity
         stateMachine = new StateMachine<PlayerRevamp>(this);
         stateMachine.ChangeState(new IdleState());
 
+        inputBuffer = new CircularBuffer<InputType>(inputBufferSize);
+
         // Dash
         _dashCooldownTimer = new Timer(_dashCooldownTime);
         _dashCooldownTimer.Time += _dashCooldownTime;
 
         /* === INPUT === */
         _playerInput.PlayerControls.Move.performed += performedInput => _input = performedInput.ReadValue<Vector2>();
-        _playerInput.PlayerControls.Dash.performed += performedInput => dashPerformed = true;
-        _playerInput.PlayerControls.Jump.performed += performedInput => jumpPerformed = true;
+        _playerInput.PlayerControls.Dash.performed += performedInput => Action(InputType.Dash);
+        _playerInput.PlayerControls.Jump.performed += performedInput => Action(InputType.Jump);
+        _playerInput.PlayerControls.AttackLight.performed += performedInput => Action(InputType.AttackLight);
+        _playerInput.PlayerControls.AttackHeavy.performed += performedInput => Action(InputType.AttackHeavy);
+
+        /* === PLAYER ANIM EVENTS === */
+        PlayerAnimationEventHandler.onAnimationOver += AnimationOver;
+        PlayerAnimationEventHandler.onIASA += IASA;
+        PlayerAnimationEventHandler.onAttackStep += AttackStep;
+        PlayerAnimationEventHandler.onAttackStepEnd += AttackStepEnd;
     }
 
     private void Update()
     {
-        GroundCheck();
-
         stateMachine.Update();
-
-        print(stateMachine.currentState);
-
-        SnapCamera();
 
         Gravity();
 
+        SnapCamera();
+
         _dashCooldownTimer.Time += Time.deltaTime;
     }
+
+    private void FixedUpdate()
+    {
+        GroundCheck();
+
+        Action(InputType.Idle);
+    }
+
+    public override void TakeDamage(HitboxValues hitbox, Entity attacker = null)
+    {
+
+    }
+    private void AttackStep() { attackStep = true; }
+    private void AttackStepEnd() { attackStep = false; }
+    private void IASA() { interruptable = true; }
+    private void AnimationOver() {  attackAnimationOver = true; }
+    private void Action(InputType type) { inputBuffer.Enqueue(type); }
 
     private void Gravity()
     {
@@ -125,23 +170,18 @@ public class PlayerRevamp : Entity
             //GlobalState.state.Player.ResetAnim();
             stateMachine.ChangeState(new DashingState());
         }
+        
     }
 
     public void Jump()
     {
-        if (_hasJumped && IsGrounded) 
+        if (IsGrounded) 
         {
-            _hasJumped = true;
             _velocity.y = Mathf.Sqrt(_jumpHeight) * -_gravity;
-            GlobalState.state.Player.EndAnim();
             playerAnimator.SetTrigger("Jump");
+            playerAnimator.SetBool("HasJumped", true);
             GlobalState.state.AudioManager.PlayerJumpAudio(this.transform.position);
         }
-    }
-
-    public override void TakeDamage(HitboxValues hitbox, Entity attacker = null)
-    {
-
     }
 
     private void GroundCheck()
@@ -151,10 +191,15 @@ public class PlayerRevamp : Entity
         {
             _velocity.y = -2f;
             _airDashes = 0;
-            _hasJumped = false;
+            playerAnimator.SetBool("HasJumped", false);
+        }
+        else
+        {
+            if (stateMachine.currentState.GetType() != typeof(DashingState))
+                stateMachine.ChangeState(new MovementState());
         }
 
-        //playerAnimator.SetBool("Grounded", _isGrounded);
+        playerAnimator.SetBool("IsGrounded", _isGrounded);
     }
 
 
@@ -177,7 +222,7 @@ public class PlayerRevamp : Entity
         _lockedOn = true;
         _doSnapCamera = true;
         _lockonCam.LookAt = transform;
-        cameraAnimator.SetBool("lockedOn", _lockedOn);
+        cameraAnimator.SetBool("LockedOn", _lockedOn);
         _lockonCam.LookAt = pointOfInterest;
     }
     
@@ -185,7 +230,7 @@ public class PlayerRevamp : Entity
     {
         _lockedOn = false;
         _doSnapCamera = true;
-        cameraAnimator.SetBool("lockedOn", _lockedOn);
+        cameraAnimator.SetBool("LockedOn", _lockedOn);
     }
 
     public void ToggleLockon()
@@ -198,8 +243,8 @@ public class PlayerRevamp : Entity
         else
         {
             _lockedOn = !_lockedOn;
-            cameraAnimator.SetBool("lockedOn", IsLockedOn);
-            playerAnimator.SetBool("lockedOn", IsLockedOn);
+            cameraAnimator.SetBool("LockedOn", IsLockedOn);
+            playerAnimator.SetBool("LockedOn", IsLockedOn);
 
             if (IsLockedOn)
             {
@@ -249,13 +294,26 @@ public class IdleState : State<PlayerRevamp>
         {
             owner.stateMachine.ChangeState(new IdleAlertState());
         }
-
-        if (owner.dashPerformed)
+        foreach (PlayerRevamp.InputType item in owner.inputBuffer)
         {
-            owner.Dash();
+            switch (item)
+            {
+                case PlayerRevamp.InputType.Dash:
+                    owner.Dash();
+                    return;
+                case PlayerRevamp.InputType.Jump:
+                    owner.Jump();
+                    return;
+                case PlayerRevamp.InputType.AttackLight:
+                    owner.stateMachine.ChangeState(new LightAttackOneState());
+                    return;
+                case PlayerRevamp.InputType.AttackHeavy:
+                    owner.stateMachine.ChangeState(new HeavyAttackState());
+                    return;
+                default:
+                    break;
+            }
         }
-
-
     }
 }
 
@@ -284,30 +342,26 @@ public class IdleAlertState : State<PlayerRevamp>
         {
             owner.stateMachine.ChangeState(new IdleState());
         }
-
-        if (owner.dashPerformed)
+        foreach (PlayerRevamp.InputType item in owner.inputBuffer)
         {
-            owner.Dash();
+            switch (item)
+            {
+                case PlayerRevamp.InputType.Dash:
+                    owner.Dash();
+                    return;
+                case PlayerRevamp.InputType.Jump:
+                    owner.Jump();
+                    return;
+                case PlayerRevamp.InputType.AttackLight:
+                    owner.stateMachine.ChangeState(new LightAttackOneState());
+                    return;
+                case PlayerRevamp.InputType.AttackHeavy:
+                    owner.stateMachine.ChangeState(new HeavyAttackState());
+                    return;
+                default:
+                    break;
+            }
         }
-    }
-}
-
-public class JumpState : State<PlayerRevamp>
-{
-    // timer
-    public override void EnterState(PlayerRevamp owner)
-    {
-
-    }
-
-    public override void ExitState(PlayerRevamp owner)
-    {
-
-    }
-
-    public override void UpdateState(PlayerRevamp owner)
-    {
-
     }
 }
 
@@ -332,11 +386,34 @@ public class MovementState : State<PlayerRevamp>
         }
         else
         {
-            if (owner.dashPerformed)
+            bool inputFound = false;
+            foreach (PlayerRevamp.InputType item in owner.inputBuffer)
             {
-                owner.Dash();
+                switch (item)
+                {
+                    case PlayerRevamp.InputType.Dash:
+                        owner.Dash();
+                        return;
+                    case PlayerRevamp.InputType.Jump:
+                        owner.Jump();
+                        inputFound = true;
+                        break;
+                    case PlayerRevamp.InputType.AttackLight:
+                        owner.stateMachine.ChangeState(new LightAttackOneState());
+                        return;
+                    case PlayerRevamp.InputType.AttackHeavy:
+                        owner.stateMachine.ChangeState(new HeavyAttackState());
+                        return;
+                    default:
+                        break;
+                }
+                if (inputFound)
+                {
+                    break;
+                }
             }
-            else if (owner.IsLockedOn)
+
+            if (owner.IsLockedOn)
             {
                 //PointOfInterestIsMousePos(owner);
 
@@ -470,5 +547,134 @@ public class DashingState : State<PlayerRevamp>
             }
         }
     }
-} 
+}
 
+public class LightAttackOneState : State<PlayerRevamp>
+{
+    private bool _secondAttack;
+    private GameObject _target;
+
+    public override void EnterState(PlayerRevamp owner)
+    {
+        /*
+        owner._animationOver = false;
+        owner._interruptable = false;
+        */
+        owner.light1HitboxGroup.enabled = true;
+        owner.playerAnimator.SetBool("LightAttackTwo", false); // Reset the double combo animation bool upon entering state
+        owner.playerAnimator.SetTrigger("AttackLight"); // Set animation trigger for first attack
+        GlobalState.state.AudioManager.PlayerSwordSwingAudio(owner.transform.position);
+
+        //_target = owner.FindTarget();
+    }
+
+    public override void ExitState(PlayerRevamp owner)
+    {
+        owner.playerAnimator.SetBool("LightAttackTwo", _secondAttack); // Set animation bool
+        owner.light1HitboxGroup.enabled = false;
+        _secondAttack = false; // Reset member variable
+        owner.interruptable = false;
+        owner.attackAnimationOver = false;
+    }
+
+    public override void UpdateState(PlayerRevamp owner)
+    {
+        if (owner.attackStep)
+        {
+            owner.controller.Move(owner.transform.forward * owner.light1StepSpeed * Time.deltaTime);
+        }
+        
+        if (owner.interruptable && owner.inputBuffer.Contains(PlayerRevamp.InputType.AttackLight))
+        {
+            _secondAttack = true;
+            owner.stateMachine.ChangeState(new LightAttackTwoState());
+        }
+        else if (owner.interruptable && owner.Input != Vector2.zero)
+        {
+            owner.stateMachine.ChangeState(new IdleState());
+        }
+        else if (owner.attackAnimationOver)
+        {
+            owner.stateMachine.ChangeState(new IdleState());
+        }
+
+        /*
+        //owner.Attack(_target, true);
+        if (!owner._animationOver && owner.inputBuffer.Contains(PlayerRevamp.InputType.AttackLight)) // If the player presses mouse0 when animation is running set doublecombo to true
+        {
+            _secondAttack = true;
+        }
+
+        if (owner._animationOver && !_secondAttack) // If the animation has ended and doublecombo is not true go to idle
+        {
+            owner.stateMachine.ChangeState(new IdleAttackState());
+        }
+        else if (owner._animationOver || (owner._interruptable && _secondAttack)) // If animation has ended and double combo is true go to second attack
+        {
+            owner.stateMachine.ChangeState(new SecondAttackState());
+        }
+        */
+    }
+}
+
+public class LightAttackTwoState : State<PlayerRevamp>
+{
+    private bool _secondAttack;
+    private GameObject _target;
+
+    public override void EnterState(PlayerRevamp owner)
+    {
+        owner.light2HitboxGroup.enabled = true;
+        GlobalState.state.AudioManager.PlayerSwordSwingAudio(owner.transform.position);
+
+        //_target = owner.FindTarget();
+    }
+
+    public override void ExitState(PlayerRevamp owner)
+    {
+        owner.light2HitboxGroup.enabled = false;
+        owner.interruptable = false;
+        owner.attackAnimationOver = false;
+        _secondAttack = false;
+    }
+
+    public override void UpdateState(PlayerRevamp owner)
+    {
+        if (owner.attackStep)
+        {
+            owner.controller.Move(owner.transform.forward * owner.light2StepSpeed * Time.deltaTime);
+        }
+
+        if (owner.interruptable && owner.inputBuffer.Contains(PlayerRevamp.InputType.AttackLight))
+        {
+            _secondAttack = true;
+            owner.stateMachine.ChangeState(new LightAttackOneState());
+        }
+        else if (owner.interruptable && owner.Input != Vector2.zero)
+        {
+            owner.stateMachine.ChangeState(new IdleState());
+        }
+        else if (owner.attackAnimationOver)
+        {
+            owner.stateMachine.ChangeState(new IdleState());
+        }
+    }
+}
+
+public class HeavyAttackState : State<PlayerRevamp>
+{
+    public override void EnterState(PlayerRevamp owner)
+    {
+
+    }
+
+    public override void ExitState(PlayerRevamp owner)
+    {
+
+    }
+
+    public override void UpdateState(PlayerRevamp owner)
+    {
+
+    }
+}

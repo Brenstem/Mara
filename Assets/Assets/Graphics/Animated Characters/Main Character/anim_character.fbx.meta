@@ -63,6 +63,9 @@ ModelImporter:
   - first:
       74: 5533516018882928935
     second: anim_char_parry_start
+  - first:
+      74: 5271684050154759006
+    second: anim_char_attack01 (1)
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -593,7 +596,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.32001406
+      - time: 0.5040141
         functionName: IASA
         data: 
         objectReferenceParameter: {instanceID: 0}
@@ -602,6 +605,20 @@ ModelImporter:
         messageOptions: 0
       - time: 0.8306878
         functionName: EndAnim
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.044226043
+        functionName: AttackStep
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.12285012
+        functionName: AttackStepEnd
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -867,7 +884,49 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.06472072
+        functionName: AttackStep
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.15017855
+        functionName: EnableHitboxes
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.2233448
+        functionName: AttackStepEnd
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.2732973
+        functionName: DisableHitboxes
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.50133336
+        functionName: IASA
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.83292377
+        functionName: EndAnim
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

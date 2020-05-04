@@ -59,9 +59,17 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Attack"",
+                    ""name"": ""AttackLight"",
                     ""type"": ""Button"",
                     ""id"": ""37ca5fea-75c3-4218-90b9-d25b0797c58e"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""AttackHeavy"",
+                    ""type"": ""Button"",
+                    ""id"": ""a2816aaa-7bb0-40c8-a3b8-b4973abce061"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
@@ -189,7 +197,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""49fcacc8-a77a-4891-bcdb-2f4124d20097"",
-                    ""path"": ""<Gamepad>/leftStickPress"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
@@ -281,7 +289,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""Attack"",
+                    ""action"": ""AttackLight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -292,14 +300,14 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Attack"",
+                    ""action"": ""AttackLight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""b00775b5-6a42-44b9-ac9c-5662b5b6d53a"",
-                    ""path"": ""<Mouse>/rightButton"",
+                    ""path"": ""<Gamepad>/buttonNorth"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
@@ -310,11 +318,33 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""1f717fe3-0c7d-4d27-a67f-72ef003463a7"",
-                    ""path"": ""<Gamepad>/buttonNorth"",
+                    ""path"": ""<Mouse>/rightButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Parry"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""30b489f3-94d6-4640-9d04-b014fa5ea01f"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""AttackHeavy"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""eba52386-533c-4757-9ba1-2d1edde6f386"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""AttackHeavy"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -358,7 +388,8 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_PlayerControls_Dash = m_PlayerControls.FindAction("Dash", throwIfNotFound: true);
         m_PlayerControls_Jump = m_PlayerControls.FindAction("Jump", throwIfNotFound: true);
         m_PlayerControls_Lockon = m_PlayerControls.FindAction("Lockon", throwIfNotFound: true);
-        m_PlayerControls_Attack = m_PlayerControls.FindAction("Attack", throwIfNotFound: true);
+        m_PlayerControls_AttackLight = m_PlayerControls.FindAction("AttackLight", throwIfNotFound: true);
+        m_PlayerControls_AttackHeavy = m_PlayerControls.FindAction("AttackHeavy", throwIfNotFound: true);
         m_PlayerControls_Parry = m_PlayerControls.FindAction("Parry", throwIfNotFound: true);
     }
 
@@ -414,7 +445,8 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_PlayerControls_Dash;
     private readonly InputAction m_PlayerControls_Jump;
     private readonly InputAction m_PlayerControls_Lockon;
-    private readonly InputAction m_PlayerControls_Attack;
+    private readonly InputAction m_PlayerControls_AttackLight;
+    private readonly InputAction m_PlayerControls_AttackHeavy;
     private readonly InputAction m_PlayerControls_Parry;
     public struct PlayerControlsActions
     {
@@ -425,7 +457,8 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @Dash => m_Wrapper.m_PlayerControls_Dash;
         public InputAction @Jump => m_Wrapper.m_PlayerControls_Jump;
         public InputAction @Lockon => m_Wrapper.m_PlayerControls_Lockon;
-        public InputAction @Attack => m_Wrapper.m_PlayerControls_Attack;
+        public InputAction @AttackLight => m_Wrapper.m_PlayerControls_AttackLight;
+        public InputAction @AttackHeavy => m_Wrapper.m_PlayerControls_AttackHeavy;
         public InputAction @Parry => m_Wrapper.m_PlayerControls_Parry;
         public InputActionMap Get() { return m_Wrapper.m_PlayerControls; }
         public void Enable() { Get().Enable(); }
@@ -451,9 +484,12 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Lockon.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnLockon;
                 @Lockon.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnLockon;
                 @Lockon.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnLockon;
-                @Attack.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnAttack;
-                @Attack.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnAttack;
-                @Attack.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnAttack;
+                @AttackLight.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnAttackLight;
+                @AttackLight.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnAttackLight;
+                @AttackLight.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnAttackLight;
+                @AttackHeavy.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnAttackHeavy;
+                @AttackHeavy.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnAttackHeavy;
+                @AttackHeavy.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnAttackHeavy;
                 @Parry.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnParry;
                 @Parry.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnParry;
                 @Parry.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnParry;
@@ -476,9 +512,12 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Lockon.started += instance.OnLockon;
                 @Lockon.performed += instance.OnLockon;
                 @Lockon.canceled += instance.OnLockon;
-                @Attack.started += instance.OnAttack;
-                @Attack.performed += instance.OnAttack;
-                @Attack.canceled += instance.OnAttack;
+                @AttackLight.started += instance.OnAttackLight;
+                @AttackLight.performed += instance.OnAttackLight;
+                @AttackLight.canceled += instance.OnAttackLight;
+                @AttackHeavy.started += instance.OnAttackHeavy;
+                @AttackHeavy.performed += instance.OnAttackHeavy;
+                @AttackHeavy.canceled += instance.OnAttackHeavy;
                 @Parry.started += instance.OnParry;
                 @Parry.performed += instance.OnParry;
                 @Parry.canceled += instance.OnParry;
@@ -511,7 +550,8 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnDash(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnLockon(InputAction.CallbackContext context);
-        void OnAttack(InputAction.CallbackContext context);
+        void OnAttackLight(InputAction.CallbackContext context);
+        void OnAttackHeavy(InputAction.CallbackContext context);
         void OnParry(InputAction.CallbackContext context);
     }
 }

@@ -16,6 +16,7 @@ public class FPSDisplay : MonoBehaviour {
     private float deltaTime = 0.0f;
 
     private void Start() {
+        //QualitySettings.vSyncCount = 0;
         DisplayFPS = displayFpsCounter;
         TargetFPS = targetFPS;
     }
