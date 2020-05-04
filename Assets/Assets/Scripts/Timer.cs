@@ -50,4 +50,10 @@ public class Timer {
         string s = "Time: " + _time + ", Time left: " + (Duration - _time) + ", Ratio: " + Ratio;
         return s;
     }
+
+    public static Timer operator +(Timer t, float v)
+    {
+        t.Time += v;
+        return t;
+    }
 }
