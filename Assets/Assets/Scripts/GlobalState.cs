@@ -21,6 +21,8 @@ public class GlobalState : MonoBehaviour
 
     [SerializeField] private LayerMask _enemyMask;
 
+    [SerializeField] private LayerMask _groundMask;
+
 
     public GameObject PlayerGameObject
     {
@@ -60,6 +62,11 @@ public class GlobalState : MonoBehaviour
     public LayerMask EnemyMask
     {
         get { return _enemyMask; }
+    }
+
+    public LayerMask GroundMask
+    {
+        get { return _groundMask; }
     }
 
     private static GlobalState _state;
