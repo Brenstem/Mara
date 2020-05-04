@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerRevamp : Entity
 {
+    #region Inspector
+    /* === INSPECTOR VARIABLES === */
     [Header("References")]
     public Animator playerAnimator;
     public Animator cameraAnimator;
@@ -18,44 +20,56 @@ public class PlayerRevamp : Entity
     private bool _isGrounded;
     public bool IsGrounded { get { return _isGrounded; } }
 
-    #region Stats
     [Header("Movement"), Space(20)]
+    public float maxSpeed = 5f;
+    public float rotationSpeed = 15f;
+    public float rotationAngleUntilMove = 30;
+
+    [Header("Jump")]
     [SerializeField] private float _gravity = -9.82f;
     [SerializeField] private float _jumpHeight = 3f;
-
-    public float maxSpeed = 5f;
-    public float airSpeed = 5f;
-    public float rotationSpeed = 15f;
     public float airRotationSpeed = 4f;
-    public float rotationAngleUntilMove = 30;
+    public float airSpeed = 5f;
+    private bool _hasJumped;
+
+    [Header("Dash Properties")]
+    [SerializeField] private float _dashCooldownTime = 0.25f;
+    [SerializeField] private int airDashAmount;
+    public float dashTime = 0.25f;
+    public float dashLag = 0.15f;
+    public float dashSpeed = 10.0f;
+    public float dashAnimationNumerator = 5;
+    private Timer _dashCooldownTimer;
+    private int _airDashes;
+
+    public bool invulerableWhenDashing;
     #endregion
 
-    
     /* === COMPONENT REFERENCES === */
     private PlayerInput _playerInput;
-    private Vector2 _input;
-    public Vector2 Input { get { return _input; } }
 
     [HideInInspector] public Transform pointOfInterest;
     [HideInInspector] public StateMachine<PlayerRevamp> stateMachine;
     [HideInInspector] public CharacterController controller;
 
+    /* === INPUT === */
+    private Vector2 _input;
+    public Vector2 Input { get { return _input; } }
+
+    [HideInInspector] public bool dashPerformed;
+    [HideInInspector] public bool jumpPerformed;
+    [HideInInspector] public bool useGravity = true;
+
     /* === LOCK ON === */
     private bool _doSnapCamera;
     private bool _lockedOn;
+
     public bool IsLockedOn { get { return _lockedOn; } }
-
-
-
-    public override void TakeDamage(HitboxValues hitbox, Entity attacker = null)
-    {
-
-    }
 
     private void OnEnable() { _playerInput.PlayerControls.Enable(); }
     private void OnDisable() { _playerInput.PlayerControls.Disable(); }
 
-    private void Awake()
+    private new void Awake()
     {
         base.Awake();
         controller = GetComponent<CharacterController>();
@@ -63,8 +77,14 @@ public class PlayerRevamp : Entity
         stateMachine = new StateMachine<PlayerRevamp>(this);
         stateMachine.ChangeState(new IdleState());
 
+        // Dash
+        _dashCooldownTimer = new Timer(_dashCooldownTime);
+        _dashCooldownTimer.Time += _dashCooldownTime;
+
         /* === INPUT === */
         _playerInput.PlayerControls.Move.performed += performedInput => _input = performedInput.ReadValue<Vector2>();
+        _playerInput.PlayerControls.Dash.performed += performedInput => dashPerformed = true;
+        _playerInput.PlayerControls.Jump.performed += performedInput => jumpPerformed = true;
     }
 
     private void Update()
@@ -76,6 +96,52 @@ public class PlayerRevamp : Entity
         print(stateMachine.currentState);
 
         SnapCamera();
+
+        Gravity();
+
+        _dashCooldownTimer.Time += Time.deltaTime;
+    }
+
+    private void Gravity()
+    {
+        if (useGravity)
+        {
+            _velocity.y += _gravity * Time.deltaTime; //Gravity formula
+        }
+        else
+        {
+            _velocity.y = 0;
+        }
+
+        controller.Move(_velocity * Time.deltaTime); // T^2
+    }
+
+    public void Dash()
+    {
+        if (_dashCooldownTimer.Expired && _airDashes < airDashAmount)
+        {
+            _airDashes++;
+            _dashCooldownTimer.Reset();
+            //GlobalState.state.Player.ResetAnim();
+            stateMachine.ChangeState(new DashingState());
+        }
+    }
+
+    public void Jump()
+    {
+        if (_hasJumped && IsGrounded) 
+        {
+            _hasJumped = true;
+            _velocity.y = Mathf.Sqrt(_jumpHeight) * -_gravity;
+            GlobalState.state.Player.EndAnim();
+            playerAnimator.SetTrigger("Jump");
+            GlobalState.state.AudioManager.PlayerJumpAudio(this.transform.position);
+        }
+    }
+
+    public override void TakeDamage(HitboxValues hitbox, Entity attacker = null)
+    {
+
     }
 
     private void GroundCheck()
@@ -84,16 +150,18 @@ public class PlayerRevamp : Entity
         if (_isGrounded && _velocity.y < 0)
         {
             _velocity.y = -2f;
-            //_hasDashed = false;
+            _airDashes = 0;
+            _hasJumped = false;
         }
 
         //playerAnimator.SetBool("Grounded", _isGrounded);
     }
 
+
     /// <summary>
     /// Snaps camera after returning to free look camera
     /// </summary>
-    void SnapCamera()
+    private void SnapCamera()
     {
         if (_doSnapCamera)
         {
@@ -122,6 +190,7 @@ public class PlayerRevamp : Entity
 
     public void ToggleLockon()
     {
+
         if (!pointOfInterest)
         {
             Debug.LogWarning("Trying to toggle lockon without a point of interest!", this);
@@ -129,16 +198,29 @@ public class PlayerRevamp : Entity
         else
         {
             _lockedOn = !_lockedOn;
-            cameraAnimator.SetBool("lockedOn", _lockedOn);
+            cameraAnimator.SetBool("lockedOn", IsLockedOn);
+            playerAnimator.SetBool("lockedOn", IsLockedOn);
+
             if (IsLockedOn)
             {
                 _lockonCam.LookAt = pointOfInterest;
+
+                FaceDirection(pointOfInterest);
             }
             else
             {
                 _doSnapCamera = true;
             }
         }
+    }
+    /// <summary>
+    /// Character looks towards direction
+    /// </summary>
+    public void FaceDirection(Transform target)
+    {
+        Vector3 _direction = (target.position - transform.position);
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(_direction.x, 0, _direction.z));
+        GlobalState.state.PlayerGameObject.GetComponent<Transform>().rotation = lookRotation;
     }
 }
 
@@ -160,7 +242,20 @@ public class IdleState : State<PlayerRevamp>
         {
             owner.stateMachine.ChangeState(new MovementState());
         }
+
         owner.playerAnimator.SetFloat("Blend", owner.Input.magnitude);
+
+        if (owner.IsLockedOn)
+        {
+            owner.stateMachine.ChangeState(new IdleAlertState());
+        }
+
+        if (owner.dashPerformed)
+        {
+            owner.Dash();
+        }
+
+
     }
 }
 
@@ -178,7 +273,22 @@ public class IdleAlertState : State<PlayerRevamp>
 
     public override void UpdateState(PlayerRevamp owner)
     {
+        if (owner.Input != Vector2.zero)
+        {
+            owner.stateMachine.ChangeState(new MovementState());
+        }
 
+        owner.playerAnimator.SetFloat("Blend", owner.Input.magnitude);
+
+        if (!owner.IsLockedOn)
+        {
+            owner.stateMachine.ChangeState(new IdleState());
+        }
+
+        if (owner.dashPerformed)
+        {
+            owner.Dash();
+        }
     }
 }
 
@@ -222,7 +332,11 @@ public class MovementState : State<PlayerRevamp>
         }
         else
         {
-            if (owner.IsLockedOn)
+            if (owner.dashPerformed)
+            {
+                owner.Dash();
+            }
+            else if (owner.IsLockedOn)
             {
                 //PointOfInterestIsMousePos(owner);
 
@@ -282,3 +396,79 @@ public class MovementState : State<PlayerRevamp>
         }
     }
 }
+
+public class DashingState : State<PlayerRevamp>
+{
+    private Timer _timer;
+    private Timer _lagTimer;
+    private Vector3 _dashDirection;
+
+    public override void EnterState(PlayerRevamp owner)
+    {
+        owner.useGravity = false;
+
+        owner.playerAnimator.SetFloat("DashSpeed", owner.dashSpeed / owner.dashAnimationNumerator);
+
+        if (owner.invulerableWhenDashing)
+        {
+            GlobalState.state.Player.invulerable = true;
+        }
+
+        _timer = new Timer(owner.dashTime);
+        _lagTimer = new Timer(owner.dashLag);
+
+        owner.playerAnimator.SetTrigger("Dash");
+        owner.playerAnimator.SetBool("IsDashing", true);
+        GlobalState.state.AudioManager.PlayerDodgeAudio(owner.transform.position);
+
+        _dashDirection += Camera.main.transform.right * owner.Input.x;
+        _dashDirection += Camera.main.transform.forward * owner.Input.y;
+        if (_dashDirection == Vector3.zero)
+            _dashDirection = Camera.main.transform.forward;
+        _dashDirection.y = 0;
+
+        if(!owner.IsLockedOn)
+        {
+            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(_dashDirection.x, 0, _dashDirection.z));
+            owner.transform.rotation = lookRotation;
+        }
+    }
+
+    public override void ExitState(PlayerRevamp owner)
+    {
+        owner.dashPerformed = false;
+
+        if (owner.invulerableWhenDashing)
+        {
+            GlobalState.state.Player.invulerable = false;
+        }
+
+        owner.playerAnimator.SetBool("IsDashing", false);
+    }
+
+    public override void UpdateState(PlayerRevamp owner)
+    {
+        if (_timer.Expired)
+        {
+            //owner.playerAnimator.SetTrigger("DashLag");
+            _lagTimer.Time += Time.deltaTime;
+            owner.useGravity = true;
+
+            if (_lagTimer.Expired) // input buffer here?
+            {
+                owner.stateMachine.ChangeState(new IdleState());
+            }
+        }
+        else
+        {
+            _timer.Time += Time.deltaTime;
+            owner.controller.Move(_dashDirection.normalized * owner.dashSpeed * Time.deltaTime);
+
+            if (owner.IsLockedOn)
+            {
+                owner.FaceDirection(owner.pointOfInterest);
+            }
+        }
+    }
+} 
+
