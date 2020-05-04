@@ -54,6 +54,15 @@ ModelImporter:
   - first:
       74: 4497963428500506993
     second: anim_char_strafe_right
+  - first:
+      74: 5008810812567406131
+    second: anim_char_attack03
+  - first:
+      74: 8493885908738554866
+    second: anim_char_parry_loop
+  - first:
+      74: 5533516018882928935
+    second: anim_char_parry_start
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -138,11 +147,20 @@ ModelImporter:
       is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'neck_rot'
       is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'head_rot'
       is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
-      'anim_char_hurt_light' has import animation warnings that might lower retargeting
+      'anim_char_attack03' has import animation warnings that might lower retargeting
       quality:\n\t'spine_01' is inbetween humanoid transforms and has rotation animation
       that will be discarded.\n\t'neck_rot' is inbetween humanoid transforms and has
       rotation animation that will be discarded.\n\t'head_rot' is inbetween humanoid
-      transforms and has rotation animation that will be discarded.\n\nClip 'anim_char_death'
+      transforms and has rotation animation that will be discarded.\n\nClip 'anim_char_hurt_light'
+      has import animation warnings that might lower retargeting quality:\n\t'spine_01'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'neck_rot'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'head_rot'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'anim_char_death' has import animation warnings that might lower retargeting
+      quality:\n\t'spine_01' is inbetween humanoid transforms and has rotation animation
+      that will be discarded.\n\t'neck_rot' is inbetween humanoid transforms and has
+      rotation animation that will be discarded.\n\t'head_rot' is inbetween humanoid
+      transforms and has rotation animation that will be discarded.\n\nClip 'anim_char_parry_start'
       has import animation warnings that might lower retargeting quality:\n\t'spine_01'
       is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'neck_rot'
       is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'head_rot'
@@ -490,7 +508,7 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 0
+      loopTime: 1
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -837,7 +855,36 @@ ModelImporter:
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: anim_char_attack03
+      takeName: anim_char_attack03
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 50
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -1149,6 +1196,64 @@ ModelImporter:
       internalID: 0
       firstFrame: 0
       lastFrame: 100
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: anim_char_parry_loop
+      takeName: anim_char_parry_loop
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 22
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: anim_char_parry_start
+      takeName: anim_char_parry_start
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 22
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
