@@ -52,7 +52,7 @@ public class MonologManager : MonoBehaviour
         }
     }
 
-    public void EndMonolog()
+    void EndMonolog()
     {
         //spela eventuell animation här
         monologBackground.SetActive(false);

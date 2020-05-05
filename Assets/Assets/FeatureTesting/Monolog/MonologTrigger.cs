@@ -19,7 +19,7 @@ public class MonologTrigger : MonoBehaviour
         //ändra till singelton sen
         _monologManager = FindObjectOfType<MonologManager>();
         _player = GlobalState.state.PlayerGameObject;
-        _triggerDetectionLayers = _triggerDetectionLayers | 1 << _player.gameObject.layer;
+        _triggerDetectionLayers = (_triggerDetectionLayers | 1 << _player.gameObject.layer);
     }
 
     void OnTriggerEnter(Collider other)
