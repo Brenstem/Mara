@@ -34,7 +34,6 @@ public abstract class BaseAIMovementController : Entity
     [NonSerialized] public Timer waitTimer;
 
     [HideInInspector] public Animator _anim;
-    protected EnemyHealth _health;
 
     virtual protected void Awake()
     {
@@ -43,7 +42,7 @@ public abstract class BaseAIMovementController : Entity
         waitTimer = new Timer(_waitTime);
 
         _anim = GetComponentInChildren<Animator>();
-        _health = GetComponent<EnemyHealth>();
+        health = GetComponent<EnemyHealth>();
         _agent = GetComponent<NavMeshAgent>();
 
         _target = GlobalState.state.PlayerGameObject;
@@ -83,7 +82,7 @@ public abstract class BaseAIMovementController : Entity
 
     public override void TakeDamage(HitboxValues hitbox, Entity attacker)
     {
-        _health.Damage(hitbox.damageValue);
+        health.TakeDamage(hitbox);
     }
 }
 

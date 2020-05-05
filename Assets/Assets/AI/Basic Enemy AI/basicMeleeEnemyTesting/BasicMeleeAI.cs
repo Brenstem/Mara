@@ -23,7 +23,7 @@ public class BasicMeleeAI : BaseAIMovementController
 
         _anim.SetFloat("Blend", _agent.velocity.magnitude);
         
-        if (_health.GetHealth() <= 0)
+        if (health.GetHealth() <= 0)
         {
             KillThis();
         }

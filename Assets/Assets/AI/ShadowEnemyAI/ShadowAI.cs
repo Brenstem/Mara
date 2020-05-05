@@ -23,7 +23,7 @@ public class ShadowAI : BaseAIMovementController
 
     protected override void Update()
     {
-        if (_health.GetHealth() <= 0)
+        if (health.GetHealth() <= 0)
         {
             KillThis();
         }
