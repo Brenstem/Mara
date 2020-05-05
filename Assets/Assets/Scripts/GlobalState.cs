@@ -7,7 +7,7 @@ public class GlobalState : MonoBehaviour
 {
     [SerializeField] private GameObject _playerGameObject;
 
-    [SerializeField] private Player _player;
+    [SerializeField] private PlayerRevamp _player;
 
     [SerializeField] private Camera _camera;
 
@@ -29,7 +29,7 @@ public class GlobalState : MonoBehaviour
         get { return _playerGameObject; }
     }
 
-    public Player Player
+    public PlayerRevamp Player
     {
         get { return _player; }
     }
@@ -47,11 +47,6 @@ public class GlobalState : MonoBehaviour
     public AudioManager AudioManager
     {
         get { return _audioManager;  }
-    }
-
-    public GameObject PlayerMesh
-    {
-        get { return _playerMesh; }
     }
 
     public LayerMask PlayerMask
