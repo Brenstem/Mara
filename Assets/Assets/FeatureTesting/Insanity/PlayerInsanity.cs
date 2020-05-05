@@ -186,7 +186,7 @@ public class PlayerInsanity : EntityHealth
     {
         onSlow();
         onIncreaseMovementSpeed();
-
+        /*
         // Static based buffs
         switch (_currentInsanity)
         {
@@ -281,6 +281,7 @@ public class PlayerInsanity : EntityHealth
                     onDisableShadows();
                 break;
         }
+        */
     }
 
     private void PlayHeartBeat()

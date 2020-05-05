@@ -77,5 +77,7 @@ public abstract class EntityHealth : MonoBehaviour
         }
 
         CurrentHealth = MaxHealth;
+
+        _entity = GetComponent<Entity>();
     }
 }

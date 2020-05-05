@@ -174,7 +174,7 @@ public class IdleAttackState : State<CombatController>
         }
         else if (Input.GetMouseButtonDown(1))
         {
-            owner.stateMachine.ChangeState(new ParryState());
+            owner.stateMachine.ChangeState(new ParryLegacyState());
         }
     }
 }
@@ -331,7 +331,7 @@ public class ThirdAttackState : State<CombatController>
     }
 }
 
-public class ParryState : State<CombatController>
+public class ParryLegacyState : State<CombatController>
 {
     private Timer _parryTimer;
     private Timer _parryLagTimer;
