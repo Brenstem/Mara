@@ -22,7 +22,7 @@ public abstract class EntityHealth : MonoBehaviour
         get { return _currentHealth; }
         set
         {
-            if (value < 0)
+            if (value <= 0)
             {
                 _currentHealth = 0;
                 KillThis();
@@ -39,8 +39,7 @@ public abstract class EntityHealth : MonoBehaviour
             if (HealthBar != null)
             {
                 HealthBar.SetValue(value);
-            }
-                
+            }   
         }
     }
 

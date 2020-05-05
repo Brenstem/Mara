@@ -13,12 +13,12 @@ public class CheckpointHandler : MonoBehaviour
     // Subscribe to player death event
     private void OnEnable()
     {
-        PlayerInsanity.onPlayerDeath += RespawnPlayer;
+        PlayerAnimationEventHandler.onPlayerDeath += RespawnPlayer;
     }
 
     private void OnDisable()
     {
-        PlayerInsanity.onPlayerDeath -= RespawnPlayer;
+        PlayerAnimationEventHandler.onPlayerDeath -= RespawnPlayer;
     }
 
     private void Start()
@@ -28,6 +28,8 @@ public class CheckpointHandler : MonoBehaviour
 
     private void LateUpdate()
     {
+        print(_activeCheckPoint);
+
         if (_respawnTimer != null)
         {
             _respawnTimer.Time += Time.deltaTime;
@@ -65,18 +67,12 @@ public class CheckpointHandler : MonoBehaviour
     // Respawn player using checkpoint data
     private void Spawn()
     {
-        GlobalState.state.Player.IsDying = false;
         GlobalState.state.PlayerGameObject.GetComponent<CharacterController>().enabled = false;
-        GlobalState.state.Player.EnableCombatController();
-        GlobalState.state.Player.EnableMovementController();
-        GlobalState.state.Player.EnableLockonFunctionality();
-        GlobalState.state.Player.ResetCombatController();
-        GlobalState.state.Player.ResetMovementController();
         GlobalState.state.PlayerGameObject.transform.position = _activeCheckPoint.pos.position;
         GlobalState.state.PlayerGameObject.transform.rotation = _activeCheckPoint.pos.rotation;
         GlobalState.state.PlayerGameObject.GetComponent<PlayerInsanity>().SetInsanity(_activeCheckPoint.ins);
         GlobalState.state.PlayerGameObject.GetComponent<CharacterController>().enabled = true;
-        GlobalState.state.Player.ResetAnim();
+        GlobalState.state.PlayerGameObject.GetComponent<PlayerRevamp>().stateMachine.ChangeState(new IdleState());
     }
 
     void RespawnPlayer()

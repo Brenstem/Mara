@@ -50,9 +50,6 @@ public class Player : Entity
 
         if (hitEffect != null)
             hitEffect.SetActive(false);
-
-        PlayerInsanity.onImpendingDoom += ImpendingDoom;
-        PlayerInsanity.onPlayerDeath += Death;
     }
     private void OnEnable() { _playerInput.PlayerControls.Enable(); }
     private void OnDisable() { _playerInput.PlayerControls.Disable(); }

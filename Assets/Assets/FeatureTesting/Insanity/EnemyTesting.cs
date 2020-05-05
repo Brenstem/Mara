@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class EnemyTesting : MonoBehaviour
 {
-    [SerializeField]
-    float damageAmount;
+    [SerializeField] float damageAmount;
 
     private PlayerRevamp player;
 
@@ -18,11 +17,6 @@ public class EnemyTesting : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-            HitboxValues h = new HitboxValues()
-            {
-                damageValue = damageAmount
-            };
-
             player.TakeDamage(damageAmount);
         }
     }

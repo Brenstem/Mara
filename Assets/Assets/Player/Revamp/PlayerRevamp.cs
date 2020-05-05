@@ -67,6 +67,10 @@ public class PlayerRevamp : Entity
     public HitboxGroup heavyHitboxGroup;
     public float heavyStepSpeed;
 
+    [Header("Insanity events")]
+    [SerializeField] float _moveSpeedBuffMultiplier = 1.1f;
+    [SerializeField] float _moveSpeedDebuffMultiplier = 0.9f;
+
     #endregion
 
     /* === COMPONENT REFERENCES === */
@@ -157,7 +161,6 @@ public class PlayerRevamp : Entity
     {
         stateMachine.Update();
 
-        print(stateMachine.currentState);
         Gravity();
 
         SnapCamera();
@@ -234,7 +237,7 @@ public class PlayerRevamp : Entity
             maxSpeed = _originalMaxSpeed;
             if (currentInsanity >= 10)
             {
-                maxSpeed *= 1.1f;
+                maxSpeed *= _moveSpeedBuffMultiplier;
             }
             else
             {
@@ -252,7 +255,7 @@ public class PlayerRevamp : Entity
             maxSpeed = _originalMaxSpeed;
             if (currentInsanity >= 10)
             {
-                maxSpeed *= 0.90f;
+                maxSpeed *= _moveSpeedDebuffMultiplier;
             }
             else
             {
