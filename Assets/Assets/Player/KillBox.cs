@@ -8,7 +8,7 @@ public class KillBox : MonoBehaviour
     {
         if (hitInfo.CompareTag("Player"))
         {
-            hitInfo.GetComponent<PlayerInsanity>().KillPlayer();
+            hitInfo.GetComponent<PlayerInsanity>().Damage(50000000);
         }
 
         if (hitInfo.CompareTag("Enemy"))

@@ -5,8 +5,6 @@ using UnityEngine;
 
 public class ShadowAI : BaseAIMovementController
 {
-
-
     protected override void Awake()
     {
         base.Awake();
@@ -23,16 +21,12 @@ public class ShadowAI : BaseAIMovementController
 
     protected override void Update()
     {
-        if (health.GetHealth() <= 0)
-        {
-            KillThis();
-        }
 
         _anim.SetFloat("Blend", _agent.velocity.magnitude);
         base.Update();
     }
 
-    private void KillThis()
+    public override void KillThis()
     {
         _anim.SetTrigger("Dead");
         stateMachine.ChangeState(new DeadState());

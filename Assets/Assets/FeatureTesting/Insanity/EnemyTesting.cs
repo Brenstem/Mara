@@ -7,11 +7,11 @@ public class EnemyTesting : MonoBehaviour
     [SerializeField]
     float damageAmount;
 
-    private Player player;
+    private PlayerRevamp player;
 
     void Start()
     {
-        player = GlobalState.state.PlayerGameObject.GetComponent<Player>(); 
+        player = GlobalState.state.PlayerGameObject.GetComponent<PlayerRevamp>(); 
     }
 
     void Update()
@@ -23,7 +23,7 @@ public class EnemyTesting : MonoBehaviour
                 damageValue = damageAmount
             };
 
-            player.TakeDamage(h);
+            player.TakeDamage(damageAmount);
         }
     }
 }

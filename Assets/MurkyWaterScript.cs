@@ -69,7 +69,7 @@ public class MurkyWaterScript : MonoBehaviour
 		print("nu ser jag något");
 		if (_collisionLayers == (_collisionLayers | 1 << other.gameObject.layer)) {
 			if (other.CompareTag("Player")) {
-				other.GetComponent<PlayerInsanity>().IncrementInsanity(_damagePerSecond);
+				other.GetComponent<PlayerInsanity>().Damage(_damagePerSecond);
 			}
 		}
 	}

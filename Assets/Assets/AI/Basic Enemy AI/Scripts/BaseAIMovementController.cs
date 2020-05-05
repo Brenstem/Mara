@@ -82,7 +82,7 @@ public abstract class BaseAIMovementController : Entity
 
     public override void TakeDamage(HitboxValues hitbox, Entity attacker)
     {
-        health.TakeDamage(hitbox);
+        health.Damage(hitbox);
     }
 }
 

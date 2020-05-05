@@ -5,7 +5,16 @@ using UnityEngine.UI;
 
 public abstract class EntityHealth : MonoBehaviour
 {
-    public Slider slider;
+    [SerializeField] private float _maxHealth;
+
+    [SerializeField] protected HealthBar _healthBar;
+
+    public virtual HealthBar HealthBar {
+        get { return _healthBar; }
+        set { _healthBar = value; } 
+    }
+
+    private Entity _entity;
 
     private float _currentHealth;
     public float CurrentHealth
@@ -16,6 +25,7 @@ public abstract class EntityHealth : MonoBehaviour
             if (value < 0)
             {
                 _currentHealth = 0;
+                KillThis();
             }
             else if (value > MaxHealth)
             {
@@ -26,27 +36,46 @@ public abstract class EntityHealth : MonoBehaviour
                 _currentHealth = value;
             }
 
-            if (slider != null)
-                slider.value = value;
+            if (HealthBar != null)
+            {
+                HealthBar.SetValue(value);
+            }
+                
         }
     }
 
-    [SerializeField] private float _maxHealth;
     public float MaxHealth
     {
         get { return _maxHealth; }
         set
         {
             _maxHealth = value;
-            if (slider != null)
-                slider.maxValue = value;
+            if (HealthBar != null)
+            {
+                HealthBar.SetMaxValue(value);
+            }
         }
     }
 
-    public abstract void TakeDamage(HitboxValues hitbox);
+    public abstract void Damage(HitboxValues hitbox);
 
-    public void Awake()
+    public virtual void Damage(float damage)
     {
+        CurrentHealth -= damage;
+    }
+
+    public void KillThis()
+    {
+        _entity.KillThis();
+    }
+
+    public void Start()
+    {
+        if (HealthBar != null)
+        {
+            HealthBar.SetMaxValue(MaxHealth);
+        }
+
         CurrentHealth = MaxHealth;
     }
 }

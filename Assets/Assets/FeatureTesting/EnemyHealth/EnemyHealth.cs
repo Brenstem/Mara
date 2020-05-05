@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class EnemyHealth : EntityHealth
 {
-    private void Awake()
+    private new void Start()
     {
-        base.Awake();
+        base.Start();
     }
     
-    public override void TakeDamage(HitboxValues hitbox)
+    public override void Damage(HitboxValues hitbox)
     {
         CurrentHealth -= hitbox.damageValue;
     }

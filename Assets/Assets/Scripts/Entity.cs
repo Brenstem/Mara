@@ -81,7 +81,13 @@ public abstract class Entity : MonoBehaviour
     public bool invulerable;
     public HitboxModifier modifier;
 
-    public abstract void TtakeDamage(HitboxValues hitbox, Entity attacker = null);
+    public abstract void TakeDamage(HitboxValues hitbox, Entity attacker = null);
+    public virtual void TakeDamage(float damageAmount)
+    {
+        health.Damage(damageAmount);
+    }
+
+    public abstract void KillThis();
 
     protected virtual void Awake()
     {

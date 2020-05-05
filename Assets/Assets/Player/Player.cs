@@ -34,7 +34,7 @@ public class Player : Entity
         else
         {
             EnableHitstun(hitbox.hitstunTime);
-            playerInsanity.IncrementInsanity(hitbox.damageValue);
+            playerInsanity.Damage(hitbox.damageValue);
             GlobalState.state.AudioManager.PlayerHurtAudio(this.transform.position);
         }
     }
@@ -161,4 +161,9 @@ public class Player : Entity
 
     public void EnableLockonFunctionality() { lockonFunctionality.enabled = true; }
     public void DisableLockonFunctionality() { lockonFunctionality.enabled = false; }
+
+    public override void KillThis()
+    {
+        throw new System.NotImplementedException();
+    }
 }

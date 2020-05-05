@@ -139,8 +139,9 @@ public class PlayerRevamp : Entity
 
     public override void TakeDamage(HitboxValues hitbox, Entity attacker = null)
     {
-
+        health.Damage(hitbox);
     }
+
     private void AttackStep() { attackStep = true; }
     private void AttackStepEnd() { attackStep = false; }
     private void IASA() { interruptable = true; }
@@ -159,29 +160,6 @@ public class PlayerRevamp : Entity
         }
 
         controller.Move(_velocity * Time.deltaTime); // T^2
-    }
-
-    public void Dash()
-    {
-        if (_dashCooldownTimer.Expired && _airDashes < airDashAmount)
-        {
-            _airDashes++;
-            _dashCooldownTimer.Reset();
-            //GlobalState.state.Player.ResetAnim();
-            stateMachine.ChangeState(new DashingState());
-        }
-        
-    }
-
-    public void Jump()
-    {
-        if (IsGrounded) 
-        {
-            _velocity.y = Mathf.Sqrt(_jumpHeight) * -_gravity;
-            playerAnimator.SetTrigger("Jump");
-            playerAnimator.SetBool("HasJumped", true);
-            GlobalState.state.AudioManager.PlayerJumpAudio(this.transform.position);
-        }
     }
 
     private void GroundCheck()
@@ -214,6 +192,28 @@ public class PlayerRevamp : Entity
             //var loc = new Vector2(_lockonCam.m_XAxis.Value, _lockonCam.m_YAxis.Value);
             _freeLookCam.m_XAxis.Value = transform.eulerAngles.y;
             _doSnapCamera = false;
+        }
+    }
+
+    public void Dash()
+    {
+        if (_dashCooldownTimer.Expired && _airDashes < airDashAmount)
+        {
+            _airDashes++;
+            _dashCooldownTimer.Reset();
+            //GlobalState.state.Player.ResetAnim();
+            stateMachine.ChangeState(new DashingState());
+        }
+    }
+
+    public void Jump()
+    {
+        if (IsGrounded)
+        {
+            _velocity.y = Mathf.Sqrt(_jumpHeight) * -_gravity;
+            playerAnimator.SetTrigger("Jump");
+            playerAnimator.SetBool("HasJumped", true);
+            GlobalState.state.AudioManager.PlayerJumpAudio(this.transform.position);
         }
     }
 
@@ -266,6 +266,11 @@ public class PlayerRevamp : Entity
         Vector3 _direction = (target.position - transform.position);
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(_direction.x, 0, _direction.z));
         GlobalState.state.PlayerGameObject.GetComponent<Transform>().rotation = lookRotation;
+    }
+
+    public override void KillThis()
+    {
+        throw new System.NotImplementedException();
     }
 }
 

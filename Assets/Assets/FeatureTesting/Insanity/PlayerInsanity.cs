@@ -4,26 +4,14 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Experimental.Rendering.HDPipeline;
 
-public class PlayerInsanity : MonoBehaviour
+public class PlayerInsanity : EntityHealth
 {
-    [Header("Insanity values")]
-    [SerializeField] 
-    private float _maxInsanity;
-
-    [SerializeField] 
-    private float _impendingDoomTimer;
-    [Space(10)]
-
-    [Tooltip("Add the insanity bar game object here")]
-    [SerializeField] private HealthBar InsanityBar;
-    [Space(10)]
+    [SerializeField] private float _impendingDoomTimer;
 
     [Tooltip("Add the static and dynamic values for each insanity tier here. Do not change the array size!")]
-    [SerializeField] 
-    private int[] staticInsanityValues;
+    [SerializeField] private int[] staticInsanityValues;
 
-    [SerializeField] 
-    private int[] dynamicInsanityValues;
+    [SerializeField] private int[] dynamicInsanityValues;
 
     [SerializeField] private Volume vol;
 
@@ -101,8 +89,11 @@ public class PlayerInsanity : MonoBehaviour
 
     private FilmGrain _filmGrain;
 
-    private void Start()
+
+    private new void Start()
     {
+        base.Start();
+
         if (vol != null)
         {
             ChromaticAberration chroTmp;
@@ -126,13 +117,11 @@ public class PlayerInsanity : MonoBehaviour
         }
         
 
-        if (!InsanityBar)
+        if (!HealthBar)
         {
             throw new System.Exception("Healthbar prefab missing!");
         }
 
-        InsanityBar.SetValue(_currentInsanity);
-        InsanityBar.SetMaxValue(_maxInsanity);
         GlobalState.state.AudioManager.PlayerInsanityAudio(GetInsanityPercentage());
     }
 
@@ -162,45 +151,23 @@ public class PlayerInsanity : MonoBehaviour
 
             if (_timer.Expired)
             {
-                KillPlayer();
+                KillThis();
             }
         }
     }
 
-    public float GetInsanity()
-    {
-        return _currentInsanity;
-    }
-
-    public float GetMaxInsanity()
-    {
-        return _maxInsanity;
-    }
-
     public float GetInsanityPercentage()
     {
-        return _currentInsanity / _maxInsanity * 100; 
-    }
-
-    public void SetMaxInsanity(float amount)
-    {
-        _maxInsanity = amount;
-        InsanityBar.SetMaxValue(_maxInsanity);
-    }
-
-    public void IncrementMaxInsanity(float amount)
-    {
-        _maxInsanity += amount;
-        InsanityBar.SetMaxValue(_maxInsanity);
+        return _currentInsanity / MaxHealth * 100; 
     }
 
     // Sets insanity based on parameters
     public void SetInsanity(float amount)
     {
         // Insanity cannot be above max or below 0
-        if (amount > _maxInsanity)
+        if (amount > MaxHealth)
         {
-            _currentInsanity = _maxInsanity;
+            _currentInsanity = MaxHealth;
         }
         else if (amount < 0)
         {
@@ -212,29 +179,7 @@ public class PlayerInsanity : MonoBehaviour
         }
 
         ActivateBuffs();
-
-        InsanityBar.SetValue(_currentInsanity);
-    }
-
-    // Increments insanity based on parameters
-    public void IncrementInsanity(float amount)
-    {
-        // Insanity cannot be above max or below 0
-        if (amount + _currentInsanity > _maxInsanity)
-        {
-            _currentInsanity = _maxInsanity;
-        }
-        else if (amount + _currentInsanity < 0)
-        {
-            _currentInsanity = 0;
-        }
-        else
-        {
-            _currentInsanity += amount;
-        }
-
-        ActivateBuffs();
-        InsanityBar.SetValue(_currentInsanity);
+        HealthBar.SetValue(_currentInsanity);
     }
 
     public void ActivateBuffs()
@@ -277,7 +222,7 @@ public class PlayerInsanity : MonoBehaviour
         }
 
         // Percentage based debuffs
-        float currentInsanityPercentage = _currentInsanity / _maxInsanity * 100;
+        float currentInsanityPercentage = _currentInsanity / MaxHealth * 100;
 
         switch (currentInsanityPercentage)
         {
@@ -285,7 +230,7 @@ public class PlayerInsanity : MonoBehaviour
                 if (_debuffState != DebuffStates.impendingDoom)
                 {
                     PlayHeartBeat();
-                    KillPlayer();
+                    KillThis();
                 }
                 _debuffState = DebuffStates.impendingDoom;
                 break;
@@ -338,20 +283,15 @@ public class PlayerInsanity : MonoBehaviour
         }
     }
 
-    public void PlayHeartBeat()
+    private void PlayHeartBeat()
     {
         GlobalState.state.AudioManager.PlayerInsanityHeartBeat(this.transform.position);
     }
 
-    public void KillPlayer()
-    { 
-        print("Killing Player");
-
-        _playerDying = false;
-        if (!Object.ReferenceEquals(_timer, null))
-        {
-            _timer.Reset();
-        }
-        onPlayerDeath();
+    public override void Damage(HitboxValues hitbox)
+    {
+        ActivateBuffs();
+        CurrentHealth -= hitbox.damageValue;
+        HealthBar.SetValue(CurrentHealth);
     }
 }

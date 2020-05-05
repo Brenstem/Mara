@@ -56,7 +56,7 @@ public class CheckpointHandler : MonoBehaviour
         }
         else
         {
-            insanity = GlobalState.state.PlayerGameObject.GetComponent<PlayerInsanity>().GetInsanity();
+            insanity = GlobalState.state.PlayerGameObject.GetComponent<PlayerInsanity>().CurrentHealth;
         }
 
         _activeCheckPoint = new CheckpointData(position, insanity);

@@ -44,6 +44,7 @@ public class BossAIScript : Entity
     public BossPhaseTwoState bossPhaseTwoState = new BossPhaseTwoState();
     public BossDeadState bossDeadState = new BossDeadState();
 
+    [SerializeField] EnemyHealth health;
     [SerializeField] public GameObject _fill;
 
     [SerializeField] public GameObject murkyWaterPrefab;
@@ -155,7 +156,7 @@ public class BossAIScript : Entity
 
     public override void TakeDamage(HitboxValues hitbox, Entity attacker)
     {
-        GetComponent<EnemyHealth>().Damage(hitbox.damageValue);
+        health.Damage(hitbox);
         //spela hurtljud här
     }
 
@@ -313,6 +314,11 @@ public class BossAIScript : Entity
         placeholoderDranBeam.SetActive(false);
     }
 
+    public override void KillThis()
+    {
+        throw new NotImplementedException();
+    }
+
     //old
     //public void FlipDrainHitboxActivation()
     //{
@@ -429,7 +435,9 @@ public class BossPhaseOneState : State<BossAIScript>
         //}
         
         //kan skapa problem (?)
-        if (owner.GetComponent<EnemyHealth>().GetHealth() <= 0)
+
+        // DETTA BÖR HANTERAS I KILLTHIS METODEN MVH DANE
+        if (owner.health.CurrentHealth <= 0)
         {
             owner.phaseControllingStateMachine.ChangeState(owner.bossDeadState);
         }
