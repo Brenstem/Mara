@@ -12,6 +12,7 @@ public class PlayerRevamp : Entity
     [SerializeField] private Transform _groundCheckPosition;
     [SerializeField] private Cinemachine.CinemachineFreeLook _freeLookCam;
     [SerializeField] private Cinemachine.CinemachineFreeLook _lockonCam;
+    [SerializeField] private TargetFinder _targetFinder;
     [SerializeField, Range(1, 20)] private int inputBufferSize = 1;
 
     [Header("Ground Check")]
@@ -72,6 +73,7 @@ public class PlayerRevamp : Entity
         AttackLight = 2,
         AttackHeavy = 3,
     }
+
     [HideInInspector] public CircularBuffer<InputType> inputBuffer;
     [HideInInspector] public bool dashPerformed;
     [HideInInspector] public bool jumpPerformed;
@@ -267,6 +269,23 @@ public class PlayerRevamp : Entity
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(_direction.x, 0, _direction.z));
         GlobalState.state.PlayerGameObject.GetComponent<Transform>().rotation = lookRotation;
     }
+
+    public GameObject FindTarget()
+    {
+        GameObject _target = _targetFinder.FindTarget(); // Find target to pass to attack function in first frame of attack
+        if (_target != null)
+        {
+            var t = GlobalState.state.PlayerGameObject.GetComponent<LockonFunctionality>().Target;
+
+            if (t != null)
+            {
+                if (Vector3.Distance(transform.position, t.position) <= _targetFinder.trackRadius)
+                    _target = t.gameObject;
+            }
+        }
+        return _target;
+    }
+
 
     public override void KillThis()
     {
@@ -561,16 +580,12 @@ public class LightAttackOneState : State<PlayerRevamp>
 
     public override void EnterState(PlayerRevamp owner)
     {
-        /*
-        owner._animationOver = false;
-        owner._interruptable = false;
-        */
         owner.light1HitboxGroup.enabled = true;
         owner.playerAnimator.SetBool("LightAttackTwo", false); // Reset the double combo animation bool upon entering state
         owner.playerAnimator.SetTrigger("AttackLight"); // Set animation trigger for first attack
         GlobalState.state.AudioManager.PlayerSwordSwingAudio(owner.transform.position);
 
-        //_target = owner.FindTarget();
+        _target = owner.FindTarget();
     }
 
     public override void ExitState(PlayerRevamp owner)
@@ -586,6 +601,7 @@ public class LightAttackOneState : State<PlayerRevamp>
     {
         if (owner.attackStep)
         {
+            owner.FaceDirection(_target.transform);
             owner.controller.Move(owner.transform.forward * owner.light1StepSpeed * Time.deltaTime);
         }
         
@@ -602,23 +618,6 @@ public class LightAttackOneState : State<PlayerRevamp>
         {
             owner.stateMachine.ChangeState(new IdleState());
         }
-
-        /*
-        //owner.Attack(_target, true);
-        if (!owner._animationOver && owner.inputBuffer.Contains(PlayerRevamp.InputType.AttackLight)) // If the player presses mouse0 when animation is running set doublecombo to true
-        {
-            _secondAttack = true;
-        }
-
-        if (owner._animationOver && !_secondAttack) // If the animation has ended and doublecombo is not true go to idle
-        {
-            owner.stateMachine.ChangeState(new IdleAttackState());
-        }
-        else if (owner._animationOver || (owner._interruptable && _secondAttack)) // If animation has ended and double combo is true go to second attack
-        {
-            owner.stateMachine.ChangeState(new SecondAttackState());
-        }
-        */
     }
 }
 
@@ -632,7 +631,7 @@ public class LightAttackTwoState : State<PlayerRevamp>
         owner.light2HitboxGroup.enabled = true;
         GlobalState.state.AudioManager.PlayerSwordSwingAudio(owner.transform.position);
 
-        //_target = owner.FindTarget();
+        _target = owner.FindTarget();
     }
 
     public override void ExitState(PlayerRevamp owner)
@@ -647,6 +646,7 @@ public class LightAttackTwoState : State<PlayerRevamp>
     {
         if (owner.attackStep)
         {
+            owner.FaceDirection(_target.transform);
             owner.controller.Move(owner.transform.forward * owner.light2StepSpeed * Time.deltaTime);
         }
 

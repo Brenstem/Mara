@@ -22,7 +22,7 @@ public class TargetFinder : MonoBehaviour
         {
             if (target != null)
             {
-                Vector2 input = GlobalState.state.Player.input.direction;
+                // Vector2 input = GlobalState.state.PlayerGameObject.GetComponent<PlayerRevamp>().Input.direction;
                 /* INPUT DEPENDANT */
                 /*if (input != Vector2.zero)
                 {

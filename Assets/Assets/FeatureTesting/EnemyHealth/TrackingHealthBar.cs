@@ -28,11 +28,6 @@ public class TrackingHealthBar : HealthBar
         _cam = GlobalState.state.Camera.transform;
     }
 
-    private void Update()
-    {
-        print(Slider.maxValue);
-    }
-
     // Health bar billboarding
     private void LateUpdate()
     {
