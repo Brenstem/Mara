@@ -27,13 +27,21 @@ public class ButtonFunction : MonoBehaviour
     {
         PlayerData data = SaveData.LoadPlayer();
 
+        GlobalState.state.Player.gameObject.GetComponent<CharacterController>().enabled = false;
+
         Vector3 position;
         position.x = data.playerPosition[0];
         position.y = data.playerPosition[1];
         position.z = data.playerPosition[2];
 
-        Debug.Log(position);
+        float rotation;
+        rotation = data.playerRotation;
+
+        Debug.Log(rotation);
 
         GlobalState.state.Player.gameObject.transform.position = position;
+        GlobalState.state.Player.gameObject.transform.Rotate(new Vector3(0, rotation, 0));
+
+        GlobalState.state.Player.gameObject.GetComponent<CharacterController>().enabled = true;
     }
 }

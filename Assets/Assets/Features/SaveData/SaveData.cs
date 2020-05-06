@@ -15,6 +15,8 @@ public static class SaveData
 
         PlayerData data = new PlayerData();
 
+        Debug.Log(GlobalState.state.Player.gameObject.transform.eulerAngles.y);
+
         bf.Serialize(stream, data);
         stream.Close();
     }
