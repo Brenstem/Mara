@@ -18,7 +18,7 @@ public class PlayerRevamp : Entity
     [SerializeField] private Cinemachine.CinemachineFreeLook _freeLookCam;
     [SerializeField] private Cinemachine.CinemachineFreeLook _lockonCam;
     [SerializeField] private TargetFinder _targetFinder;
-    [SerializeField, Range(1, 20)] private int inputBufferSize = 1;
+    [SerializeField, Range(1, 50)] private int inputBufferSize = 1;
 
     [Header("Ground Check")]
     [SerializeField] private float _groundDistance = 0.4f;
@@ -86,12 +86,12 @@ public class PlayerRevamp : Entity
 
     public enum InputType
     {
-        Idle = -1,
-        Dash = 0,
-        Jump = 1,
-        AttackLight = 2,
-        AttackHeavy = 3,
-        Parry = 4,
+        Idle = 0,
+        Dash = 1,
+        Jump = 2,
+        AttackLight = 3,
+        AttackHeavy = 4,
+        Parry = 5,
     }
 
     [HideInInspector] public CircularBuffer<InputType> inputBuffer;
@@ -292,6 +292,7 @@ public class PlayerRevamp : Entity
             _velocity.y = Mathf.Sqrt(_jumpHeight) * -_gravity;
             playerAnimator.SetBool("HasJumped", true);
             playerAnimator.SetTrigger("Jump");
+            inputBuffer.Clear();
             GlobalState.state.AudioManager.PlayerJumpAudio(this.transform.position);
         }
     }
@@ -748,14 +749,36 @@ public class LightAttackOneState : State<PlayerRevamp>
                     owner.FaceDirection(_target.transform);
                 owner.controller.Move(owner.transform.forward * owner.light1StepSpeed * Time.deltaTime);
             }
-            if (owner.interruptable && owner.inputBuffer.Contains(PlayerRevamp.InputType.AttackLight))
+            if (owner.interruptable)
             {
-                _secondAttack = true;
-                owner.stateMachine.ChangeState(new LightAttackTwoState());
-            }
-            else if (owner.interruptable && owner.Input != Vector2.zero)
-            {
-                owner.stateMachine.ChangeState(new IdleState());
+                foreach (PlayerRevamp.InputType item in owner.inputBuffer)
+                {
+                    switch (item)
+                    {
+                        case PlayerRevamp.InputType.AttackLight:
+                            if (owner.IsGrounded)
+                            {
+                                _secondAttack = true;
+                                owner.stateMachine.ChangeState(new LightAttackTwoState());
+                                return;
+                            }
+                            break;
+                        case PlayerRevamp.InputType.AttackHeavy:
+                            if (owner.IsGrounded)
+                            {
+                                owner.stateMachine.ChangeState(new HeavyAttackState());
+                                return;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                if (owner.Input != Vector2.zero)
+                {
+                    owner.stateMachine.ChangeState(new IdleState());
+                }
             }
             else if (owner.attackAnimationOver)
             {
@@ -776,7 +799,6 @@ public class LightAttackTwoState : State<PlayerRevamp>
         owner.attackAnimationOver = false;
         owner.light2HitboxGroup.enabled = true;
         GlobalState.state.AudioManager.PlayerSwordSwingAudio(owner.transform.position);
-
         _target = owner.FindTarget();
     }
 
@@ -803,14 +825,36 @@ public class LightAttackTwoState : State<PlayerRevamp>
                 owner.controller.Move(owner.transform.forward * owner.light2StepSpeed * Time.deltaTime);
             }
 
-            if (owner.interruptable && owner.inputBuffer.Contains(PlayerRevamp.InputType.AttackLight))
+            if (owner.interruptable)
             {
-                _secondAttack = true;
-                owner.stateMachine.ChangeState(new LightAttackOneState());
-            }
-            else if (owner.interruptable && owner.Input != Vector2.zero)
-            {
-                owner.stateMachine.ChangeState(new IdleState());
+                foreach (PlayerRevamp.InputType item in owner.inputBuffer)
+                {
+                    switch (item)
+                    {
+                        case PlayerRevamp.InputType.AttackLight:
+                            if (owner.IsGrounded)
+                            {
+                                _secondAttack = true;
+                                owner.stateMachine.ChangeState(new LightAttackOneState());
+                                return;
+                            }
+                            break;
+                        case PlayerRevamp.InputType.AttackHeavy:
+                            if (owner.IsGrounded)
+                            {
+                                owner.stateMachine.ChangeState(new HeavyAttackState());
+                                return;
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+
+                if (owner.Input != Vector2.zero)
+                {
+                    owner.stateMachine.ChangeState(new IdleState());
+                }
             }
             else if (owner.attackAnimationOver)
             {
@@ -857,9 +901,12 @@ public class HeavyAttackState : State<PlayerRevamp>
                 owner.controller.Move(owner.transform.forward * owner.heavyStepSpeed * Time.deltaTime);
             }
 
-            if (owner.interruptable && owner.Input != Vector2.zero)
+            if (owner.interruptable)
             {
-                owner.stateMachine.ChangeState(new IdleState());
+                if (owner.inputBuffer.Contains(PlayerRevamp.InputType.AttackLight)) // just nu prioriteras det helt
+                    owner.stateMachine.ChangeState(new LightAttackOneState());
+                else if (owner.Input != Vector2.zero)
+                    owner.stateMachine.ChangeState(new IdleState());
             }
             else if (owner.attackAnimationOver)
             {

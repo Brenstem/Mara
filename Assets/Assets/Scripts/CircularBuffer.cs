@@ -145,7 +145,7 @@ public class CircularBuffer<T> : ICircularBuffer<T>, IEnumerable<T>
     {
         if ((System.Object)item == null)
         {
-            for (int i = 0; i < Count; i++)
+            for (int i = 0; i < Count; i++) // null men det gör inget särskillt just nu så det spelar ingen roll att ändra
             {
                 if ((System.Object)_buffer[i] == null)
                     return true;
@@ -155,22 +155,33 @@ public class CircularBuffer<T> : ICircularBuffer<T>, IEnumerable<T>
         else
         {
             EqualityComparer<T> c = EqualityComparer<T>.Default;
-            for (int i = 0; i < Count; i++)
+            int index = _head;
+            while (index != _tail)
             {
-                if (c.Equals(_buffer[i], item))
+                if (c.Equals(_buffer[index], item))
                     return true;
+                index--;
+                if (index < 0)
+                    index = Count - 1;
             }
             return false;
         }
     }
-
     public IEnumerator<T> GetEnumerator()
     {
         if (Count == 0 || Capacity == 0)
             yield break;
 
-        for (var i = 0; i < Count; ++i)
-            yield return this[i];
+        int index = _head;
+        while (index != _tail)
+        {
+            yield return this[index];
+            index--;
+            if (index < 0)
+                index = Count - 1;
+        }
+        //for (var i = 0; i < Count; ++i)
+           // yield return this[i];
     }
 
     IEnumerator IEnumerable.GetEnumerator()
