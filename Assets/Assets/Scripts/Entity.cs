@@ -92,5 +92,6 @@ public abstract class Entity : MonoBehaviour
     protected virtual void Awake()
     {
         modifier = new HitboxModifier();
+        health = GetComponent<EntityHealth>();
     }
 }

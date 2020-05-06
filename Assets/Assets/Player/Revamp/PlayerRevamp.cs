@@ -155,16 +155,12 @@ public class PlayerRevamp : Entity
         PlayerInsanity.onIncreaseMovementSpeed += IncreaseMoveSpeed;
     }
 
-
-
     private void Update()
     {
         stateMachine.Update();
 
         playerAnimator.SetFloat("StrafeDirX", Input.x);
         playerAnimator.SetFloat("StrafeDirY", Input.y);
-
-        print(stateMachine.currentState);
 
         Gravity();
 

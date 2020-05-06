@@ -40,7 +40,7 @@ public class RangedEnemyAI : BaseAIMovementController
     public override void KillThis()
     {
         stateMachine.ChangeState(new DeadState());
-        _anim.SetTrigger("Dead");
+        _anim.SetBool("Dead", true);
         _agent.SetDestination(transform.position);
         transform.tag = "Untagged";
     }

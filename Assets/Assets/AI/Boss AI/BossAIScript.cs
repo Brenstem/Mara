@@ -46,7 +46,6 @@ public class BossAIScript : Entity
     public BossPhaseTwoState bossPhaseTwoState = new BossPhaseTwoState();
     public BossDeadState bossDeadState = new BossDeadState();
 
-    [SerializeField] EnemyHealth health;
     [SerializeField] public GameObject _fill;
 
     [SerializeField] public GameObject murkyWaterPrefab;
@@ -122,8 +121,10 @@ public class BossAIScript : Entity
     [NonSerialized] public bool animationEnded;
     [NonSerialized] public bool facePlayerBool = true;
 
-    void Awake()
+    protected new void Awake()
     {
+        base.Awake();
+
         phaseControllingStateMachine = new StateMachine<BossAIScript>(this);
 
         //borde inte göras såhär at the end of the day men måste göra skit med spelaren då och vet inte om jag får det
@@ -330,7 +331,7 @@ public class BossAIScript : Entity
 
     public override void KillThis()
     {
-        throw new NotImplementedException();
+        phaseControllingStateMachine.ChangeState(bossDeadState);
     }
 
     //old
@@ -451,12 +452,6 @@ public class BossPhaseOneState : State<BossAIScript>
         //}
         
         //kan skapa problem (?)
-
-        // DETTA BÖR HANTERAS I KILLTHIS METODEN MVH DANE
-        if (owner.health.CurrentHealth <= 0)
-        {
-            owner.phaseControllingStateMachine.ChangeState(owner.bossDeadState);
-        }
 
         phaseOneStateMashine.Update();
     }
