@@ -26,7 +26,7 @@ public class LockonFunctionality : MonoBehaviour
     private Collider _closestTarget;
     private Transform _pointOfInterest;
     private PlayerInput _playerInput;
-    private MovementController _movementController;
+    private PlayerRevamp _player;
 
     public Transform Target
     {
@@ -37,7 +37,9 @@ public class LockonFunctionality : MonoBehaviour
     {
         _playerInput = new PlayerInput();
         targetList = new List<GameObject>();
-        _movementController = GetComponent<MovementController>();
+        //_movementController = GetComponent<MovementController>();
+        _player = GetComponent<PlayerRevamp>();
+
         _playerInput.PlayerControls.Lockon.performed += LockOnInput;
     }
 
@@ -45,12 +47,12 @@ public class LockonFunctionality : MonoBehaviour
     {
         if (_pointOfInterest != null)
         {
-            _movementController.pointOfInterest = _pointOfInterest;
-            _movementController.ToggleLockon();
+            _player.pointOfInterest = _pointOfInterest;
+            _player.ToggleLockon();
         }
-        else if (_movementController.isLockedOn)
+        else if (_player.IsLockedOn)
         {
-            _movementController.DisableLockon();
+            _player.DisableLockon();
         }
     }
 
@@ -59,7 +61,7 @@ public class LockonFunctionality : MonoBehaviour
     private void OnDisable()
     {
         _playerInput.Disable();
-        _movementController.DisableLockon();
+        //_movementController.DisableLockon();
     }
 
     public bool IsVisibleFrom(Renderer renderer, Camera camera)
@@ -72,7 +74,7 @@ public class LockonFunctionality : MonoBehaviour
     {
         _cols = Physics.OverlapSphere(transform.position, _trackRadius, _enemyMask);
         float _smallestAngle = 180;
-        if (!_movementController.isLockedOn)
+        if (!_player.IsLockedOn)
         {
             _closestTarget = null;
             _pointOfInterest = null;
@@ -173,14 +175,14 @@ public class LockonFunctionality : MonoBehaviour
                 {
                     _pointOfInterest = null;
                     _closestTarget = null;
-                    _movementController.DisableLockon();
+                    _player.DisableLockon();
                 }
             }
             else
             {
                 _pointOfInterest = null;
                 _closestTarget = null;
-                _movementController.DisableLockon();
+                _player.DisableLockon();
             }
         }
     }
@@ -188,7 +190,7 @@ public class LockonFunctionality : MonoBehaviour
     {
         if (_pointOfInterest != null && !_pointOfInterest.CompareTag(lockonTag))
         {
-            _movementController.DisableLockon();
+            _player.DisableLockon();
         }
         TargetRecognition();
     }

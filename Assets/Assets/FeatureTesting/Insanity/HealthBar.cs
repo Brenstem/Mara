@@ -4,22 +4,27 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Slider))]
-public class HealthBar : MonoBehaviour
-{   
+public abstract class HealthBar : MonoBehaviour
+{
     private Slider _slider;
-
-    private void Awake()
+    public Slider Slider
     {
-        _slider = GetComponent<Slider>();
+        get
+        {
+            if (!_slider)
+                _slider = GetComponentInChildren<Slider>();
+
+            return _slider;
+        }
     }
 
-    public void SetValue(float amount)
+    public virtual void SetValue(float amount)
     {
-        _slider.value = amount;
+        Slider.value = amount;
     }
 
-    public void SetMaxValue(float amount)
+    public virtual void SetMaxValue(float amount)
     {
-        _slider.maxValue = amount;
+        Slider.maxValue = amount;
     }
 }

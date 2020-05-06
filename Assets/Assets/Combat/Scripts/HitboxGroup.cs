@@ -124,24 +124,27 @@ public class HitboxGroup : MonoBehaviour
 
     private void TakeDamage(Entity target, HitboxValues hitbox)
     {
-        if (_parentEntity != null && _parentEntity.modifier != null)
-            target.TakeDamage(hitbox * _parentEntity.modifier);
-        else
-            target.TakeDamage(hitbox);
-
-        if (hitbox.hitstopTime > 0)
+        if (!target.invulerable)
         {
-            if (_parentEntity != null && _parentEntity.CompareTag("Player")) // temporär lösninggggg 
-            {
-                HitboxValues h = new HitboxValues()
-                {
-                    damageValue = hitbox.damageValue * -1.0f
-                };
-                GlobalState.state.HitStop(hitbox.hitstopTime, h);
-            }
+            if (_parentEntity != null && _parentEntity.modifier != null)
+                target.TakeDamage(hitbox * _parentEntity.modifier);
             else
+                target.TakeDamage(hitbox);
+
+            if (hitbox.hitstopTime > 0)
             {
-                GlobalState.state.HitStop(hitbox.hitstopTime, hitbox);
+                if (_parentEntity != null && _parentEntity.CompareTag("Player")) // temporär lösninggggg 
+                {
+                    HitboxValues h = new HitboxValues()
+                    {
+                        damageValue = hitbox.damageValue * -1.0f
+                    };
+                    GlobalState.state.HitStop(hitbox.hitstopTime, h);
+                }
+                else
+                {
+                    GlobalState.state.HitStop(hitbox.hitstopTime, hitbox);
+                }
             }
         }
     }

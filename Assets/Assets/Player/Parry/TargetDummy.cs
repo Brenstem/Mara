@@ -5,8 +5,13 @@ using UnityEngine;
 [RequireComponent(typeof(EnemyHealth))]
 public class TargetDummy : Entity
 {
+    public override void KillThis()
+    {
+        Destroy(this.gameObject);
+    }
+
     public override void TakeDamage(HitboxValues hitbox, Entity attacker)
     {
-        GetComponent<EnemyHealth>().Damage(hitbox.damageValue);
+        health.Damage(hitbox);
     }
 }

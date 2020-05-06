@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class BasicEnemyAI : BaseAIMovementController
 {
+    public override void KillThis()
+    {
+        throw new System.NotImplementedException();
+    }
+
     public override void TakeDamage(HitboxValues hitbox, Entity attacker)
     {
         throw new System.NotImplementedException();

@@ -22,14 +22,9 @@ public class BasicMeleeAI : BaseAIMovementController
         base.Update();
 
         _anim.SetFloat("Blend", _agent.velocity.magnitude);
-        
-        if (_health.GetHealth() <= 0)
-        {
-            KillThis();
-        }
     }
 
-    private void KillThis()
+    public override void KillThis()
     {
         stateMachine.ChangeState(new DeadState());
         _anim.SetTrigger("Dead");

@@ -5,29 +5,21 @@ using UnityEngine;
 
 public class GlobalState : MonoBehaviour
 {
-    [SerializeField] private GameObject _playerGameObject;
-
-    [SerializeField] private Player _player;
+    [SerializeField] private PlayerRevamp _player;
 
     [SerializeField] private Camera _camera;
 
     [SerializeField] private AudioManager _audioManager;
-
-    [SerializeField] private GameObject _playerMesh;
-
+    
     [SerializeField] private CheckpointHandler _checkpointHandler;
 
     [SerializeField] private LayerMask _playerMask;
 
     [SerializeField] private LayerMask _enemyMask;
 
+    [SerializeField] private LayerMask _groundMask;
 
-    public GameObject PlayerGameObject
-    {
-        get { return _playerGameObject; }
-    }
-
-    public Player Player
+    public PlayerRevamp Player
     {
         get { return _player; }
     }
@@ -47,11 +39,6 @@ public class GlobalState : MonoBehaviour
         get { return _audioManager;  }
     }
 
-    public GameObject PlayerMesh
-    {
-        get { return _playerMesh; }
-    }
-
     public LayerMask PlayerMask
     {
         get { return _playerMask; }
@@ -60,6 +47,11 @@ public class GlobalState : MonoBehaviour
     public LayerMask EnemyMask
     {
         get { return _enemyMask; }
+    }
+
+    public LayerMask GroundMask
+    {
+        get { return _groundMask; }
     }
 
     private static GlobalState _state;

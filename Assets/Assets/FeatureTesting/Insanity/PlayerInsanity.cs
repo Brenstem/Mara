@@ -3,38 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Experimental.Rendering.HDPipeline;
+using System;
 
-public class PlayerInsanity : MonoBehaviour
+public class PlayerInsanity : EntityHealth
 {
-    [Header("Insanity values")]
-    [SerializeField] 
-    private float _maxInsanity;
-
-    [SerializeField] 
-    private float _impendingDoomTimer;
-    [Space(10)]
-
-    [Tooltip("Add the insanity bar game object here")]
-    [SerializeField] private HealthBar InsanityBar;
-    [Space(10)]
-
-    [Tooltip("Add the static and dynamic values for each insanity tier here. Do not change the array size!")]
-    [SerializeField] 
-    private int[] staticInsanityValues;
-
-    [SerializeField] 
-    private int[] dynamicInsanityValues;
-
+    [Header("References")]
     [SerializeField] private Volume vol;
 
-    #region Events
+    [Header("Variables")]
+    [SerializeField] private float _hitstunBuffMultiplier = 1.5f;
+    [SerializeField] private float _damageBuffMultiplier = 1.1f;
+
+    [Header("Insanity tier values")]
+    [Tooltip("Add the static and dynamic values for each insanity tier here. Do not change the array size!")]
+    [SerializeField]  int[] staticInsanityValues;
+    [SerializeField] private int[] dynamicInsanityValues;
+
+
+    #region Insanity Tier Events
     // Events for each stage of insanity 
-    public delegate void TutorialDebuff();
-    public static event TutorialDebuff onTutorialDebuff;
-
-    public delegate void Paranoia();
-    public static event Paranoia onParanoia;
-
     public delegate void Slow();
     public static event Slow onSlow;
 
@@ -46,18 +33,9 @@ public class PlayerInsanity : MonoBehaviour
 
     public delegate void Monsters();
     public static event Monsters onMonsters;
-
-    public delegate void ImpendingDoom();
-    public static event ImpendingDoom onImpendingDoom;
-
-    public delegate void PlayerDead();
-    public static event PlayerDead onPlayerDeath;
     
     public delegate void IncreaseMovementSpeed();
     public static event IncreaseMovementSpeed onIncreaseMovementSpeed;
-
-    //public delegate void HeightenedSenses();
-    //public static event HeightenedSenses onHeightenedSenses;
 
     public delegate void IncreaseAttackSpeed();
     public static event IncreaseAttackSpeed onIncreaseAttackSpeed;
@@ -65,16 +43,18 @@ public class PlayerInsanity : MonoBehaviour
     public delegate void DisableShadows();
     public static event DisableShadows onDisableShadows;
     #endregion
-    private float _currentInsanity;
 
-    private Timer _timer;
-
+    // PRIVATE VARIABLES
     private bool _playerDying;
-
+    private Timer _timer;
+    private HitboxModifier _playerModifier;
     private DebuffStates _debuffState;
-
     private BuffStates _buffState;
+    private ChromaticAberration _chromaticAberration;
+    private Vignette _vignette;
+    private FilmGrain _filmGrain;
 
+    // Insanity tier states
     private enum DebuffStates
     {
         defaultState,
@@ -95,14 +75,15 @@ public class PlayerInsanity : MonoBehaviour
         attackSpeed
     }
 
-    private ChromaticAberration _chromaticAberration;
-
-    private Vignette _vignette;
-
-    private FilmGrain _filmGrain;
-
-    private void Start()
+    private void Awake()
     {
+        _playerModifier = GlobalState.state.Player.gameObject.GetComponent<PlayerRevamp>().modifier;
+    }
+
+    private new void Start()
+    {
+        base.Start();
+
         if (vol != null)
         {
             ChromaticAberration chroTmp;
@@ -126,13 +107,11 @@ public class PlayerInsanity : MonoBehaviour
         }
         
 
-        if (!InsanityBar)
+        if (!HealthBar)
         {
             throw new System.Exception("Healthbar prefab missing!");
         }
 
-        InsanityBar.SetValue(_currentInsanity);
-        InsanityBar.SetMaxValue(_maxInsanity);
         GlobalState.state.AudioManager.PlayerInsanityAudio(GetInsanityPercentage());
     }
 
@@ -154,142 +133,88 @@ public class PlayerInsanity : MonoBehaviour
         {
             _filmGrain.intensity.value = GetInsanityPercentage() / 100;
         }
-
-        // if a timer exists and the player is "dead" wait for timer to kill player
-        if (!Object.ReferenceEquals( _timer, null) && _playerDying) 
-        {
-            _timer.Time += Time.deltaTime;
-
-            if (_timer.Expired)
-            {
-                KillPlayer();
-            }
-        }
-    }
-
-    public float GetInsanity()
-    {
-        return _currentInsanity;
-    }
-
-    public float GetMaxInsanity()
-    {
-        return _maxInsanity;
     }
 
     public float GetInsanityPercentage()
     {
-        return _currentInsanity / _maxInsanity * 100; 
+        return CurrentHealth / MaxHealth * 100; 
     }
 
-    public void SetMaxInsanity(float amount)
-    {
-        _maxInsanity = amount;
-        InsanityBar.SetMaxValue(_maxInsanity);
-    }
-
-    public void IncrementMaxInsanity(float amount)
-    {
-        _maxInsanity += amount;
-        InsanityBar.SetMaxValue(_maxInsanity);
-    }
-
-    // Sets insanity based on parameters
     public void SetInsanity(float amount)
     {
         // Insanity cannot be above max or below 0
-        if (amount > _maxInsanity)
+        if (amount > MaxHealth)
         {
-            _currentInsanity = _maxInsanity;
+            CurrentHealth = MaxHealth;
         }
         else if (amount < 0)
         {
-            _currentInsanity = 0;
+            CurrentHealth = 0;
         }
         else
         {
-            _currentInsanity = amount;
+            CurrentHealth = amount;
         }
 
         ActivateBuffs();
-
-        InsanityBar.SetValue(_currentInsanity);
-    }
-
-    // Increments insanity based on parameters
-    public void IncrementInsanity(float amount)
-    {
-        // Insanity cannot be above max or below 0
-        if (amount + _currentInsanity > _maxInsanity)
-        {
-            _currentInsanity = _maxInsanity;
-        }
-        else if (amount + _currentInsanity < 0)
-        {
-            _currentInsanity = 0;
-        }
-        else
-        {
-            _currentInsanity += amount;
-        }
-
-        ActivateBuffs();
-        InsanityBar.SetValue(_currentInsanity);
+        HealthBar.SetValue(CurrentHealth);
     }
 
     public void ActivateBuffs()
     {
         onSlow();
         onIncreaseMovementSpeed();
-
+        
         // Static based buffs
-        switch (_currentInsanity)
+        switch (CurrentHealth)
         {
-            case float n when (n >= staticInsanityValues[4]):
-                //onIncreaseAttackSpeed();
+            case float n when (n >= staticInsanityValues[4]): // Attack speed buff
                 break;
-            case float n when (n >= staticInsanityValues[3]):
+            case float n when (n >= staticInsanityValues[3]): // Hitstun amount buff
                 if (_buffState != BuffStates.hitStun)
                 {
-                    if (GlobalState.state.Player.modifier.HitstunMultiplier == 1.0f)
-                        GlobalState.state.Player.modifier.HitstunMultiplier = 1.5f;
+                    if (_playerModifier.HitstunMultiplier == 1.0f)
+                        _playerModifier.HitstunMultiplier = _hitstunBuffMultiplier;
                 }
                 _buffState = BuffStates.hitStun;
                 break;
-            case float n when (n >= staticInsanityValues[2]):
-                //onHeightenedSenses();
+
+            case float n when (n >= staticInsanityValues[2]): // Outline on shadows buff
                 break;
-            case float n when (n >= staticInsanityValues[1]):
+
+            case float n when (n >= staticInsanityValues[1]): // Movement speed buff
                 _buffState = BuffStates.movementSpeed;
                 break;
-            case float n when (n >= staticInsanityValues[0]):
+
+            case float n when (n >= staticInsanityValues[0]): // Attack damage buff
                 if (_buffState != BuffStates.playerDamage)
                 {
-                    if (GlobalState.state.Player.modifier.DamageMultiplier == 1.0f)
-                        GlobalState.state.Player.modifier.DamageMultiplier = 1.1f;
+                    if (_playerModifier.DamageMultiplier == 1.0f)
+                        _playerModifier.DamageMultiplier = _damageBuffMultiplier;
                 }
                 _buffState = BuffStates.playerDamage;
                 break;
-            case float n when (n < staticInsanityValues[0]):
-                GlobalState.state.Player.modifier.Reset();
+
+            case float n when (n < staticInsanityValues[0]): // Default buff state
+                _playerModifier.Reset();
                 _buffState = BuffStates.defaultState;
                 break;
         }
 
         // Percentage based debuffs
-        float currentInsanityPercentage = _currentInsanity / _maxInsanity * 100;
+        float currentInsanityPercentage = CurrentHealth / MaxHealth * 100;
 
         switch (currentInsanityPercentage)
         {
-            case float n when (n >= dynamicInsanityValues[4]):
+            case float n when (n >= dynamicInsanityValues[4]): // Impending doom debuff
                 if (_debuffState != DebuffStates.impendingDoom)
                 {
                     PlayHeartBeat();
-                    KillPlayer();
                 }
                 _debuffState = DebuffStates.impendingDoom;
                 break;
-            case float n when (n >= dynamicInsanityValues[3]):
+
+            case float n when (n >= dynamicInsanityValues[3]): // Shadows appear debuff
                 if (onHallucination != null)
                 {
                     onHallucination();
@@ -300,8 +225,8 @@ public class PlayerInsanity : MonoBehaviour
                 }
                 _debuffState = DebuffStates.hallucinations;
                 break;
-            // Slow state requires update so event is called on every insanity change
-            case float n when (n >= dynamicInsanityValues[2]):
+
+            case float n when (n >= dynamicInsanityValues[2]): // Movement speed debuff
                 if (_debuffState != DebuffStates.slow)
                 {
                     PlayHeartBeat();
@@ -310,8 +235,8 @@ public class PlayerInsanity : MonoBehaviour
                 if (onDisableShadows != null)
                     onDisableShadows();
                 break;
-            case float n when (n >= dynamicInsanityValues[1]):
-                //onParanoia();
+
+            case float n when (n >= dynamicInsanityValues[1]): // FX debuff
                 if (_debuffState != DebuffStates.paranoia)
                 {
                     PlayHeartBeat();
@@ -320,17 +245,18 @@ public class PlayerInsanity : MonoBehaviour
                 if (onDisableShadows != null)
                     onDisableShadows();
                 break;
-            case float n when (n >= dynamicInsanityValues[0]):
+
+            case float n when (n >= dynamicInsanityValues[0]): // Tutorial debuff
                 if (_debuffState != DebuffStates.tutorialDebuff)
                 {
-                    // onTutorialDebuff();
                     PlayHeartBeat();
                 }
                 _debuffState = DebuffStates.tutorialDebuff;
                 if (onDisableShadows != null)
                     onDisableShadows();
                 break;
-            case float n when (n < dynamicInsanityValues[0]):
+
+            case float n when (n < dynamicInsanityValues[0]): // Standard state debuff
                 _debuffState = DebuffStates.defaultState;
                 if (onDisableShadows != null)
                     onDisableShadows();
@@ -338,20 +264,15 @@ public class PlayerInsanity : MonoBehaviour
         }
     }
 
-    public void PlayHeartBeat()
+    private void PlayHeartBeat()
     {
         GlobalState.state.AudioManager.PlayerInsanityHeartBeat(this.transform.position);
     }
 
-    public void KillPlayer()
-    { 
-        print("Killing Player");
-
-        _playerDying = false;
-        if (!Object.ReferenceEquals(_timer, null))
-        {
-            _timer.Reset();
-        }
-        onPlayerDeath();
+    public override void Damage(HitboxValues hitbox)
+    {
+        ActivateBuffs();
+        base.CurrentHealth -= hitbox.damageValue;
+        base.HealthBar.SetValue(base.CurrentHealth);
     }
 }

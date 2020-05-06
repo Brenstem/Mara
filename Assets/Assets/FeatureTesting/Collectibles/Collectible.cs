@@ -18,7 +18,7 @@ public class Collectible : MonoBehaviour
             GlobalState.state.AudioManager.CollectibleAudio(this.transform.position);
             _playerInsanity = hitInfo.GetComponent<PlayerInsanity>();
             
-            _playerInsanity.IncrementMaxInsanity(incrementAmount);
+            _playerInsanity.MaxHealth += incrementAmount;
 
             if (destroyOnPickup)
             {

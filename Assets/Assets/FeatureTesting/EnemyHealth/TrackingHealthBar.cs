@@ -4,13 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Slider))]
-public class TrackingHealthBar : MonoBehaviour
+public class TrackingHealthBar : HealthBar
 {
     [SerializeField] private bool _billBoarding;
 
     private Transform _cam;
 
     // Get transform component if null
+    private RectTransform _transform;
     public RectTransform Transform
     {
         get
@@ -21,21 +22,6 @@ public class TrackingHealthBar : MonoBehaviour
             return _transform;
         }
     }
-
-    private RectTransform _transform;
-
-    // Get slider component if null
-    public Slider Slider
-    {
-        get
-        {
-            if (!_slider)
-                _slider = GetComponent<Slider>();
-
-            return _slider;
-        }
-    }
-    private Slider _slider;
 
     private void Awake()
     {
@@ -51,12 +37,7 @@ public class TrackingHealthBar : MonoBehaviour
         }
     }
 
-    public void SetValue(float amount)
-    {
-        Slider.value = amount;
-    }
-
-    public void SetMaxValue(float amount)
+    public override void SetMaxValue(float amount)
     {
         Slider.maxValue = amount;
         Transform.sizeDelta = new Vector2(amount, 10);
