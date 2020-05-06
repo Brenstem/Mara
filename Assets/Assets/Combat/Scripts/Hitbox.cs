@@ -36,6 +36,7 @@ public class Hitbox : MonoBehaviour
     [SerializeField] private float damageBuffMultiplier;
     [SerializeField] private Vector3 _size;
     [SerializeField] private Vector3 _offset;
+    [SerializeField] private Transform followPoint;
 
     [HideInInspector] public HitboxValues hitboxValues;
 
@@ -59,6 +60,11 @@ public class Hitbox : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (followPoint != null)
+        {
+            transform.position = followPoint.position;
+            transform.rotation = followPoint.rotation;
+        }
         //Lägger in objekt som är i hitboxen i arrayn
         //isHit = Physics.OverlapBox(transform.position + _offset, _size * 0.5f, transform.rotation, _parent.targetLayerMask);
         isHit = Physics.OverlapBox(transform.TransformPoint(_offset), _size * 0.5f, transform.rotation, _parent.targetLayerMask);
