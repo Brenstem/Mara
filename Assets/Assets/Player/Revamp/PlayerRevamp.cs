@@ -158,7 +158,7 @@ public class PlayerRevamp : Entity
     private void Update()
     {
         stateMachine.Update();
-
+        print(attackAnimationOver);
         playerAnimator.SetFloat("StrafeDirX", Input.x);
         playerAnimator.SetFloat("StrafeDirY", Input.y);
 
@@ -711,7 +711,7 @@ public class DashingState : State<PlayerRevamp>
 
 public class LightAttackOneState : State<PlayerRevamp>
 {
-    private bool _secondAttack;
+    private bool _secondAttack = false;
     private GameObject _target;
 
     public override void EnterState(PlayerRevamp owner)
@@ -719,8 +719,10 @@ public class LightAttackOneState : State<PlayerRevamp>
         owner.interruptable = false;
         owner.attackAnimationOver = false;
         owner.light1HitboxGroup.enabled = true;
-        owner.playerAnimator.SetBool("LightAttackTwo", false); // Reset the double combo animation bool upon entering state
+
         owner.playerAnimator.SetTrigger("AttackLight"); // Set animation trigger for first attack
+        owner.playerAnimator.SetBool("LightAttackTwo", false); // Reset the double combo animation bool upon entering state
+
         GlobalState.state.AudioManager.PlayerSwordSwingAudio(owner.transform.position);
 
         _target = owner.FindTarget();
@@ -729,8 +731,10 @@ public class LightAttackOneState : State<PlayerRevamp>
     public override void ExitState(PlayerRevamp owner)
     {
         owner.playerAnimator.SetBool("LightAttackTwo", _secondAttack); // Set animation bool
-        owner.light1HitboxGroup.enabled = false;
+        owner.playerAnimator.SetBool("LightAttackOne", false); // Set animation bool
+
         _secondAttack = false; // Reset member variable
+        owner.light1HitboxGroup.enabled = false;
         owner.interruptable = false;
         owner.attackAnimationOver = false;
     }
@@ -749,6 +753,7 @@ public class LightAttackOneState : State<PlayerRevamp>
                     owner.FaceDirection(_target.transform);
                 owner.controller.Move(owner.transform.forward * owner.light1StepSpeed * Time.deltaTime);
             }
+
             if (owner.interruptable)
             {
                 foreach (PlayerRevamp.InputType item in owner.inputBuffer)
@@ -780,7 +785,8 @@ public class LightAttackOneState : State<PlayerRevamp>
                     owner.stateMachine.ChangeState(new IdleState());
                 }
             }
-            else if (owner.attackAnimationOver)
+
+            if (owner.attackAnimationOver)
             {
                 owner.stateMachine.ChangeState(new IdleState());
             }
@@ -804,6 +810,10 @@ public class LightAttackTwoState : State<PlayerRevamp>
 
     public override void ExitState(PlayerRevamp owner)
     {
+        owner.playerAnimator.SetBool("LightAttackOne", _secondAttack); // Set animation bool
+        owner.playerAnimator.SetBool("LightAttackTwo", false); // Set animation bool
+
+        _secondAttack = false;
         owner.light2HitboxGroup.enabled = false;
         owner.interruptable = false;
         owner.attackAnimationOver = false;
@@ -856,7 +866,8 @@ public class LightAttackTwoState : State<PlayerRevamp>
                     owner.stateMachine.ChangeState(new IdleState());
                 }
             }
-            else if (owner.attackAnimationOver)
+
+            if (owner.attackAnimationOver)
             {
                 owner.stateMachine.ChangeState(new IdleState());
             }
@@ -908,7 +919,8 @@ public class HeavyAttackState : State<PlayerRevamp>
                 else if (owner.Input != Vector2.zero)
                     owner.stateMachine.ChangeState(new IdleState());
             }
-            else if (owner.attackAnimationOver)
+
+            if (owner.attackAnimationOver)
             {
                 owner.stateMachine.ChangeState(new IdleState());
             }
