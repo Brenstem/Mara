@@ -68,7 +68,12 @@ public abstract class EntityHealth : MonoBehaviour
         _entity.KillThis();
     }
 
-    public void Start()
+    protected virtual void Awake()
+    {
+        _entity = GetComponent<Entity>();
+    }
+
+    protected virtual void Start()
     {
         if (HealthBar != null)
         {
@@ -77,6 +82,5 @@ public abstract class EntityHealth : MonoBehaviour
 
         CurrentHealth = MaxHealth;
 
-        _entity = GetComponent<Entity>();
     }
 }
