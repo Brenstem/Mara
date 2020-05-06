@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MonologManager : MonoBehaviour
 {
     public Text monologText;
+    //public TextMeshProUGUI monologText;
     public GameObject monologBackground;
 
     private Queue<string> _textPerSlide;
