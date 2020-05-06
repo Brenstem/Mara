@@ -214,9 +214,10 @@ public class PlayerRevamp : Entity
     private void GroundCheck()
     {
         _isGrounded = Physics.CheckSphere(_groundCheckPosition.position, _groundDistance, GlobalState.state.GroundMask);
-        if (_isGrounded && _velocity.y < 0)
+        if (_isGrounded)
         {
-            _velocity.y = -2f;
+            if (_velocity.y < 0)
+                _velocity.y = -2f;
             _airDashes = 0;
             playerAnimator.SetBool("HasJumped", false);
         }
@@ -670,6 +671,7 @@ public class DashingState : State<PlayerRevamp>
 
     public override void ExitState(PlayerRevamp owner)
     {
+        owner.useGravity = true;
         owner.dashPerformed = false;
 
         if (owner.invulerableWhenDashing)
