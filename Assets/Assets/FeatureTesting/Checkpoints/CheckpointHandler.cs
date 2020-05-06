@@ -28,8 +28,6 @@ public class CheckpointHandler : MonoBehaviour
 
     private void LateUpdate()
     {
-        print(_activeCheckPoint);
-
         if (_respawnTimer != null)
         {
             _respawnTimer.Time += Time.deltaTime;
@@ -67,12 +65,10 @@ public class CheckpointHandler : MonoBehaviour
     // Respawn player using checkpoint data
     private void Spawn()
     {
-        GlobalState.state.PlayerGameObject.GetComponent<CharacterController>().enabled = false;
+        GlobalState.state.PlayerGameObject.GetComponent<PlayerRevamp>().stateMachine.ChangeState(new IdleState());
         GlobalState.state.PlayerGameObject.transform.position = _activeCheckPoint.pos.position;
         GlobalState.state.PlayerGameObject.transform.rotation = _activeCheckPoint.pos.rotation;
         GlobalState.state.PlayerGameObject.GetComponent<PlayerInsanity>().SetInsanity(_activeCheckPoint.ins);
-        GlobalState.state.PlayerGameObject.GetComponent<CharacterController>().enabled = true;
-        GlobalState.state.PlayerGameObject.GetComponent<PlayerRevamp>().stateMachine.ChangeState(new IdleState());
     }
 
     void RespawnPlayer()

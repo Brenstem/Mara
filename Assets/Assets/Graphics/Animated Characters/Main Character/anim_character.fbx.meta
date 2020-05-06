@@ -582,6 +582,20 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
+      - time: 0.044226043
+        functionName: AttackStep
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.12285012
+        functionName: AttackStepEnd
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       - time: 0.15343915
         functionName: EnableHitboxes
         data: 
@@ -596,7 +610,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.5040141
+      - time: 0.34224936
         functionName: IASA
         data: 
         objectReferenceParameter: {instanceID: 0}
@@ -605,20 +619,6 @@ ModelImporter:
         messageOptions: 0
       - time: 0.8306878
         functionName: EndAnim
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.044226043
-        functionName: AttackStep
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
-      - time: 0.12285012
-        functionName: AttackStepEnd
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
@@ -913,7 +913,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.50133336
+      - time: 0.41800004
         functionName: IASA
         data: 
         objectReferenceParameter: {instanceID: 0}

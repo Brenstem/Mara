@@ -161,6 +161,8 @@ public class PlayerRevamp : Entity
     {
         stateMachine.Update();
 
+        print(stateMachine.currentState);
+
         Gravity();
 
         SnapCamera();
@@ -221,8 +223,10 @@ public class PlayerRevamp : Entity
         }
         else
         {
-            if (stateMachine.currentState.GetType() != typeof(DashingState))
+            if (stateMachine.currentState.GetType() != typeof(DashingState) || stateMachine.currentState.GetType() != typeof(JumpState))
+            {
                 stateMachine.ChangeState(new MovementState());
+            }
         }
 
         playerAnimator.SetBool("IsGrounded", _isGrounded);
@@ -294,8 +298,8 @@ public class PlayerRevamp : Entity
         if (IsGrounded)
         {
             _velocity.y = Mathf.Sqrt(_jumpHeight) * -_gravity;
-            playerAnimator.SetTrigger("Jump");
             playerAnimator.SetBool("HasJumped", true);
+            playerAnimator.SetTrigger("Jump");
             GlobalState.state.AudioManager.PlayerJumpAudio(this.transform.position);
         }
     }
@@ -373,7 +377,7 @@ public class PlayerRevamp : Entity
     public override void KillThis()
     {
         stateMachine.ChangeState(new PlayerDeathState());
-        playerAnimator.SetTrigger("Death");
+        playerAnimator.SetBool("Dead", true);
     }
 }
 
@@ -402,6 +406,7 @@ public class IdleState : State<PlayerRevamp>
         {
             owner.stateMachine.ChangeState(new IdleAlertState());
         }
+        bool inputFound = false;
         foreach (PlayerRevamp.InputType item in owner.inputBuffer)
         {
             switch (item)
@@ -411,7 +416,10 @@ public class IdleState : State<PlayerRevamp>
                     return;
                 case PlayerRevamp.InputType.Jump:
                     owner.Jump();
-                    return;
+                    owner.stateMachine.ChangeState(new JumpState());
+                    Debug.Log("jump");
+                    inputFound = true;
+                    break;
                 case PlayerRevamp.InputType.Parry:
                     if (owner.IsGrounded)
                     {
@@ -427,6 +435,10 @@ public class IdleState : State<PlayerRevamp>
                     return;
                 default:
                     break;
+            }
+            if (inputFound)
+            {
+                break;
             }
         }
     }
@@ -600,6 +612,25 @@ public class MovementState : State<PlayerRevamp>
                 }
             }
         }
+    }
+}
+
+public class JumpState : State<PlayerRevamp>
+{
+    public override void EnterState(PlayerRevamp owner)
+    {
+    }
+
+    public override void ExitState(PlayerRevamp owner)
+    {
+    }
+
+    public override void UpdateState(PlayerRevamp owner)
+    {
+        /*if (owner.IsGrounded)
+        {
+            owner.stateMachine.ChangeState(new IdleAlertState());
+        }*/
     }
 }
 
@@ -912,6 +943,7 @@ public class PlayerDeathState : State<PlayerRevamp>
     public override void ExitState(PlayerRevamp owner)
     {
         owner.invulerable = false;
+        owner.playerAnimator.SetBool("Dead", false);
     }
 
     public override void UpdateState(PlayerRevamp owner) { }
