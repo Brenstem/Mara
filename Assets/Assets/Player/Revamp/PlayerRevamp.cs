@@ -779,11 +779,12 @@ public class LightAttackOneState : State<PlayerRevamp>
                             break;
                     }
                 }
-
+                /*
                 if (owner.Input != Vector2.zero)
                 {
                     owner.stateMachine.ChangeState(new IdleState());
                 }
+                */
             }
 
             if (owner.attackAnimationOver)
@@ -860,11 +861,12 @@ public class LightAttackTwoState : State<PlayerRevamp>
                             break;
                     }
                 }
-
+                /*
                 if (owner.Input != Vector2.zero)
                 {
                     owner.stateMachine.ChangeState(new IdleState());
                 }
+                */
             }
 
             if (owner.attackAnimationOver)
@@ -916,8 +918,8 @@ public class HeavyAttackState : State<PlayerRevamp>
             {
                 if (owner.inputBuffer.Contains(PlayerRevamp.InputType.AttackLight)) // just nu prioriteras det helt
                     owner.stateMachine.ChangeState(new LightAttackOneState());
-                else if (owner.Input != Vector2.zero)
-                    owner.stateMachine.ChangeState(new IdleState());
+                //else if (owner.Input != Vector2.zero) // walk cancel?
+                   // owner.stateMachine.ChangeState(new IdleState());
             }
 
             if (owner.attackAnimationOver)
