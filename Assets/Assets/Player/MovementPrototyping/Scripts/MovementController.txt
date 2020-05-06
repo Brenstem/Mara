@@ -154,7 +154,7 @@ public class MovementController : MonoBehaviour
 
     private void IncreaseMoveSpeed()
     {
-        float currentInsanity = GlobalState.state.PlayerGameObject.GetComponent<PlayerInsanity>().GetInsanityPercentage();
+        float currentInsanity = GlobalState.state.Player.gameObject.GetComponent<PlayerInsanity>().GetInsanityPercentage();
         currentInsanity -= 75; // Slow starts at 75 insanity or higher
         if (currentInsanity > 0)
         {
@@ -172,7 +172,7 @@ public class MovementController : MonoBehaviour
     
     private void Slow()
     {
-        float currentInsanity = GlobalState.state.PlayerGameObject.GetComponent<PlayerInsanity>().GetInsanityPercentage();
+        float currentInsanity = GlobalState.state.Player.gameObject.GetComponent<PlayerInsanity>().GetInsanityPercentage();
         if (currentInsanity - 50 > 0 && currentInsanity - 75 <= 0)
         {
             currentInsanity -= 50; // Slow starts at 50 insanity or higher

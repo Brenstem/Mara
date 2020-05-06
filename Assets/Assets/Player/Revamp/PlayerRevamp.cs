@@ -161,6 +161,9 @@ public class PlayerRevamp : Entity
     {
         stateMachine.Update();
 
+        playerAnimator.SetFloat("StrafeDirX", Input.x);
+        playerAnimator.SetFloat("StrafeDirY", Input.y);
+
         print(stateMachine.currentState);
 
         Gravity();
@@ -221,14 +224,6 @@ public class PlayerRevamp : Entity
             _airDashes = 0;
             playerAnimator.SetBool("HasJumped", false);
         }
-        else
-        {
-            if (stateMachine.currentState.GetType() != typeof(DashingState) || stateMachine.currentState.GetType() != typeof(JumpState))
-            {
-                stateMachine.ChangeState(new MovementState());
-            }
-        }
-
         playerAnimator.SetBool("IsGrounded", _isGrounded);
     }
 
@@ -295,7 +290,7 @@ public class PlayerRevamp : Entity
 
     public void Jump()
     {
-        if (IsGrounded)
+        if (IsGrounded && !playerAnimator.GetBool("HasJumped"))
         {
             _velocity.y = Mathf.Sqrt(_jumpHeight) * -_gravity;
             playerAnimator.SetBool("HasJumped", true);
@@ -310,6 +305,7 @@ public class PlayerRevamp : Entity
         _doSnapCamera = true;
         _lockonCam.LookAt = transform;
         cameraAnimator.SetBool("LockedOn", _lockedOn);
+        playerAnimator.SetBool("LockedOn", _lockedOn);
         _lockonCam.LookAt = pointOfInterest;
     }
     
@@ -318,6 +314,7 @@ public class PlayerRevamp : Entity
         _lockedOn = false;
         _doSnapCamera = true;
         cameraAnimator.SetBool("LockedOn", _lockedOn);
+        playerAnimator.SetBool("LockedOn", _lockedOn);
     }
 
     public void ToggleLockon()
@@ -363,7 +360,7 @@ public class PlayerRevamp : Entity
         GameObject _target = _targetFinder.FindTarget(); // Find target to pass to attack function in first frame of attack
         if (_target != null)
         {
-            var t = GlobalState.state.PlayerGameObject.GetComponent<LockonFunctionality>().Target;
+            var t = GlobalState.state.Player.gameObject.GetComponent<LockonFunctionality>().Target;
 
             if (t != null)
             {
@@ -416,7 +413,6 @@ public class IdleState : State<PlayerRevamp>
                     return;
                 case PlayerRevamp.InputType.Jump:
                     owner.Jump();
-                    owner.stateMachine.ChangeState(new JumpState());
                     Debug.Log("jump");
                     inputFound = true;
                     break;
@@ -428,11 +424,19 @@ public class IdleState : State<PlayerRevamp>
                     }
                     break;
                 case PlayerRevamp.InputType.AttackLight:
-                    owner.stateMachine.ChangeState(new LightAttackOneState());
-                    return;
+                    if (owner.IsGrounded)
+                    {
+                        owner.stateMachine.ChangeState(new LightAttackOneState());
+                        return;
+                    }
+                    break;
                 case PlayerRevamp.InputType.AttackHeavy:
-                    owner.stateMachine.ChangeState(new HeavyAttackState());
-                    return;
+                    if (owner.IsGrounded)
+                    {
+                        owner.stateMachine.ChangeState(new HeavyAttackState());
+                        return;
+                    }
+                    break;
                 default:
                     break;
             }
@@ -487,12 +491,20 @@ public class IdleAlertState : State<PlayerRevamp>
                     }
                     break;
                 case PlayerRevamp.InputType.AttackLight:
-                    owner.stateMachine.ChangeState(new LightAttackOneState());
-                    return;
+                    if (owner.IsGrounded)
+                    {
+                        owner.stateMachine.ChangeState(new LightAttackOneState());
+                        return;
+                    }
+                    break;
                 case PlayerRevamp.InputType.AttackHeavy:
-                    owner.stateMachine.ChangeState(new HeavyAttackState());
-                    return;
-                default:
+                    if (owner.IsGrounded)
+                    {
+                        owner.stateMachine.ChangeState(new HeavyAttackState());
+                        return;
+                    }
+                    break;
+            default:
                     break;
             }
         }
@@ -540,11 +552,19 @@ public class MovementState : State<PlayerRevamp>
                         }
                         break;
                     case PlayerRevamp.InputType.AttackLight:
-                        owner.stateMachine.ChangeState(new LightAttackOneState());
-                        return;
+                        if (owner.IsGrounded)
+                        {
+                            owner.stateMachine.ChangeState(new LightAttackOneState());
+                            return;
+                        }
+                        break;
                     case PlayerRevamp.InputType.AttackHeavy:
-                        owner.stateMachine.ChangeState(new HeavyAttackState());
-                        return;
+                        if (owner.IsGrounded)
+                        {
+                            owner.stateMachine.ChangeState(new HeavyAttackState());
+                            return;
+                        }
+                        break;
                     default:
                         break;
                 }
@@ -612,25 +632,6 @@ public class MovementState : State<PlayerRevamp>
                 }
             }
         }
-    }
-}
-
-public class JumpState : State<PlayerRevamp>
-{
-    public override void EnterState(PlayerRevamp owner)
-    {
-    }
-
-    public override void ExitState(PlayerRevamp owner)
-    {
-    }
-
-    public override void UpdateState(PlayerRevamp owner)
-    {
-        /*if (owner.IsGrounded)
-        {
-            owner.stateMachine.ChangeState(new IdleAlertState());
-        }*/
     }
 }
 
@@ -737,24 +738,31 @@ public class LightAttackOneState : State<PlayerRevamp>
 
     public override void UpdateState(PlayerRevamp owner)
     {
-        if (owner.attackStep)
-        {
-            if (_target != null)
-                owner.FaceDirection(_target.transform);
-            owner.controller.Move(owner.transform.forward * owner.light1StepSpeed * Time.deltaTime);
-        }
-        if (owner.interruptable && owner.inputBuffer.Contains(PlayerRevamp.InputType.AttackLight))
-        {
-            _secondAttack = true;
-            owner.stateMachine.ChangeState(new LightAttackTwoState());
-        }
-        else if (owner.interruptable && owner.Input != Vector2.zero)
+        if (!owner.IsGrounded)
         {
             owner.stateMachine.ChangeState(new IdleState());
         }
-        else if (owner.attackAnimationOver)
+        else
         {
-            owner.stateMachine.ChangeState(new IdleState());
+            if (owner.attackStep)
+            {
+                if (_target != null)
+                    owner.FaceDirection(_target.transform);
+                owner.controller.Move(owner.transform.forward * owner.light1StepSpeed * Time.deltaTime);
+            }
+            if (owner.interruptable && owner.inputBuffer.Contains(PlayerRevamp.InputType.AttackLight))
+            {
+                _secondAttack = true;
+                owner.stateMachine.ChangeState(new LightAttackTwoState());
+            }
+            else if (owner.interruptable && owner.Input != Vector2.zero)
+            {
+                owner.stateMachine.ChangeState(new IdleState());
+            }
+            else if (owner.attackAnimationOver)
+            {
+                owner.stateMachine.ChangeState(new IdleState());
+            }
         }
     }
 }
@@ -784,25 +792,32 @@ public class LightAttackTwoState : State<PlayerRevamp>
 
     public override void UpdateState(PlayerRevamp owner)
     {
-        if (owner.attackStep)
+        if (!owner.IsGrounded)
         {
-            if (_target != null)
-                owner.FaceDirection(_target.transform);
-            owner.controller.Move(owner.transform.forward * owner.light2StepSpeed * Time.deltaTime);
+            owner.stateMachine.ChangeState(new IdleState());
         }
+        else
+        {
+            if (owner.attackStep)
+            {
+                if (_target != null)
+                    owner.FaceDirection(_target.transform);
+                owner.controller.Move(owner.transform.forward * owner.light2StepSpeed * Time.deltaTime);
+            }
 
-        if (owner.interruptable && owner.inputBuffer.Contains(PlayerRevamp.InputType.AttackLight))
-        {
-            _secondAttack = true;
-            owner.stateMachine.ChangeState(new LightAttackOneState());
-        }
-        else if (owner.interruptable && owner.Input != Vector2.zero)
-        {
-            owner.stateMachine.ChangeState(new IdleState());
-        }
-        else if (owner.attackAnimationOver)
-        {
-            owner.stateMachine.ChangeState(new IdleState());
+            if (owner.interruptable && owner.inputBuffer.Contains(PlayerRevamp.InputType.AttackLight))
+            {
+                _secondAttack = true;
+                owner.stateMachine.ChangeState(new LightAttackOneState());
+            }
+            else if (owner.interruptable && owner.Input != Vector2.zero)
+            {
+                owner.stateMachine.ChangeState(new IdleState());
+            }
+            else if (owner.attackAnimationOver)
+            {
+                owner.stateMachine.ChangeState(new IdleState());
+            }
         }
     }
 }
@@ -831,20 +846,27 @@ public class HeavyAttackState : State<PlayerRevamp>
 
     public override void UpdateState(PlayerRevamp owner)
     {
-        if (owner.attackStep)
+        if (!owner.IsGrounded)
         {
-            if (_target != null)
-                owner.FaceDirection(_target.transform);
-            owner.controller.Move(owner.transform.forward * owner.heavyStepSpeed * Time.deltaTime);
+            owner.stateMachine.ChangeState(new IdleState());
         }
+        else
+        {
+            if (owner.attackStep)
+            {
+                if (_target != null)
+                    owner.FaceDirection(_target.transform);
+                owner.controller.Move(owner.transform.forward * owner.heavyStepSpeed * Time.deltaTime);
+            }
 
-        if (owner.interruptable && owner.Input != Vector2.zero)
-        {
-            owner.stateMachine.ChangeState(new IdleState());
-        }
-        else if (owner.attackAnimationOver)
-        {
-            owner.stateMachine.ChangeState(new IdleState());
+            if (owner.interruptable && owner.Input != Vector2.zero)
+            {
+                owner.stateMachine.ChangeState(new IdleState());
+            }
+            else if (owner.attackAnimationOver)
+            {
+                owner.stateMachine.ChangeState(new IdleState());
+            }
         }
     }
 }
@@ -907,26 +929,32 @@ public class ParryState : State<PlayerRevamp>
 
     public override void UpdateState(PlayerRevamp owner)
     {
-        Debug.Log(owner.isParrying);
-        if (owner.attackAnimationOver)
+        if (!owner.IsGrounded)
         {
-            owner.isParrying = true;
-            _parryTimer.Time += Time.deltaTime;
-            if (owner.successfulParry)
+            owner.stateMachine.ChangeState(new IdleState());
+        }
+        else
+        {
+            if (owner.attackAnimationOver)
             {
-                owner.playerAnimator.SetTrigger("ParrySuccessful");
-                owner.stateMachine.ChangeState(new IdleState()); // successful parry state, no logic atm
-            }
-            else if (_parryTimer.Expired) // Mathf.Lerp time on successful parry
-            {
-                owner.isParrying = false;
-                Debug.Log("expired");
-                owner.playerAnimator.SetBool("IsParrying", false);
-                owner.playerAnimator.SetBool("ParryLag", true);
-                _parryLagTimer.Time += Time.deltaTime;
-                if (_parryLagTimer.Expired)
+                owner.isParrying = true;
+                _parryTimer.Time += Time.deltaTime;
+                if (owner.successfulParry)
                 {
-                    owner.stateMachine.ChangeState(new IdleState());
+                    owner.playerAnimator.SetTrigger("ParrySuccessful");
+                    owner.stateMachine.ChangeState(new IdleState()); // successful parry state, no logic atm
+                }
+                else if (_parryTimer.Expired) // Mathf.Lerp time on successful parry
+                {
+                    owner.isParrying = false;
+                    Debug.Log("expired");
+                    owner.playerAnimator.SetBool("IsParrying", false);
+                    owner.playerAnimator.SetBool("ParryLag", true);
+                    _parryLagTimer.Time += Time.deltaTime;
+                    if (_parryLagTimer.Expired)
+                    {
+                        owner.stateMachine.ChangeState(new IdleState());
+                    }
                 }
             }
         }

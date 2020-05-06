@@ -45,7 +45,7 @@ public abstract class BaseAIMovementController : Entity
         health = GetComponent<EnemyHealth>();
         _agent = GetComponent<NavMeshAgent>();
 
-        _target = GlobalState.state.PlayerGameObject;
+        _target = GlobalState.state.Player.gameObject;
     }
 
     virtual protected void Update()

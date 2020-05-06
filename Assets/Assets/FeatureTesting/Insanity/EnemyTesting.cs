@@ -10,7 +10,7 @@ public class EnemyTesting : MonoBehaviour
 
     void Start()
     {
-        player = GlobalState.state.PlayerGameObject.GetComponent<PlayerRevamp>(); 
+        player = GlobalState.state.Player.gameObject.GetComponent<PlayerRevamp>(); 
     }
 
     void Update()

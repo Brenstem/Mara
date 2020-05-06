@@ -115,7 +115,7 @@ public class BossAIScript : Entity
         phaseControllingStateMachine = new StateMachine<BossAIScript>(this);
 
         //borde inte göras såhär at the end of the day men måste göra skit med spelaren då och vet inte om jag får det
-        player = GlobalState.state.PlayerGameObject;
+        player = GlobalState.state.Player.gameObject;
 
         testDrainDPS = phaseOneStats.testP1value1;
 

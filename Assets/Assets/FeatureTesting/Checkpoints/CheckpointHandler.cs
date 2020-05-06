@@ -56,7 +56,7 @@ public class CheckpointHandler : MonoBehaviour
         }
         else
         {
-            insanity = GlobalState.state.PlayerGameObject.GetComponent<PlayerInsanity>().CurrentHealth;
+            insanity = GlobalState.state.Player.gameObject.GetComponent<PlayerInsanity>().CurrentHealth;
         }
 
         _activeCheckPoint = new CheckpointData(position, insanity);
@@ -65,10 +65,10 @@ public class CheckpointHandler : MonoBehaviour
     // Respawn player using checkpoint data
     private void Spawn()
     {
-        GlobalState.state.PlayerGameObject.GetComponent<PlayerRevamp>().stateMachine.ChangeState(new IdleState());
-        GlobalState.state.PlayerGameObject.transform.position = _activeCheckPoint.pos.position;
-        GlobalState.state.PlayerGameObject.transform.rotation = _activeCheckPoint.pos.rotation;
-        GlobalState.state.PlayerGameObject.GetComponent<PlayerInsanity>().SetInsanity(_activeCheckPoint.ins);
+        GlobalState.state.Player.gameObject.GetComponent<PlayerRevamp>().stateMachine.ChangeState(new IdleState());
+        GlobalState.state.Player.gameObject.transform.position = _activeCheckPoint.pos.position;
+        GlobalState.state.Player.gameObject.transform.rotation = _activeCheckPoint.pos.rotation;
+        GlobalState.state.Player.gameObject.GetComponent<PlayerInsanity>().SetInsanity(_activeCheckPoint.ins);
     }
 
     void RespawnPlayer()

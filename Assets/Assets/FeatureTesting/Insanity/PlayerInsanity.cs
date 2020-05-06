@@ -77,7 +77,7 @@ public class PlayerInsanity : EntityHealth
 
     private void Awake()
     {
-        _playerModifier = GlobalState.state.PlayerGameObject.GetComponent<PlayerRevamp>().modifier;
+        _playerModifier = GlobalState.state.Player.gameObject.GetComponent<PlayerRevamp>().modifier;
     }
 
     private new void Start()
