@@ -20,6 +20,7 @@ public class RangedEnemyAI : BaseAIMovementController
 
     [HideInInspector] public Timer _hitStunTimer;
     [HideInInspector] public bool _useHitStun;
+    [HideInInspector] public bool _canTurn;
 
     protected override void Awake()
     {
@@ -89,6 +90,7 @@ public class RangedEnemyAI : BaseAIMovementController
         GlobalState.state.AudioManager.RangedEnemyFireAudio(this.transform.position);
         Instantiate(_projectile, _projectileSpawnPos.position, this.transform.rotation);
         firerateTimer.Reset();
+        _canTurn = true;
     }
 
     public override void FacePlayer()
@@ -258,6 +260,7 @@ public class RangedEnemyChasingState : BaseChasingState
     {
         _attackingState = new RangedEnemyAttackingState();
         _returnToIdleState = new RangedEnemyReturnToIdleState();
+
         GlobalState.state.AudioManager.RangedEnemyAlertAudio(owner.rangedAI.transform.position);
         owner.rangedAI._fill.SetActive(true);
     }
@@ -273,13 +276,17 @@ public class RangedEnemyAttackingState : BaseAttackingState
     public override void EnterState(BaseAIMovementController owner)
     {
         _chasingState = new RangedEnemyChasingState();
+
         owner.rangedAI.firerateTimer.Reset();
         owner.rangedAI._fill.SetActive(true);
     }
 
     public override void UpdateState(BaseAIMovementController owner)
     {
-        owner.FacePlayer();
+        if (owner.rangedAI._canTurn)
+        {
+            owner.FacePlayer();
+        }
 
         owner.rangedAI.Attack();
 
