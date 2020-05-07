@@ -6,8 +6,9 @@ using UnityEngine;
 public class PlayerData
 {
     public float playerHealth;
-    public float playerRotation;
+    //public float playerRotation;
     public float[] playerPosition;
+    public float[] playerRotation;
 
     public PlayerData()
     {
@@ -18,8 +19,12 @@ public class PlayerData
         playerPosition[1] = GlobalState.state.Player.gameObject.transform.position.y;
         playerPosition[2] = GlobalState.state.Player.gameObject.transform.position.z;
 
+        //playerRotation = GlobalState.state.Player.gameObject.transform.rotation.eulerAngles.y;
 
-        playerRotation = GlobalState.state.Player.gameObject.transform.rotation.eulerAngles.y;
+        playerRotation = new float[3];
+        playerRotation[0] = GlobalState.state.Player.gameObject.transform.rotation.eulerAngles.x;
+        playerRotation[1] = GlobalState.state.Player.gameObject.transform.rotation.eulerAngles.y;
+        playerRotation[2] = GlobalState.state.Player.gameObject.transform.rotation.eulerAngles.z;
     }
 
 

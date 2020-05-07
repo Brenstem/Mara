@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class ButtonFunction : MonoBehaviour
 {
-
+    
+    Quaternion rotationQ;
     public void Update()
     {
         if (Input.GetKeyDown(KeyCode.F5))
@@ -33,14 +34,16 @@ public class ButtonFunction : MonoBehaviour
         position.x = data.playerPosition[0];
         position.y = data.playerPosition[1];
         position.z = data.playerPosition[2];
-
-        float rotation;
-        rotation = data.playerRotation;
-
-        Debug.Log(rotation);
+        
+        Vector3 rotation;
+        rotation.x = data.playerRotation[0];
+        rotation.y = data.playerRotation[1];
+        rotation.z = data.playerRotation[2];
 
         GlobalState.state.Player.gameObject.transform.position = position;
-        GlobalState.state.Player.gameObject.transform.Rotate(new Vector3(0, rotation, 0));
+        //av någon anledning får man inte sätta transform.rotation.eulerangles, men man får sätta transform.rotation...
+        rotationQ.eulerAngles = rotation;
+        GlobalState.state.Player.gameObject.transform.rotation = rotationQ;
 
         GlobalState.state.Player.gameObject.GetComponent<CharacterController>().enabled = true;
     }
