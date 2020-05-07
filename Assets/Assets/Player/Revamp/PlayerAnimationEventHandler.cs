@@ -13,6 +13,9 @@ public class PlayerAnimationEventHandler : MonoBehaviour
     public delegate void OnAttackStep();
     public static event OnAttackStep onAttackStep;
 
+    public delegate void OnWalkCancel();
+    public static event OnWalkCancel onWalkCancel;
+
     public delegate void OnAttackStepEnd();
     public static event OnAttackStepEnd onAttackStepEnd;
 
@@ -56,6 +59,14 @@ public class PlayerAnimationEventHandler : MonoBehaviour
         if (onPlayerDeath != null)
         {
             onPlayerDeath();
+        }
+    }
+
+    public void WalkCancel()
+    {
+        if (onWalkCancel != null)
+        {
+            onWalkCancel();
         }
     }
 }

@@ -114,6 +114,7 @@ public class PlayerRevamp : Entity
     [HideInInspector] public bool attackStep;
     [HideInInspector] public float hitstunDuration;
     [HideInInspector] public bool isParrying;
+    [HideInInspector] public bool walkCancel;
 
     private new void Awake()
     {
@@ -147,6 +148,7 @@ public class PlayerRevamp : Entity
         /* === PLAYER ANIM EVENTS === */
         PlayerAnimationEventHandler.onAnimationOver += AnimationOver;
         PlayerAnimationEventHandler.onIASA += IASA;
+        PlayerAnimationEventHandler.onWalkCancel += WalkCancel;
         PlayerAnimationEventHandler.onAttackStep += AttackStep;
         PlayerAnimationEventHandler.onAttackStepEnd += AttackStepEnd;
 
@@ -158,9 +160,11 @@ public class PlayerRevamp : Entity
     private void Update()
     {
         stateMachine.Update();
-        print(attackAnimationOver);
         playerAnimator.SetFloat("StrafeDirX", Input.x);
         playerAnimator.SetFloat("StrafeDirY", Input.y);
+
+        print(playerAnimator.GetBool("Cancel"));
+        print(stateMachine.currentState);
 
         Gravity();
 
@@ -194,6 +198,7 @@ public class PlayerRevamp : Entity
     private void AttackStep() { attackStep = true; }
     private void AttackStepEnd() { attackStep = false; }
     private void IASA() { interruptable = true; }
+    private void WalkCancel() { walkCancel = true; }
     private void AnimationOver() {  attackAnimationOver = true; }
     private void Action(InputType type) { inputBuffer.Enqueue(type); }
 
@@ -737,6 +742,7 @@ public class LightAttackOneState : State<PlayerRevamp>
         owner.light1HitboxGroup.enabled = false;
         owner.interruptable = false;
         owner.attackAnimationOver = false;
+        owner.walkCancel = false;
     }
 
     public override void UpdateState(PlayerRevamp owner)
@@ -779,15 +785,14 @@ public class LightAttackOneState : State<PlayerRevamp>
                             break;
                     }
                 }
-                /*
-                if (owner.Input != Vector2.zero)
-                {
-                    owner.stateMachine.ChangeState(new IdleState());
-                }
-                */
             }
 
-            if (owner.attackAnimationOver)
+            if (owner.walkCancel && owner.Input != Vector2.zero)
+            {
+                owner.playerAnimator.SetTrigger("Cancel");
+                owner.stateMachine.ChangeState(new MovementState());
+            }
+            else if (owner.attackAnimationOver)
             {
                 owner.stateMachine.ChangeState(new IdleState());
             }
@@ -818,6 +823,7 @@ public class LightAttackTwoState : State<PlayerRevamp>
         owner.light2HitboxGroup.enabled = false;
         owner.interruptable = false;
         owner.attackAnimationOver = false;
+        owner.walkCancel = false;
         _secondAttack = false;
     }
 
@@ -861,15 +867,14 @@ public class LightAttackTwoState : State<PlayerRevamp>
                             break;
                     }
                 }
-                /*
-                if (owner.Input != Vector2.zero)
-                {
-                    owner.stateMachine.ChangeState(new IdleState());
-                }
-                */
             }
 
-            if (owner.attackAnimationOver)
+            if (owner.walkCancel && owner.Input != Vector2.zero)
+            {
+                owner.playerAnimator.SetTrigger("Cancel");
+                owner.stateMachine.ChangeState(new MovementState());
+            }
+            else if (owner.attackAnimationOver)
             {
                 owner.stateMachine.ChangeState(new IdleState());
             }
@@ -897,6 +902,7 @@ public class HeavyAttackState : State<PlayerRevamp>
         owner.heavyHitboxGroup.enabled = false;
         owner.interruptable = false;
         owner.attackAnimationOver = false;
+        owner.walkCancel = false;
     }
 
     public override void UpdateState(PlayerRevamp owner)
@@ -914,15 +920,17 @@ public class HeavyAttackState : State<PlayerRevamp>
                 owner.controller.Move(owner.transform.forward * owner.heavyStepSpeed * Time.deltaTime);
             }
 
-            if (owner.interruptable)
+            if (owner.interruptable && owner.inputBuffer.Contains(PlayerRevamp.InputType.AttackLight))
             {
-                if (owner.inputBuffer.Contains(PlayerRevamp.InputType.AttackLight)) // just nu prioriteras det helt
-                    owner.stateMachine.ChangeState(new LightAttackOneState());
-                //else if (owner.Input != Vector2.zero) // walk cancel?
-                   // owner.stateMachine.ChangeState(new IdleState());
+                owner.stateMachine.ChangeState(new LightAttackOneState());
             }
 
-            if (owner.attackAnimationOver)
+            if (owner.walkCancel && owner.Input != Vector2.zero)
+            {
+                owner.playerAnimator.SetTrigger("Cancel");
+                owner.stateMachine.ChangeState(new MovementState());
+            }
+            else if (owner.attackAnimationOver)
             {
                 owner.stateMachine.ChangeState(new IdleState());
             }
