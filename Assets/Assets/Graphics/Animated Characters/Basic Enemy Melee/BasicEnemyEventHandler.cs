@@ -16,4 +16,9 @@ public class BasicEnemyEventHandler : MonoBehaviour
     {
         Destroy(this.parentAI.gameObject);
     }
+
+    public void EndAnim()
+    {
+        parentAI._animationOver = true;
+    }
 }
