@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.Interactions;
 
 // alert kan man gå in i när man nyligen har tagit skada inom en viss tid samt när fienden har aggro på en och man är skadad eller whatever
 public class PlayerRevamp : Entity
@@ -80,9 +81,14 @@ public class PlayerRevamp : Entity
     [HideInInspector] public StateMachine<PlayerRevamp> stateMachine;
     [HideInInspector] public CharacterController controller;
 
+
     /* === INPUT === */
     private Vector2 _input;
     public Vector2 Input { get { return _input; } }
+
+    [HideInInspector] public Vector3 _currentDirection;
+    [HideInInspector] public Vector3 CurrentDirection { get { return _currentDirection; } }
+    [HideInInspector] public float CurrentSpeed { get { return maxSpeed; } }
 
     public enum InputType
     {
@@ -395,6 +401,8 @@ public class IdleState : State<PlayerRevamp>
 
     public override void UpdateState(PlayerRevamp owner)
     {
+        owner._currentDirection = Vector3.zero;
+
         if (owner.Input != Vector2.zero)
         {
             owner.stateMachine.ChangeState(new MovementState());
@@ -406,6 +414,7 @@ public class IdleState : State<PlayerRevamp>
         {
             owner.stateMachine.ChangeState(new IdleAlertState());
         }
+
         bool inputFound = false;
         foreach (PlayerRevamp.InputType item in owner.inputBuffer)
         {
@@ -416,7 +425,6 @@ public class IdleState : State<PlayerRevamp>
                     return;
                 case PlayerRevamp.InputType.Jump:
                     owner.Jump();
-                    Debug.Log("jump");
                     inputFound = true;
                     break;
                 case PlayerRevamp.InputType.Parry:
@@ -465,6 +473,8 @@ public class IdleAlertState : State<PlayerRevamp>
 
     public override void UpdateState(PlayerRevamp owner)
     {
+        owner._currentDirection = Vector3.zero;
+
         if (owner.Input != Vector2.zero)
         {
             owner.stateMachine.ChangeState(new MovementState());
@@ -590,6 +600,8 @@ public class MovementState : State<PlayerRevamp>
                 Vector3 move = owner.transform.forward * z;
                 move += owner.transform.right * x;
 
+                owner._currentDirection = move;
+
                 owner.controller.Move(move * owner.maxSpeed * Time.deltaTime);
             }
             else if (owner.Input.magnitude >= movingThreshold)
@@ -630,6 +642,8 @@ public class MovementState : State<PlayerRevamp>
                         speed *= owner.maxSpeed;
                     else
                         speed *= owner.airSpeed;
+
+                    owner._currentDirection = move;
 
                     owner.controller.Move(speed * Time.deltaTime);
                 }

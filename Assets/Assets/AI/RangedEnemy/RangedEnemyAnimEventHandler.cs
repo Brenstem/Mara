@@ -11,6 +11,11 @@ public class RangedEnemyAnimEventHandler : MonoBehaviour
         parentAI.Fire();
     }
 
+    public void TurnInterruptEvent()
+    {
+        parentAI._canTurn = false;
+    }
+
     public void DestroyThis()
     {
         Destroy(this.parentAI.gameObject);
