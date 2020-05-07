@@ -27,10 +27,10 @@ public abstract class BaseAIMovementController : Entity
 
     [NonSerialized] public GameObject _target;
     [NonSerialized] public NavMeshAgent _agent;
-    [NonSerialized] public BasicMeleeAI _meleeEnemy;
 
-
+    [NonSerialized] public BasicMeleeAI meleeEnemy;
     [NonSerialized] public RangedEnemyAI rangedAI;
+
     [NonSerialized] public Timer waitTimer;
 
     [HideInInspector] public Animator _anim;
