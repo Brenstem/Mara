@@ -103,7 +103,7 @@ public class RangedEnemyAI : BaseAIMovementController
         direction = direction.normalized;
 
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-        this.transform.rotation = Quaternion.Slerp(this.transform.rotation, lookRotation, Time.deltaTime * _turnSpeed);
+        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, lookRotation, Time.deltaTime * _turnSpeed); //ändrat från Slerp till Lerp MVH Måns
     }
 
     // Full derivation by Kain Shin exists here:
@@ -158,7 +158,7 @@ public class RangedEnemyAI : BaseAIMovementController
             // We know that cos(theta) of zero or less means there is no solution, since that would mean B goes backwards or leads to div/0 (infinity)
             if (cosTheta > 0)
             {
-                t = 0.5f * targetToMuzzleDist / (targetSpeed * cosTheta);
+                t = (0.5f * targetToMuzzleDist / (targetSpeed * cosTheta)) ;
             }
             else
             {
@@ -193,7 +193,7 @@ public class RangedEnemyAI : BaseAIMovementController
                 t = Mathf.Min(t0, t1);
                 if (t < Mathf.Epsilon)
                 {
-                    t = Mathf.Max(t0, t1);
+                    t = Mathf.Max(t0, t1) + (Mathf.Acos(cosTheta) * (Time.deltaTime * 5)) + (9.0f / 30.0f); /*CHANGE "5" TO TURNSPEED!!!!!!!!!!!!!!!!1! (9 = frames mellan turnlock och fire, 30 = animationFPS) */
                 }
 
                 if (t < Mathf.Epsilon)
