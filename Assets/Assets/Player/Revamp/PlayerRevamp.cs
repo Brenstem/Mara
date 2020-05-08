@@ -119,6 +119,7 @@ public class PlayerRevamp : Entity
     [HideInInspector] public bool attackAnimationOver;
     [HideInInspector] public bool attackStep;
     [HideInInspector] public float hitstunDuration;
+    [HideInInspector] public float attackSpeedModifier;
     [HideInInspector] public bool isParrying;
     [HideInInspector] public bool walkCancel;
 

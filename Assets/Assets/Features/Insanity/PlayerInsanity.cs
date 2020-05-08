@@ -10,9 +10,11 @@ public class PlayerInsanity : EntityHealth
     [Header("References")]
     [SerializeField] private Volume vol;
 
-    [Header("Variables")]
+    [Header("Buff and debuff variables")]
     [SerializeField] private float _hitstunBuffMultiplier = 1.5f;
     [SerializeField] private float _damageBuffMultiplier = 1.1f;
+    [SerializeField] private float _moveSpeedBuffMultiplier = 1.1f;
+    [SerializeField] private float _moveSpeedDebuffMultiplier = 0.9f;
 
     [Header("Insanity tier values")]
     [Tooltip("Add the static and dynamic values for each insanity tier here. Do not change the array size!")]
@@ -180,6 +182,10 @@ public class PlayerInsanity : EntityHealth
                 break;
 
             case float n when (n >= staticInsanityValues[1]): // Movement speed buff
+                if (_buffState != BuffStates.movementSpeed)
+                {
+                    _playerModifier.MovementSpeedMultiplier *= _moveSpeedBuffMultiplier;
+                }
                 _buffState = BuffStates.movementSpeed;
                 break;
 
@@ -227,6 +233,11 @@ public class PlayerInsanity : EntityHealth
                 if (_debuffState != DebuffStates.slow)
                 {
                     PlayHeartBeat();
+
+                    if (_playerModifier.MovementSpeedMultiplier == 1.0f)
+                    {
+                        _playerModifier.MovementSpeedMultiplier *= _moveSpeedDebuffMultiplier;
+                    }
                 }
                 _debuffState = DebuffStates.slow;
                 if (onDisableShadows != null)

@@ -2,9 +2,32 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public struct Modifier
+{
+    private float _multiplier;
+    private bool _isModified;
+
+    public Modifier(float multiplier)
+    {
+        _multiplier = multiplier;
+        if (_multiplier != 1.0f)
+        {
+            _isModified = false;
+        }
+        else
+        {
+            _isModified = true
+        }
+    }
+}
+
 public class HitboxModifier
 {
     private bool _modified;
+    private bool _hitstunModified;
+    private bool _movementModified;
+    private bool _attackSpeedModified;
+    private bool _damageModified;
 
     private float _movementSpeedMultiplier = 1.0f;
     public float MovementSpeedMultiplier
