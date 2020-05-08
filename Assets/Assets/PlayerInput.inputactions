@@ -62,9 +62,17 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Parry",
+                    "name": "HeavyCharge",
                     "type": "Button",
                     "id": "957b424e-f522-4dac-b987-612086619734",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Parry",
+                    "type": "Button",
+                    "id": "46d43148-aeee-413c-86c3-440d2c42871f",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
@@ -249,17 +257,6 @@
                 },
                 {
                     "name": "",
-                    "id": "1f717fe3-0c7d-4d27-a67f-72ef003463a7",
-                    "path": "<Keyboard>/v",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard",
-                    "action": "Parry",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "30b489f3-94d6-4640-9d04-b014fa5ea01f",
                     "path": "<Mouse>/rightButton",
                     "interactions": "",
@@ -277,17 +274,6 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "AttackHeavy",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "b00775b5-6a42-44b9-ac9c-5662b5b6d53a",
-                    "path": "<Gamepad>/rightShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Parry",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -332,6 +318,39 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Look",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "abc576f6-3aa9-43a0-a904-0c89e5cf34fb",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "Tap,SlowTap",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "HeavyCharge",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1f717fe3-0c7d-4d27-a67f-72ef003463a7",
+                    "path": "<Keyboard>/v",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Parry",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b00775b5-6a42-44b9-ac9c-5662b5b6d53a",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "Parry",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
