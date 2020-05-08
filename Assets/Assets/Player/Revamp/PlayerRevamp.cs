@@ -119,7 +119,6 @@ public class PlayerRevamp : Entity
     [HideInInspector] public bool attackAnimationOver;
     [HideInInspector] public bool attackStep;
     [HideInInspector] public float hitstunDuration;
-    [HideInInspector] public float attackSpeedModifier;
     [HideInInspector] public bool isParrying;
     [HideInInspector] public bool walkCancel;
 
@@ -133,7 +132,7 @@ public class PlayerRevamp : Entity
         _originalMaxSpeed = maxSpeed;
 
         controller = GetComponent<CharacterController>();
-        modifier = new HitboxModifier();
+        modifier = new EntityModifier();
         _playerInput = new PlayerInput();
         stateMachine = new StateMachine<PlayerRevamp>(this);
         stateMachine.ChangeState(new IdleState());
@@ -158,10 +157,6 @@ public class PlayerRevamp : Entity
         PlayerAnimationEventHandler.onWalkCancel += WalkCancel;
         PlayerAnimationEventHandler.onAttackStep += AttackStep;
         PlayerAnimationEventHandler.onAttackStepEnd += AttackStepEnd;
-
-        /* === INSANITY EVENTS === */
-        PlayerInsanity.onSlow += Slow;
-        PlayerInsanity.onIncreaseMovementSpeed += IncreaseMoveSpeed;
     }
 
     private void Update()
@@ -170,8 +165,7 @@ public class PlayerRevamp : Entity
         playerAnimator.SetFloat("StrafeDirX", Input.x);
         playerAnimator.SetFloat("StrafeDirY", Input.y);
 
-        print(playerAnimator.GetBool("Cancel"));
-        print(stateMachine.currentState);
+        print(maxSpeed);
 
         Gravity();
 
@@ -236,41 +230,6 @@ public class PlayerRevamp : Entity
         playerAnimator.SetBool("IsGrounded", _isGrounded);
     }
 
-    private void IncreaseMoveSpeed()
-    {
-        float currentInsanity = ((PlayerInsanity)health).GetInsanityPercentage();
-        currentInsanity -= 75; // Slow starts at 75 insanity or higher
-        if (currentInsanity > 0)
-        {
-            maxSpeed = _originalMaxSpeed;
-            if (currentInsanity >= 10)
-            {
-                maxSpeed *= _moveSpeedBuffMultiplier;
-            }
-            else
-            {
-                maxSpeed *= 1 + currentInsanity / 100;
-            }
-        }
-    }
-
-    private void Slow()
-    {
-        float currentInsanity = ((PlayerInsanity)health).GetInsanityPercentage();
-        if (currentInsanity - 50 > 0 && currentInsanity - 75 <= 0)
-        {
-            currentInsanity -= 50; // Slow starts at 50 insanity or higher
-            maxSpeed = _originalMaxSpeed;
-            if (currentInsanity >= 10)
-            {
-                maxSpeed *= _moveSpeedDebuffMultiplier;
-            }
-            else
-            {
-                maxSpeed *= 1 - currentInsanity / 100;
-            }
-        }
-    }
     
     /// <summary>
     /// Snaps camera after returning to free look camera
@@ -283,6 +242,58 @@ public class PlayerRevamp : Entity
             //var loc = new Vector2(_lockonCam.m_XAxis.Value, _lockonCam.m_YAxis.Value);
             _freeLookCam.m_XAxis.Value = transform.eulerAngles.y;
             _doSnapCamera = false;
+        }
+    }
+
+    public void IncreaseMoveSpeedOverValue(float insValueModStart, float insValueModEnd, float multiplier)
+    {
+        float currentInsanity = ((PlayerInsanity)health).CurrentHealth;
+
+        float range = insValueModEnd - insValueModStart;
+
+        currentInsanity -= insValueModStart;
+
+        float interpolationValue = Mathf.Clamp(currentInsanity / range, 0, 1);
+
+        float finalMultiplier = Mathf.Lerp(1.0f, multiplier, interpolationValue);
+
+        if (currentInsanity > 0)
+        {
+            maxSpeed = _originalMaxSpeed;
+
+            modifier.MovementSpeedMultiplier *= finalMultiplier;
+
+            maxSpeed *= modifier.MovementSpeedMultiplier;
+        }
+        else if (currentInsanity < 0)
+        {
+            modifier.MovementSpeedMultiplier.Reset();
+        }
+    }
+
+    public void SlowOverValue(float insValueModStart, float insValueModEnd, float multiplier)
+    {
+        float currentInsanity = ((PlayerInsanity)health).GetInsanityPercentage();
+
+        float range = insValueModEnd - insValueModStart;
+
+        currentInsanity -= insValueModStart;
+
+        float interpolationValue = Mathf.Clamp(currentInsanity / range, 0, 1);
+
+        float finalMultiplier = Mathf.Lerp(1.0f, multiplier, interpolationValue);
+
+        if (currentInsanity > 0)
+        {
+            maxSpeed = _originalMaxSpeed;
+
+            modifier.MovementSpeedMultiplier *= finalMultiplier;
+
+            maxSpeed *= modifier.MovementSpeedMultiplier;
+        }
+        else if (currentInsanity < 0)
+        {
+            modifier.MovementSpeedMultiplier.Reset();
         }
     }
 
@@ -329,7 +340,6 @@ public class PlayerRevamp : Entity
 
     public void ToggleLockon()
     {
-
         if (!pointOfInterest)
         {
             Debug.LogWarning("Trying to toggle lockon without a point of interest!", this);

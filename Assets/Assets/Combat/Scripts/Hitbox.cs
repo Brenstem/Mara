@@ -9,7 +9,7 @@ public struct HitboxValues
     public float hitstunTime;
     public float hitstopTime;
 
-    public static HitboxValues operator *(HitboxValues h, HitboxModifier m)
+    public static HitboxValues operator *(HitboxValues h, EntityModifier m)
     {
         h.damageValue *= m.DamageMultiplier;
         h.hitstunTime *= m.HitstunMultiplier;
