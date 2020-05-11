@@ -899,13 +899,20 @@ public class LightAttackTwoState : State<PlayerRevamp>
 public class HeavyAttackState : State<PlayerRevamp>
 {
     private GameObject _target;
+    private bool _isCharging;
+
+    private float _chargeTime = 2.0f;
+    private Timer _chargeTimer;
 
     public override void EnterState(PlayerRevamp owner)
     {
+        _chargeTimer = new Timer(_chargeTime);
+
         owner.interruptable = false;
         owner.attackAnimationOver = false;
         owner.heavyHitboxGroup.enabled = true;
         owner.playerAnimator.SetTrigger("AttackHeavy"); // Set animation trigger for first attack
+        owner.playerAnimator.SetBool("HeavyCharge", true);
         GlobalState.state.AudioManager.PlayerSwordSwingAudio(owner.transform.position);
 
         _target = owner.FindTarget();
@@ -917,6 +924,7 @@ public class HeavyAttackState : State<PlayerRevamp>
         owner.interruptable = false;
         owner.attackAnimationOver = false;
         owner.walkCancel = false;
+        owner.playerAnimator.SetBool("HeavyCharge", false);
     }
 
     public override void UpdateState(PlayerRevamp owner)
