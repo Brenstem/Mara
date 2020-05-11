@@ -405,8 +405,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac2019947aa47dc45b41d13851ab1ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 50
-  _anim: {fileID: 7726847149550425440}
+  _maxHealth: 100
+  _healthBar: {fileID: 1714572244285463164}
 --- !u!114 &8915456496256060790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -419,9 +419,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3357687673d2c8643bafe76d24faec2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: {fileID: 0}
   invulerable: 0
-  _aggroRange: 15
-  _unaggroRange: 25
+  _aggroRange: 10
+  _unaggroRange: 15
   _turnSpeed: 5
   _targetLayers:
     serializedVersion: 2
@@ -430,7 +431,7 @@ MonoBehaviour:
   _waitAtPoints: 0
   _waitTime: 0
   _idlePathingPoints: []
-  _attackRange: 15
+  _attackRange: 10
   _anim: {fileID: 0}
   _projectile: {fileID: 8366055604816629108, guid: 634054fb0d9b0864c9b35bbdfd9ef739,
     type: 3}
@@ -438,6 +439,7 @@ MonoBehaviour:
   _firerate: 2
   _fill: {fileID: 730838367674231687}
   _useHitStun: 0
+  _canTurn: 0
 --- !u!1001 &4669090988226794240
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -521,12 +523,6 @@ GameObject:
 --- !u!4 &410185227624118298 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: adf34ba624f6f3549ace6940ab49be95,
-    type: 3}
-  m_PrefabInstance: {fileID: 4669090988226794240}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &7726847149550425440 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: -6057140222963153312, guid: adf34ba624f6f3549ace6940ab49be95,
     type: 3}
   m_PrefabInstance: {fileID: 4669090988226794240}
   m_PrefabAsset: {fileID: 0}
