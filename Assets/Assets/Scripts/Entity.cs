@@ -5,16 +5,16 @@ using UnityEngine;
 
 public struct Modifier
 {
-    // TODO add tolerance to multiplier isModifier check
-
     public float multiplier;
     public bool isModified;
+
+    private const float TOLERANCE = 0.0000000001f;
 
     public Modifier(float multiplier)
     {
         this.multiplier = multiplier;
 
-        if (this.multiplier != 1.0f)
+        if (NearlyEquals(multiplier, 1.0f, TOLERANCE))
         {
             isModified = false;
         }
@@ -40,6 +40,26 @@ public struct Modifier
     {
         modifier.multiplier = value;
         return modifier;
+    }
+
+    public static bool NearlyEquals(float a, float b, float tolerance)
+    {
+        if (a > b + tolerance || a < b - tolerance)
+        {
+            return false;
+        }
+        else { return true; }
+    }
+
+    public static bool NearlyEquals(float a, float b)
+    {
+        float tolerance = 0.0000000001f;
+
+        if (a > b + tolerance || a < b - tolerance)
+        {
+            return false;
+        }
+        else { return true; }
     }
 }
 
@@ -89,14 +109,20 @@ public class EntityModifier
         _attackSpeedMultiplier.multiplier = 1.0f;
     }
 
-    public EntityModifier() { }
+    public EntityModifier() 
+    {
+        MovementSpeedMultiplier *= 1.0f;
+        HitstunMultiplier *= 1.0f;
+        DamageMultiplier *= 1.0f;
+        AttackSpeedMultiplier *= 1.0f;
+    }
 
     public EntityModifier(float movementSpeedMultiplier, float hitstunMultiplier, float damageMultiplier, float attackSpeedMultiplier)
     {
-        _movementSpeedMultiplier.multiplier = movementSpeedMultiplier;
-        _hitstunMultiplier.multiplier = hitstunMultiplier;
-        _damageMultiplier.multiplier = damageMultiplier;
-        _attackSpeedMultiplier.multiplier = attackSpeedMultiplier;
+        MovementSpeedMultiplier *= movementSpeedMultiplier;
+        HitstunMultiplier *= hitstunMultiplier;
+        DamageMultiplier *= damageMultiplier;
+        AttackSpeedMultiplier *= attackSpeedMultiplier;
     }
 }
 

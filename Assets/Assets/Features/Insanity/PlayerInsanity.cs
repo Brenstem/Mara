@@ -19,8 +19,8 @@ public class PlayerInsanity : EntityHealth
 
     [Header("Insanity tier values")]
     [Tooltip("Add the static and dynamic values for each insanity tier here. Do not change the array size!")]
-    [SerializeField]  int[] staticInsanityValues;
     [SerializeField] private int[] dynamicInsanityValues;
+    [SerializeField] private int[] staticInsanityValues;
 
     #region Insanity Tier Events
     // Events for each stage of insanity 
@@ -196,11 +196,6 @@ public class PlayerInsanity : EntityHealth
 
     public void ActivateBuffs()
     {
-        // TODO fix buffs and debuffs :)
-
-        _player.IncreaseMoveSpeedOverValue(staticInsanityValues[2], staticInsanityValues[3], _moveSpeedMultiplier);
-        _player.SlowOverValue(dynamicInsanityValues[2], dynamicInsanityValues[3], _moveSpeedMultiplier);
-
         // Static based buffs
         switch (CurrentHealth)
         {
@@ -224,12 +219,12 @@ public class PlayerInsanity : EntityHealth
                 break;
 
             case float n when (n >= staticInsanityValues[1]): // Movement speed buff
-                if (!_player.modifier.MovementSpeedMultiplier.isModified)
+                if (_buffState != BuffStates.movementSpeed)
                 {
                     _moveSpeedMultiplier = _moveSpeedBuffMultiplier;
-                    _player.modifier.MovementSpeedMultiplier = new Modifier(_damageBuffMultiplier);
-                    _player.IncreaseMoveSpeedOverValue(staticInsanityValues[2], staticInsanityValues[3], _moveSpeedMultiplier);
+                    _player.IncreaseMoveSpeedOverValue(staticInsanityValues[1], staticInsanityValues[2], _moveSpeedMultiplier);
                 }
+
                 _buffState = BuffStates.movementSpeed;
                 break;
 
@@ -274,11 +269,13 @@ public class PlayerInsanity : EntityHealth
                 if (_debuffState != DebuffStates.slow)
                 {
                     PlayHeartBeat();
+                }
+                if (_debuffState != DebuffStates.slow && !_player.modifier.MovementSpeedMultiplier.isModified)
+                {
                     _moveSpeedMultiplier = _moveSpeedDebuffMultiplier;
                 }
                 if (!_player.modifier.MovementSpeedMultiplier.isModified)
                 {
-                    _player.modifier.MovementSpeedMultiplier = new Modifier(_moveSpeedMultiplier);
                     _player.SlowOverValue(dynamicInsanityValues[2], dynamicInsanityValues[3], _moveSpeedMultiplier);
                 }
                 _debuffState = DebuffStates.slow;
@@ -311,6 +308,18 @@ public class PlayerInsanity : EntityHealth
                 if (onDisableShadows != null)
                     onDisableShadows();
                 break;
+        }
+
+        if (CurrentHealth > staticInsanityValues[1] || Modifier.NearlyEquals(CurrentHealth, staticInsanityValues[1]))
+        {
+            print("speed");
+            _player.IncreaseMoveSpeedOverValue(staticInsanityValues[1], staticInsanityValues[2], _moveSpeedMultiplier);
+        }
+        else if (GetInsanityPercentage() > dynamicInsanityValues[2] || Modifier.NearlyEquals(GetInsanityPercentage(), dynamicInsanityValues[2]))
+        {
+            print("slow");
+            _moveSpeedMultiplier = _moveSpeedDebuffMultiplier;
+            _player.SlowOverValue(dynamicInsanityValues[2], dynamicInsanityValues[3], _moveSpeedMultiplier);
         }
     }
 

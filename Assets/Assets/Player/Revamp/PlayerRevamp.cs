@@ -165,8 +165,6 @@ public class PlayerRevamp : Entity
         playerAnimator.SetFloat("StrafeDirX", Input.x);
         playerAnimator.SetFloat("StrafeDirY", Input.y);
 
-        print(maxSpeed);
-
         Gravity();
 
         SnapCamera();
@@ -253,12 +251,12 @@ public class PlayerRevamp : Entity
 
         currentInsanity -= insValueModStart;
 
-        float interpolationValue = Mathf.Clamp(currentInsanity / range, 0, 1);
-
-        float finalMultiplier = Mathf.Lerp(1.0f, multiplier, interpolationValue);
-
-        if (currentInsanity > 0)
+        if (currentInsanity > 0 || Modifier.NearlyEquals(currentInsanity, 0))
         {
+            float interpolationValue = Mathf.Clamp(currentInsanity / range, 0, 1);
+
+            float finalMultiplier = Mathf.Lerp(1.0f, multiplier, interpolationValue);
+
             maxSpeed = _originalMaxSpeed;
 
             modifier.MovementSpeedMultiplier *= finalMultiplier;
@@ -268,6 +266,7 @@ public class PlayerRevamp : Entity
         else if (currentInsanity < 0)
         {
             modifier.MovementSpeedMultiplier.Reset();
+            maxSpeed *= modifier.MovementSpeedMultiplier;
         }
     }
 
@@ -279,21 +278,23 @@ public class PlayerRevamp : Entity
 
         currentInsanity -= insValueModStart;
 
-        float interpolationValue = Mathf.Clamp(currentInsanity / range, 0, 1);
-
-        float finalMultiplier = Mathf.Lerp(1.0f, multiplier, interpolationValue);
-
-        if (currentInsanity > 0)
+        if (currentInsanity > 0 || Modifier.NearlyEquals(currentInsanity, 0))
         {
+            float interpolationValue = Mathf.Clamp(currentInsanity / range, 0, 1);
+
+            float finalMultiplier = Mathf.Lerp(1.0f, multiplier, interpolationValue);
+
             maxSpeed = _originalMaxSpeed;
 
             modifier.MovementSpeedMultiplier *= finalMultiplier;
 
             maxSpeed *= modifier.MovementSpeedMultiplier;
+
         }
         else if (currentInsanity < 0)
         {
             modifier.MovementSpeedMultiplier.Reset();
+            maxSpeed *= modifier.MovementSpeedMultiplier;
         }
     }
 
