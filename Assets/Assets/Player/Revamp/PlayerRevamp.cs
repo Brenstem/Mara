@@ -243,6 +243,17 @@ public class PlayerRevamp : Entity
         }
     }
 
+    public void IncreaseAttackSpeed(float insValueModStart, float multiplier)
+    {
+        float currentInsanity = ((PlayerInsanity)health).CurrentHealth;
+
+        if (currentInsanity > insValueModStart || Modifier.NearlyEquals(currentInsanity, insValueModStart))
+        {
+            playerAnimator.SetFloat("AttackSpeedModifier", 1.0f * multiplier);
+        }
+    }
+
+
     public void IncreaseMoveSpeedOverValue(float insValueModStart, float insValueModEnd, float multiplier)
     {
         float currentInsanity = ((PlayerInsanity)health).CurrentHealth;
