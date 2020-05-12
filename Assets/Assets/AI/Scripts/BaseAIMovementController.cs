@@ -28,6 +28,7 @@ public abstract class BaseAIMovementController : Entity
     [SerializeField] public float _waitTime;
     [SerializeField] public Vector3[] _idlePathingPoints;
     [SerializeField] public float _attackRange = 12f;
+    [SerializeField] public bool _usesHitStun = true;
 
     [NonSerialized] public Vector3 _idlePosition;
 
@@ -42,6 +43,8 @@ public abstract class BaseAIMovementController : Entity
     [HideInInspector] public Timer _attackRateTimer;
     [HideInInspector] public Animator _anim;
     [HideInInspector] public bool _animationOver;
+
+    [HideInInspector] public bool _canEnterHitStun;
 
     // Private variables
     private float _attackSpeed;
@@ -59,6 +62,7 @@ public abstract class BaseAIMovementController : Entity
         _agent = GetComponent<NavMeshAgent>();
 
         _target = GlobalState.state.Player.gameObject;
+        _canEnterHitStun = _usesHitStun;
     }
 
     virtual protected void Update()
@@ -109,7 +113,7 @@ public abstract class BaseAIMovementController : Entity
         _attackSpeed += UnityEngine.Random.Range(0f, _maxAttackSpeedIncrease / 2);
         _attackSpeed += UnityEngine.Random.Range(0f, _maxAttackSpeedIncrease / 2);
 
-        print(_attackSpeed);
+        //print(_attackSpeed);
 
         _attackRateTimer = new Timer(_attackSpeed);
     }

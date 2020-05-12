@@ -18,13 +18,7 @@ public class RangedEnemyAI : BaseAIMovementController
     [SerializeField] public GameObject _fill;
 
     [HideInInspector] public Timer _hitStunTimer;
-    [HideInInspector] public bool _useHitStun;
     [HideInInspector] public bool _canTurn;
-
-    protected override void Awake()
-    {
-        base.Awake();
-    }
 
     private void Start()
     {
@@ -66,22 +60,11 @@ public class RangedEnemyAI : BaseAIMovementController
 
     public void EnableHitstun(float duration)
     {
-        if (duration > 0.0f)
+        if (duration > 0.0f && _canEnterHitStun)
         {
             stateMachine.ChangeState(new RangedAIHitStunState());
             _hitStunTimer = new Timer(duration);
-            _useHitStun = true;
-            GlobalState.state.AudioManager.FloatingEnemyHurtAudio(this.transform.position);
-            _anim.SetTrigger("Hurt");
-            _anim.SetBool("InHitstun", true);
         }
-    }
-
-    public void DisableHitStun()
-    {
-        stateMachine.ChangeState(stateMachine.previousState);
-        _useHitStun = false;
-        _anim.SetBool("InHitstun", false);
     }
 
     public void Fire()
@@ -248,6 +231,7 @@ public class RangedEnemyIdleState : BaseIdleState
 {
     public override void EnterState(BaseAIMovementController owner)
     {
+        owner.GenerateNewAttackTimer();
         _chasingState = new RangedEnemyChasingState();
     }
 }
@@ -275,7 +259,7 @@ public class RangedEnemyAttackingState : BaseAttackingState
     {
         _chasingState = new RangedEnemyChasingState();
 
-        owner.GenerateNewAttackTimer();
+        //owner.GenerateNewAttackTimer();
         owner.rangedAI._fill.SetActive(true);
     }
 
@@ -303,12 +287,17 @@ public class RangedEnemyFiringState : State<BaseAIMovementController>
 {
     public override void EnterState(BaseAIMovementController owner)
     {
+        owner._canEnterHitStun = false;
         owner._anim.SetTrigger("Attack");
+        UnityEngine.Debug.Log("fire");
     }
 
     public override void ExitState(BaseAIMovementController owner) 
     {
+        UnityEngine.Debug.Log("no fire");
         owner._animationOver = false;
+        owner._canEnterHitStun = owner._usesHitStun;
+        owner.GenerateNewAttackTimer();
     }
 
     public override void UpdateState(BaseAIMovementController owner) 
@@ -347,20 +336,30 @@ public class RangedEnemyReturnToIdleState : BaseReturnToIdlePosState
 
 public class RangedAIHitStunState : State<BaseAIMovementController>
 {
-    public override void EnterState(BaseAIMovementController owner) { }
+    public override void EnterState(BaseAIMovementController owner) 
+    {
+        UnityEngine.Debug.Log("im hit");
+        GlobalState.state.AudioManager.FloatingEnemyHurtAudio(owner.transform.position);
+        owner._anim.SetTrigger("Hurt");
+        owner._anim.SetBool("InHitstun", true);
+    }
 
-    public override void ExitState(BaseAIMovementController owner) { }
+    public override void ExitState(BaseAIMovementController owner) 
+    {
+        owner._anim.SetBool("InHitstun", false);
+    }
 
     public override void UpdateState(BaseAIMovementController owner)
     {
-        if (owner.rangedAI._useHitStun)
+        //if (owner.rangedAI._useHitStun)
+        //{
+        //}
+        owner.rangedAI._hitStunTimer.Time += Time.deltaTime;
+        if (owner.rangedAI._hitStunTimer.Expired)
         {
-            owner.rangedAI._hitStunTimer.Time += Time.deltaTime;
-            if (owner.rangedAI._hitStunTimer.Expired)
-            {
-                owner.rangedAI._hitStunTimer.Reset();
-                owner.rangedAI.DisableHitStun();
-            }
+            owner.rangedAI._hitStunTimer.Reset();
+            owner.stateMachine.ChangeState(owner.stateMachine.previousState);
+            //owner.rangedAI.DisableHitStun();
         }
     }
 }
