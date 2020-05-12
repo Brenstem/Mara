@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -199,12 +199,19 @@ public class PlayerInsanity : EntityHealth
         // Static based buffs
         switch (CurrentHealth)
         {
+
+
             case float n when (n >= staticInsanityValues[4]): // Attack speed buff
                 if (_buffState != BuffStates.attackSpeed)
                 {
                     if (!_player.modifier.AttackSpeedMultiplier.isModified)
+                    {
                         _player.modifier.AttackSpeedMultiplier = new Modifier(_attackSpeedModifier);
+                        _player.playerAnimator.SetFloat("AttackSpeedModifier", _player.modifier.AttackSpeedMultiplier.multiplier);
+                    }
                 }
+                _buffState = BuffStates.attackSpeed;
+                TestResetBuffs();
                 break;
 
             case float n when (n >= staticInsanityValues[3]): // Hitstun amount buff
@@ -213,6 +220,7 @@ public class PlayerInsanity : EntityHealth
                     _player.modifier.HitstunMultiplier *= _hitstunBuffMultiplier;
                 }
                 _buffState = BuffStates.hitStun;
+                TestResetBuffs();
                 break;
 
             case float n when (n >= staticInsanityValues[2]): // Outline on shadows buff
@@ -224,8 +232,8 @@ public class PlayerInsanity : EntityHealth
                     _moveSpeedMultiplier = _moveSpeedBuffMultiplier;
                     _player.IncreaseMoveSpeedOverValue(staticInsanityValues[1], staticInsanityValues[2], _moveSpeedMultiplier);
                 }
-
                 _buffState = BuffStates.movementSpeed;
+                TestResetBuffs();
                 break;
 
             case float n when (n >= staticInsanityValues[0]): // Attack damage buff
@@ -235,11 +243,12 @@ public class PlayerInsanity : EntityHealth
                         _player.modifier.DamageMultiplier = new Modifier(_damageBuffMultiplier);
                 }
                 _buffState = BuffStates.playerDamage;
+                TestResetBuffs();
                 break;
 
             case float n when (n < staticInsanityValues[0]): // Default buff state
-                _player.modifier.Reset();
                 _buffState = BuffStates.defaultState;
+                TestResetBuffs();
                 break;
         }
 
@@ -251,6 +260,7 @@ public class PlayerInsanity : EntityHealth
                     PlayHeartBeat();
                 }
                 _debuffState = DebuffStates.impendingDoom;
+                TestResetBuffs();
                 break;
 
             case float n when (n >= dynamicInsanityValues[3]): // Shadows appear debuff
@@ -263,6 +273,7 @@ public class PlayerInsanity : EntityHealth
                     PlayHeartBeat();
                 }
                 _debuffState = DebuffStates.hallucinations;
+                TestResetBuffs();
                 break;
 
             case float n when (n >= dynamicInsanityValues[2]): // Movement speed debuff
@@ -279,8 +290,7 @@ public class PlayerInsanity : EntityHealth
                     _player.SlowOverValue(dynamicInsanityValues[2], dynamicInsanityValues[3], _moveSpeedMultiplier);
                 }
                 _debuffState = DebuffStates.slow;
-                if (onDisableShadows != null)
-                    onDisableShadows();
+                TestResetBuffs();
                 break;
 
             case float n when (n >= dynamicInsanityValues[1]): // FX debuff
@@ -289,8 +299,7 @@ public class PlayerInsanity : EntityHealth
                     PlayHeartBeat();
                 }
                 _debuffState = DebuffStates.paranoia;
-                if (onDisableShadows != null)
-                    onDisableShadows();
+                TestResetBuffs();
                 break;
 
             case float n when (n >= dynamicInsanityValues[0]): // Tutorial debuff
@@ -299,27 +308,90 @@ public class PlayerInsanity : EntityHealth
                     PlayHeartBeat();
                 }
                 _debuffState = DebuffStates.tutorialDebuff;
-                if (onDisableShadows != null)
-                    onDisableShadows();
+                TestResetBuffs();
                 break;
 
             case float n when (n < dynamicInsanityValues[0]): // Standard state debuff
                 _debuffState = DebuffStates.defaultState;
-                if (onDisableShadows != null)
-                    onDisableShadows();
+                TestResetBuffs();
                 break;
         }
 
         if (CurrentHealth > staticInsanityValues[1] || Modifier.NearlyEquals(CurrentHealth, staticInsanityValues[1]))
         {
-            print("speed");
             _player.IncreaseMoveSpeedOverValue(staticInsanityValues[1], staticInsanityValues[2], _moveSpeedMultiplier);
         }
         else if (GetInsanityPercentage() > dynamicInsanityValues[2] || Modifier.NearlyEquals(GetInsanityPercentage(), dynamicInsanityValues[2]))
         {
-            print("slow");
             _moveSpeedMultiplier = _moveSpeedDebuffMultiplier;
             _player.SlowOverValue(dynamicInsanityValues[2], dynamicInsanityValues[3], _moveSpeedMultiplier);
+        }
+    }
+
+    private void TestResetBuffs()
+    {
+        // Reset function for attackspeed modifier just... doesn't work ??
+
+        switch (_buffState)
+        {
+            case BuffStates.defaultState:
+                _player.modifier.Reset();
+                _player.playerAnimator.SetFloat("AttackSpeedModifier", _player.modifier.AttackSpeedMultiplier.multiplier);
+                break;
+            case BuffStates.playerDamage:
+                _player.modifier.HitstunMultiplier.Reset();
+                _player.modifier.AttackSpeedMultiplier *= 1.0f;
+                _player.playerAnimator.SetFloat("AttackSpeedModifier", _player.modifier.AttackSpeedMultiplier.multiplier);
+                break;
+            case BuffStates.movementSpeed:
+                _player.modifier.HitstunMultiplier.Reset();
+                _player.modifier.AttackSpeedMultiplier.Reset();
+                _player.playerAnimator.SetFloat("AttackSpeedModifier", _player.modifier.AttackSpeedMultiplier.multiplier);
+                break;
+            case BuffStates.heightenedSenses:
+                _player.modifier.HitstunMultiplier.Reset();
+                _player.modifier.AttackSpeedMultiplier *= 1.0f;
+                _player.playerAnimator.SetFloat("AttackSpeedModifier", _player.modifier.AttackSpeedMultiplier.multiplier);
+                break;
+            case BuffStates.hitStun:
+                print(_player.modifier.AttackSpeedMultiplier.multiplier);
+                _player.modifier.AttackSpeedMultiplier *= 1.0f;
+                print(_player.modifier.AttackSpeedMultiplier.multiplier);
+                _player.playerAnimator.SetFloat("AttackSpeedModifier", _player.modifier.AttackSpeedMultiplier.multiplier);
+                print(_player.modifier.AttackSpeedMultiplier.multiplier);
+                float f = _player.playerAnimator.GetFloat("AttackSpeedModifier");
+                print(f);
+                break;
+            case BuffStates.attackSpeed:
+                break;
+            default:
+                break;
+        }
+
+        switch (_debuffState)
+        {
+            case DebuffStates.defaultState:
+                if (onDisableShadows != null)
+                    onDisableShadows();
+                break;
+            case DebuffStates.tutorialDebuff:
+                if (onDisableShadows != null)
+                    onDisableShadows();
+                break;
+            case DebuffStates.paranoia:
+                if (onDisableShadows != null)
+                    onDisableShadows();
+                break;
+            case DebuffStates.slow:
+                if (onDisableShadows != null)
+                    onDisableShadows();
+                break;
+            case DebuffStates.hallucinations:
+                break;
+            case DebuffStates.impendingDoom:
+                break;
+            default:
+                break;
         }
     }
 
