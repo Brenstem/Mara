@@ -16,8 +16,8 @@ public abstract class EntityHealth : MonoBehaviour
 
     private Entity _entity;
 
-    private float _currentHealth;
-    public float CurrentHealth
+    protected float _currentHealth;
+    public virtual float CurrentHealth
     {
         get { return _currentHealth; }
         set
@@ -81,6 +81,5 @@ public abstract class EntityHealth : MonoBehaviour
         }
 
         CurrentHealth = MaxHealth;
-
     }
 }

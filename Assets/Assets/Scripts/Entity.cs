@@ -1,53 +1,98 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
-public class HitboxModifier
+public struct Modifier
+{
+    public float multiplier;
+    public bool isModified;
+
+    private const float TOLERANCE = 0.0000000001f;
+
+    public Modifier(float multiplier)
+    {
+        this.multiplier = multiplier;
+
+        if (NearlyEquals(multiplier, 1.0f, TOLERANCE))
+        {
+            isModified = false;
+        }
+        else
+        {
+            isModified = true;
+        }
+    }
+
+    public void Reset()
+    {
+        multiplier = 1.0f;
+        isModified = false;
+    }
+
+    public static float operator *(float value, Modifier modifier)
+    {
+        value *= modifier.multiplier;
+        return value;
+    }
+
+    public static Modifier operator *(Modifier modifier, float value)
+    {
+        modifier.multiplier = value;
+        return modifier;
+    }
+
+    public static bool NearlyEquals(float a, float b, float tolerance)
+    {
+        if (a > b + tolerance || a < b - tolerance)
+        {
+            return false;
+        }
+        else { return true; }
+    }
+
+    public static bool NearlyEquals(float a, float b)
+    {
+        float tolerance = 0.0000000001f;
+
+        if (a > b + tolerance || a < b - tolerance)
+        {
+            return false;
+        }
+        else { return true; }
+    }
+}
+
+public class EntityModifier
 {
     private bool _modified;
 
-    private float _movementSpeedMultiplier = 1.0f;
-    public float MovementSpeedMultiplier
+    private Modifier _movementSpeedMultiplier = new Modifier(1.0f);
+    public Modifier MovementSpeedMultiplier
     {
         get { return _movementSpeedMultiplier; }
-        set
-        {
-            _modified = true;
-            _movementSpeedMultiplier = value;
-        }
+        set { _movementSpeedMultiplier.multiplier = value.multiplier; }
     }
 
-    private float _hitstunMultiplier = 1.0f; // knockback multiplier???
-    public float HitstunMultiplier
+    private Modifier _hitstunMultiplier = new Modifier(1.0f);
+    public Modifier HitstunMultiplier
     {
         get { return _hitstunMultiplier; }
-        set
-        {
-            _modified = true;
-            _hitstunMultiplier = value;
-        }
+        set { _hitstunMultiplier.multiplier = value.multiplier; }
     }
 
-    private float _damageMultiplier = 1.0f;
-    public float DamageMultiplier
+    private Modifier _damageMultiplier = new Modifier(1.0f);
+    public Modifier DamageMultiplier
     {
         get { return _damageMultiplier; }
-        set
-        {
-            _modified = true;
-            _damageMultiplier = value;
-        }
+        set { _damageMultiplier.multiplier = value.multiplier; }
     }
 
-    private float _animSpeedMultiplier = 1.0f;
-    public float AnimSpeedMultiplier
+    private Modifier _attackSpeedMultiplier = new Modifier(1.0f);
+    public Modifier AttackSpeedMultiplier
     {
-        get { return _animSpeedMultiplier; }
-        set
-        {
-            _modified = true;
-            _animSpeedMultiplier = value;
-        }
+        get { return _attackSpeedMultiplier; }
+        set { _attackSpeedMultiplier.multiplier = value.multiplier; }
     }
 
     public bool IsModified
@@ -58,20 +103,26 @@ public class HitboxModifier
     public void Reset()
     {
         _modified = false;
-        _movementSpeedMultiplier = 1.0f;
-        _hitstunMultiplier = 1.0f;
-        _damageMultiplier = 1.0f;
-        _animSpeedMultiplier = 1.0f;
+        _movementSpeedMultiplier.multiplier = 1.0f;
+        _hitstunMultiplier.multiplier = 1.0f;
+        _damageMultiplier.multiplier = 1.0f;
+        _attackSpeedMultiplier.multiplier = 1.0f;
     }
 
-    public HitboxModifier() { }
-
-    public HitboxModifier(float movementSpeedMultiplier, float hitstunMultiplier, float damageMultiplier, float animSpeedMultiplier)
+    public EntityModifier() 
     {
-        MovementSpeedMultiplier = movementSpeedMultiplier;
-        HitstunMultiplier = hitstunMultiplier;
-        DamageMultiplier = damageMultiplier;
-        AnimSpeedMultiplier = animSpeedMultiplier;
+        MovementSpeedMultiplier *= 1.0f;
+        HitstunMultiplier *= 1.0f;
+        DamageMultiplier *= 1.0f;
+        AttackSpeedMultiplier *= 1.0f;
+    }
+
+    public EntityModifier(float movementSpeedMultiplier, float hitstunMultiplier, float damageMultiplier, float attackSpeedMultiplier)
+    {
+        MovementSpeedMultiplier *= movementSpeedMultiplier;
+        HitstunMultiplier *= hitstunMultiplier;
+        DamageMultiplier *= damageMultiplier;
+        AttackSpeedMultiplier *= attackSpeedMultiplier;
     }
 }
 
@@ -79,7 +130,7 @@ public abstract class Entity : MonoBehaviour
 {
     public EntityHealth health;
     public bool invulerable;
-    public HitboxModifier modifier;
+    public EntityModifier modifier;
 
     public abstract void TakeDamage(HitboxValues hitbox, Entity attacker = null);
     public virtual void TakeDamage(float damageAmount)
@@ -91,7 +142,7 @@ public abstract class Entity : MonoBehaviour
 
     protected virtual void Awake()
     {
-        modifier = new HitboxModifier();
+        modifier = new EntityModifier();
         health = GetComponent<EntityHealth>();
     }
 }
