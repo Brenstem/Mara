@@ -210,8 +210,6 @@ public class PlayerInsanity : EntityHealth
         // Static based buffs
         switch (CurrentHealth)
         {
-
-
             case float n when (n >= staticInsanityValues[4]): // Attack speed buff
                 if (_buffState != BuffStates.attackSpeed)
                 {

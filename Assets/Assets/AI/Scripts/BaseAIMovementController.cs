@@ -17,6 +17,9 @@ public abstract class BaseAIMovementController : Entity
     [SerializeField] public float _unaggroRange = 20f;
     [SerializeField] public float _turnSpeed = 5f;
 
+    [SerializeField] private float _minAttackSpeed;
+    [SerializeField] private float _maxAttackSpeedIncrease;
+
     //Layermask skit för line of sight raycasts
     [SerializeField] public LayerMask _targetLayers;
 
@@ -36,7 +39,12 @@ public abstract class BaseAIMovementController : Entity
 
     [NonSerialized] public Timer waitTimer;
 
+    [HideInInspector] public Timer _attackRateTimer;
     [HideInInspector] public Animator _anim;
+    [HideInInspector] public bool _animationOver;
+
+    // Private variables
+    private float _attackSpeed;
 
     virtual protected new void Awake()
     {
@@ -59,14 +67,14 @@ public abstract class BaseAIMovementController : Entity
     }
 
     //vänder monstret mot spelaren
-    virtual public void FacePlayer()
+    public virtual void FacePlayer()
     {
         Vector3 direction = (_target.transform.position - this.transform.position).normalized;
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
         this.transform.rotation = Quaternion.Slerp(this.transform.rotation, lookRotation, Time.deltaTime * _turnSpeed);
     }
 
-    virtual protected void OnDrawGizmosSelected()
+    protected virtual void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, _aggroRange);
@@ -93,6 +101,17 @@ public abstract class BaseAIMovementController : Entity
     public override void KillThis()
     {
         onEnemyDeath();
+    }
+
+    public void GenerateNewAttackTimer()
+    {
+        _attackSpeed = _minAttackSpeed;
+        _attackSpeed += UnityEngine.Random.Range(0f, _maxAttackSpeedIncrease / 2);
+        _attackSpeed += UnityEngine.Random.Range(0f, _maxAttackSpeedIncrease / 2);
+
+        print(_attackSpeed);
+
+        _attackRateTimer = new Timer(_attackSpeed);
     }
 }
 

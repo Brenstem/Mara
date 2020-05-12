@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.Interactions;
 
 public class BasicMeleeAI : BaseAIMovementController
 {
@@ -8,7 +9,6 @@ public class BasicMeleeAI : BaseAIMovementController
 
     [HideInInspector] public Timer _hitStunTimer;
     [HideInInspector] public bool _useHitStun;
-    [HideInInspector] public bool _animationOver;
 
     // Start is called before the first frame update
     void Start()
@@ -16,11 +16,16 @@ public class BasicMeleeAI : BaseAIMovementController
         _fill.SetActive(false);
         stateMachine.ChangeState(new BasicMeleeIdleState());
         meleeEnemy = this;
+        GenerateNewAttackTimer();
     }
 
     protected override void Update()
     {
         base.Update();
+
+        print(stateMachine.currentState);
+
+        _attackRateTimer += Time.deltaTime;
 
         _anim.SetFloat("Blend", _agent.velocity.magnitude);
     }
@@ -33,11 +38,6 @@ public class BasicMeleeAI : BaseAIMovementController
         _anim.SetBool("Dead", true);
         _agent.SetDestination(transform.position);
         transform.tag = "Untagged";
-    }
-
-    public void Attack()
-    {
-        _anim.SetTrigger("Attack");
     }
 
     public override void TakeDamage(HitboxValues hitbox, Entity attacker)
@@ -93,26 +93,49 @@ public class BasicMeleeAttackingState : BaseAttackingState
     public override void EnterState(BaseAIMovementController owner)
     {
         _chasingState = new BasicMeleeChasingState();
-        owner.meleeEnemy._animationOver = false;
-        owner.meleeEnemy.Attack();
     }
 
     public override void UpdateState(BaseAIMovementController owner)
     {
         float range = owner._attackRange - owner._agent.stoppingDistance;
 
-        Vector3 vectorToPlayer = (owner._target.transform.position - owner.transform.position).normalized * range;
-        Vector3 targetPosition = owner._target.transform.position - vectorToPlayer;
 
         owner.FacePlayer();
 
-        if (range < Vector3.Distance(owner._target.transform.position, owner.transform.position) && owner.meleeEnemy._animationOver)
+        if (range < Vector3.Distance(owner._target.transform.position, owner.transform.position))
         {
             owner.stateMachine.ChangeState(_chasingState);
         }
-        else if (range > Vector3.Distance(owner._target.transform.position, owner.transform.position) && owner.meleeEnemy._animationOver)
+        else if (range > Vector3.Distance(owner._target.transform.position, owner.transform.position))
         {
-            owner.stateMachine.ChangeState(new BasicMeleeAttackingState());
+            if (owner._attackRateTimer.Expired)
+            {
+                owner.stateMachine.ChangeState(new BasicMeleeSwingState());
+            }
+        }
+    }
+}
+
+public class BasicMeleeSwingState : State<BaseAIMovementController>
+{
+    public override void EnterState(BaseAIMovementController owner)
+    {
+        owner._anim.SetTrigger("Attack");
+    }
+
+    public override void ExitState(BaseAIMovementController owner)
+    {
+        owner._animationOver = false;
+        owner.GenerateNewAttackTimer();
+    }
+
+    public override void UpdateState(BaseAIMovementController owner)
+    {
+        owner.FacePlayer();
+
+        if (owner._animationOver)
+        {
+            owner.stateMachine.ChangeState(owner.stateMachine.previousState);
         }
     }
 }
