@@ -10,6 +10,9 @@ public abstract class BaseAIMovementController : Entity
 {
     public StateMachine<BaseAIMovementController> stateMachine;
 
+    public delegate void EnemyDead();
+    public static event EnemyDead onEnemyDeath;
+
     [SerializeField] public float _aggroRange = 10f;
     [SerializeField] public float _unaggroRange = 20f;
     [SerializeField] public float _turnSpeed = 5f;
@@ -85,6 +88,11 @@ public abstract class BaseAIMovementController : Entity
     public override void TakeDamage(HitboxValues hitbox, Entity attacker)
     {
         health.Damage(hitbox);
+    }
+
+    public override void KillThis()
+    {
+        onEnemyDeath();
     }
 }
 

@@ -21,6 +21,7 @@ public class PlayerInsanity : EntityHealth
     [Tooltip("Add the static and dynamic values for each insanity tier here. Do not change the array size!")]
     [SerializeField] private int[] dynamicInsanityValues;
     [SerializeField] private int[] staticInsanityValues;
+    [SerializeField] private float _hpIncreaseOnEnemyDeath;
 
     #region Insanity Tier Events
     // Events for each stage of insanity 
@@ -104,6 +105,16 @@ public class PlayerInsanity : EntityHealth
         heightenedSenses,
         hitStun,
         attackSpeed
+    }
+
+    private void Awake()
+    {
+        BaseAIMovementController.onEnemyDeath += IncreaseMaxInsanity;
+    }
+
+    private void IncreaseMaxInsanity()
+    {
+        MaxHealth += _hpIncreaseOnEnemyDeath;
     }
 
     protected override void Start()
