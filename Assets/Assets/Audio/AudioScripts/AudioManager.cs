@@ -25,6 +25,9 @@ public class AudioManager : MonoBehaviour
     [SerializeField] string playerJumpAudio;
 
     [EventRef]
+    [SerializeField] string playerLandAudio;
+
+    [EventRef]
     [SerializeField] string playerHurtAudio;
 
     [EventRef]
@@ -95,6 +98,11 @@ public class AudioManager : MonoBehaviour
     public void PlayerJumpAudio(Vector3 position)
     {
         RuntimeManager.PlayOneShot(playerJumpAudio, position);
+    }
+
+    public void PlayerLandAudio(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(playerLandAudio, position);
     }
 
     public void PlayerHurtAudio(Vector3 position)

@@ -52,6 +52,7 @@ public class PlayerRevamp : Entity
     public bool invulerableWhenDashing;
 
     [Header("Combat")]
+    public float hitstunImmunityTime;
     public float heavyHitstunThreshold = 1.0f;
     public float parryDuration;
     public float parryLag; // borde vara tied till animationen, samt tror inte att cooldown behövs med tanke på att det ska vara få active frames och mycket lag
@@ -117,6 +118,7 @@ public class PlayerRevamp : Entity
     private void OnDisable() { _playerInput.PlayerControls.Disable(); }
 
     /* === COMBAT === */
+    private Timer _hitstunImmunityTimer;
     [HideInInspector] public bool interruptable;
     [HideInInspector] public bool attackAnimationOver;
     [HideInInspector] public bool attackStep;
@@ -183,6 +185,8 @@ public class PlayerRevamp : Entity
 
         Gravity();
 
+        HitstunImmunity();
+
         SnapCamera();
 
         dashCooldownTimer += Time.deltaTime;
@@ -195,6 +199,7 @@ public class PlayerRevamp : Entity
         Action(InputType.Idle);
     }
 
+    private bool _hitstunImmunity;
     [HideInInspector] public bool successfulParry;
     public override void TakeDamage(HitboxValues hitbox, Entity attacker = null)
     {
@@ -207,9 +212,13 @@ public class PlayerRevamp : Entity
         }
         else
         {
-            hitstunDuration = hitbox.hitstunTime;
-            stateMachine.ChangeState(new HitstunState());
-            health.Damage(hitbox);
+            if (!_hitstunImmunity)
+            {
+                hitstunDuration = hitbox.hitstunTime;
+                stateMachine.ChangeState(new HitstunState());
+                health.Damage(hitbox);
+                _hitstunImmunity = true;
+            }
         }
     }
 
@@ -287,6 +296,7 @@ public class PlayerRevamp : Entity
         controller.Move(_velocity * Time.deltaTime); // T^2
     }
 
+    private bool _playedLandingSound;
     private void GroundCheck()
     {
         groundHits = Physics.OverlapSphere(_groundCheckPosition.position, _groundDistance, GlobalState.state.GroundMask);
@@ -298,6 +308,19 @@ public class PlayerRevamp : Entity
                 _velocity.y = -2f;
             _airDashes = 0;
             playerAnimator.SetBool("HasJumped", false);
+
+            if (playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Landing"))
+            {
+                if (!_playedLandingSound)
+                {
+                    GlobalState.state.AudioManager.PlayerLandAudio(_groundCheckPosition.position);
+                    _playedLandingSound = true;
+                }
+            }
+            else
+            {
+                _playedLandingSound = false;
+            }
         }
         playerAnimator.SetBool("IsGrounded", _isGrounded);
     }
@@ -372,6 +395,19 @@ public class PlayerRevamp : Entity
             playerAnimator.SetTrigger("Jump");
             inputBuffer.Clear();
             GlobalState.state.AudioManager.PlayerJumpAudio(this.transform.position);
+        }
+    }
+
+    private void HitstunImmunity()
+    {
+        if (_hitstunImmunity)
+        {
+            _hitstunImmunityTimer += Time.deltaTime;
+            if (_hitstunImmunityTimer.Expired)
+            {
+                _hitstunImmunityTimer.Reset();
+                _hitstunImmunity = false;
+            }
         }
     }
 
@@ -1174,6 +1210,7 @@ public class SuccessfulParryState : State<PlayerRevamp>
     public override void EnterState(PlayerRevamp owner)
     {
         owner.attackAnimationOver = true;
+        owner.inputBuffer.Clear();
     }
 
     public override void ExitState(PlayerRevamp owner)

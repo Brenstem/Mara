@@ -70,7 +70,13 @@ public class GlobalState : MonoBehaviour
         }
     }
 
-    private void Awake() {
+    private float _previousEntryFrac;
+    private float _previousExitFrac;
+    private void Awake()
+    {
+        _previousEntryFrac = _entryTimeFraction;
+        _previousExitFrac = _exitTimeFraction;
+
         if (_state != null && _state != this) {
             Destroy(this.gameObject);
         }
@@ -107,16 +113,21 @@ public class GlobalState : MonoBehaviour
         float time = 0.0f;
         float exitTime = 0.0f;
         float tScale = 0.0f;
+
         while (time < duration)
         {
-            if (duration < _exitTimeFraction || time / duration >= 1 - _exitTimeFraction)
+            if (duration < _exitTimeFraction || time / duration > 1 - _exitTimeFraction)
             {
                 exitTime += Time.unscaledDeltaTime;
-                tScale = Mathf.Lerp(0.0f, 1.0f, Mathf.Pow(exitTime, 2) / Mathf.Pow(duration, 2));
+                if (_exitTimeFraction > 0)
+                    tScale = Mathf.Lerp(0.0f, 1.0f, (exitTime * exitTime) / (_exitTimeFraction * _exitTimeFraction));
             }
             else if (time / duration <= _entryTimeFraction)
             {
-                tScale = Mathf.Lerp(1.0f, 0.0f, time / _entryTimeFraction);
+                if (_entryTimeFraction > 0)
+                    tScale = Mathf.Lerp(1.0f, 0.0f, (time * time) / (_entryTimeFraction * _entryTimeFraction));
+                else
+                    tScale = 0.0f;
             }
             else
             {
@@ -127,10 +138,26 @@ public class GlobalState : MonoBehaviour
             time += Time.unscaledDeltaTime;
             yield return new WaitForEndOfFrame();
         }
+        
 
         Time.timeScale = 1f;
         _hitstopRunning = false;
         yield return 0;
+    }
+
+    private void OnValidate()
+    {
+        bool exceeded = _entryTimeFraction + _exitTimeFraction > 1 ? true : false;
+        if (exceeded)
+        {
+            if (_previousEntryFrac != _entryTimeFraction)
+                _exitTimeFraction = 1 - _entryTimeFraction;
+            else if (_previousExitFrac != _exitTimeFraction)
+                _entryTimeFraction = 1 - _exitTimeFraction;
+        }
+
+        _previousEntryFrac = _entryTimeFraction;
+        _previousExitFrac = _exitTimeFraction;
     }
 
     /*
