@@ -22,7 +22,7 @@ public class BasicMeleeAI : BaseAIMovementController
     {
         base.Update();
 
-        //print(stateMachine.currentState);
+        print(stateMachine.currentState);
 
         _anim.SetFloat("Blend", _agent.velocity.magnitude);
     }
@@ -89,13 +89,14 @@ public class BasicMeleeAttackingState : BaseAttackingState
     {
         _chasingState = new BasicMeleeChasingState();
     }
-
+    
     public override void UpdateState(BaseAIMovementController owner)
     {
         owner._attackRateTimer += Time.deltaTime;
         
-        float range = owner._attackRange - owner._agent.stoppingDistance;
-
+        //float range = owner._attackRange - owner._agent.stoppingDistance;
+        float range = owner._attackRange;
+        
         owner.FacePlayer();
 
         if (range < Vector3.Distance(owner._target.transform.position, owner.transform.position))
