@@ -10,22 +10,20 @@ public class PlayerData
     public float[] playerPosition;
     public float[] playerRotation;
 
-    public PlayerData()
+    public PlayerData(float health, Transform spawnPosition)
     {
-        playerHealth = GlobalState.state.Player.GetComponent<PlayerInsanity>().CurrentHealth;
+        playerHealth = health;
 
         playerPosition = new float[3];
-        playerPosition[0] = GlobalState.state.Player.gameObject.transform.position.x;
-        playerPosition[1] = GlobalState.state.Player.gameObject.transform.position.y;
-        playerPosition[2] = GlobalState.state.Player.gameObject.transform.position.z;
+        playerPosition[0] = spawnPosition.transform.position.x;
+        playerPosition[1] = spawnPosition.transform.position.y;
+        playerPosition[2] = spawnPosition.transform.position.z;
 
         //playerRotation = GlobalState.state.Player.gameObject.transform.rotation.eulerAngles.y;
 
         playerRotation = new float[3];
-        playerRotation[0] = GlobalState.state.Player.gameObject.transform.rotation.eulerAngles.x;
-        playerRotation[1] = GlobalState.state.Player.gameObject.transform.rotation.eulerAngles.y;
-        playerRotation[2] = GlobalState.state.Player.gameObject.transform.rotation.eulerAngles.z;
+        playerRotation[0] = spawnPosition.transform.rotation.eulerAngles.x;
+        playerRotation[1] = spawnPosition.transform.rotation.eulerAngles.y;
+        playerRotation[2] = spawnPosition.transform.rotation.eulerAngles.z;
     }
-
-
 }

@@ -4,31 +4,16 @@ using UnityEngine;
 
 public class ButtonFunction : MonoBehaviour
 {
-    
     Quaternion rotationQ;
-    public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.F5))
-        {
-            Debug.Log("i saved");
-            Save();
-        }
-
-        if (Input.GetKeyDown(KeyCode.F6))
-        {
-            Load();
-        }
-    }
-
     public void Save()
     {
-        SaveData.SavePlayer();
+        //PlayerData playerData;
+        //SaveData.SavePlayer();
     }
     public void Load()
     {
         PlayerData data = SaveData.LoadPlayer();
 
-        GlobalState.state.Player.gameObject.GetComponent<CharacterController>().enabled = false;
 
         Vector3 position;
         position.x = data.playerPosition[0];
@@ -45,6 +30,6 @@ public class ButtonFunction : MonoBehaviour
         rotationQ.eulerAngles = rotation;
         GlobalState.state.Player.gameObject.transform.rotation = rotationQ;
 
-        GlobalState.state.Player.gameObject.GetComponent<CharacterController>().enabled = true;
+
     }
 }
