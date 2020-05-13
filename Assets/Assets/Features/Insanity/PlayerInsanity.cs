@@ -50,7 +50,7 @@ public class PlayerInsanity : EntityHealth
     // PRIVATE VARIABLES
     // private float _moveSpeedMultiplier;
     private bool _playerDying;
-    private float _moveSpeedMultiplier;
+    private float _moveSpeedMultiplier = 1.0f;
     private Timer _timer;
     private PlayerRevamp _player;
     private EntityModifier _playerModifier;
@@ -215,7 +215,7 @@ public class PlayerInsanity : EntityHealth
                 {
                     if (!_player.modifier.AttackSpeedMultiplier.isModified)
                     {
-                        _player.modifier.AttackSpeedMultiplier = new Modifier(_attackSpeedModifier);
+                        _player.modifier.AttackSpeedMultiplier *= _attackSpeedModifier;
                         _player.playerAnimator.SetFloat("AttackSpeedModifier", _player.modifier.AttackSpeedMultiplier.multiplier);
                     }
                 }
@@ -340,7 +340,6 @@ public class PlayerInsanity : EntityHealth
     private void TestResetBuffs()
     {
         // Reset function for attackspeed modifier just... doesn't work ??
-
         switch (_buffState)
         {
             case BuffStates.defaultState:
@@ -349,7 +348,7 @@ public class PlayerInsanity : EntityHealth
                 break;
             case BuffStates.playerDamage:
                 _player.modifier.HitstunMultiplier.Reset();
-                _player.modifier.AttackSpeedMultiplier *= 1.0f;
+                _player.modifier.AttackSpeedMultiplier.Reset();
                 _player.playerAnimator.SetFloat("AttackSpeedModifier", _player.modifier.AttackSpeedMultiplier.multiplier);
                 break;
             case BuffStates.movementSpeed:
@@ -359,17 +358,12 @@ public class PlayerInsanity : EntityHealth
                 break;
             case BuffStates.heightenedSenses:
                 _player.modifier.HitstunMultiplier.Reset();
-                _player.modifier.AttackSpeedMultiplier *= 1.0f;
+                _player.modifier.AttackSpeedMultiplier.Reset();
                 _player.playerAnimator.SetFloat("AttackSpeedModifier", _player.modifier.AttackSpeedMultiplier.multiplier);
                 break;
             case BuffStates.hitStun:
-                print(_player.modifier.AttackSpeedMultiplier.multiplier);
-                _player.modifier.AttackSpeedMultiplier *= 1.0f;
-                print(_player.modifier.AttackSpeedMultiplier.multiplier);
+                _player.modifier.AttackSpeedMultiplier.Reset();
                 _player.playerAnimator.SetFloat("AttackSpeedModifier", _player.modifier.AttackSpeedMultiplier.multiplier);
-                print(_player.modifier.AttackSpeedMultiplier.multiplier);
-                float f = _player.playerAnimator.GetFloat("AttackSpeedModifier");
-                print(f);
                 break;
             case BuffStates.attackSpeed:
                 break;

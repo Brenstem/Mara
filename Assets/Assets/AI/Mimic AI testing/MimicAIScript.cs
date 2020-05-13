@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class MimicAIScript : BaseAIMovementController
 {
+    public override void Parried()
+    {
+        Debug.LogWarning("Parried implementation missing", this);
+    }
+
     public override void KillThis()
     {
         throw new System.NotImplementedException();

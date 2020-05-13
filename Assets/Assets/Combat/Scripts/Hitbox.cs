@@ -8,6 +8,7 @@ public struct HitboxValues
     public float damageValue;
     public float hitstunTime;
     public float hitstopTime;
+    public bool parryable;
 
     public static HitboxValues operator *(HitboxValues h, EntityModifier m)
     {
@@ -29,7 +30,7 @@ public class Hitbox : MonoBehaviour
     public float damageValue;
     public float hitstunTime;
     public float hitstopTime;
-    public bool isParryable;
+    public bool parryable;
     [Tooltip("How many seconds to increase the weapons hitstun effect")]
     [SerializeField] private float hitStunIncrease;
     [Tooltip("Percentage multiplier for damage value")]
@@ -49,7 +50,8 @@ public class Hitbox : MonoBehaviour
         {
             damageValue = this.damageValue,
             hitstopTime = this.hitstopTime,
-            hitstunTime = this.hitstunTime
+            hitstunTime = this.hitstunTime,
+            parryable = this.parryable,
         };
 
         originalDamageValue = damageValue;
@@ -57,6 +59,9 @@ public class Hitbox : MonoBehaviour
 
         _parent = transform.parent.GetComponent<HitboxGroup>();
     }
+
+    private void OnEnable() { } // TODO: Parryable indicator
+    private void OnDisable() { }
 
     void FixedUpdate()
     {
@@ -82,7 +87,11 @@ public class Hitbox : MonoBehaviour
         if (enabled)
         {
             //Gizmos.matrix = Matrix4x4.TRS(transform.position + _offset, transform.rotation, transform.localScale);
-            Gizmos.matrix = Matrix4x4.TRS(transform.TransformPoint(_offset), transform.rotation, transform.localScale);
+
+            if (followPoint == null)
+                Gizmos.matrix = Matrix4x4.TRS(transform.TransformPoint(_offset), transform.rotation, transform.localScale);
+            else
+                Gizmos.matrix = Matrix4x4.TRS(followPoint.TransformPoint(_offset), followPoint.rotation, transform.localScale);
 
             switch (priority)
             {

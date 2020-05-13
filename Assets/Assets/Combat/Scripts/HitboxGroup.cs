@@ -52,16 +52,15 @@ public class HitboxGroup : MonoBehaviour
         enabled = _enabledByDefault;
     }
 
-    private void EnableEvent(int id)
+    public void EnableEvent(int id = 0)
     {
-        
         if (onEnableHitboxes != null)
             onEnableHitboxes(id);
         else
             Debug.LogWarning("No object is subscribed to the \"onEnableHitboxes\" event!", this);
     }
 
-    private void DisableEvent(int id)
+    public void DisableEvent(int id = 0)
     {
         if (onDisableHitboxes != null)
             onDisableHitboxes(id);
@@ -127,23 +126,38 @@ public class HitboxGroup : MonoBehaviour
         if (!target.invulerable)
         {
             if (_parentEntity != null && _parentEntity.modifier != null)
-                target.TakeDamage(hitbox * _parentEntity.modifier);
+                target.TakeDamage(hitbox * _parentEntity.modifier, _parentEntity);
             else
-                target.TakeDamage(hitbox);
+                target.TakeDamage(hitbox, _parentEntity);
 
             if (hitbox.hitstopTime > 0)
             {
-                if (_parentEntity != null && _parentEntity.CompareTag("Player")) // temporär lösninggggg 
+                if (_parentEntity != null && _parentEntity.GetType() == typeof(PlayerRevamp)) // if the player is attacking, temporary solution
                 {
                     HitboxValues h = new HitboxValues()
                     {
-                        damageValue = hitbox.damageValue * -1.0f
+                        damageValue = hitbox.damageValue * -1.0f // damage är negativ
                     };
+
                     GlobalState.state.HitStop(hitbox.hitstopTime, h);
                 }
                 else
                 {
-                    GlobalState.state.HitStop(hitbox.hitstopTime, hitbox);
+                    if (hitbox.parryable && target.GetType() == typeof(PlayerRevamp)) // if player is the reciever and is parrying
+                    {
+                        if (!(target as PlayerRevamp).isParrying)
+                        {
+                            GlobalState.state.HitStop(hitbox.hitstopTime, hitbox);
+                        }
+                        else
+                        {
+                            // GlobalState.state.HitStop(hitbox.hitstopTime, hitbox); // parry time
+                        }
+                    }
+                    else
+                    {
+                        GlobalState.state.HitStop(hitbox.hitstopTime, hitbox);
+                    }
                 }
             }
         }

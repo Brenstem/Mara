@@ -44,6 +44,11 @@ public class BasicMeleeAI : BaseAIMovementController
         base.TakeDamage(hitbox, attacker);
     }
 
+    public override void Parried()
+    {
+        Debug.LogWarning("Parried implementation missing", this);
+    }
+
     public void EnableHitstun(float duration)
     {
         if (duration > 0.0f && _canEnterHitStun)

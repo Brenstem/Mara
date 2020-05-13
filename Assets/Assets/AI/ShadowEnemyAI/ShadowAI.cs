@@ -32,6 +32,11 @@ public class ShadowAI : BaseAIMovementController
         stateMachine.ChangeState(new DeadState());
     }
 
+    public override void Parried()
+    {
+        Debug.LogWarning("Parried implementation missing", this);
+    }
+
     private void DisableThis()
     {
         GetComponent<CapsuleCollider>().enabled = false;

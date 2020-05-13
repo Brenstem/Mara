@@ -174,6 +174,11 @@ public class BossAIScript : Entity
         //spela hurtljud här
     }
 
+    public override void Parried()
+    {
+        Debug.LogWarning("Parried implementation missing", this);
+    }
+
     public bool CheckDashPath(Vector3 dashCheckVector)
     {
         float dashCheckAngle = Vector3.SignedAngle(transform.forward, dashCheckVector.normalized, transform.up);
