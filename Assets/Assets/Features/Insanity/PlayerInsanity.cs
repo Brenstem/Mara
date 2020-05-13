@@ -5,23 +5,40 @@ using UnityEngine.Rendering;
 using UnityEngine.Experimental.Rendering.HDPipeline;
 using System;
 
+[System.Serializable]
+public struct Range
+{
+    public int start;
+    public int end;
+}
+
 public class PlayerInsanity : EntityHealth
 {
     [Header("References")]
     [SerializeField] private Volume vol;
 
-    [Header("Buff and debuff variables")]
+    [Header("Player modifier variables")]
     [SerializeField] private float _hitstunBuffMultiplier = 1.5f;
     [SerializeField] private float _damageBuffMultiplier = 1.1f;
     [SerializeField] private float _moveSpeedBuffMultiplier = 1.1f;
     [SerializeField] private float _moveSpeedDebuffMultiplier = 0.9f; 
-    [SerializeField] private float _attackSpeedModifier = 1.1f;
+    [SerializeField] private float _attackSpeedMultiplier = 1.1f;
 
-    [Header("Insanity tier values")]
-    [Tooltip("Add the static and dynamic values for each insanity tier here. Do not change the array size!")]
     [SerializeField] private int[] dynamicInsanityValues;
     [SerializeField] private int[] staticInsanityValues;
     [SerializeField] private float _hpIncreaseOnEnemyDeath;
+
+    [Header("Buff Tier Values")]
+    [SerializeField] private int _attackspeedBuff;
+    [SerializeField] private int _hitstunBuff;
+    [SerializeField] private Range _movespeedRange;
+    [SerializeField] private int _damageBuff;
+
+    [Header("Debuff tier values")]
+    [SerializeField] private Range _whispersRange;
+    [SerializeField] private Range _chromaticAberrationRange;
+    [SerializeField] private Range _hallucinationsRange;
+    [SerializeField] private Range _vignetteRange;
 
     #region Insanity Tier Events
     // Events for each stage of insanity 
@@ -107,8 +124,9 @@ public class PlayerInsanity : EntityHealth
         attackSpeed
     }
 
-    private void Awake()
+    private new void Awake()
     {
+        base.Awake();
         BaseAIMovementController.onEnemyDeath += IncreaseMaxInsanity;
     }
 
@@ -128,6 +146,9 @@ public class PlayerInsanity : EntityHealth
 
         _player = GlobalState.state.Player.gameObject.GetComponent<PlayerRevamp>();
         _playerModifier = _player.modifier;
+
+        GlobalState.state.AudioManager.PlayerInsanityAudio(0);
+
 
         if (vol != null)
         {
@@ -157,19 +178,12 @@ public class PlayerInsanity : EntityHealth
             throw new System.Exception("Healthbar prefab missing!");
         }
 
-        GlobalState.state.AudioManager.PlayerInsanityAudio(GetInsanityPercentage());
     }
 
     private void Update()
     {
-        GlobalState.state.AudioManager.PlayerInsanityAudioUpdate(GetInsanityPercentage());
 
-        if (_chromaticAberration != null)
-        {
-            _chromaticAberration.intensity.value = GetInsanityPercentage() / 100;
-        }
-
-        if (_vignette != null)
+        /*if (_vignette != null)
         {
             _vignette.intensity.value = GetInsanityPercentage() / 200;
         }
@@ -177,7 +191,7 @@ public class PlayerInsanity : EntityHealth
         if (_filmGrain != null)
         {
             _filmGrain.intensity.value = GetInsanityPercentage() / 100;
-        }
+        }*/
     }
 
     public float GetInsanityPercentage()
@@ -210,12 +224,12 @@ public class PlayerInsanity : EntityHealth
         // Static based buffs
         switch (CurrentHealth)
         {
-            case float n when (n >= staticInsanityValues[4]): // Attack speed buff
+            /*case float n when (n >= staticInsanityValues[4]): // Attack speed buff
                 if (_buffState != BuffStates.attackSpeed)
                 {
                     if (!_player.modifier.AttackSpeedMultiplier.isModified)
                     {
-                        _player.modifier.AttackSpeedMultiplier = new Modifier(_attackSpeedModifier);
+                        _player.modifier.AttackSpeedMultiplier = new Modifier(_attackSpeedMultiplier);
                         _player.playerAnimator.SetFloat("AttackSpeedModifier", _player.modifier.AttackSpeedMultiplier.multiplier);
                     }
                 }
@@ -258,12 +272,11 @@ public class PlayerInsanity : EntityHealth
             case float n when (n < staticInsanityValues[0]): // Default buff state
                 _buffState = BuffStates.defaultState;
                 TestResetBuffs();
-                break;
+                break;*/
         }
-
         switch (CurrentHealth)
         {
-            case float n when (n >= dynamicInsanityValues[4]): // Impending doom debuff
+            /* case float n when (n >= dynamicInsanityValues[4]): // Impending doom debuff
                 if (_debuffState != DebuffStates.impendingDoom)
                 {
                     PlayHeartBeat();
@@ -323,18 +336,66 @@ public class PlayerInsanity : EntityHealth
             case float n when (n < dynamicInsanityValues[0]): // Standard state debuff
                 _debuffState = DebuffStates.defaultState;
                 TestResetBuffs();
-                break;
+                break;*/
         }
 
-        if (CurrentHealth > staticInsanityValues[1] || Modifier.NearlyEquals(CurrentHealth, staticInsanityValues[1]))
+        #region Buffs
+        float multiplier = 1;
+
+        // Attack speed
+        if (Step(_attackspeedBuff, CurrentHealth) == 1)
+            multiplier = _attackSpeedMultiplier;
+
+        _player.modifier.AttackSpeedMultiplier *= multiplier;
+
+        // Hitstun
+        multiplier = 1;
+        if (Step(_hitstunBuff, CurrentHealth) == 1)
+            multiplier = _hitstunBuffMultiplier;
+
+        _player.modifier.HitstunMultiplier *= multiplier;
+
+        // Movement speed
+        _player.IncreaseMoveSpeedOverValue(_movespeedRange.start, _movespeedRange.end, _moveSpeedMultiplier);
+
+        // Damage buff
+        if (Step(_damageBuff, CurrentHealth) == 1)
+            multiplier = _damageBuffMultiplier;
+
+        _player.modifier.DamageMultiplier *= multiplier;
+
+        #endregion
+
+        #region Debuff FX
+        float intensity;
+
+        // Whispers audio
+        intensity = SmoothStep(_whispersRange.start, _whispersRange.end, GetInsanityPercentage());
+        intensity *= 100; // player insanity audio wants percentage value between 0 and 100
+        GlobalState.state.AudioManager.PlayerInsanityAudioUpdate(intensity);
+
+        // Chromatic aberration
+        intensity = SmoothStep(_chromaticAberrationRange.start, _chromaticAberrationRange.end, GetInsanityPercentage());
+
+        if (_chromaticAberration != null)
+            _chromaticAberration.intensity.value = intensity;
+
+        // Vignette
+        intensity = SmoothStep(_vignetteRange.start, _vignetteRange.end, GetInsanityPercentage());
+
+        if (_vignette != null)
+            _vignette.intensity.value = intensity;
+        #endregion
+
+        /*if (CurrentHealth > staticInsanityValues[1] || Modifier.NearlyEquals(CurrentHealth, staticInsanityValues[1]))
         {
-            _player.IncreaseMoveSpeedOverValue(staticInsanityValues[1], staticInsanityValues[2], _moveSpeedMultiplier);
+            
         }
         else if (GetInsanityPercentage() > dynamicInsanityValues[2] || Modifier.NearlyEquals(GetInsanityPercentage(), dynamicInsanityValues[2]))
         {
             _moveSpeedMultiplier = _moveSpeedDebuffMultiplier;
             _player.SlowOverValue(dynamicInsanityValues[2], dynamicInsanityValues[3], _moveSpeedMultiplier);
-        }
+        }*/
     }
 
     private void TestResetBuffs()
@@ -363,13 +424,8 @@ public class PlayerInsanity : EntityHealth
                 _player.playerAnimator.SetFloat("AttackSpeedModifier", _player.modifier.AttackSpeedMultiplier.multiplier);
                 break;
             case BuffStates.hitStun:
-                print(_player.modifier.AttackSpeedMultiplier.multiplier);
                 _player.modifier.AttackSpeedMultiplier *= 1.0f;
-                print(_player.modifier.AttackSpeedMultiplier.multiplier);
                 _player.playerAnimator.SetFloat("AttackSpeedModifier", _player.modifier.AttackSpeedMultiplier.multiplier);
-                print(_player.modifier.AttackSpeedMultiplier.multiplier);
-                float f = _player.playerAnimator.GetFloat("AttackSpeedModifier");
-                print(f);
                 break;
             case BuffStates.attackSpeed:
                 break;
@@ -420,5 +476,41 @@ public class PlayerInsanity : EntityHealth
     {
         CurrentHealth += damage;
         ActivateBuffs();
+    }
+
+    // Returns value between 0 and 1 lerped over a range
+    public float SmoothStep(float rangeStart, float rangeEnd, float current)
+    {
+        if (current < rangeStart)
+        {
+            return 0;
+        }
+
+        if (current > rangeEnd)
+        {
+            return 1;
+        }
+        
+        float range = rangeEnd - rangeStart;
+
+        current -= rangeStart;
+
+        float interpolationValue = Mathf.Clamp(current / range, 0, 1);
+
+        float finalMultiplier = Mathf.Lerp(0, 1, interpolationValue);
+
+        return finalMultiplier;
+    }
+
+    public int Step(float rangeStart, float current)
+    {
+        if (current < rangeStart)
+        {
+            return 0;
+        }
+        else
+        {
+            return 1;
+        }
     }
 }
