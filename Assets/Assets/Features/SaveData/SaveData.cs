@@ -6,16 +6,16 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class SaveData
 {
-    public static void SavePlayer()
+    public static void SavePlayer(PlayerData playerData)
     {
         BinaryFormatter bf = new BinaryFormatter();
         string path = Application.persistentDataPath + "/player.data";
 
         FileStream stream = new FileStream(path, FileMode.Create);
 
-        PlayerData data = new PlayerData();
+        Debug.Log(GlobalState.state.Player.gameObject.transform.eulerAngles.y);
 
-        bf.Serialize(stream, data);
+        bf.Serialize(stream, playerData);
         stream.Close();
     }
 

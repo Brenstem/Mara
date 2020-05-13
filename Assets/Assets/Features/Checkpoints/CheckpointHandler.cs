@@ -7,8 +7,9 @@ public class CheckpointHandler : MonoBehaviour
     [SerializeField]
     float respawnTime;
 
-    private CheckpointData _activeCheckPoint;
+    private PlayerData _activeCheckPoint;
     private Timer _respawnTimer;
+    private Quaternion _rotationQ;
 
     // Subscribe to player death event
     private void OnEnable()
@@ -23,7 +24,7 @@ public class CheckpointHandler : MonoBehaviour
 
     private void Start()
     {
-        _activeCheckPoint = new CheckpointData(this.transform, 0);
+        _activeCheckPoint = new PlayerData(0, this.transform);
     }
 
     private void LateUpdate()
@@ -59,16 +60,30 @@ public class CheckpointHandler : MonoBehaviour
             insanity = GlobalState.state.Player.gameObject.GetComponent<PlayerInsanity>().CurrentHealth;
         }
 
-        _activeCheckPoint = new CheckpointData(position, insanity);
+
+        _activeCheckPoint = new PlayerData(insanity , position);
+        SaveData.SavePlayer(_activeCheckPoint);
     }
 
     // Respawn player using checkpoint data
     private void Spawn()
     {
+        PlayerData data = SaveData.LoadPlayer();
+
+        GlobalState.state.Player.gameObject.GetComponent<CharacterController>().enabled = false;
+
+        Vector3 position = new Vector3(data.playerPosition[0], data.playerPosition[1], data.playerPosition[2]);
+        Vector3 rotation = new Vector3(data.playerRotation[0], data.playerRotation[1], data.playerRotation[2]);
+
+        _rotationQ.eulerAngles = rotation;
+
         GlobalState.state.Player.gameObject.GetComponent<PlayerRevamp>().stateMachine.ChangeState(new IdleState());
-        GlobalState.state.Player.gameObject.transform.position = _activeCheckPoint.pos.position;
-        GlobalState.state.Player.gameObject.transform.rotation = _activeCheckPoint.pos.rotation;
-        GlobalState.state.Player.gameObject.GetComponent<PlayerInsanity>().SetInsanity(_activeCheckPoint.ins);
+
+        GlobalState.state.Player.gameObject.transform.position = position;
+        GlobalState.state.Player.gameObject.transform.rotation = _rotationQ;
+        GlobalState.state.Player.gameObject.GetComponent<PlayerInsanity>().SetInsanity(data.playerHealth);
+
+        GlobalState.state.Player.gameObject.GetComponent<CharacterController>().enabled = true;
     }
 
     void RespawnPlayer()
