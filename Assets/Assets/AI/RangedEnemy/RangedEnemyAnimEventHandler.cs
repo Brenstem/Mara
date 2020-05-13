@@ -16,6 +16,11 @@ public class RangedEnemyAnimEventHandler : MonoBehaviour
         parentAI._canTurn = false;
     }
 
+    public void EndAnim()
+    {
+        parentAI._animationOver = true;
+    }
+
     public void DestroyThis()
     {
         Destroy(this.parentAI.gameObject);

@@ -490,7 +490,7 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
 
         _ownerParentScript = ownerParentScript;
 
-        GenarateNewAttackSpeed();
+        GenerateNewAttackSpeed();
         _timer = new Timer(_attackSpeed);
     }
 
@@ -499,7 +499,7 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
         //Debug.Log("in i PhaseOneCombatState");
         if (_timer.Expired)
         {
-            GenarateNewAttackSpeed();
+            GenerateNewAttackSpeed();
             _timer = new Timer(_attackSpeed);
             _minAttackCooldown = _baseMinAttackCooldown;
         }
@@ -509,7 +509,7 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
         }
     }
 
-    private void GenarateNewAttackSpeed()
+    private void GenerateNewAttackSpeed()
     {
         _attackSpeed = _minAttackSpeed;
         _attackSpeed += UnityEngine.Random.Range(0f, _attackSpeedIncreaseMax);
