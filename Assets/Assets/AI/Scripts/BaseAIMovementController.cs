@@ -8,56 +8,56 @@ using UnityEngine.AI;
 
 public abstract class BaseAIMovementController : Entity
 {
-    public StateMachine<BaseAIMovementController> stateMachine;
 
+    /* === ENEMY DEATH EVENT === */
     public delegate void EnemyDead(float amount);
     public static event EnemyDead onEnemyDeath;
 
-    [SerializeField] private float _insanityIncreaseOnDeath;
-
+    [Header("Aggro")]
     [SerializeField] public float _aggroRange = 10f;
     [SerializeField] public float _unaggroRange = 20f;
-    [SerializeField] public float _turnSpeed = 5f;
-
-    [SerializeField] private float _minAttackSpeed;
-    [SerializeField] private float _maxAttackSpeedIncrease;
-
-    //Layermask skit för line of sight raycasts
     [SerializeField] public LayerMask _targetLayers;
 
+    [Header("Pathing")]
+    [SerializeField] public float _turnSpeed = 5f;
     [SerializeField] public bool _cyclePathing;
     [SerializeField] public bool _waitAtPoints;
     [SerializeField] public float _waitTime;
     [SerializeField] public Vector3[] _idlePathingPoints;
+
+    [NonSerialized] public NavMeshAgent _agent;
+    [NonSerialized] public Vector3 _idlePosition;
+    [NonSerialized] public Timer _waitTimer;
+
+    [Header("Attacks")]
     [SerializeField] public float _attackRange = 12f;
+    [SerializeField] private float _minAttackSpeed;
+    [SerializeField] private float _maxAttackSpeedIncrease;
     [SerializeField] public bool _usesHitStun = true;
 
-    [NonSerialized] public Vector3 _idlePosition;
-
+    private float _attackSpeed;
+    [HideInInspector] public Timer _attackRateTimer;
     [NonSerialized] public GameObject _target;
-    [NonSerialized] public NavMeshAgent _agent;
+    [HideInInspector] public Animator _anim;
+    [HideInInspector] public bool _animationOver;
+    [HideInInspector] public bool _canEnterHitStun;
+
+    [Header("Temp")]
+    [SerializeField] private float _insanityIncreaseOnDeath;
 
     [NonSerialized] public BasicMeleeAI meleeEnemy;
     [NonSerialized] public RangedEnemyAI rangedAI;
 
-    [NonSerialized] public Timer waitTimer;
+    [HideInInspector] public StateMachine<BaseAIMovementController> stateMachine;
 
-    [HideInInspector] public Timer _attackRateTimer;
-    [HideInInspector] public Animator _anim;
-    [HideInInspector] public bool _animationOver;
-
-    [HideInInspector] public bool _canEnterHitStun;
-
-    // Private variables
-    private float _attackSpeed;
-
+    /* === UNITY FUNCTIONS === */
     virtual protected new void Awake()
     {
         base.Awake();
 
         _idlePosition = this.transform.position;
         stateMachine = new StateMachine<BaseAIMovementController>(this);
-        waitTimer = new Timer(_waitTime);
+        _waitTimer = new Timer(_waitTime);
 
         _anim = GetComponentInChildren<Animator>();
         health = GetComponent<EnemyHealth>();
@@ -72,14 +72,6 @@ public abstract class BaseAIMovementController : Entity
         stateMachine.Update();
     }
 
-    //vänder monstret mot spelaren
-    public virtual void FacePlayer()
-    {
-        Vector3 direction = (_target.transform.position - this.transform.position).normalized;
-        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-        this.transform.rotation = Quaternion.Slerp(this.transform.rotation, lookRotation, Time.deltaTime * _turnSpeed);
-    }
-
     protected virtual void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
@@ -92,11 +84,19 @@ public abstract class BaseAIMovementController : Entity
         Gizmos.color = Color.blue;
         if (_idlePathingPoints.Length > 1)
         {
-            for (int i = 0; i < _idlePathingPoints.Length-1; i++)
+            for (int i = 0; i < _idlePathingPoints.Length - 1; i++)
             {
                 Gizmos.DrawLine(_idlePathingPoints[i], _idlePathingPoints[i + 1]);
             }
         }
+    }
+
+    /* === PUBLIC FUNCTIONS === */
+    public virtual void FacePlayer()
+    {
+        Vector3 direction = (_target.transform.position - this.transform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+        this.transform.rotation = Quaternion.Slerp(this.transform.rotation, lookRotation, Time.deltaTime * _turnSpeed);
     }
 
     public override void TakeDamage(HitboxValues hitbox, Entity attacker)
@@ -119,7 +119,7 @@ public abstract class BaseAIMovementController : Entity
     }
 }
 
-//State classer
+/* === IDLE STATE === */
 public class BaseIdleState : State<BaseAIMovementController>
 {
     private RaycastHit _hit;
@@ -138,7 +138,7 @@ public class BaseIdleState : State<BaseAIMovementController>
     {
         if (owner._waitAtPoints)
         {
-            owner.waitTimer.Time += Time.deltaTime;
+            owner._waitTimer.Time += Time.deltaTime;
         }
 
         //idle pathing
@@ -160,10 +160,10 @@ public class BaseIdleState : State<BaseAIMovementController>
             //flyttar monstret mot nästa position i positions arrayen
             if (owner._waitAtPoints)
             {
-                if (owner.waitTimer.Expired)
+                if (owner._waitTimer.Expired)
                 {
                     owner._agent.SetDestination(owner._idlePathingPoints[_pathingIndex]);
-                    owner.waitTimer.Reset();
+                    owner._waitTimer.Reset();
                 }
             }
             else
@@ -185,12 +185,11 @@ public class BaseIdleState : State<BaseAIMovementController>
         }
     }
 }
-
+/* === CHASING STATE === */
 public class BaseChasingState : State<BaseAIMovementController>
 {
     protected BaseReturnToIdlePosState _returnToIdleState;
     protected BaseAttackingState _attackingState;
-
 
     public override void EnterState(BaseAIMovementController owner) { }
 
@@ -201,29 +200,29 @@ public class BaseChasingState : State<BaseAIMovementController>
         float range = owner._attackRange - owner._agent.stoppingDistance;
 
         Vector3 vectorToPlayer = (owner._target.transform.position - owner.transform.position).normalized * range;
-        Vector3 targetPosition = owner._target.transform.position - vectorToPlayer; 
+        Vector3 targetPosition = owner._target.transform.position - vectorToPlayer;
 
         owner._agent.SetDestination(targetPosition);
-        
+
         if (owner._unaggroRange <= Vector3.Distance(owner._target.transform.position, owner.transform.position))
         {
             owner.stateMachine.ChangeState(_returnToIdleState);
         }
 
-        if(owner._attackRange >= Vector3.Distance(owner._target.transform.position, owner.transform.position))
+        if (owner._attackRange >= Vector3.Distance(owner._target.transform.position, owner.transform.position))
         {
             owner.stateMachine.ChangeState(_attackingState);
         }
     }
 }
-
+/* === ATTACKING STATE === */
 public class BaseAttackingState : State<BaseAIMovementController>
 {
     protected BaseChasingState _chasingState;
 
     public override void EnterState(BaseAIMovementController owner) { }
 
-    public override void ExitState(BaseAIMovementController owner)  { }
+    public override void ExitState(BaseAIMovementController owner) { }
 
     public override void UpdateState(BaseAIMovementController owner)
     {
@@ -242,7 +241,7 @@ public class BaseAttackingState : State<BaseAIMovementController>
         }
     }
 }
-
+/* === RETURN TO IDLE STATE === */
 public class BaseReturnToIdlePosState : State<BaseAIMovementController>
 {
     private RaycastHit _hit;
@@ -278,7 +277,7 @@ public class BaseReturnToIdlePosState : State<BaseAIMovementController>
 
     }
 }
-
+/* === DEAD STATE === */
 public class DeadState : State<BaseAIMovementController>
 {
     public override void EnterState(BaseAIMovementController owner) { }

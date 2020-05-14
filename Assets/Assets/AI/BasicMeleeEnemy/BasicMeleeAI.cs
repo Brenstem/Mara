@@ -5,11 +5,13 @@ using UnityEngine.InputSystem.Interactions;
 
 public class BasicMeleeAI : BaseAIMovementController
 {
+
+    [Header("References")]
     [SerializeField] public GameObject _fill;
 
     [HideInInspector] public Timer _hitStunTimer;
 
-    // Start is called before the first frame update
+    /* === UNITY FUNCTIONS === */
     void Start()
     {
         _fill.SetActive(false);
@@ -27,6 +29,7 @@ public class BasicMeleeAI : BaseAIMovementController
         _anim.SetFloat("Blend", _agent.velocity.magnitude);
     }
 
+    /* === PUBLIC FUNCTIONS === */
     public override void KillThis()
     {
         base.KillThis();
@@ -42,6 +45,7 @@ public class BasicMeleeAI : BaseAIMovementController
         EnableHitstun(hitbox.hitstunTime);
         GlobalState.state.AudioManager.FloatingEnemyHurtAudio(this.transform.position);
         base.TakeDamage(hitbox, attacker);
+        _fill.SetActive(true);
     }
 
     public void EnableHitstun(float duration)
@@ -53,7 +57,7 @@ public class BasicMeleeAI : BaseAIMovementController
         }
     }
 }
-
+/* === IDLE STATE === */
 public class BasicMeleeIdleState : BaseIdleState
 {
     public override void EnterState(BaseAIMovementController owner)
@@ -66,7 +70,7 @@ public class BasicMeleeIdleState : BaseIdleState
         owner._attackRateTimer += Time.deltaTime;
     }
 }
-
+/* === CHASING STATE === */ 
 public class BasicMeleeChasingState : BaseChasingState
 {
     public override void EnterState(BaseAIMovementController owner)
@@ -74,7 +78,7 @@ public class BasicMeleeChasingState : BaseChasingState
         _attackingState = new BasicMeleeAttackingState();
         _returnToIdleState = new BasicMeleeReturnToIdleState();
         // GlobalState.state.AudioManager.RangedEnemyAlertAudio(owner._meleeEnemy.transform.position);
-        owner.meleeEnemy._fill.SetActive(true);
+        
     }
     public override void UpdateState(BaseAIMovementController owner)
     {
@@ -82,7 +86,7 @@ public class BasicMeleeChasingState : BaseChasingState
         owner._attackRateTimer += Time.deltaTime;
     }
 }
-
+/* === ATTACKING STATE === */
 public class BasicMeleeAttackingState : BaseAttackingState
 {
     public override void EnterState(BaseAIMovementController owner)
@@ -112,7 +116,7 @@ public class BasicMeleeAttackingState : BaseAttackingState
         }
     }
 }
-
+/* === SWING STATE === */
 public class BasicMeleeSwingState : State<BaseAIMovementController>
 {
     public override void EnterState(BaseAIMovementController owner)
@@ -140,7 +144,7 @@ public class BasicMeleeSwingState : State<BaseAIMovementController>
         }
     }
 }
-
+/* === RETURN TO IDLE STATE === */
 public class BasicMeleeReturnToIdleState : BaseReturnToIdlePosState
 {
     public override void EnterState(BaseAIMovementController owner)
@@ -162,7 +166,7 @@ public class BasicMeleeReturnToIdleState : BaseReturnToIdlePosState
     }
 
 }
-
+/* === HITSTUN STATE === */
 public class MeleeAIHitstunState : State<BaseAIMovementController>
 {
     public override void EnterState(BaseAIMovementController owner) 
