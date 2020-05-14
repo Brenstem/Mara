@@ -419,26 +419,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3357687673d2c8643bafe76d24faec2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: {fileID: 443341181197099621}
   invulerable: 0
-  _aggroRange: 20
-  _unaggroRange: 25
-  _turnSpeed: 5
+  health: {fileID: 443341181197099621}
+  _aggroRange: 10
+  _unaggroRange: 15
   _targetLayers:
     serializedVersion: 2
     m_Bits: 2359
+  _turnSpeed: 5
   _cyclePathing: 0
   _waitAtPoints: 0
   _waitTime: 0
   _idlePathingPoints: []
-  _attackRange: 20
+  _attackRange: 10
+  _minAttackSpeed: 1.5
+  _maxAttackSpeedIncrease: 3.5
+  _usesHitStun: 1
   _anim: {fileID: 0}
+  _animationOver: 0
+  _canEnterHitStun: 0
+  _insanityIncreaseOnDeath: 0
   _projectile: {fileID: 8366055604816629108, guid: 634054fb0d9b0864c9b35bbdfd9ef739,
     type: 3}
   _projectileSpawnPos: {fileID: 3882684762693499996}
-  _firerate: 2
   _fill: {fileID: 730838367674231687}
-  _useHitStun: 0
+  _firerate: 2
   _canTurn: 0
 --- !u!1001 &4669090988226794240
 PrefabInstance:

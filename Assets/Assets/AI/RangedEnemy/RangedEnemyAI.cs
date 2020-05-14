@@ -57,6 +57,7 @@ public class RangedEnemyAI : BaseAIMovementController
 
     public override void Parried()
     {
+        EnableHitstun(0.1f, true);
         UnityEngine.Debug.LogWarning("Parried implementation missing", this);
     }
 

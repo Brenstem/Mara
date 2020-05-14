@@ -24,8 +24,6 @@ public class BasicMeleeAI : BaseAIMovementController
     {
         base.Update();
 
-        print(stateMachine.currentState);
-
         _anim.SetFloat("Blend", _agent.velocity.magnitude);
     }
 
@@ -50,7 +48,8 @@ public class BasicMeleeAI : BaseAIMovementController
 
     public override void Parried()
     {
-        Debug.LogWarning("Parried implementation missing", this);
+        EnableHitstun(0.1f, true);
+        //Debug.LogWarning("Parried implementation missing", this);
     }
 
     public void EnableHitstun(float duration, bool ignoreArmor)
