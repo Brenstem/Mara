@@ -18,7 +18,7 @@ public class PlayerRevamp : Entity
     public Animator cameraAnimator;
     [SerializeField] private Transform _groundCheckPosition;
     [SerializeField] private Cinemachine.CinemachineFreeLook _freeLookCam;
-    [SerializeField] private Cinemachine.CinemachineVirtualCamera _lockonCam;
+    [SerializeField] private Cinemachine.CinemachineFreeLook _lockonCam;
     [SerializeField] private TargetFinder _targetFinder;
     [SerializeField, Range(1, 50)] private int inputBufferSize = 1;
 
@@ -149,6 +149,9 @@ public class PlayerRevamp : Entity
         dashCooldownTimer = new Timer(_dashCooldownTime);
         dashCooldownTimer.Time += _dashCooldownTime;
 
+        // Hitstun
+        _hitstunImmunityTimer = new Timer(hitstunImmunityTime);
+
         /* === INPUT === */
         _playerInput.PlayerControls.Move.performed += performedInput => _input = performedInput.ReadValue<Vector2>();
         _playerInput.PlayerControls.Dash.performed += performedInput => Action(InputType.Dash);
@@ -265,21 +268,6 @@ public class PlayerRevamp : Entity
         {
             modifier.MovementSpeedMultiplier.Reset();
             maxSpeed *= modifier.MovementSpeedMultiplier;
-        }
-    }
-
-    [HideInInspector] public bool successfulParry;
-    public override void TakeDamage(HitboxValues hitbox, Entity attacker = null)
-    {
-        if (isParrying)
-        {
-            successfulParry = true;
-        }
-        else
-        {
-            hitstunDuration = hitbox.hitstunTime;
-            stateMachine.ChangeState(new HitstunState());
-            health.Damage(hitbox);
         }
     }
 
@@ -1077,8 +1065,8 @@ public class HeavyAttackState : State<PlayerRevamp>
                     _isCharging = false;
                     owner.playerAnimator.SetBool("HeavyCharge", false);
 
-                    if (owner.modifier.DamageMultiplier.isModified)
-                        _previousDamageMultiplier = owner.modifier.DamageMultiplier.multiplier;
+                    if (owner.modifier.DamageMultiplier.IsModified)
+                        _previousDamageMultiplier = owner.modifier.DamageMultiplier.Multiplier;
                     owner.modifier.DamageMultiplier *= 1f + _chargeTimer.Time / owner.heavyChargeTime * owner.heavyMaxDamageMultiplier;
 
                     GlobalState.state.AudioManager.PlayerSwordSwingAudio(owner.transform.position);
