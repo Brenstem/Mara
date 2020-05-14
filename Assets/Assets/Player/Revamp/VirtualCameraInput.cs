@@ -21,7 +21,7 @@ public class VirtualCameraInput : MonoBehaviour
 
     private void Update()
     {
-        print(_defaultcontrols.PlayerControls.Look.triggered);
+        //print(_defaultcontrols.PlayerControls.Look.);
         print(_lookDelta);
         _camera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset = new Vector3(_lookDelta.x, 0, _lookDelta.y);
     }
