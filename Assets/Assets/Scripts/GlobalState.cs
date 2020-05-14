@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class GlobalState : MonoBehaviour
 {
+    [Header("Hitstop")]
+    [SerializeField, Range(0.0f, 1.0f)] private float _entryTimeFraction = 0.043f;
+    [SerializeField, Range(0.0f, 1.0f)] private float _exitTimeFraction = 0.22f;
+
+    [Header("References")]
     [SerializeField] private PlayerRevamp _player;
 
     [SerializeField] private Camera _camera;
@@ -65,7 +70,13 @@ public class GlobalState : MonoBehaviour
         }
     }
 
-    private void Awake() {
+    private float _previousEntryFrac;
+    private float _previousExitFrac;
+    private void Awake()
+    {
+        _previousEntryFrac = _entryTimeFraction;
+        _previousExitFrac = _exitTimeFraction;
+
         if (_state != null && _state != this) {
             Destroy(this.gameObject);
         }
@@ -82,33 +93,12 @@ public class GlobalState : MonoBehaviour
     }
 
     private bool _hitstopRunning;
-    public void HitStop(float duration)
-    {
-        StartCoroutine(HitStopCoroutine(duration));
-    }
 
     public void HitStop(float duration, HitboxValues values)
     {
         StartCoroutine(HitStopCoroutine(duration, values));
     }
 
-    private IEnumerator HitStopCoroutine(float duration)
-    {
-        _hitstopRunning = true;
-        if (GetComponent<CinemachineImpulseSource>() != null)
-        {
-            CinemachineImpulseManager.Instance.IgnoreTimeScale = true;
-            GetComponent<CinemachineImpulseSource>().m_ImpulseDefinition.m_TimeEnvelope.m_DecayTime = duration;
-            GetComponent<CinemachineImpulseSource>().GenerateImpulse();
-        }
-
-        yield return new WaitForEndOfFrame();
-        Time.timeScale = 0.0f;
-        yield return new WaitForSecondsRealtime(duration);
-        Time.timeScale = 1f;
-        _hitstopRunning = false;
-        yield return 0;
-    }
 
     private IEnumerator HitStopCoroutine(float duration, HitboxValues values)
     {
@@ -118,11 +108,56 @@ public class GlobalState : MonoBehaviour
         //GetComponent<CinemachineImpulseSource>().m_ImpulseDefinition.m_AmplitudeGain = 1.5f + values.damageValue / 100; // todo nästa
         GetComponent<CinemachineImpulseSource>().GenerateImpulse();
         yield return new WaitForEndOfFrame();
-        Time.timeScale = 0.0f;
-        yield return new WaitForSecondsRealtime(duration);
+
+
+        float time = 0.0f;
+        float exitTime = 0.0f;
+        float tScale = 0.0f;
+
+        while (time < duration)
+        {
+            if (duration < _exitTimeFraction || time / duration > 1 - _exitTimeFraction)
+            {
+                exitTime += Time.unscaledDeltaTime;
+                if (_exitTimeFraction > 0)
+                    tScale = Mathf.Lerp(0.0f, 1.0f, (exitTime * exitTime) / (_exitTimeFraction * _exitTimeFraction));
+            }
+            else if (time / duration <= _entryTimeFraction)
+            {
+                if (_entryTimeFraction > 0)
+                    tScale = Mathf.Lerp(1.0f, 0.0f, (time * time) / (_entryTimeFraction * _entryTimeFraction));
+                else
+                    tScale = 0.0f;
+            }
+            else
+            {
+                tScale = 0.0f;
+            }
+
+            Time.timeScale = tScale;
+            time += Time.unscaledDeltaTime;
+            yield return new WaitForEndOfFrame();
+        }
+        
+
         Time.timeScale = 1f;
         _hitstopRunning = false;
         yield return 0;
+    }
+
+    private void OnValidate()
+    {
+        bool exceeded = _entryTimeFraction + _exitTimeFraction > 1 ? true : false;
+        if (exceeded)
+        {
+            if (_previousEntryFrac != _entryTimeFraction)
+                _exitTimeFraction = 1 - _entryTimeFraction;
+            else if (_previousExitFrac != _exitTimeFraction)
+                _entryTimeFraction = 1 - _exitTimeFraction;
+        }
+
+        _previousEntryFrac = _entryTimeFraction;
+        _previousExitFrac = _exitTimeFraction;
     }
 
     /*

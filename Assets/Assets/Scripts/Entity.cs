@@ -95,28 +95,28 @@ public class EntityModifier
 {
     private bool _modified;
 
-    private Modifier _movementSpeedMultiplier = new Modifier(1.0f);
+    private Modifier _movementSpeedMultiplier;
     public Modifier MovementSpeedMultiplier
     {
         get { return _movementSpeedMultiplier; }
         set { _movementSpeedMultiplier.Multiplier = value.Multiplier; }
     }
 
-    private Modifier _hitstunMultiplier = new Modifier(1.0f);
+    private Modifier _hitstunMultiplier;
     public Modifier HitstunMultiplier
     {
         get { return _hitstunMultiplier; }
         set { _hitstunMultiplier.Multiplier = value.Multiplier; }
     }
 
-    private Modifier _damageMultiplier = new Modifier(1.0f);
+    private Modifier _damageMultiplier;
     public Modifier DamageMultiplier
     {
         get { return _damageMultiplier; }
         set { _damageMultiplier.Multiplier = value.Multiplier; }
     }
 
-    private Modifier _attackSpeedMultiplier = new Modifier(1.0f);
+    private Modifier _attackSpeedMultiplier;
     public Modifier AttackSpeedMultiplier
     {
         get { return _attackSpeedMultiplier; }
@@ -139,25 +139,25 @@ public class EntityModifier
 
     public EntityModifier() 
     {
-        MovementSpeedMultiplier *= 1.0f;
-        HitstunMultiplier *= 1.0f;
-        DamageMultiplier *= 1.0f;
-        AttackSpeedMultiplier *= 1.0f;
+        _movementSpeedMultiplier = new Modifier(1.0f);
+        _hitstunMultiplier = new Modifier(1.0f);
+        _damageMultiplier = new Modifier(1.0f);
+        _attackSpeedMultiplier = new Modifier(1.0f);
     }
 
     public EntityModifier(float movementSpeedMultiplier, float hitstunMultiplier, float damageMultiplier, float attackSpeedMultiplier)
     {
-        MovementSpeedMultiplier *= movementSpeedMultiplier;
-        HitstunMultiplier *= hitstunMultiplier;
-        DamageMultiplier *= damageMultiplier;
-        AttackSpeedMultiplier *= attackSpeedMultiplier;
+        _movementSpeedMultiplier = new Modifier(movementSpeedMultiplier);
+        _hitstunMultiplier = new Modifier(hitstunMultiplier);
+        _damageMultiplier = new Modifier(damageMultiplier);
+        _attackSpeedMultiplier = new Modifier(attackSpeedMultiplier);
     }
 }
 
 public abstract class Entity : MonoBehaviour
 {
-    public EntityHealth health;
     public bool invulerable;
+    public EntityHealth health;
     public EntityModifier modifier;
 
     public abstract void TakeDamage(HitboxValues hitbox, Entity attacker = null);
@@ -165,7 +165,7 @@ public abstract class Entity : MonoBehaviour
     {
         health.Damage(damageAmount);
     }
-
+    public abstract void Parried();
     public abstract void KillThis();
 
     protected virtual void Awake()

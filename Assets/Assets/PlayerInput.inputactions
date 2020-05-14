@@ -62,14 +62,6 @@
                     "interactions": ""
                 },
                 {
-                    "name": "HeavyCharge",
-                    "type": "Button",
-                    "id": "957b424e-f522-4dac-b987-612086619734",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
                     "name": "Parry",
                     "type": "Button",
                     "id": "46d43148-aeee-413c-86c3-440d2c42871f",
@@ -318,17 +310,6 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Look",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "abc576f6-3aa9-43a0-a904-0c89e5cf34fb",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "Tap,SlowTap",
-                    "processors": "",
-                    "groups": "Keyboard",
-                    "action": "HeavyCharge",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

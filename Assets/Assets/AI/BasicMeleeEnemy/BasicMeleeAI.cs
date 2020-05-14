@@ -48,6 +48,11 @@ public class BasicMeleeAI : BaseAIMovementController
         _fill.SetActive(true);
     }
 
+    public override void Parried()
+    {
+        Debug.LogWarning("Parried implementation missing", this);
+    }
+
     public void EnableHitstun(float duration)
     {
         if (duration > 0.0f && _canEnterHitStun)

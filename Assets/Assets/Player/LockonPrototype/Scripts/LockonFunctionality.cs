@@ -168,7 +168,7 @@ public class LockonFunctionality : MonoBehaviour
             if (_pointOfInterest != null)
             {
                 Vector3 direction = _pointOfInterest.transform.position - transform.position;
-                direction.y = 0;
+                //direction.y = 0;
                 RaycastHit hit;
                 Physics.Raycast(_lockonThreshold.position, direction.normalized, out hit, Vector3.Distance(_lockonThreshold.position, _pointOfInterest.position), _groundMask); // is the view of the object obstructed?
                 if (hit.collider != null || Vector3.Distance(_lockonThreshold.position, _pointOfInterest.position) > _lockedOnRadius)
@@ -186,6 +186,7 @@ public class LockonFunctionality : MonoBehaviour
             }
         }
     }
+
     private void Update()
     {
         if (_pointOfInterest != null && !_pointOfInterest.CompareTag(lockonTag))

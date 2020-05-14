@@ -18,7 +18,7 @@ public class PlayerRevamp : Entity
     public Animator cameraAnimator;
     [SerializeField] private Transform _groundCheckPosition;
     [SerializeField] private Cinemachine.CinemachineFreeLook _freeLookCam;
-    [SerializeField] private Cinemachine.CinemachineFreeLook _lockonCam;
+    [SerializeField] private Cinemachine.CinemachineVirtualCamera _lockonCam;
     [SerializeField] private TargetFinder _targetFinder;
     [SerializeField, Range(1, 50)] private int inputBufferSize = 1;
 
@@ -48,11 +48,12 @@ public class PlayerRevamp : Entity
     public float dashLag = 0.15f;
     public float dashSpeed = 10.0f;
     public float dashAnimationNumerator = 5;
-    private Timer _dashCooldownTimer;
+    public Timer dashCooldownTimer;
     private int _airDashes;
     public bool invulerableWhenDashing;
 
     [Header("Combat")]
+    public float hitstunImmunityTime;
     public float heavyHitstunThreshold = 1.0f;
     public float parryDuration;
     public float parryLag; // borde vara tied till animationen, samt tror inte att cooldown behövs med tanke på att det ska vara få active frames och mycket lag
@@ -68,6 +69,13 @@ public class PlayerRevamp : Entity
     [Header("Heavy Attack")]
     public HitboxGroup heavyHitboxGroup;
     public float heavyStepSpeed;
+    public float heavyChargeTime = 2.0f;
+    public float heavyMaxDamageMultiplier = 1.0f;
+
+    [Header("Insanity events")]
+    [SerializeField] float _moveSpeedBuffMultiplier = 1.1f;
+    [SerializeField] float _moveSpeedDebuffMultiplier = 0.9f;
+
     #endregion
 
     /* === COMPONENT REFERENCES === */
@@ -81,6 +89,7 @@ public class PlayerRevamp : Entity
     /* === INPUT === */
     private Vector2 _input;
     public Vector2 Input { get { return _input; } }
+    [HideInInspector] public Collider[] groundHits;
 
     [HideInInspector] public Vector3 _currentDirection;
     [HideInInspector] public Vector3 CurrentDirection { get { return _currentDirection; } }
@@ -93,7 +102,8 @@ public class PlayerRevamp : Entity
         Jump = 2,
         AttackLight = 3,
         AttackHeavy = 4,
-        Parry = 5,
+        AttackHeavyReleased = 5,
+        Parry = 6,
     }
 
     [HideInInspector] public CircularBuffer<InputType> inputBuffer;
@@ -111,6 +121,7 @@ public class PlayerRevamp : Entity
     private void OnDisable() { _playerInput.PlayerControls.Disable(); }
 
     /* === COMBAT === */
+    private Timer _hitstunImmunityTimer;
     [HideInInspector] public bool interruptable;
     [HideInInspector] public bool attackAnimationOver;
     [HideInInspector] public bool attackStep;
@@ -128,7 +139,6 @@ public class PlayerRevamp : Entity
         _originalMaxSpeed = maxSpeed;
 
         controller = GetComponent<CharacterController>();
-        modifier = new EntityModifier();
         _playerInput = new PlayerInput();
         stateMachine = new StateMachine<PlayerRevamp>(this);
         stateMachine.ChangeState(new IdleState());
@@ -136,15 +146,17 @@ public class PlayerRevamp : Entity
         inputBuffer = new CircularBuffer<InputType>(inputBufferSize);
 
         // Dash
-        _dashCooldownTimer = new Timer(_dashCooldownTime);
-        _dashCooldownTimer.Time += _dashCooldownTime;
+        dashCooldownTimer = new Timer(_dashCooldownTime);
+        dashCooldownTimer.Time += _dashCooldownTime;
 
         /* === INPUT === */
         _playerInput.PlayerControls.Move.performed += performedInput => _input = performedInput.ReadValue<Vector2>();
         _playerInput.PlayerControls.Dash.performed += performedInput => Action(InputType.Dash);
         _playerInput.PlayerControls.Jump.performed += performedInput => Action(InputType.Jump);
         _playerInput.PlayerControls.AttackLight.performed += performedInput => Action(InputType.AttackLight);
-        _playerInput.PlayerControls.AttackHeavy.performed += performedInput => Action(InputType.AttackHeavy);
+        _playerInput.PlayerControls.AttackHeavy.started += performedInput => Action(InputType.AttackHeavy);
+        _playerInput.PlayerControls.AttackHeavy.canceled += performedInput => Action(InputType.AttackHeavyReleased);
+
         _playerInput.PlayerControls.Parry.performed += performedInput => Action(InputType.Parry);
 
         /* === PLAYER ANIM EVENTS === */
@@ -159,6 +171,15 @@ public class PlayerRevamp : Entity
         modifier.MovementSpeedMultiplier.onModified += UpdateMoveSpeed;
     }
 
+    /* === INPUT === */
+    private void AttackStep() { attackStep = true; }
+    private void AttackStepEnd() { attackStep = false; }
+    private void IASA() { interruptable = true; }
+    private void WalkCancel() { walkCancel = true; }
+    private void AnimationOver() { attackAnimationOver = true; }
+    private void Action(InputType type) { inputBuffer.Enqueue(type); }
+
+
     private void Update()
     {
         stateMachine.Update();
@@ -167,9 +188,11 @@ public class PlayerRevamp : Entity
 
         Gravity();
 
+        HitstunImmunity();
+
         SnapCamera();
 
-        _dashCooldownTimer.Time += Time.deltaTime;
+        dashCooldownTimer += Time.deltaTime;
     }
 
     private void FixedUpdate()
@@ -179,13 +202,34 @@ public class PlayerRevamp : Entity
         Action(InputType.Idle);
     }
 
-    private void AttackStep() { attackStep = true; }
-    private void AttackStepEnd() { attackStep = false; }
-    private void IASA() { interruptable = true; }
-    private void WalkCancel() { walkCancel = true; }
-    private void AnimationOver() {  attackAnimationOver = true; }
-    private void Action(InputType type) { inputBuffer.Enqueue(type); }
+    private bool _hitstunImmunity;
+    [HideInInspector] public bool successfulParry;
+    public override void TakeDamage(HitboxValues hitbox, Entity attacker = null)
+    {
+        if (isParrying && hitbox.parryable)
+        {
+            successfulParry = true;
 
+            if (attacker != null)
+                attacker.Parried();
+        }
+        else
+        {
+            if (!_hitstunImmunity)
+            {
+                hitstunDuration = hitbox.hitstunTime;
+                stateMachine.ChangeState(new HitstunState());
+                health.Damage(hitbox);
+                _hitstunImmunity = true;
+            }
+        }
+    }
+
+    public override void Parried()
+    {
+        Debug.LogWarning("Parried implementation missing", this);
+    }
+    
     private void UpdateMoveSpeed()
     {
         maxSpeed = _originalMaxSpeed;
@@ -195,48 +239,6 @@ public class PlayerRevamp : Entity
     private void UpdateAttackSpeed()
     {
         playerAnimator.SetFloat("AttackSpeedModifier", 1.0f * modifier.AttackSpeedMultiplier);
-    }
-
-    private void Gravity()
-    {
-        if (useGravity)
-        {
-            _velocity.y += _gravity * Time.deltaTime; //Gravity formula
-        }
-        else
-        {
-            _velocity.y = 0;
-        }
-
-        controller.Move(_velocity * Time.deltaTime); // T^2
-    }
-
-    private void GroundCheck()
-    {
-        _isGrounded = Physics.CheckSphere(_groundCheckPosition.position, _groundDistance, GlobalState.state.GroundMask);
-        if (_isGrounded)
-        {
-            if (_velocity.y < 0)
-                _velocity.y = -2f;
-            _airDashes = 0;
-            playerAnimator.SetBool("HasJumped", false);
-        }
-        playerAnimator.SetBool("IsGrounded", _isGrounded);
-    }
-
-    
-    /// <summary>
-    /// Snaps camera after returning to free look camera
-    /// </summary>
-    private void SnapCamera()
-    {
-        if (_doSnapCamera)
-        {
-            //var free = new Vector2(_freeLookCam.m_XAxis.Value, _freeLookCam.m_YAxis.Value);
-            //var loc = new Vector2(_lockonCam.m_XAxis.Value, _lockonCam.m_YAxis.Value);
-            _freeLookCam.m_XAxis.Value = transform.eulerAngles.y;
-            _doSnapCamera = false;
-        }
     }
 
     public void IncreaseMoveSpeedOverValue(float insValueModStart, float insValueModEnd, float multiplier)
@@ -281,12 +283,105 @@ public class PlayerRevamp : Entity
         }
     }
 
+    private void Gravity()
+    {
+        if (useGravity)
+        {
+            _velocity.y += _gravity * Time.deltaTime; //Gravity formula
+        }
+        else
+        {
+            _velocity.y = 0;
+        }
+
+        controller.Move(_velocity * Time.deltaTime); // T^2
+    }
+
+    private bool _playedLandingSound;
+    private void GroundCheck()
+    {
+        groundHits = Physics.OverlapSphere(_groundCheckPosition.position, _groundDistance, GlobalState.state.GroundMask);
+        _isGrounded = groundHits.Length > 0 ? true : false;
+
+        if (_isGrounded)
+        {
+            if (_velocity.y < 0)
+                _velocity.y = -2f;
+            _airDashes = 0;
+            playerAnimator.SetBool("HasJumped", false);
+
+            if (playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Landing"))
+            {
+                if (!_playedLandingSound)
+                {
+                    GlobalState.state.AudioManager.PlayerLandAudio(_groundCheckPosition.position);
+                    _playedLandingSound = true;
+                }
+            }
+            else
+            {
+                _playedLandingSound = false;
+            }
+        }
+        playerAnimator.SetBool("IsGrounded", _isGrounded);
+    }
+
+    private void IncreaseMoveSpeed()
+    {
+        float currentInsanity = ((PlayerInsanity)health).GetInsanityPercentage();
+        currentInsanity -= 75; // Slow starts at 75 insanity or higher
+        if (currentInsanity > 0)
+        {
+            maxSpeed = _originalMaxSpeed;
+            if (currentInsanity >= 10)
+            {
+                maxSpeed *= _moveSpeedBuffMultiplier;
+            }
+            else
+            {
+                maxSpeed *= 1 + currentInsanity / 100;
+            }
+        }
+    }
+
+    private void Slow()
+    {
+        float currentInsanity = ((PlayerInsanity)health).GetInsanityPercentage();
+        if (currentInsanity - 50 > 0 && currentInsanity - 75 <= 0)
+        {
+            currentInsanity -= 50; // Slow starts at 50 insanity or higher
+            maxSpeed = _originalMaxSpeed;
+            if (currentInsanity >= 10)
+            {
+                maxSpeed *= _moveSpeedDebuffMultiplier;
+            }
+            else
+            {
+                maxSpeed *= 1 - currentInsanity / 100;
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Snaps camera after returning to free look camera
+    /// </summary>
+    private void SnapCamera()
+    {
+        if (_doSnapCamera)
+        {
+            //var free = new Vector2(_freeLookCam.m_XAxis.Value, _freeLookCam.m_YAxis.Value);
+            //var loc = new Vector2(_lockonCam.m_XAxis.Value, _lockonCam.m_YAxis.Value);
+            _freeLookCam.m_XAxis.Value = transform.eulerAngles.y;
+            _doSnapCamera = false;
+        }
+    }
+
     public void Dash()
     {
-        if (_dashCooldownTimer.Expired && _airDashes < airDashAmount)
+        if (dashCooldownTimer.Expired && _airDashes < airDashAmount)
         {
             _airDashes++;
-            _dashCooldownTimer.Reset();
+            dashCooldownTimer.Reset();
             //GlobalState.state.Player.ResetAnim();
             stateMachine.ChangeState(new DashingState());
         }
@@ -301,6 +396,19 @@ public class PlayerRevamp : Entity
             playerAnimator.SetTrigger("Jump");
             inputBuffer.Clear();
             GlobalState.state.AudioManager.PlayerJumpAudio(this.transform.position);
+        }
+    }
+
+    private void HitstunImmunity()
+    {
+        if (_hitstunImmunity)
+        {
+            _hitstunImmunityTimer += Time.deltaTime;
+            if (_hitstunImmunityTimer.Expired)
+            {
+                _hitstunImmunityTimer.Reset();
+                _hitstunImmunity = false;
+            }
         }
     }
 
@@ -324,6 +432,7 @@ public class PlayerRevamp : Entity
 
     public void ToggleLockon()
     {
+
         if (!pointOfInterest)
         {
             Debug.LogWarning("Trying to toggle lockon without a point of interest!", this);
@@ -416,8 +525,12 @@ public class IdleState : State<PlayerRevamp>
             switch (item)
             {
                 case PlayerRevamp.InputType.Dash:
-                    owner.Dash();
-                    return;
+                    if (owner.dashCooldownTimer.Expired)
+                    {
+                        owner.Dash();
+                        return;
+                    }
+                    break;
                 case PlayerRevamp.InputType.Jump:
                     owner.Jump();
                     inputFound = true;
@@ -486,8 +599,12 @@ public class IdleAlertState : State<PlayerRevamp>
             switch (item)
             {
                 case PlayerRevamp.InputType.Dash:
-                    owner.Dash();
-                    return;
+                    if (owner.dashCooldownTimer.Expired)
+                    {
+                        owner.Dash();
+                        return;
+                    }
+                    break;
                 case PlayerRevamp.InputType.Jump:
                     owner.Jump();
                     return;
@@ -546,8 +663,12 @@ public class MovementState : State<PlayerRevamp>
                 switch (item)
                 {
                     case PlayerRevamp.InputType.Dash:
-                        owner.Dash();
-                        return;
+                        if (owner.dashCooldownTimer.Expired)
+                        {
+                            owner.Dash();
+                            return;
+                        }
+                        break;
                     case PlayerRevamp.InputType.Jump:
                         owner.Jump();
                         inputFound = true;
@@ -675,9 +796,9 @@ public class DashingState : State<PlayerRevamp>
         _dashDirection += Camera.main.transform.forward * owner.Input.y;
         if (_dashDirection == Vector3.zero)
             _dashDirection = Camera.main.transform.forward;
-        _dashDirection.y = 0;
 
-        if(!owner.IsLockedOn)
+        _dashDirection.y = 0;
+        if (!owner.IsLockedOn)
         {
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(_dashDirection.x, 0, _dashDirection.z));
             owner.transform.rotation = lookRotation;
@@ -712,6 +833,19 @@ public class DashingState : State<PlayerRevamp>
         }
         else
         {
+            /*
+            if (owner.IsGrounded)
+            {
+                RaycastHit hit;
+                if (Physics.Raycast(new Ray(owner.transform.position, Vector3.down), out hit, 2f, GlobalState.state.GroundMask))
+                {
+                    _dashDirection.y = Mathf.Sin(Vector3.Angle(hit.normal, Vector3.up));
+                }
+            }
+            if (_dashDirection.y > 0)
+                _dashDirection.y = 0;
+            */
+
             _timer.Time += Time.deltaTime;
             owner.controller.Move(_dashDirection.normalized * owner.dashSpeed * Time.deltaTime);
 
@@ -896,30 +1030,35 @@ public class HeavyAttackState : State<PlayerRevamp>
     private GameObject _target;
     private bool _isCharging;
 
-    private float _chargeTime = 2.0f;
+    private float _previousDamageMultiplier;
     private Timer _chargeTimer;
 
     public override void EnterState(PlayerRevamp owner)
     {
-        _chargeTimer = new Timer(_chargeTime);
+        _chargeTimer = new Timer(owner.heavyChargeTime);
+        _isCharging = true;
 
         owner.interruptable = false;
         owner.attackAnimationOver = false;
-        owner.heavyHitboxGroup.enabled = true;
         owner.playerAnimator.SetTrigger("AttackHeavy"); // Set animation trigger for first attack
         owner.playerAnimator.SetBool("HeavyCharge", true);
-        GlobalState.state.AudioManager.PlayerSwordSwingAudio(owner.transform.position);
 
         _target = owner.FindTarget();
     }
 
     public override void ExitState(PlayerRevamp owner)
     {
+        _isCharging = false;
         owner.heavyHitboxGroup.enabled = false;
         owner.interruptable = false;
         owner.attackAnimationOver = false;
         owner.walkCancel = false;
         owner.playerAnimator.SetBool("HeavyCharge", false);
+
+        if (_previousDamageMultiplier != 0.0f)
+            owner.modifier.DamageMultiplier *= _previousDamageMultiplier;
+        else
+            owner.modifier.DamageMultiplier.Reset();
     }
 
     public override void UpdateState(PlayerRevamp owner)
@@ -930,26 +1069,46 @@ public class HeavyAttackState : State<PlayerRevamp>
         }
         else
         {
-            if (owner.attackStep)
+            if (_isCharging)
             {
-                if (_target != null)
-                    owner.FaceDirection(_target.transform);
-                owner.controller.Move(owner.transform.forward * owner.heavyStepSpeed * Time.deltaTime);
-            }
+                _chargeTimer += Time.deltaTime;
+                if (_chargeTimer.Expired || owner.inputBuffer.Contains(PlayerRevamp.InputType.AttackHeavyReleased))
+                {
+                    _isCharging = false;
+                    owner.playerAnimator.SetBool("HeavyCharge", false);
 
-            if (owner.interruptable && owner.inputBuffer.Contains(PlayerRevamp.InputType.AttackLight))
-            {
-                owner.stateMachine.ChangeState(new LightAttackOneState());
-            }
+                    if (owner.modifier.DamageMultiplier.isModified)
+                        _previousDamageMultiplier = owner.modifier.DamageMultiplier.multiplier;
+                    owner.modifier.DamageMultiplier *= 1f + _chargeTimer.Time / owner.heavyChargeTime * owner.heavyMaxDamageMultiplier;
 
-            if (owner.walkCancel && owner.Input != Vector2.zero)
-            {
-                owner.playerAnimator.SetTrigger("Cancel");
-                owner.stateMachine.ChangeState(new MovementState());
+                    GlobalState.state.AudioManager.PlayerSwordSwingAudio(owner.transform.position);
+                }
             }
-            else if (owner.attackAnimationOver)
+            else
             {
-                owner.stateMachine.ChangeState(new IdleState());
+                owner.heavyHitboxGroup.enabled = true;
+
+                if (owner.attackStep)
+                {
+                    if (_target != null)
+                        owner.FaceDirection(_target.transform);
+                    owner.controller.Move(owner.transform.forward * owner.heavyStepSpeed * Time.deltaTime);
+                }
+
+                if (owner.interruptable && owner.inputBuffer.Contains(PlayerRevamp.InputType.AttackLight))
+                {
+                    owner.stateMachine.ChangeState(new LightAttackOneState());
+                }
+
+                if (owner.walkCancel && owner.Input != Vector2.zero)
+                {
+                    owner.playerAnimator.SetTrigger("Cancel");
+                    owner.stateMachine.ChangeState(new MovementState());
+                }
+                else if (owner.attackAnimationOver)
+                {
+                    owner.stateMachine.ChangeState(new IdleState());
+                }
             }
         }
     }
@@ -996,8 +1155,10 @@ public class ParryState : State<PlayerRevamp>
     {
         _parryTimer = new Timer(owner.parryDuration);
         _parryLagTimer = new Timer(owner.parryLag);
-        owner.playerAnimator.SetBool("IsParrying", true);
+        //owner.isParrying = true; // parry sedan startup
         owner.playerAnimator.SetTrigger("Parry");
+        owner.playerAnimator.SetBool("IsParrying", true);
+        owner.playerAnimator.SetBool("ParryLag", false);
     }
 
     public override void ExitState(PlayerRevamp owner)
@@ -1019,19 +1180,18 @@ public class ParryState : State<PlayerRevamp>
         }
         else
         {
-            if (owner.attackAnimationOver)
+            if (owner.successfulParry)
+            {
+                owner.stateMachine.ChangeState(new SuccessfulParryState());
+            }
+            else if (owner.attackAnimationOver)
             {
                 owner.isParrying = true;
                 _parryTimer.Time += Time.deltaTime;
-                if (owner.successfulParry)
-                {
-                    owner.playerAnimator.SetTrigger("ParrySuccessful");
-                    owner.stateMachine.ChangeState(new IdleState()); // successful parry state, no logic atm
-                }
-                else if (_parryTimer.Expired) // Mathf.Lerp time on successful parry
+
+                if (_parryTimer.Expired)
                 {
                     owner.isParrying = false;
-                    Debug.Log("expired");
                     owner.playerAnimator.SetBool("IsParrying", false);
                     owner.playerAnimator.SetBool("ParryLag", true);
                     _parryLagTimer.Time += Time.deltaTime;
@@ -1042,6 +1202,29 @@ public class ParryState : State<PlayerRevamp>
                 }
             }
         }
+    }
+}
+
+public class SuccessfulParryState : State<PlayerRevamp>
+{
+    public override void EnterState(PlayerRevamp owner)
+    {
+        owner.attackAnimationOver = true;
+        owner.inputBuffer.Clear();
+    }
+
+    public override void ExitState(PlayerRevamp owner)
+    {
+        owner.attackAnimationOver = false;
+        owner.playerAnimator.SetBool("IsParrying", false);
+    }
+
+    public override void UpdateState(PlayerRevamp owner)
+    {
+        // parry logic goes here
+        Debug.Log("successful parry state!!!");
+        if (owner.attackAnimationOver)
+            owner.stateMachine.ChangeState(new IdleState());
     }
 }
 

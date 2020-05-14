@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using UnityEditor.Experimental.GraphView;
+//using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem.Interactions;
@@ -53,6 +53,11 @@ public class RangedEnemyAI : BaseAIMovementController
         EnableHitstun(hitbox.hitstunTime);
         base.TakeDamage(hitbox, attacker);
         _fill.SetActive(true);
+    }
+
+    public override void Parried()
+    {
+        UnityEngine.Debug.LogWarning("Parried implementation missing", this);
     }
 
     public void EnableHitstun(float duration)

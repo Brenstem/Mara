@@ -119,13 +119,13 @@ AnimatorStateMachine:
     m_Position: {x: 900, y: -340, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -3585650112195131829}
-    m_Position: {x: 1190, y: -110, z: 0}
+    m_Position: {x: 1220, y: -150, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5254588882637748895}
     m_Position: {x: 1190, y: 350, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4495024704100947644}
-    m_Position: {x: 1190, y: -180, z: 0}
+    m_Position: {x: 1090, y: -150, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6750950466957534220}
     m_Position: {x: 900, y: 290, z: 0}
@@ -143,13 +143,13 @@ AnimatorStateMachine:
     m_Position: {x: 1440, y: 180, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
-  - {fileID: 7917655360490765387}
-  - {fileID: -4824781301619593470}
-  - {fileID: -7740722249648679263}
-  - {fileID: 2318896034401582754}
-  - {fileID: 5336197564445668451}
   - {fileID: 6221456645630096196}
   - {fileID: 6776666360117241496}
+  - {fileID: -7740722249648679263}
+  - {fileID: 7917655360490765387}
+  - {fileID: -4824781301619593470}
+  - {fileID: 2318896034401582754}
+  - {fileID: 5336197564445668451}
   - {fileID: -3358340794965420662}
   - {fileID: -8345327353716172518}
   m_EntryTransitions: []
@@ -954,6 +954,9 @@ AnimatorStateTransition:
   - m_ConditionMode: 2
     m_ConditionEvent: IsParrying
     m_EventTreshold: 0
+  - m_ConditionMode: 1
+    m_ConditionEvent: ParryLag
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: -3585650112195131829}
   m_Solo: 0
@@ -1221,12 +1224,6 @@ AnimatorController:
     m_DefaultBool: 0
     m_Controller: {fileID: 0}
   - m_Name: Parry
-    m_Type: 9
-    m_DefaultFloat: 0
-    m_DefaultInt: 0
-    m_DefaultBool: 0
-    m_Controller: {fileID: 0}
-  - m_Name: ParrySuccessful
     m_Type: 9
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -1530,8 +1527,11 @@ AnimatorStateTransition:
   m_PrefabAsset: {fileID: 0}
   m_Name: 
   m_Conditions:
-  - m_ConditionMode: 1
-    m_ConditionEvent: ParrySuccessful
+  - m_ConditionMode: 2
+    m_ConditionEvent: IsParrying
+    m_EventTreshold: 0
+  - m_ConditionMode: 2
+    m_ConditionEvent: ParryLag
     m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4495024704100947644}
@@ -1539,7 +1539,7 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.25
+  m_TransitionDuration: 0
   m_TransitionOffset: 0
   m_ExitTime: 0
   m_HasExitTime: 0
@@ -1702,14 +1702,14 @@ AnimatorState:
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
   m_Mirror: 0
-  m_SpeedParameterActive: 0
+  m_SpeedParameterActive: 1
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: -8812635216167514445, guid: a0f8d99896df5714bb265fba975c6bf9,
     type: 3}
   m_Tag: 
-  m_SpeedParameter: 
+  m_SpeedParameter: AttackSpeedModifier
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 
@@ -2071,7 +2071,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 5533516018882928935, guid: a0f8d99896df5714bb265fba975c6bf9,
+  m_Motion: {fileID: 7480919960875995772, guid: a0f8d99896df5714bb265fba975c6bf9,
     type: 3}
   m_Tag: 
   m_SpeedParameter: 
