@@ -37,7 +37,7 @@ public class Checkpoint : MonoBehaviour
     {
         if (hitInfo.CompareTag("Player"))
         {
-            hitInfo.GetComponent<PlayerInsanity>().Damage(-_healAmount);
+            hitInfo.GetComponent<PlayerInsanity>().Heal(_healAmount * Time.deltaTime);
         }
     }
 }

@@ -3,42 +3,70 @@ using System.Collections.Generic;
 using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 
-public struct Modifier
+public class Modifier
 {
-    public float multiplier;
-    public bool isModified;
+    public delegate void Modified();
+    public event Modified onModified;
+
+    private float _multiplier;
+    private bool _isModified;
+
+    public float Multiplier 
+    { 
+        get { return _multiplier; } 
+        set 
+        { 
+            _multiplier = value;
+
+            if (_multiplier == 1)
+            {
+                _isModified = false;
+            }
+            else 
+            {
+                _isModified = true;
+
+                if (onModified != null)
+                    onModified();
+            }
+        }
+    }
+    public bool IsModified { get { return _isModified; } }
 
     private const float TOLERANCE = 0.0000000001f;
 
     public Modifier(float multiplier)
     {
-        this.multiplier = multiplier;
+        _multiplier = multiplier;
 
         if (NearlyEquals(multiplier, 1.0f, TOLERANCE))
         {
-            isModified = false;
+            _isModified = false;
         }
         else
         {
-            isModified = true;
+            _isModified = true;
+
+            if (onModified != null)
+                onModified();
         }
     }
 
     public void Reset()
     {
-        multiplier = 1.0f;
-        isModified = false;
+        Multiplier = 1.0f;
+        _isModified = false;
     }
 
     public static float operator *(float value, Modifier modifier)
     {
-        value *= modifier.multiplier;
+        value *= modifier.Multiplier;
         return value;
     }
 
     public static Modifier operator *(Modifier modifier, float value)
     {
-        modifier.multiplier = value;
+        modifier.Multiplier = value;
         return modifier;
     }
 
@@ -71,28 +99,28 @@ public class EntityModifier
     public Modifier MovementSpeedMultiplier
     {
         get { return _movementSpeedMultiplier; }
-        set { _movementSpeedMultiplier.multiplier = value.multiplier; }
+        set { _movementSpeedMultiplier.Multiplier = value.Multiplier; }
     }
 
     private Modifier _hitstunMultiplier = new Modifier(1.0f);
     public Modifier HitstunMultiplier
     {
         get { return _hitstunMultiplier; }
-        set { _hitstunMultiplier.multiplier = value.multiplier; }
+        set { _hitstunMultiplier.Multiplier = value.Multiplier; }
     }
 
     private Modifier _damageMultiplier = new Modifier(1.0f);
     public Modifier DamageMultiplier
     {
         get { return _damageMultiplier; }
-        set { _damageMultiplier.multiplier = value.multiplier; }
+        set { _damageMultiplier.Multiplier = value.Multiplier; }
     }
 
     private Modifier _attackSpeedMultiplier = new Modifier(1.0f);
     public Modifier AttackSpeedMultiplier
     {
         get { return _attackSpeedMultiplier; }
-        set { _attackSpeedMultiplier.multiplier = value.multiplier; }
+        set { _attackSpeedMultiplier.Multiplier = value.Multiplier; }
     }
 
     public bool IsModified
@@ -103,10 +131,10 @@ public class EntityModifier
     public void Reset()
     {
         _modified = false;
-        _movementSpeedMultiplier.multiplier = 1.0f;
-        _hitstunMultiplier.multiplier = 1.0f;
-        _damageMultiplier.multiplier = 1.0f;
-        _attackSpeedMultiplier.multiplier = 1.0f;
+        _movementSpeedMultiplier.Multiplier = 1.0f;
+        _hitstunMultiplier.Multiplier = 1.0f;
+        _damageMultiplier.Multiplier = 1.0f;
+        _attackSpeedMultiplier.Multiplier = 1.0f;
     }
 
     public EntityModifier() 

@@ -11,7 +11,7 @@ public class TutorialUITrigger : MonoBehaviour
 
     void Awake()
     {
-        _player = GlobalState.state.PlayerGameObject;
+        _player = GlobalState.state.Player.gameObject;
         _triggerDetectionLayers = (_triggerDetectionLayers | 1 << _player.gameObject.layer);
     }
 

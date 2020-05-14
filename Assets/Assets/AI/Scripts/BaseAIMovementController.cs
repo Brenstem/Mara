@@ -10,8 +10,10 @@ public abstract class BaseAIMovementController : Entity
 {
     public StateMachine<BaseAIMovementController> stateMachine;
 
-    public delegate void EnemyDead();
+    public delegate void EnemyDead(float amount);
     public static event EnemyDead onEnemyDeath;
+
+    [SerializeField] private float _insanityIncreaseOnDeath;
 
     [SerializeField] public float _aggroRange = 10f;
     [SerializeField] public float _unaggroRange = 20f;
@@ -104,7 +106,7 @@ public abstract class BaseAIMovementController : Entity
 
     public override void KillThis()
     {
-        onEnemyDeath();
+        onEnemyDeath(_insanityIncreaseOnDeath);
     }
 
     public void GenerateNewAttackTimer()
@@ -112,8 +114,6 @@ public abstract class BaseAIMovementController : Entity
         _attackSpeed = _minAttackSpeed;
         _attackSpeed += UnityEngine.Random.Range(0f, _maxAttackSpeedIncrease / 2);
         _attackSpeed += UnityEngine.Random.Range(0f, _maxAttackSpeedIncrease / 2);
-
-        //print(_attackSpeed);
 
         _attackRateTimer = new Timer(_attackSpeed);
     }

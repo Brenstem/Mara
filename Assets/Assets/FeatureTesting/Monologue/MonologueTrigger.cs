@@ -18,7 +18,7 @@ public class MonologueTrigger : MonoBehaviour
     {
         //ändra till singelton sen
         _monologueManager = FindObjectOfType<MonologueManager>();
-        _player = GlobalState.state.PlayerGameObject;
+        _player = GlobalState.state.Player.gameObject;
         _triggerDetectionLayers = (_triggerDetectionLayers | 1 << _player.gameObject.layer);
     }
 
