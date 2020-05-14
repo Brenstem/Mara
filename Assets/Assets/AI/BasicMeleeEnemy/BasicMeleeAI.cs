@@ -24,6 +24,8 @@ public class BasicMeleeAI : BaseAIMovementController
     {
         base.Update();
 
+        print(stateMachine.currentState);
+
         _anim.SetFloat("Blend", _agent.velocity.magnitude);
     }
 
@@ -40,7 +42,7 @@ public class BasicMeleeAI : BaseAIMovementController
 
     public override void TakeDamage(HitboxValues hitbox, Entity attacker)
     {
-        EnableHitstun(hitbox.hitstunTime);
+        EnableHitstun(hitbox.hitstunTime, hitbox.ignoreArmor);
         GlobalState.state.AudioManager.FloatingEnemyHurtAudio(this.transform.position);
         base.TakeDamage(hitbox, attacker);
         _fill.SetActive(true);
@@ -51,12 +53,17 @@ public class BasicMeleeAI : BaseAIMovementController
         Debug.LogWarning("Parried implementation missing", this);
     }
 
-    public void EnableHitstun(float duration)
+    public void EnableHitstun(float duration, bool ignoreArmor)
     {
-        if (duration > 0.0f && _canEnterHitStun)
+        if (duration > 0.0f && ignoreArmor)
         {
-            stateMachine.ChangeState(new MeleeAIHitstunState());
             _hitStunTimer = new Timer(duration);
+            stateMachine.ChangeState(new MeleeAIHitstunState());
+        }
+        else if (duration > 0.0f && _canEnterHitStun)
+        {
+            _hitStunTimer = new Timer(duration);
+            stateMachine.ChangeState(new MeleeAIHitstunState());
         }
     }
 }
@@ -143,7 +150,7 @@ public class BasicMeleeSwingState : State<BaseAIMovementController>
 
         if (owner._animationOver)
         {
-            owner.stateMachine.ChangeState(owner.stateMachine.previousState);
+            owner.stateMachine.ChangeState(new BasicMeleeAttackingState());
         }
     }
 }
@@ -191,7 +198,7 @@ public class MeleeAIHitstunState : State<BaseAIMovementController>
         if (owner.meleeEnemy._hitStunTimer.Expired)
         {
             owner.meleeEnemy._hitStunTimer.Reset();
-            owner.stateMachine.ChangeState(owner.stateMachine.previousState);
+            owner.stateMachine.ChangeState(new BasicMeleeAttackingState());
         }
     }
 }

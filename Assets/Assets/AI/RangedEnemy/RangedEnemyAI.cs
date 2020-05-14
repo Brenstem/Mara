@@ -50,7 +50,7 @@ public class RangedEnemyAI : BaseAIMovementController
 
     public override void TakeDamage(HitboxValues hitbox, Entity attacker)
     {
-        EnableHitstun(hitbox.hitstunTime);
+        EnableHitstun(hitbox.hitstunTime, hitbox.ignoreArmor);
         base.TakeDamage(hitbox, attacker);
         _fill.SetActive(true);
     }
@@ -60,9 +60,14 @@ public class RangedEnemyAI : BaseAIMovementController
         UnityEngine.Debug.LogWarning("Parried implementation missing", this);
     }
 
-    public void EnableHitstun(float duration)
+    public void EnableHitstun(float duration, bool ignoreArmor)
     {
-        if (duration > 0.0f && _canEnterHitStun)
+        if (duration > 0.0f && ignoreArmor)
+        {
+            stateMachine.ChangeState(new RangedAIHitStunState());
+            _hitStunTimer = new Timer(duration);
+        }
+        else if (duration > 0.0f && _canEnterHitStun)
         {
             stateMachine.ChangeState(new RangedAIHitStunState());
             _hitStunTimer = new Timer(duration);
