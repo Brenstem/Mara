@@ -18,7 +18,7 @@ public class PlayerRevamp : Entity
     public Animator cameraAnimator;
     [SerializeField] private Transform _groundCheckPosition;
     [SerializeField] private Cinemachine.CinemachineFreeLook _freeLookCam;
-    [SerializeField] private Cinemachine.CinemachineVirtualCamera _lockonCam;
+    [SerializeField] private Cinemachine.CinemachineFreeLook _lockonCam;
     [SerializeField] private TargetFinder _targetFinder;
     [SerializeField, Range(1, 50)] private int inputBufferSize = 1;
 
@@ -148,6 +148,9 @@ public class PlayerRevamp : Entity
         // Dash
         dashCooldownTimer = new Timer(_dashCooldownTime);
         dashCooldownTimer.Time += _dashCooldownTime;
+
+        // Hitstun
+        _hitstunImmunityTimer = new Timer(hitstunImmunityTime);
 
         /* === INPUT === */
         _playerInput.PlayerControls.Move.performed += performedInput => _input = performedInput.ReadValue<Vector2>();

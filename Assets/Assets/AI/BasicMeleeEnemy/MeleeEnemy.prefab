@@ -99,23 +99,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d28072a81aa1a5a46aa65be825b60182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: {fileID: 7915258470840588278}
   invulerable: 0
+  health: {fileID: 7915258470840588278}
   _aggroRange: 10
   _unaggroRange: 20
-  _turnSpeed: 5
   _targetLayers:
     serializedVersion: 2
     m_Bits: 2359
+  _turnSpeed: 5
   _cyclePathing: 0
   _waitAtPoints: 0
   _waitTime: 0
   _idlePathingPoints: []
   _attackRange: 2
+  _minAttackSpeed: 0
+  _maxAttackSpeedIncrease: 0
+  _usesHitStun: 0
   _anim: {fileID: 0}
-  _fill: {fileID: 5418900163542067587}
-  _useHitStun: 0
   _animationOver: 0
+  _canEnterHitStun: 0
+  _insanityIncreaseOnDeath: 0
+  _fill: {fileID: 5418900163542067587}
 --- !u!1 &4503388721576541945
 GameObject:
   m_ObjectHideFlags: 0

@@ -24,8 +24,6 @@ public class BasicMeleeAI : BaseAIMovementController
     {
         base.Update();
 
-        print(stateMachine.currentState);
-
         _anim.SetFloat("Blend", _agent.velocity.magnitude);
     }
 
