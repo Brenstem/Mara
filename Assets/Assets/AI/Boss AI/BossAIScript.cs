@@ -61,18 +61,23 @@ public class BossAIScript : Entity
 
     //lägga till ranomness på attack speed, kan göra det med 2 randoms för att få en normal distribution
     #region Attack Speed Variables
+    [Header("Attack Speed Variables")]
     [SerializeField] public float minAttackSpeed = 5f;
     [SerializeField] public float attackSpeedIncreaseMax = 5f;
     [SerializeField] public float minAttackCooldown = 1f;
     #endregion
 
     #region Drain Variables
+    [Header("Drain Variables")]
+
     [SerializeField] public float drainRange = 6f;
     [SerializeField] public float drainChargeTime = 7f;
     [SerializeField] public float drainAttackTime = 8f;
     #endregion
 
     #region Dash Variables
+    [Header("Dash Variables")]
+
     [SerializeField] [Range(0, 10)] public float dashChansePerFrame = 0.1f;
     [SerializeField] [Range(0, 100)] public float dashAttackChanse = 20f;
 
@@ -85,11 +90,14 @@ public class BossAIScript : Entity
     #endregion
 
     #region Chasing Variables
+    [Header("Chasing Variables")]
     [SerializeField] public float chasingSpeed = 5f;
     [SerializeField] public float chasingAcceleration = 20f;
     #endregion
 
     #region Misc Variables
+    [Header("Misc Variables")]
+
     [SerializeField] public float aggroRange = 10f;
     [SerializeField] public float defaultTurnSpeed = 5f;
     [SerializeField] public float drainActiveTurnSpeed = 0.1f;
