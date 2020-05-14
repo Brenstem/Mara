@@ -13,8 +13,8 @@ public class ShadowAI : BaseAIMovementController
 
     private void Start()
     {
-        PlayerInsanity.onHallucination += EnableThis;
-        PlayerInsanity.onDisableShadows += DisableThis;
+        // PlayerInsanity.onHallucination += EnableThis;
+        // PlayerInsanity.onDisableShadows += DisableThis;
         stateMachine.ChangeState(new ShadowEnemyIdleState());
         DisableThis();
     }

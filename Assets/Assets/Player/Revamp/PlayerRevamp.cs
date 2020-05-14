@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem.Interactions;
@@ -67,11 +68,6 @@ public class PlayerRevamp : Entity
     [Header("Heavy Attack")]
     public HitboxGroup heavyHitboxGroup;
     public float heavyStepSpeed;
-
-    [Header("Insanity events")]
-    [SerializeField] float _moveSpeedBuffMultiplier = 1.1f;
-    [SerializeField] float _moveSpeedDebuffMultiplier = 0.9f;
-
     #endregion
 
     /* === COMPONENT REFERENCES === */
@@ -157,6 +153,10 @@ public class PlayerRevamp : Entity
         PlayerAnimationEventHandler.onWalkCancel += WalkCancel;
         PlayerAnimationEventHandler.onAttackStep += AttackStep;
         PlayerAnimationEventHandler.onAttackStepEnd += AttackStepEnd;
+
+        /* === MODIFIER EVENTS === */
+        modifier.AttackSpeedMultiplier.onModified += UpdateAttackSpeed;
+        modifier.MovementSpeedMultiplier.onModified += UpdateMoveSpeed;
     }
 
     private void Update()
@@ -179,27 +179,23 @@ public class PlayerRevamp : Entity
         Action(InputType.Idle);
     }
 
-    [HideInInspector] public bool successfulParry;
-    public override void TakeDamage(HitboxValues hitbox, Entity attacker = null)
-    {
-        if (isParrying)
-        {
-            successfulParry = true;
-        }
-        else
-        {
-            hitstunDuration = hitbox.hitstunTime;
-            stateMachine.ChangeState(new HitstunState());
-            health.Damage(hitbox);
-        }
-    }
-
     private void AttackStep() { attackStep = true; }
     private void AttackStepEnd() { attackStep = false; }
     private void IASA() { interruptable = true; }
     private void WalkCancel() { walkCancel = true; }
     private void AnimationOver() {  attackAnimationOver = true; }
     private void Action(InputType type) { inputBuffer.Enqueue(type); }
+
+    private void UpdateMoveSpeed()
+    {
+        maxSpeed = _originalMaxSpeed;
+        maxSpeed *= modifier.MovementSpeedMultiplier;
+    }
+
+    private void UpdateAttackSpeed()
+    {
+        playerAnimator.SetFloat("AttackSpeedModifier", 1.0f * modifier.AttackSpeedMultiplier);
+    }
 
     private void Gravity()
     {
@@ -243,17 +239,6 @@ public class PlayerRevamp : Entity
         }
     }
 
-    public void IncreaseAttackSpeed(float insValueModStart, float multiplier)
-    {
-        float currentInsanity = ((PlayerInsanity)health).CurrentHealth;
-
-        if (currentInsanity > insValueModStart || Modifier.NearlyEquals(currentInsanity, insValueModStart))
-        {
-            playerAnimator.SetFloat("AttackSpeedModifier", 1.0f * multiplier);
-        }
-    }
-
-
     public void IncreaseMoveSpeedOverValue(float insValueModStart, float insValueModEnd, float multiplier)
     {
         float currentInsanity = ((PlayerInsanity)health).CurrentHealth;
@@ -281,31 +266,18 @@ public class PlayerRevamp : Entity
         }
     }
 
-    public void SlowOverValue(float insValueModStart, float insValueModEnd, float multiplier)
+    [HideInInspector] public bool successfulParry;
+    public override void TakeDamage(HitboxValues hitbox, Entity attacker = null)
     {
-        float currentInsanity = ((PlayerInsanity)health).GetInsanityPercentage();
-
-        float range = insValueModEnd - insValueModStart;
-
-        currentInsanity -= insValueModStart;
-
-        if (currentInsanity > 0 || Modifier.NearlyEquals(currentInsanity, 0))
+        if (isParrying)
         {
-            float interpolationValue = Mathf.Clamp(currentInsanity / range, 0, 1);
-
-            float finalMultiplier = Mathf.Lerp(1.0f, multiplier, interpolationValue);
-
-            maxSpeed = _originalMaxSpeed;
-
-            modifier.MovementSpeedMultiplier *= finalMultiplier;
-
-            maxSpeed *= modifier.MovementSpeedMultiplier;
-
+            successfulParry = true;
         }
-        else if (currentInsanity < 0)
+        else
         {
-            modifier.MovementSpeedMultiplier.Reset();
-            maxSpeed *= modifier.MovementSpeedMultiplier;
+            hitstunDuration = hitbox.hitstunTime;
+            stateMachine.ChangeState(new HitstunState());
+            health.Damage(hitbox);
         }
     }
 
