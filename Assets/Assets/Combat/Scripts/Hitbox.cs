@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public struct HitboxValues
 {
     public float damageValue;
     public float hitstunTime;
     public float hitstopTime;
     public bool parryable;
+    public bool ignoreArmor;
 
     public static HitboxValues operator *(HitboxValues h, EntityModifier m)
     {
@@ -27,35 +29,19 @@ public class Hitbox : MonoBehaviour
     [Header("Hitbox stats")]
     [Tooltip("Lower numbers are prioritized"), Range(0, 15)] public int priority;
     public int id;
-    public float damageValue;
-    public float hitstunTime;
-    public float hitstopTime;
-    public bool parryable;
-    [Tooltip("How many seconds to increase the weapons hitstun effect")]
-    [SerializeField] private float hitStunIncrease;
-    [Tooltip("Percentage multiplier for damage value")]
-    [SerializeField] private float damageBuffMultiplier;
     [SerializeField] private Vector3 _size;
     [SerializeField] private Vector3 _offset;
     [SerializeField] private Transform followPoint;
 
-    [HideInInspector] public HitboxValues hitboxValues;
+    public HitboxValues hitboxValues;
 
     private float originalDamageValue;
     private float originalHitStun;
 
     private void Awake()
     {
-        hitboxValues = new HitboxValues()
-        {
-            damageValue = this.damageValue,
-            hitstopTime = this.hitstopTime,
-            hitstunTime = this.hitstunTime,
-            parryable = this.parryable,
-        };
-
-        originalDamageValue = damageValue;
-        originalHitStun = hitstunTime;
+        originalDamageValue = hitboxValues.damageValue;
+        originalHitStun = hitboxValues.hitstunTime;
 
         _parent = transform.parent.GetComponent<HitboxGroup>();
     }

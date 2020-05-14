@@ -268,21 +268,6 @@ public class PlayerRevamp : Entity
         }
     }
 
-    [HideInInspector] public bool successfulParry;
-    public override void TakeDamage(HitboxValues hitbox, Entity attacker = null)
-    {
-        if (isParrying)
-        {
-            successfulParry = true;
-        }
-        else
-        {
-            hitstunDuration = hitbox.hitstunTime;
-            stateMachine.ChangeState(new HitstunState());
-            health.Damage(hitbox);
-        }
-    }
-
     private void Gravity()
     {
         if (useGravity)
@@ -1077,8 +1062,8 @@ public class HeavyAttackState : State<PlayerRevamp>
                     _isCharging = false;
                     owner.playerAnimator.SetBool("HeavyCharge", false);
 
-                    if (owner.modifier.DamageMultiplier.isModified)
-                        _previousDamageMultiplier = owner.modifier.DamageMultiplier.multiplier;
+                    if (owner.modifier.DamageMultiplier.IsModified)
+                        _previousDamageMultiplier = owner.modifier.DamageMultiplier.Multiplier;
                     owner.modifier.DamageMultiplier *= 1f + _chargeTimer.Time / owner.heavyChargeTime * owner.heavyMaxDamageMultiplier;
 
                     GlobalState.state.AudioManager.PlayerSwordSwingAudio(owner.transform.position);
