@@ -442,7 +442,7 @@ public class BossPhaseOneState : State<BossAIScript>
         //owner.MurkyWaterSpiralAbility(10, 6, 2f);
         //owner.MurkyWaterCircleAbility(10, 6);
         //owner.MurkyWaterCircleAbility(10, 1);
-        //owner.MurkyWaterPolygonAbility(5, 4, 2);
+        //owner.MurkyWaterPolygonAbility(5, 6, 2);
 
     }
 
@@ -1058,6 +1058,7 @@ public class BossDeadState : State<BossAIScript>
         owner.bossAnimator.SetBool("deathBool", true);
         owner.GetComponent<HitboxEventHandler>().DisableHitboxes(0);
         owner.GetComponent<HitboxEventHandler>().EndAnim();
+        owner.agent.SetDestination(owner.transform.position);
     }
 
     public override void ExitState(BossAIScript owner)
