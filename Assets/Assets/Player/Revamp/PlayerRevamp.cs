@@ -17,7 +17,7 @@ public class PlayerRevamp : Entity
     public Animator cameraAnimator;
     [SerializeField] private Transform _groundCheckPosition;
     [SerializeField] private Cinemachine.CinemachineFreeLook _freeLookCam;
-    [SerializeField] private Cinemachine.CinemachineFreeLook _lockonCam;
+    [SerializeField] private Cinemachine.CinemachineVirtualCamera _lockonCam;
     [SerializeField] private TargetFinder _targetFinder;
     [SerializeField, Range(1, 50)] private int inputBufferSize = 1;
 
@@ -68,6 +68,8 @@ public class PlayerRevamp : Entity
     [Header("Heavy Attack")]
     public HitboxGroup heavyHitboxGroup;
     public float heavyStepSpeed;
+    public float heavyChargeTime = 2.0f;
+    public float heavyMaxDamageMultiplier = 1.0f;
 
     [Header("Insanity events")]
     [SerializeField] float _moveSpeedBuffMultiplier = 1.1f;
@@ -1030,12 +1032,11 @@ public class HeavyAttackState : State<PlayerRevamp>
     private bool _isCharging;
 
     private float _previousDamageMultiplier;
-    private float _chargeTime = 2.0f;
     private Timer _chargeTimer;
 
     public override void EnterState(PlayerRevamp owner)
     {
-        _chargeTimer = new Timer(_chargeTime);
+        _chargeTimer = new Timer(owner.heavyChargeTime);
         _isCharging = true;
 
         owner.interruptable = false;
@@ -1079,7 +1080,7 @@ public class HeavyAttackState : State<PlayerRevamp>
 
                     if (owner.modifier.DamageMultiplier.isModified)
                         _previousDamageMultiplier = owner.modifier.DamageMultiplier.multiplier;
-                    owner.modifier.DamageMultiplier *= 1f + _chargeTimer.Time;
+                    owner.modifier.DamageMultiplier *= 1f + _chargeTimer.Time / owner.heavyChargeTime * owner.heavyMaxDamageMultiplier;
 
                     GlobalState.state.AudioManager.PlayerSwordSwingAudio(owner.transform.position);
                 }
