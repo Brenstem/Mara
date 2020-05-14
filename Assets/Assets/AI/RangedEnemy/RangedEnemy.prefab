@@ -25,7 +25,7 @@ Transform:
   m_GameObject: {fileID: 598761226229481847}
   m_LocalRotation: {x: 0.00000008195639, y: -0.000000059604645, z: 0.000000044703484,
     w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.002, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8709111070874144534}
@@ -258,7 +258,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 2.3}
+  m_AnchoredPosition: {x: 0, y: 2.877}
   m_SizeDelta: {x: 300, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &4851464302714251395
@@ -367,10 +367,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.28
-  m_Height: 1.14
+  m_Radius: 0.35
+  m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 1.34, z: 0}
+  m_Center: {x: 0, y: 1.16, z: 0}
 --- !u!195 &8713683434502732729
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -381,7 +381,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 1
-  m_Speed: 4
+  m_Speed: 3
   m_Acceleration: 13.77
   avoidancePriority: 50
   m_AngularSpeed: 286.23
@@ -405,7 +405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac2019947aa47dc45b41d13851ab1ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 100
+  _maxHealth: 50
   _healthBar: {fileID: 1714572244285463164}
 --- !u!114 &8915456496256060790
 MonoBehaviour:
@@ -419,10 +419,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3357687673d2c8643bafe76d24faec2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: {fileID: 0}
+  health: {fileID: 443341181197099621}
   invulerable: 0
-  _aggroRange: 10
-  _unaggroRange: 15
+  _aggroRange: 20
+  _unaggroRange: 25
   _turnSpeed: 5
   _targetLayers:
     serializedVersion: 2
@@ -431,7 +431,7 @@ MonoBehaviour:
   _waitAtPoints: 0
   _waitTime: 0
   _idlePathingPoints: []
-  _attackRange: 10
+  _attackRange: 20
   _anim: {fileID: 0}
   _projectile: {fileID: 8366055604816629108, guid: 634054fb0d9b0864c9b35bbdfd9ef739,
     type: 3}
@@ -506,6 +506,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: adf34ba624f6f3549ace6940ab49be95,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.75
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: adf34ba624f6f3549ace6940ab49be95,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.75
+      objectReference: {fileID: 0}
+    - target: {fileID: -4216859302048453862, guid: adf34ba624f6f3549ace6940ab49be95,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.75
       objectReference: {fileID: 0}
     - target: {fileID: -6057140222963153312, guid: adf34ba624f6f3549ace6940ab49be95,
         type: 3}

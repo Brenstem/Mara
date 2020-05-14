@@ -39,16 +39,17 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2778033842384518026}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ef3d454b079a7dd4fa4e70762dc708fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _hitboxEventHandler: {fileID: 0}
+  hitboxEventHandler: {fileID: 0}
   targetLayerMask:
     serializedVersion: 2
-    m_Bits: 4096
+    m_Bits: 2048
   _alreadyHit: []
+  _enabledByDefault: 1
 --- !u!1 &2778033842924246596
 GameObject:
   m_ObjectHideFlags: 0
@@ -59,7 +60,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2778033842924246595}
   - component: {fileID: 2778033842924246593}
-  - component: {fileID: 2778033842924246594}
   m_Layer: 0
   m_Name: WeaponCollider
   m_TagString: Untagged
@@ -97,19 +97,12 @@ MonoBehaviour:
   isHit: []
   priority: 0
   id: 1
-  damageValue: 50
+  damageValue: 25
+  hitstunTime: 0.75
+  hitstopTime: 0.11
   isParryable: 0
-  _size: {x: 0.66, y: 1.27, z: 0.38}
+  hitStunIncrease: 0
+  damageBuffMultiplier: 0
+  _size: {x: 0.25, y: 0.25, z: 0.25}
   _offset: {x: 0, y: 0, z: 0}
---- !u!114 &2778033842924246594
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2778033842924246596}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4f978c1f795c8a24b8a58a517571e0eb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  followPoint: {fileID: 0}
