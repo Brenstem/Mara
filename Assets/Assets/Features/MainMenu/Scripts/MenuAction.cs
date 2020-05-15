@@ -31,10 +31,10 @@ public class MenuAction : MonoBehaviour
         //QualitySettings.SetQualityLevel(qualityIndex);
     }
 
-    public void SetFullscreenMode(int index)
+    public void SetFullscreenMode(bool isFullscreen)
     {
-        Screen.fullScreenMode = (FullScreenMode)index;
-        print(Screen.fullScreenMode);
+        Screen.fullScreen = isFullscreen;
+        print(isFullscreen);
         //QualitySettings.SetQualityLevel(qualityIndex);
     }
 
@@ -45,6 +45,12 @@ public class MenuAction : MonoBehaviour
         #else
          Application.Quit();
         #endif
+    }
+
+    public void SetResolution(int index)
+    {
+        var rr = Screen.resolutions[index];
+        Screen.SetResolution(rr.width, rr.height, Screen.fullScreenMode, rr.refreshRate);
     }
 }
 
