@@ -50,6 +50,10 @@ public class BossAIScript : Entity
 
     [SerializeField] public GameObject murkyWaterPrefab;
 
+    [SerializeField] public GameObject enemyToSpawnPrefab;
+
+    [SerializeField] public GameObject[] enemySpawnList;
+
     [SerializeField] public LayerMask targetLayers;
     [SerializeField] public LayerMask dashCollisionLayers;
 
@@ -129,6 +133,9 @@ public class BossAIScript : Entity
     [NonSerialized] public bool animationEnded;
     [NonSerialized] public bool facePlayerBool = true;
 
+    [NonSerialized] public bool AOEAbilityOver;
+    [NonSerialized] public bool SpawnAbilityOver;
+
     protected new void Awake()
     {
         base.Awake();
@@ -191,8 +198,9 @@ public class BossAIScript : Entity
         return Physics.OverlapBox(transform.TransformPoint(dashCheckOffsetVector), dashCheckBoxSize, Quaternion.LookRotation(dashCheckVector.normalized), dashCollisionLayers).Length <= 0;
     }
 
+    //flytta allt detta till aoe state?
     #region Murky Water Testing (AOE)
-    public void MurkyWaterSpiralAbility(int layers, int poolsPerLayer, float spiralIntensity)
+    public System.Collections.IEnumerator MurkyWaterSpiralAbility(int layers, int poolsPerLayer, float spiralIntensity)
     {
         Vector3 spawnPos = Vector3.forward;
         //float rotationAmount
@@ -202,13 +210,19 @@ public class BossAIScript : Entity
             {
                 spawnPos = Quaternion.AngleAxis(360f / poolsPerLayer + spiralIntensity, Vector3.up) * spawnPos;
                 //print(testVec);
-                SpawnMurkyWater(spawnPos * (i + 1));
+                SpawnMurkyWater(spawnPos * (i + 1), 2.5f);
+                yield return new WaitForSeconds(0.03f);
+                //yield return null;
             }
+            //yield return new WaitForSeconds(0.3f);
         }
+        AOEAbilityOver = true;
+        yield return null;
     }
-    
-    public void MurkyWaterCircleAbility(int layers, int poolsPerLayer)
+
+    public System.Collections.IEnumerator MurkyWaterCircleAbility(int layers, int poolsPerLayer)
     {
+        print("we in here");
         Vector3 spawnPos;
         float poolAmount = 0;
         for (int i = 0; i < layers; i++)
@@ -219,12 +233,16 @@ public class BossAIScript : Entity
             {
                 spawnPos = Quaternion.AngleAxis(360f / poolAmount, Vector3.up) * spawnPos;
                 //print(testVec);
-                SpawnMurkyWater(spawnPos * (i + 1));
+                SpawnMurkyWater(spawnPos * (i + 1), 1.5f);
+                //yield return new WaitForSeconds(0.03f);
             }
+            yield return new WaitForSeconds(0.3f);
         }
+        AOEAbilityOver = true;
+        yield return null;
     }
-    
-    public void MurkyWaterPolygonAbility(int layers, int sides, int poolsPerSide)
+
+    public System.Collections.IEnumerator MurkyWaterPolygonAbility(int layers, int sides, int poolsPerSide)
     {
         Vector3 spawnPos;
         Vector3 currentCornerPos;
@@ -246,20 +264,16 @@ public class BossAIScript : Entity
                 for (int j = 0; j < poolAmount; j++)
                 {
                     SpawnMurkyWater(spawnPos);
+                    yield return new WaitForSeconds(0.03f);
                     spawnPos += cornerToCorner.normalized * (cornerToCorner.magnitude / poolAmount);
                 }
                 currentCornerPos = nextCornerPos;
                 nextCornerPos = Quaternion.AngleAxis(360f / sides, Vector3.up) * nextCornerPos;
             }
         }
+        AOEAbilityOver = true;
+        yield return null;
     }
-
-    //public void drainBeamTest()
-    //{
-    //    Physics.BoxCast(transform.TransformPoint(new Vector3(0f, 1f, 0f)), new Vector3 ()  );
-
-    //}
-
 
     //hur fan ska det funka med olika Y nivå? får typ raycasta upp och ner när den spawnas för att hitta vart marken är och sen flytta den dit och rotera den baserat på normalen eller något, låter jobbigt :(
     public void SpawnMurkyWater(Vector3 spawnPositionOffset, float timeToLive = 0f)
@@ -294,6 +308,31 @@ public class BossAIScript : Entity
     }
     #endregion
 
+    //flytta allt detta till spawn enemy state?
+    #region Spawn Enemy Ability
+    public System.Collections.IEnumerator SpawnEnemyAbility(float distanceFromBoss, GameObject[] enemiesToSpawn)
+    {
+        Vector3 spawnPos;
+        spawnPos = Vector3.forward;
+
+        for (int i = 0; i < enemiesToSpawn.Length; i++)
+        {
+            spawnPos = Quaternion.AngleAxis(360f / enemiesToSpawn.Length, Vector3.up) * spawnPos;
+            SpawnEnemy(spawnPos * distanceFromBoss, enemiesToSpawn[i]);
+            yield return new WaitForSeconds(0.5f);
+        }
+        //lägg till så fienderna aggroar här
+        SpawnAbilityOver = true;
+        yield return null;
+    }
+
+    public void SpawnEnemy(Vector3 spawnPositionOffset, GameObject enemy)
+    {
+        GameObject spawnedEnemy = (GameObject)Instantiate(enemy, transform.TransformPoint(spawnPositionOffset), Quaternion.identity);
+        spawnedEnemy.GetComponent<BaseAIMovementController>()._aggroRange = 30f;
+        spawnedEnemy.GetComponent<BaseAIMovementController>()._unaggroRange = 50f;
+    }
+    #endregion
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
@@ -417,6 +456,9 @@ public class BossPhaseOneState : State<BossAIScript>
     public PhaseOneMeleeAttackOneState phaseOneMeleeAttackOneState;
     public PhaseOneDashState phaseOneDashState;
     public PhaseOneChaseToAttackState phaseOneChaseToAttackState;
+    public PhaseOneAOEAttackState phaseOneAOEAttackState;
+    public PhaseOneSpawnAbilityState phaseOneSpawnAddsAbilityState;
+
     public override void EnterState(BossAIScript owner)
     {
         //fixa detta i konstruktor kanske?
@@ -428,14 +470,19 @@ public class BossPhaseOneState : State<BossAIScript>
         phaseOneDashState = new PhaseOneDashState(owner.dashSpeed, owner.dashDistance, owner.dashLagDurration, owner.dashAcceleration);
         phaseOneChaseToAttackState = new PhaseOneChaseToAttackState();
 
-
         phaseOneChargeDrainAttackState = new PhaseOneChargeDrainAttackState(owner.drainChargeTime);
         phaseOneActiveDrainAttackState = new PhaseOneActiveDrainAttackState(owner.drainAttackTime);
         phaseOneMeleeAttackOneState = new PhaseOneMeleeAttackOneState(owner.meleeRange, owner.drainAttackTime, owner.drainChargeTime);
+        phaseOneAOEAttackState = new PhaseOneAOEAttackState();
+        phaseOneSpawnAddsAbilityState = new PhaseOneSpawnAbilityState();
+
 
         parentScript = owner;
 
         phaseOneStateMashine.ChangeState(phaseOneCombatState);
+
+        //phaseOneStateMashine.ChangeState(phaseOneAOEAttackState);
+        //phaseOneStateMashine.ChangeState(phaseOneSpawnAddsAbilityState);
 
         //spela cool animation :)
 
@@ -443,6 +490,10 @@ public class BossPhaseOneState : State<BossAIScript>
         //owner.MurkyWaterCircleAbility(10, 6);
         //owner.MurkyWaterCircleAbility(10, 1);
         //owner.MurkyWaterPolygonAbility(5, 6, 2);
+
+        //owner.SpawnEnemy( Vector3.forward * 3f, owner.enemyToSpawnPrefab);
+
+        //owner.StartCoroutine(owner.SpawnEnemyAbility(3f, owner.enemySpawnList));
 
     }
 
@@ -458,8 +509,6 @@ public class BossPhaseOneState : State<BossAIScript>
         //{
         //    owner.phaseControllingStateMachine.ChangeState(owner.bossPhaseTwoState);
         //}
-        
-        //kan skapa problem (?)
 
         phaseOneStateMashine.Update();
     }
@@ -551,6 +600,7 @@ public class PhaseOneCombatState : State<BossPhaseOneState>
             //nära nog för att göra melee attacken
             if (_drainAttackRange > Vector3.Distance(_ownerParentScript.transform.position, _ownerParentScript.player.transform.position))
             {
+                //flytta allt som har med dash attack till en egen metod?
                 //vill den dash attacka?
                 if (UnityEngine.Random.Range(0f, 100f) > 100f - _ownerParentScript.dashAttackChanse)
                 {
@@ -977,6 +1027,54 @@ public class PhaseOneActiveDrainAttackState : State<BossPhaseOneState>
             owner.parentScript.FacePlayer();
         }
         if (_timer.Expired)
+        {
+            owner.phaseOneStateMashine.ChangeState(owner.phaseOneCombatState);
+        }
+    }
+}
+
+public class PhaseOneAOEAttackState : State<BossPhaseOneState>
+{
+    public override void EnterState(BossPhaseOneState owner)
+    {
+        owner.parentScript.agent.SetDestination(owner.parentScript.transform.position);
+
+        owner.parentScript.StartCoroutine(owner.parentScript.MurkyWaterCircleAbility(10, 6));
+        //owner.parentScript.StartCoroutine(owner.parentScript.MurkyWaterSpiralAbility(10, 8, 1.5f));
+        //owner.parentScript.StartCoroutine(owner.parentScript.MurkyWaterPolygonAbility(5, 9, 2));
+    }
+
+    public override void ExitState(BossPhaseOneState owner)
+    {
+        owner.parentScript.AOEAbilityOver = false;
+    }
+
+    public override void UpdateState(BossPhaseOneState owner)
+    {
+        if (owner.parentScript.AOEAbilityOver)
+        {
+            owner.phaseOneStateMashine.ChangeState(owner.phaseOneCombatState);
+        }
+    }
+}
+
+public class PhaseOneSpawnAbilityState : State<BossPhaseOneState>
+{
+    public override void EnterState(BossPhaseOneState owner)
+    {
+        owner.parentScript.agent.SetDestination(owner.parentScript.transform.position);
+
+        owner.parentScript.StartCoroutine(owner.parentScript.SpawnEnemyAbility(3f, owner.parentScript.enemySpawnList));
+    }
+
+    public override void ExitState(BossPhaseOneState owner)
+    {
+        owner.parentScript.SpawnAbilityOver = false;
+    }
+
+    public override void UpdateState(BossPhaseOneState owner)
+    {
+        if (owner.parentScript.SpawnAbilityOver)
         {
             owner.phaseOneStateMashine.ChangeState(owner.phaseOneCombatState);
         }
