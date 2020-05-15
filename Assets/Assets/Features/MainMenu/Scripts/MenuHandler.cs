@@ -4,24 +4,11 @@ using UnityEngine;
 
 public class MenuHandler : MonoBehaviour
 {
-    private static MenuHandler _state;
-    public static MenuHandler state
-    {
-        get { return _state; }
-    }
-
     [SerializeField] private GameObject _currentMenu;
 
     private void Awake()
     {
-        if (_state != null && _state != this)
-        {
-            Destroy(this.gameObject);
-        }
-        else
-        {
-            _state = this;
-        }
+
     }
 
     private void Start()

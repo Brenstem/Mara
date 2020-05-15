@@ -282,7 +282,10 @@ public class PlayerRevamp : Entity
             _velocity.y = 0;
         }
 
-        controller.Move(_velocity * Time.deltaTime); // T^2
+        if (_velocity != Vector3.zero)
+        {
+            controller.Move(_velocity * Time.deltaTime); // T^2
+        }
     }
 
     private bool _playedLandingSound;

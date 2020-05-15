@@ -63,19 +63,13 @@ public class LockonFunctionality : MonoBehaviour
         _playerInput.Disable();
         //_movementController.DisableLockon();
     }
-
-    public bool IsVisibleFrom(Renderer renderer, Camera camera)
-    {
-        Plane[] planes = GeometryUtility.CalculateFrustumPlanes(camera);
-        return GeometryUtility.TestPlanesAABB(planes, renderer.bounds);
-    }
-
+    
     void TargetRecognition()
     {
-        _cols = Physics.OverlapSphere(transform.position, _trackRadius, _enemyMask);
-        float _smallestAngle = 180;
         if (!_player.IsLockedOn)
         {
+            _cols = Physics.OverlapSphere(transform.position, _trackRadius, _enemyMask);
+            float _smallestAngle = 180;
             _closestTarget = null;
             _pointOfInterest = null;
             foreach (Collider collider in _cols)

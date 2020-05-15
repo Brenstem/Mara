@@ -16,12 +16,14 @@ public class VirtualCameraInput : MonoBehaviour
     private void Start()
     {
         _camera = GetComponent<CinemachineVirtualCamera>();
-        _lookDelta = _defaultcontrols.PlayerControls.Look.ReadValue<Vector2>();
+        //_defaultcontrols.PlayerControls.Look.performed += ctx => _lookDelta = ctx.ReadValue<Vector2>();
     }
 
     private void Update()
     {
-        print(_defaultcontrols.PlayerControls.Look.triggered);
+        _lookDelta = _defaultcontrols.PlayerControls.Look.ReadValue<Vector2>();
+        if (_lookDelta.magnitude > 1)
+            _lookDelta.Normalize();
         print(_lookDelta);
         _camera.GetCinemachineComponent<CinemachineComposer>().m_TrackedObjectOffset = new Vector3(_lookDelta.x, 0, _lookDelta.y);
     }

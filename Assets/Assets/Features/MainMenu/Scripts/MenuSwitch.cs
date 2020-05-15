@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class MenuSwitch : MonoBehaviour
 {
+    [SerializeField] private MenuHandler _menuHandler;
     [SerializeField] private GameObject _menuSwitchDestination;
+
+    private void Awake()
+    {
+        _menuHandler = GetComponentInParent<MenuHandler>();
+    }
+
     public void OnClick()
     {
-        print("click");
-        MenuHandler.state.ChangeMenu(_menuSwitchDestination);
+        _menuHandler.ChangeMenu(_menuSwitchDestination);
     }
 }
