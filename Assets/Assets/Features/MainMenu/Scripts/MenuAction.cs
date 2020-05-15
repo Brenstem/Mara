@@ -25,9 +25,16 @@ public class MenuAction : MonoBehaviour
         print("Selected option value: " + GetComponent<UnityEngine.UI.Dropdown>().value);
     }
 
-    public void SetQuality(int qualityIndex)
+    public void SetQuality(int index)
     {
-        print(qualityIndex);
+        print(index);
+        //QualitySettings.SetQualityLevel(qualityIndex);
+    }
+
+    public void SetFullscreenMode(int index)
+    {
+        Screen.fullScreenMode = (FullScreenMode)index;
+        print(Screen.fullScreenMode);
         //QualitySettings.SetQualityLevel(qualityIndex);
     }
 
