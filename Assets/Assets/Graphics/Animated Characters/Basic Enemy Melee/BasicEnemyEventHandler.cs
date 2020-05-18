@@ -14,6 +14,7 @@ public class BasicEnemyEventHandler : MonoBehaviour
 
     public void DestroyThis()
     {
+        parentAI.stateMachine.ChangeState(new BaseIdleState()); // Do this to call exitstate on death state before destroying object
         Destroy(this.parentAI.gameObject);
     }
 

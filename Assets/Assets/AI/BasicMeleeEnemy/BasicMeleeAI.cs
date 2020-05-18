@@ -30,8 +30,6 @@ public class BasicMeleeAI : BaseAIMovementController
     /* === PUBLIC FUNCTIONS === */
     public override void KillThis()
     {
-        base.KillThis();
-
         stateMachine.ChangeState(new DeadState());
         _anim.SetBool("Dead", true);
         _agent.SetDestination(transform.position);
