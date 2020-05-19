@@ -8,11 +8,6 @@ using UnityEngine.AI;
 
 public abstract class BaseAIMovementController : Entity
 {
-
-    /* === ENEMY DEATH EVENT === */
-    public delegate void EnemyDead(float amount);
-    public static event EnemyDead onEnemyDeath;
-
     [Header("Aggro")]
     [SerializeField] public float _aggroRange = 10f;
     [SerializeField] public float _unaggroRange = 20f;
@@ -35,15 +30,19 @@ public abstract class BaseAIMovementController : Entity
     [SerializeField] private float _maxAttackSpeedIncrease;
     [SerializeField] public bool _usesHitStun = true;
 
-    private float _attackSpeed;
-    [HideInInspector] public Timer _attackRateTimer;
     [NonSerialized] public GameObject _target;
+    [HideInInspector] public Timer _attackRateTimer;
     [HideInInspector] public Animator _anim;
     [HideInInspector] public bool _animationOver;
     [HideInInspector] public bool _canEnterHitStun;
+    private float _attackSpeed;
+
+    [Header("Insanity increase drop")]
+    [SerializeField] private GameObject _dropPrefab;
+    [SerializeField] private float _insanityIncreaseAmount;
 
     [Header("Temp")]
-    [SerializeField] private float _insanityIncreaseOnDeath;
+    // [SerializeField] private float _insanityIncreaseOnDeath;
 
     [NonSerialized] public BasicMeleeAI meleeEnemy;
     [NonSerialized] public RangedEnemyAI rangedAI;
@@ -104,11 +103,6 @@ public abstract class BaseAIMovementController : Entity
         health.Damage(hitbox);
     }
 
-    public override void KillThis()
-    {
-        onEnemyDeath(_insanityIncreaseOnDeath);
-    }
-
     public void GenerateNewAttackTimer()
     {
         _attackSpeed = _minAttackSpeed;
@@ -116,6 +110,12 @@ public abstract class BaseAIMovementController : Entity
         _attackSpeed += UnityEngine.Random.Range(0f, _maxAttackSpeedIncrease / 2);
 
         _attackRateTimer = new Timer(_attackSpeed);
+    }
+
+    public void OnDeathDrop()
+    {
+        GameObject dropObject = Instantiate(_dropPrefab, this.transform.position + new Vector3(0, 0.5f, 0), this.transform.rotation);
+        dropObject.SendMessage("SetIncrementAmount", _insanityIncreaseAmount);
     }
 }
 
@@ -280,9 +280,12 @@ public class BaseReturnToIdlePosState : State<BaseAIMovementController>
 /* === DEAD STATE === */
 public class DeadState : State<BaseAIMovementController>
 {
-    public override void EnterState(BaseAIMovementController owner) { }
+    public override void EnterState(BaseAIMovementController owner) {  }
 
-    public override void ExitState(BaseAIMovementController owner) { }
+    public override void ExitState(BaseAIMovementController owner)
+    {
+        owner.OnDeathDrop();
+    }
 
     public override void UpdateState(BaseAIMovementController owner) { }
 }

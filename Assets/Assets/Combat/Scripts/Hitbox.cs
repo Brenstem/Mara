@@ -29,11 +29,17 @@ public class Hitbox : MonoBehaviour
     [Header("Hitbox stats")]
     [Tooltip("Lower numbers are prioritized"), Range(0, 15)] public int priority;
     public int id;
+
+    public HitboxValues hitboxValues;
+
+    [Header("Cube Hitbox")]
     [SerializeField] private Vector3 _size;
     [SerializeField] private Vector3 _offset;
     [SerializeField] private Transform followPoint;
 
-    public HitboxValues hitboxValues;
+    [Header("Sphere Hitbox")]
+    [SerializeField] private bool circleCollider;
+    [SerializeField] private float circleRadius;
 
     private float originalDamageValue;
     private float originalHitStun;
@@ -58,7 +64,16 @@ public class Hitbox : MonoBehaviour
         }
         //Lägger in objekt som är i hitboxen i arrayn
         //isHit = Physics.OverlapBox(transform.position + _offset, _size * 0.5f, transform.rotation, _parent.targetLayerMask);
-        isHit = Physics.OverlapBox(transform.TransformPoint(_offset), _size * 0.5f, transform.rotation, _parent.targetLayerMask);
+        if (circleCollider)
+        {
+            isHit = Physics.OverlapSphere(transform.TransformPoint(_offset), circleRadius, _parent.targetLayerMask);
+        }
+        else
+        {
+            isHit = Physics.OverlapBox(transform.TransformPoint(_offset), _size * 0.5f, transform.rotation, _parent.targetLayerMask);
+        }
+
+
         foreach (Collider enemy in isHit)
         {
             if (isHit.Length != 0 && !_parent._alreadyHit.Contains(enemy.gameObject))
@@ -97,7 +112,14 @@ public class Hitbox : MonoBehaviour
                     break;
             }
 
-            Gizmos.DrawWireCube(Vector3.zero, _size);
+            if (circleCollider)
+            {
+                Gizmos.DrawWireSphere(Vector3.zero, circleRadius);
+            }
+            else
+            {
+                Gizmos.DrawWireCube(Vector3.zero, _size);
+            }
         }
     }
 }
