@@ -53,7 +53,7 @@ public class Hitbox : MonoBehaviour
     {
         if (followPoint != null)
         {
-            transform.position = followPoint.position;
+            transform.position = followPoint.position + _offset;
             transform.rotation = followPoint.rotation;
         }
         //Lägger in objekt som är i hitboxen i arrayn
@@ -61,7 +61,7 @@ public class Hitbox : MonoBehaviour
         isHit = Physics.OverlapBox(transform.TransformPoint(_offset), _size * 0.5f, transform.rotation, _parent.targetLayerMask);
         foreach (Collider enemy in isHit)
         {
-            if (isHit.Length != 0 && !_parent._alreadyHit.Contains(enemy.gameObject))
+            if (isHit.Length != 0 && !_parent._alreadyHit.Contains(enemy.gameObject)) // optimera contains så att om den finns så sätts en bool så att den inte behöver kolla igenom hela tiden, utan det är en dynamic algorithm
             {
                 _parent.AddHitbox(this);
             }

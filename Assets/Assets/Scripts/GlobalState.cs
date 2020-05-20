@@ -8,6 +8,9 @@ public class GlobalState : MonoBehaviour
     [Header("Hitstop")]
     [SerializeField, Range(0.0f, 1.0f)] private float _entryTimeFraction = 0.043f;
     [SerializeField, Range(0.0f, 1.0f)] private float _exitTimeFraction = 0.22f;
+    [SerializeField] private float _minHitstopTime;
+    [SerializeField] private float _maxHitstopTime;
+    [SerializeField] private float _maxDamageHitstopThreshold;
 
     [Header("References")]
     [SerializeField] private PlayerRevamp _player;
@@ -94,14 +97,28 @@ public class GlobalState : MonoBehaviour
 
     private bool _hitstopRunning;
 
-    public void HitStop(float duration, HitboxValues values)
+    public void HitStop(HitboxValues values)
     {
-        StartCoroutine(HitStopCoroutine(duration, values));
+        float duration = 0.0f;
+
+        if (values.damageValue >= _maxDamageHitstopThreshold)
+        {
+            duration = _maxHitstopTime;
+        }
+        else
+        {
+            float fraction = values.damageValue / _maxDamageHitstopThreshold;
+            duration = Mathf.Lerp(_minHitstopTime, _maxHitstopTime, fraction >= 1 ? 1.0f : fraction);
+            print(duration);
+        }
+
+        StartCoroutine(HitStopCoroutine(duration));
     }
 
 
-    private IEnumerator HitStopCoroutine(float duration, HitboxValues values)
+    private IEnumerator HitStopCoroutine(float duration)
     {
+
         _hitstopRunning = true;
         CinemachineImpulseManager.Instance.IgnoreTimeScale = true;
         GetComponent<CinemachineImpulseSource>().m_ImpulseDefinition.m_TimeEnvelope.m_DecayTime = duration;
