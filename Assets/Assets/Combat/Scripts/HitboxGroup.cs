@@ -89,10 +89,10 @@ public class HitboxGroup : MonoBehaviour
 
             foreach (Collider enemy in _hitTimes[highestPriorityIndex].isHit)
             {
-                if (enemy != null && !_alreadyHit.Contains(enemy.gameObject) && enemy)
+                if (enemy != null && !_alreadyHit.Contains(enemy.gameObject))
                 {
                     var targetEntity = enemy.gameObject.GetComponent<Entity>();
-                    if (targetEntity != null && !targetEntity.invulerable) // intangible behavior atm, stöd för båda borde finnas! Man blir samt slagen om invun. tar slut medans man blir träffad
+                    if (!targetEntity.invulerable) // intangible behavior atm, stöd för båda borde finnas! Man blir samt slagen om invun. tar slut medans man blir träffad
                     {
                         Hitbox hitbox = _hitTimes[highestPriorityIndex];
                         if (targetEntity == null)
@@ -123,47 +123,37 @@ public class HitboxGroup : MonoBehaviour
 
     private void TakeDamage(Entity target, HitboxValues hitbox)
     {
-        if (!target.invulerable)
+        if (_parentEntity != null && _parentEntity.modifier != null)
+            target.TakeDamage(hitbox * _parentEntity.modifier, _parentEntity);
+        else
+            target.TakeDamage(hitbox, _parentEntity);
+
+        if (hitbox.hitstopTime > 0)
         {
-            if (_parentEntity != null && _parentEntity.modifier != null)
-                target.TakeDamage(hitbox * _parentEntity.modifier, _parentEntity);
-            else
-                target.TakeDamage(hitbox, _parentEntity);
-
-            if (hitbox.hitstopTime > 0)
+            if (_parentEntity != null && _parentEntity.GetType() == typeof(PlayerRevamp)) // if the player is attacking, temporary solution
             {
-                if (_parentEntity != null && _parentEntity.GetType() == typeof(PlayerRevamp)) // if the player is attacking, temporary solution
+                GlobalState.state.HitStop(hitbox);
+            }
+            else
+            {
+                if (hitbox.parryable && target.GetType() == typeof(PlayerRevamp)) // if player is the reciever and is parrying
                 {
-                    HitboxValues h = new HitboxValues()
+                    if (!(target as PlayerRevamp).isParrying)
                     {
-                        damageValue = hitbox.damageValue * -1.0f // damage är negativ
-                    };
-
-                    GlobalState.state.HitStop(hitbox.hitstopTime, h);
-                }
-                else
-                {
-                    if (hitbox.parryable && target.GetType() == typeof(PlayerRevamp)) // if player is the reciever and is parrying
-                    {
-                        if (!(target as PlayerRevamp).isParrying)
-                        {
-                            GlobalState.state.HitStop(hitbox.hitstopTime, hitbox);
-                        }
-                        else
-                        {
-                            // GlobalState.state.HitStop(hitbox.hitstopTime, hitbox); // parry time
-                        }
+                        GlobalState.state.HitStop(hitbox);
                     }
                     else
                     {
-                        GlobalState.state.HitStop(hitbox.hitstopTime, hitbox);
+                        // GlobalState.state.HitStop(hitbox.hitstopTime, hitbox); // parry time
                     }
+                }
+                else
+                {
+                    GlobalState.state.HitStop(hitbox);
                 }
             }
         }
     }
-
-
 
     public void AddHitbox(Hitbox hitbox)
     {

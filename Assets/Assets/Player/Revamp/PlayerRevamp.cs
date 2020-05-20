@@ -71,6 +71,7 @@ public class PlayerRevamp : Entity
     public float heavyStepSpeed;
     public float heavyChargeTime = 2.0f;
     public float heavyMaxDamageMultiplier = 1.0f;
+    public float heavyMaxHitstopMultiplier = 1.0f;
 
     [Header("Action Attack")]
     public HitboxGroup actionHitboxGroup;
@@ -185,6 +186,8 @@ public class PlayerRevamp : Entity
         stateMachine.Update();
         playerAnimator.SetFloat("StrafeDirX", Input.x);
         playerAnimator.SetFloat("StrafeDirY", Input.y);
+
+        print(stateMachine.currentState);
 
         Gravity();
 
@@ -1045,6 +1048,7 @@ public class HeavyAttackState : State<PlayerRevamp>
 
         owner.interruptable = false;
         owner.attackAnimationOver = false;
+        owner.heavyHitboxGroup.enabled = true;
         owner.playerAnimator.SetTrigger("AttackHeavy"); // Set animation trigger for first attack
         owner.playerAnimator.SetBool("HeavyCharge", true);
 
@@ -1058,6 +1062,7 @@ public class HeavyAttackState : State<PlayerRevamp>
         owner.interruptable = false;
         owner.attackAnimationOver = false;
         owner.walkCancel = false;
+        owner.heavyHitboxGroup.enabled = false;
         owner.playerAnimator.SetBool("HeavyCharge", false);
 
         if (_previousDamageMultiplier != 0.0f)
@@ -1091,8 +1096,6 @@ public class HeavyAttackState : State<PlayerRevamp>
             }
             else
             {
-                owner.heavyHitboxGroup.enabled = true;
-
                 if (owner.attackStep)
                 {
                     if (_target != null)
@@ -1102,6 +1105,7 @@ public class HeavyAttackState : State<PlayerRevamp>
 
                 if (owner.interruptable && owner.inputBuffer.Contains(PlayerRevamp.InputType.AttackLight))
                 {
+                    owner.playerAnimator.SetTrigger("AttackLight");
                     owner.stateMachine.ChangeState(new LightAttackOneState());
                 }
 
