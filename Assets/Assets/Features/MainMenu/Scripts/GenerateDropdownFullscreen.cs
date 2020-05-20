@@ -16,13 +16,27 @@ public class GenerateDropdownFullscreen : MonoBehaviour
 
             Resolution[] resolutions = Screen.resolutions;
 
+            int currentIndex = 0;
+            bool incrementIndex = true;
             // Print the resolutions
             foreach (var res in resolutions)
             {
                 options.Add(res.width + "x" + res.height + " : " + res.refreshRate);
+                if (incrementIndex)
+                {
+                    if (Screen.currentResolution.height == res.height &&
+                        Screen.currentResolution.width == res.width &&
+                        Screen.currentResolution.refreshRate == res.refreshRate)
+                    {
+                        incrementIndex = false;
+                    }
+                    currentIndex++;
+                }
+                
             }
 
             _dropdown.AddOptions(options);
+            _dropdown.value = currentIndex;
         }
         else
         {

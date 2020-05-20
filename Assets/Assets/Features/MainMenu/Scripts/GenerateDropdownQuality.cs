@@ -18,6 +18,7 @@ public class GenerateDropdownQuality : MonoBehaviour
                 options.Add(item);
             }
             _dropdown.AddOptions(options);
+            _dropdown.value = QualitySettings.GetQualityLevel();
         }
         else
         {

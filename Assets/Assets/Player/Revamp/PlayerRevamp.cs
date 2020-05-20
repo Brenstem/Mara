@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Interactions;
 
 // alert kan man gå in i när man nyligen har tagit skada inom en viss tid samt när fienden har aggro på en och man är skadad eller whatever
@@ -187,7 +188,7 @@ public class PlayerRevamp : Entity
         playerAnimator.SetFloat("StrafeDirX", Input.x);
         playerAnimator.SetFloat("StrafeDirY", Input.y);
 
-        print(stateMachine.currentState);
+        //print(stateMachine.currentState);
 
         Gravity();
 
