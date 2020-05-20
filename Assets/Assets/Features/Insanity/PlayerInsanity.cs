@@ -41,12 +41,17 @@ public class PlayerInsanity : EntityHealth
     [SerializeField] private int _hitstunBuff;
     [SerializeField] private Range _movespeedRange;
     [SerializeField] private int _damageBuff;
+    [SerializeField] private int _actionAttackDebuff;
 
     [Header("Debuff tier values")]
     [SerializeField] private Range _whispersRange;
     [SerializeField] private Range _chromaticAberrationRange;
     [SerializeField] private Range _hallucinationsRange;
     [SerializeField] private Range _vignetteRange;
+
+    [Header("Temp")]
+    [SerializeField] private Light _playerLight;
+
 
     public override float CurrentHealth
     {
@@ -77,12 +82,13 @@ public class PlayerInsanity : EntityHealth
     private new void Awake()
     {
         base.Awake();
-        BaseAIMovementController.onEnemyDeath += IncreaseMaxInsanity;
         _healTimer = new Timer(0);
     }
 
     protected override void Start()
     {
+        _playerLight.intensity = GetInsanityPercentage();
+
         if (HealthBar != null)
         {
             HealthBar.SetMaxValue(MaxHealth);
@@ -226,6 +232,8 @@ public class PlayerInsanity : EntityHealth
 
     private void ActivateBuffs()
     {
+        _playerLight.intensity = GetInsanityPercentage();
+
         #region Buffs
         float multiplier = 1;
 
@@ -251,6 +259,11 @@ public class PlayerInsanity : EntityHealth
             multiplier = _damageBuffMultiplier;
 
         _player.modifier.DamageMultiplier *= multiplier;
+
+        // Action attack buff
+        _player.actionAttackActive = false;
+        if (Step(_actionAttackDebuff, CurrentHealth) == 1)
+            _player.actionAttackActive = true; 
         #endregion
 
         #region Debuff FX

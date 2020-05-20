@@ -13,10 +13,13 @@ public class GenerateDropdownFullscreen : MonoBehaviour
         {
             _dropdown.ClearOptions();
             List<string> options = new List<string>();
-            
-            foreach (FullScreenMode val in (FullScreenMode[])FullScreenMode.GetValues(typeof(FullScreenMode)))
+
+            Resolution[] resolutions = Screen.resolutions;
+
+            // Print the resolutions
+            foreach (var res in resolutions)
             {
-                options.Add(val.ToString());
+                options.Add(res.width + "x" + res.height + " : " + res.refreshRate);
             }
 
             _dropdown.AddOptions(options);
@@ -25,5 +28,7 @@ public class GenerateDropdownFullscreen : MonoBehaviour
         {
             Debug.LogWarning("Dropdown component is missing!", this);
         }
+
+
     }
 }
