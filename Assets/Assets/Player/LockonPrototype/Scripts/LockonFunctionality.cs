@@ -30,7 +30,17 @@ public class LockonFunctionality : MonoBehaviour
 
     public Transform Target
     {
-        get { return _pointOfInterest; }
+        get
+        {
+            if (!_pointOfInterest)
+            {
+                return null;
+            }
+            else
+            {
+                return _pointOfInterest;
+            }
+        }
     }
 
     private void Awake()
