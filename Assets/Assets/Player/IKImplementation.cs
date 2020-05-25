@@ -63,7 +63,10 @@ public class IKImplementation : MonoBehaviour
                 footPos.y += _distanceToGround;
 
                 _anim.SetIKPosition(AvatarIKGoal.LeftFoot, footPos);
-                _anim.SetIKRotation(AvatarIKGoal.LeftFoot, Quaternion.LookRotation(transform.forward, hit.normal));
+
+                Vector3 slope = new Vector3(hit.normal.y, -hit.normal.x);
+                Quaternion leftFootRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * transform.rotation;
+                _anim.SetIKRotation(AvatarIKGoal.LeftFoot, leftFootRotation);
             }
 
             // Right foot
@@ -78,7 +81,8 @@ public class IKImplementation : MonoBehaviour
                 footPos.y += _distanceToGround;
 
                 _anim.SetIKPosition(AvatarIKGoal.RightFoot, footPos);
-                _anim.SetIKRotation(AvatarIKGoal.RightFoot, Quaternion.LookRotation(transform.forward, hit.normal));    
+                Quaternion rightFootRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * transform.rotation;
+                _anim.SetIKRotation(AvatarIKGoal.RightFoot, rightFootRotation);    
             }
         }
     }

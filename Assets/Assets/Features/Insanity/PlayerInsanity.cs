@@ -87,7 +87,10 @@ public class PlayerInsanity : EntityHealth
 
     protected override void Start()
     {
-        _playerLight.intensity = GetInsanityPercentage();
+        if (_playerLight)
+        {
+            _playerLight.intensity = GetInsanityPercentage();
+        }
 
         if (HealthBar != null)
         {
@@ -232,7 +235,10 @@ public class PlayerInsanity : EntityHealth
 
     private void ActivateBuffs()
     {
-        _playerLight.intensity = GetInsanityPercentage();
+        if (_playerLight)
+        {
+            _playerLight.intensity = GetInsanityPercentage();
+        }
 
         #region Buffs
         float multiplier = 1;
