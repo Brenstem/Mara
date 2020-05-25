@@ -5,9 +5,9 @@ using UnityEngine.InputSystem.Interactions;
 
 public class BasicMeleeAI : BaseAIMovementController
 {
-
     [Header("References")]
     [SerializeField] public GameObject _fill;
+    [SerializeField] public HitboxGroup hitboxGroup;
 
     [HideInInspector] public Timer _hitStunTimer;
 
@@ -128,12 +128,14 @@ public class BasicMeleeSwingState : State<BaseAIMovementController>
 {
     public override void EnterState(BaseAIMovementController owner)
     {
+        owner.meleeEnemy.hitboxGroup.enabled = true;
         owner._anim.SetTrigger("Attack");
         owner._canEnterHitStun = false;
     }
 
     public override void ExitState(BaseAIMovementController owner)
     {
+        owner.meleeEnemy.hitboxGroup.enabled = false;
         owner._animationOver = false;
         owner._canEnterHitStun = owner._usesHitStun;
         owner.GenerateNewAttackTimer();
