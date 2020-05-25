@@ -798,7 +798,8 @@ public class DashingState : State<PlayerRevamp>
 
         if (owner.actionAttackActive)
         {
-            owner.actionHitboxGroup.enabled = true;
+            if (owner.actionHitboxGroup)
+                owner.actionHitboxGroup.enabled = true;
         }
 
         owner.playerAnimator.SetFloat("DashSpeed", owner.dashSpeed / owner.dashAnimationNumerator);
@@ -832,7 +833,9 @@ public class DashingState : State<PlayerRevamp>
     {
         owner.useGravity = true;
         owner.dashPerformed = false;
-        owner.actionHitboxGroup.enabled = false;
+
+        if (owner.actionHitboxGroup)
+            owner.actionHitboxGroup.enabled = false;
 
         if (owner.invulerableWhenDashing)
         {
@@ -1235,6 +1238,7 @@ public class SuccessfulParryState : State<PlayerRevamp>
     public override void EnterState(PlayerRevamp owner)
     {
         owner.attackAnimationOver = true;
+        owner.isParrying = false;
         owner.inputBuffer.Clear();
     }
 
