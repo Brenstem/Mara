@@ -8,10 +8,11 @@ public class GlobalState : MonoBehaviour
     [Header("Hitstop")]
     [SerializeField, Range(0.0f, 1.0f)] private float _entryTimeFraction = 0.043f;
     [SerializeField, Range(0.0f, 1.0f)] private float _exitTimeFraction = 0.22f;
+    /*
     [SerializeField] private float _minHitstopTime;
     [SerializeField] private float _maxHitstopTime;
     [SerializeField] private float _maxDamageHitstopThreshold;
-
+    */
     [Header("References")]
     [SerializeField] private PlayerRevamp _player;
 
@@ -99,8 +100,8 @@ public class GlobalState : MonoBehaviour
 
     public void HitStop(HitboxValues values)
     {
+        /*
         float duration = 0.0f;
-
         if (values.damageValue >= _maxDamageHitstopThreshold)
         {
             duration = _maxHitstopTime;
@@ -111,8 +112,8 @@ public class GlobalState : MonoBehaviour
             duration = Mathf.Lerp(_minHitstopTime, _maxHitstopTime, fraction >= 1 ? 1.0f : fraction);
             print(duration);
         }
-
-        StartCoroutine(HitStopCoroutine(duration));
+        */
+        StartCoroutine(HitStopCoroutine(values.hitstopTime));
     }
 
 
