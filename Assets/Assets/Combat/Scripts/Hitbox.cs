@@ -29,6 +29,7 @@ public class Hitbox : MonoBehaviour
     [Header("Hitbox stats")]
     [Tooltip("Lower numbers are prioritized"), Range(0, 15)] public int priority;
     public int id;
+    public LayerMask targetLayerMask;
 
     public HitboxValues hitboxValues;
 
@@ -62,15 +63,18 @@ public class Hitbox : MonoBehaviour
             transform.position = followPoint.position + _offset;
             transform.rotation = followPoint.rotation;
         }
+
+        LayerMask mask = targetLayerMask == 0 ? _parent.targetLayerMask : targetLayerMask;
+
         //Lägger in objekt som är i hitboxen i arrayn
         //isHit = Physics.OverlapBox(transform.position + _offset, _size * 0.5f, transform.rotation, _parent.targetLayerMask);
         if (circleCollider)
         {
-            isHit = Physics.OverlapSphere(transform.TransformPoint(_offset), circleRadius, _parent.targetLayerMask);
+            isHit = Physics.OverlapSphere(transform.TransformPoint(_offset), circleRadius, mask);
         }
         else
         {
-            isHit = Physics.OverlapBox(transform.TransformPoint(_offset), _size * 0.5f, transform.rotation, _parent.targetLayerMask);
+            isHit = Physics.OverlapBox(transform.TransformPoint(_offset), _size * 0.5f, transform.rotation, mask);
         }
 
 

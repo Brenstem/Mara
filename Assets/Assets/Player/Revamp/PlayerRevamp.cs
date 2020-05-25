@@ -891,6 +891,7 @@ public class LightAttackOneState : State<PlayerRevamp>
 
     public override void EnterState(PlayerRevamp owner)
     {
+        owner.walkCancel = false;
         owner.interruptable = false;
         owner.attackAnimationOver = false;
         owner.light1HitboxGroup.enabled = true;
@@ -977,6 +978,7 @@ public class LightAttackTwoState : State<PlayerRevamp>
 
     public override void EnterState(PlayerRevamp owner)
     {
+        owner.walkCancel = false;
         owner.interruptable = false;
         owner.attackAnimationOver = false;
         owner.light2HitboxGroup.enabled = true;
@@ -1065,6 +1067,7 @@ public class HeavyAttackState : State<PlayerRevamp>
         _chargeTimer = new Timer(owner.heavyChargeTime);
         _isCharging = true;
 
+        owner.walkCancel = false;
         owner.interruptable = false;
         owner.attackAnimationOver = false;
         owner.heavyHitboxGroup.enabled = true;

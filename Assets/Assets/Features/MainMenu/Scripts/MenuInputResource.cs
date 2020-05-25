@@ -5,6 +5,9 @@ using UnityEngine.InputSystem;
 
 public class MenuInputResource : MonoBehaviour
 {
+    public static float cameraSensitivity;
+    public static float lockonCameraSensitivity;
+
     public static PlayerInput _playerInput;
     public static PlayerInput PlayerInput
     {
