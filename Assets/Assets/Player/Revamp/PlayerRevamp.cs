@@ -496,9 +496,12 @@ public class PlayerRevamp : Entity
 
 public class IdleState : State<PlayerRevamp>
 {
+    private float time = 0;
+    private float blend;
+    public float idleBlendDuration = 0.15f;
     public override void EnterState(PlayerRevamp owner)
     {
-
+        blend = owner.playerAnimator.GetFloat("Blend");
     }
 
     public override void ExitState(PlayerRevamp owner)
@@ -515,13 +518,15 @@ public class IdleState : State<PlayerRevamp>
             owner.stateMachine.ChangeState(new MovementState());
         }
 
-        owner.playerAnimator.SetFloat("Blend", owner.Input.magnitude);
+        owner.playerAnimator.SetFloat("Blend", Mathf.Lerp(blend, 0, time / (idleBlendDuration * blend)));
+        time += Time.deltaTime;
 
+        /*
         if (owner.IsLockedOn)
         {
             owner.stateMachine.ChangeState(new IdleAlertState());
         }
-
+        */
         bool inputFound = false;
         foreach (PlayerRevamp.InputType item in owner.inputBuffer)
         {
@@ -570,6 +575,7 @@ public class IdleState : State<PlayerRevamp>
     }
 }
 
+/*
 public class IdleAlertState : State<PlayerRevamp>
 {
     public override void EnterState(PlayerRevamp owner)
@@ -638,10 +644,13 @@ public class IdleAlertState : State<PlayerRevamp>
         }
     }
 }
+*/
 
 public class MovementState : State<PlayerRevamp>
 {
     private bool _isMoving;
+    private float time = 0;
+    public float idleBlendDuration = 0.15f;
 
     public override void EnterState(PlayerRevamp owner) { }
     public override void ExitState(PlayerRevamp owner)
@@ -740,7 +749,13 @@ public class MovementState : State<PlayerRevamp>
                 owner.transform.rotation = Quaternion.LookRotation(resultingDirection);
                 owner.transform.eulerAngles = new Vector3(0, owner.transform.eulerAngles.y, 0); // Limits rotation to the Y-axis
                 Vector3 move = owner.transform.forward * owner.Input.magnitude;                 // Constant forward facing force
-                owner.playerAnimator.SetFloat("Blend", owner.Input.magnitude > 1 ? 1 : owner.Input.magnitude);
+
+
+
+                //owner.playerAnimator.SetFloat("Blend", owner.Input.magnitude > 1 ? 1 : owner.Input.magnitude);
+                float magnitude = owner.Input.magnitude > 1 ? 1 : owner.Input.magnitude;
+                owner.playerAnimator.SetFloat("Blend", Mathf.Lerp(0, magnitude, time / (idleBlendDuration * magnitude)));
+                time += Time.deltaTime;
 
                 //owner.playerAnimator.SetBool("Running", true);
 

@@ -5,38 +5,47 @@ using UnityEngine.InputSystem;
 
 public class MenuInputResource : MonoBehaviour
 {
-    public static PlayerInput playerInput;
-    public static Dictionary<System.Guid, string> overrides;
-
-    private void Awake()
+    public static PlayerInput _playerInput;
+    public static PlayerInput PlayerInput
     {
-        playerInput = new PlayerInput();
+        get
+        {
+            if (_playerInput == null)
+            {
+                _playerInput = new PlayerInput();
+                _playerInput.PlayerControls.Enable();
+            }
+            else if (!_playerInput.PlayerControls.enabled)
+            {
+                _playerInput.PlayerControls.Enable();
+            }
+            return _playerInput;
+        }
     }
 
-    private void OnEnable() { playerInput.PlayerControls.Enable(); }
-    private void OnDisable() { playerInput.PlayerControls.Disable(); }
-
-    public void SaveOverrides()
+    public static void SaveOverrides()
     {
-        overrides = new Dictionary<System.Guid, string>();
-        foreach (var map in playerInput.asset.actionMaps) // https://forum.unity.com/threads/saving-user-bindings.805722/#post-5384310
+        //overrides = new Dictionary<System.Guid, string>();
+        foreach (var map in PlayerInput.asset.actionMaps) // https://forum.unity.com/threads/saving-user-bindings.805722/#post-5384310
         {
             foreach (var binding in map.bindings)
             {
                 if (!string.IsNullOrEmpty(binding.overridePath))
-                    overrides[binding.id] = binding.overridePath;
+                {
+                    //overrides[binding.id] = binding.overridePath;
+
+                    //binding.id.ToByteArray(); // key
+                    // overrides[binding.id] // value
+                }
             }
         }
-
-        foreach (var item in overrides.Values)
-        {
-            print(item);
-        }
+        PlayerInput.PlayerControls.Disable();
     }
 
-    public void LoadOverrides() // temp
+
+    public static void LoadOverrides(ref PlayerInput input, Dictionary<System.Guid, string> overrides) // temp
     {
-        foreach (var map in playerInput.asset.actionMaps)
+        foreach (var map in input.asset.actionMaps)
         {
             var bindings = map.bindings;
             for (var i = 0; i < bindings.Count; ++i)

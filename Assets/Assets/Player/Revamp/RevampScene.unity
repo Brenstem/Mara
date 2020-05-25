@@ -127,6 +127,82 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 486761198}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &201662657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3df29e7cc05fbec4aa43e06ea875565d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 1
+  m_AdvancedMode: 0
+  rotation:
+    m_OverrideState: 0
+    m_Value: 0
+    min: 0
+    max: 360
+  skyIntensityMode:
+    m_OverrideState: 0
+    m_Value: 0
+  exposure:
+    m_OverrideState: 0
+    m_Value: 0
+  multiplier:
+    m_OverrideState: 0
+    m_Value: 1
+    min: 0
+  upperHemisphereLuxValue:
+    m_OverrideState: 0
+    m_Value: 1
+    min: 0
+  desiredLuxValue:
+    m_OverrideState: 0
+    m_Value: 20000
+  updateMode:
+    m_OverrideState: 0
+    m_Value: 0
+  updatePeriod:
+    m_OverrideState: 0
+    m_Value: 0
+    min: 0
+  includeSunInBaking:
+    m_OverrideState: 0
+    m_Value: 0
+  sunSize:
+    m_OverrideState: 0
+    m_Value: 0.04
+    min: 0
+    max: 1
+  sunSizeConvergence:
+    m_OverrideState: 0
+    m_Value: 5
+    min: 1
+    max: 10
+  atmosphereThickness:
+    m_OverrideState: 0
+    m_Value: 1
+    min: 0
+    max: 5
+  skyTint:
+    m_OverrideState: 0
+    m_Value: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    hdr: 0
+    showAlpha: 1
+    showEyeDropper: 1
+  groundColor:
+    m_OverrideState: 0
+    m_Value: {r: 0.369, g: 0.349, b: 0.341, a: 1}
+    hdr: 0
+    showAlpha: 1
+    showEyeDropper: 1
+  enableSunDisk:
+    m_OverrideState: 0
+    m_Value: 1
 --- !u!1 &286090087
 GameObject:
   m_ObjectHideFlags: 0
@@ -236,15 +312,29 @@ MonoBehaviour:
   isHit: []
   priority: 0
   id: 1
-  _size: {x: 2.63, y: 2.03, z: 1.27}
-  _offset: {x: 0, y: 0, z: 0}
-  followPoint: {fileID: 0}
   hitboxValues:
     damageValue: 0
     hitstunTime: 0
     hitstopTime: 0
     parryable: 0
     ignoreArmor: 0
+  _size: {x: 2.63, y: 2.03, z: 1.27}
+  _offset: {x: 0, y: 0, z: 0}
+  followPoint: {fileID: 0}
+  circleCollider: 0
+  circleRadius: 0
+--- !u!114 &471028576 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7912443774355918656, guid: 0018251b900274d4f82d88118599e2eb,
+    type: 3}
+  m_PrefabInstance: {fileID: 1015217144}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef3d454b079a7dd4fa4e70762dc708fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &481561928
 GameObject:
   m_ObjectHideFlags: 0
@@ -277,7 +367,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Profile: {fileID: 11400000, guid: d4094e955f07d024c9a950368e679e61, type: 2}
   m_StaticLightingSkyUniqueID: 2
-  m_SkySettings: {fileID: 1200270662}
+  m_SkySettings: {fileID: 201662657}
   m_SkySettingsFromProfile: {fileID: 2606652218056383274, guid: d4094e955f07d024c9a950368e679e61,
     type: 2}
 --- !u!114 &481561930
@@ -1575,6 +1665,11 @@ PrefabInstance:
       propertyPath: heavyMaxDamageMultiplier
       value: 50
       objectReference: {fileID: 0}
+    - target: {fileID: 5420518576247655275, guid: 0018251b900274d4f82d88118599e2eb,
+        type: 3}
+      propertyPath: actionHitboxGroup
+      value: 
+      objectReference: {fileID: 471028576}
     - target: {fileID: 5420518576247655279, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: _attackspeedBuff
@@ -1600,6 +1695,16 @@ PrefabInstance:
       propertyPath: _damageBuff
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5420518576247655279, guid: 0018251b900274d4f82d88118599e2eb,
+        type: 3}
+      propertyPath: _actionAttackDebuff
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5420518576247655279, guid: 0018251b900274d4f82d88118599e2eb,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7912443774358412258, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: hitboxValues.damageValue
@@ -1614,6 +1719,36 @@ PrefabInstance:
         type: 3}
       propertyPath: hitboxValues.hitstopTime
       value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7912443773277411501, guid: 0018251b900274d4f82d88118599e2eb,
+        type: 3}
+      propertyPath: hitboxValues.damageValue
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7912443773277411501, guid: 0018251b900274d4f82d88118599e2eb,
+        type: 3}
+      propertyPath: hitboxValues.hitstunTime
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7912443773277411501, guid: 0018251b900274d4f82d88118599e2eb,
+        type: 3}
+      propertyPath: hitboxValues.hitstopTime
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7912443773489342257, guid: 0018251b900274d4f82d88118599e2eb,
+        type: 3}
+      propertyPath: hitboxValues.damageValue
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7912443773489342257, guid: 0018251b900274d4f82d88118599e2eb,
+        type: 3}
+      propertyPath: hitboxValues.hitstunTime
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7912443773489342257, guid: 0018251b900274d4f82d88118599e2eb,
+        type: 3}
+      propertyPath: hitboxValues.hitstopTime
+      value: 0.2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0018251b900274d4f82d88118599e2eb, type: 3}
@@ -1828,82 +1963,6 @@ PrefabInstance:
       objectReference: {fileID: 1015520338}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c1ddd76bcebde9c419b0e0592f49b3cc, type: 3}
---- !u!114 &1200270662
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3df29e7cc05fbec4aa43e06ea875565d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  active: 1
-  m_AdvancedMode: 0
-  rotation:
-    m_OverrideState: 0
-    m_Value: 0
-    min: 0
-    max: 360
-  skyIntensityMode:
-    m_OverrideState: 0
-    m_Value: 0
-  exposure:
-    m_OverrideState: 0
-    m_Value: 0
-  multiplier:
-    m_OverrideState: 0
-    m_Value: 1
-    min: 0
-  upperHemisphereLuxValue:
-    m_OverrideState: 0
-    m_Value: 1
-    min: 0
-  desiredLuxValue:
-    m_OverrideState: 0
-    m_Value: 20000
-  updateMode:
-    m_OverrideState: 0
-    m_Value: 0
-  updatePeriod:
-    m_OverrideState: 0
-    m_Value: 0
-    min: 0
-  includeSunInBaking:
-    m_OverrideState: 0
-    m_Value: 0
-  sunSize:
-    m_OverrideState: 0
-    m_Value: 0.04
-    min: 0
-    max: 1
-  sunSizeConvergence:
-    m_OverrideState: 0
-    m_Value: 5
-    min: 1
-    max: 10
-  atmosphereThickness:
-    m_OverrideState: 0
-    m_Value: 1
-    min: 0
-    max: 5
-  skyTint:
-    m_OverrideState: 0
-    m_Value: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    hdr: 0
-    showAlpha: 1
-    showEyeDropper: 1
-  groundColor:
-    m_OverrideState: 0
-    m_Value: {r: 0.369, g: 0.349, b: 0.341, a: 1}
-    hdr: 0
-    showAlpha: 1
-    showEyeDropper: 1
-  enableSunDisk:
-    m_OverrideState: 0
-    m_Value: 1
 --- !u!1 &1311402485
 GameObject:
   m_ObjectHideFlags: 3
@@ -2107,15 +2166,17 @@ MonoBehaviour:
   isHit: []
   priority: 0
   id: 1
-  _size: {x: 0.73, y: 2.03, z: 1.27}
-  _offset: {x: 0, y: 0, z: 0}
-  followPoint: {fileID: 0}
   hitboxValues:
     damageValue: 0
     hitstunTime: 0
     hitstopTime: 0
     parryable: 0
     ignoreArmor: 0
+  _size: {x: 0.73, y: 2.03, z: 1.27}
+  _offset: {x: 0, y: 0, z: 0}
+  followPoint: {fileID: 0}
+  circleCollider: 0
+  circleRadius: 0
 --- !u!1 &1424080314
 GameObject:
   m_ObjectHideFlags: 3
@@ -2970,15 +3031,17 @@ MonoBehaviour:
   isHit: []
   priority: 0
   id: 1
-  _size: {x: 0.73, y: 2.03, z: 1.27}
-  _offset: {x: 0, y: 0, z: 0}
-  followPoint: {fileID: 0}
   hitboxValues:
     damageValue: 0
     hitstunTime: 0
     hitstopTime: 0
     parryable: 0
     ignoreArmor: 0
+  _size: {x: 0.73, y: 2.03, z: 1.27}
+  _offset: {x: 0, y: 0, z: 0}
+  followPoint: {fileID: 0}
+  circleCollider: 0
+  circleRadius: 0
 --- !u!1 &1695323786
 GameObject:
   m_ObjectHideFlags: 3
@@ -5590,6 +5653,8 @@ MonoBehaviour:
   heavyChargeTime: 2
   heavyMaxDamageMultiplier: 1
   heavyMaxHitstopMultiplier: 1
+  actionHitboxGroup: {fileID: 0}
+  actionAttackActive: 0
   _moveSpeedBuffMultiplier: 1.1
   _moveSpeedDebuffMultiplier: 0.9
   pointOfInterest: {fileID: 0}
@@ -5694,6 +5759,7 @@ MonoBehaviour:
     start: 0
     end: 0
   _damageBuff: 0
+  _actionAttackDebuff: 0
   _whispersRange:
     start: 0
     end: 0
@@ -5706,6 +5772,7 @@ MonoBehaviour:
   _vignetteRange:
     start: 0
     end: 0
+  _playerLight: {fileID: 0}
 --- !u!114 &2807758375336863559
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6261,9 +6328,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _entryTimeFraction: 0.05
   _exitTimeFraction: 0.95
-  _minHitstopTime: 0
-  _maxHitstopTime: 0
-  _maxDamageHitstopThreshold: 0
   _player: {fileID: 2807758375336863554}
   _camera: {fileID: 2807758374795413139}
   _audioManager: {fileID: 5790157286833736080}
@@ -9348,15 +9412,17 @@ MonoBehaviour:
   isHit: []
   priority: 0
   id: 1
-  _size: {x: 0.66, y: 1.27, z: 0.38}
-  _offset: {x: 0, y: 0, z: 0}
-  followPoint: {fileID: 7210309623783425081}
   hitboxValues:
     damageValue: 0
     hitstunTime: 0.4
     hitstopTime: 0.4
     parryable: 1
     ignoreArmor: 0
+  _size: {x: 0.66, y: 1.27, z: 0.38}
+  _offset: {x: 0, y: 0, z: 0}
+  followPoint: {fileID: 7210309623783425081}
+  circleCollider: 0
+  circleRadius: 0
 --- !u!4 &7210309623715252914
 Transform:
   m_ObjectHideFlags: 0

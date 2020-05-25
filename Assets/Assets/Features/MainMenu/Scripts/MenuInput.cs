@@ -81,22 +81,22 @@ public class MenuInput : MonoBehaviour
                 switch (inputType)
                 {
                     case InputType.AttackLight:
-                        MenuInputResource.playerInput.PlayerControls.AttackLight.ApplyBindingOverride(index, new InputBinding { overridePath = ctx.control.path });
+                        MenuInputResource.PlayerInput.PlayerControls.AttackLight.ApplyBindingOverride(index, new InputBinding { overridePath = ctx.control.path });
                         break;
                     case InputType.AttackHeavy:
-                        MenuInputResource.playerInput.PlayerControls.AttackHeavy.ApplyBindingOverride(index, new InputBinding { overridePath = ctx.control.path });
+                        MenuInputResource.PlayerInput.PlayerControls.AttackHeavy.ApplyBindingOverride(index, new InputBinding { overridePath = ctx.control.path });
                         break;
                     case InputType.Dash:
-                        MenuInputResource.playerInput.PlayerControls.Dash.ApplyBindingOverride(index, new InputBinding { overridePath = ctx.control.path });
+                        MenuInputResource.PlayerInput.PlayerControls.Dash.ApplyBindingOverride(index, new InputBinding { overridePath = ctx.control.path });
                         break;
                     case InputType.Jump:
-                        MenuInputResource.playerInput.PlayerControls.Jump.ApplyBindingOverride(index, new InputBinding { overridePath = ctx.control.path });
+                        MenuInputResource.PlayerInput.PlayerControls.Jump.ApplyBindingOverride(index, new InputBinding { overridePath = ctx.control.path });
                         break;
                     case InputType.Lockon:
-                        MenuInputResource.playerInput.PlayerControls.Lockon.ApplyBindingOverride(index, new InputBinding { overridePath = ctx.control.path });
+                        MenuInputResource.PlayerInput.PlayerControls.Lockon.ApplyBindingOverride(index, new InputBinding { overridePath = ctx.control.path });
                         break;
                     case InputType.Parry:
-                        MenuInputResource.playerInput.PlayerControls.Parry.ApplyBindingOverride(index, new InputBinding { overridePath = ctx.control.path });
+                        MenuInputResource.PlayerInput.PlayerControls.Parry.ApplyBindingOverride(index, new InputBinding { overridePath = ctx.control.path });
                         break;
                     default:
                         break;
