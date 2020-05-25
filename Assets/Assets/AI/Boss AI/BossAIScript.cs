@@ -31,7 +31,6 @@ public class BossAIScript : Entity
         public float speedIncrese;
     }
 
-    //lägga till en speed change variabel, beroende på hur nära man e desiredDistance
     [Tooltip("Elementen MÅSTE vara i ordnade utifrån Desired Distance Offset (från störst till minst)")]
     [SerializeField] public DesiredDistanceToAngleValues[] desiredDistanceValues;
 
@@ -39,7 +38,7 @@ public class BossAIScript : Entity
     [NonSerialized] public List<float> desiredDistanceAngleValues = new List<float>();
     [NonSerialized] public List<float> desiredDistanceSpeedIncreseValues = new List<float>();
 
-    #region Fas State Machine saker
+    #region Phase State Machine saker
     public StateMachine<BossAIScript> phaseStateMachine;
 
     public PreBossFightState preBossFightState = new PreBossFightState();
@@ -68,7 +67,6 @@ public class BossAIScript : Entity
     [SerializeField] public HitboxGroup meleeAttackHitboxGroup;
     [SerializeField] public HitboxGroup drainAttackHitboxGroup;
 
-    //lägga till ranomness på attack speed, kan göra det med 2 randoms för att få en normal distribution
     #region Attack Speed Variables
     [Header("Attack Speed Variables")]
     [SerializeField] public float minAttackSpeed = 5f;
@@ -109,6 +107,8 @@ public class BossAIScript : Entity
     [Header("AOE Variables")]
 
     [SerializeField] public GameObject murkyWaterPrefab;
+
+    [SerializeField] public float aoeAttackCooldown;
 
     [SerializeField] public int spiralLayers;
     [SerializeField] public int spiralArms;
@@ -367,7 +367,7 @@ public class BossAIScript : Entity
     }
     #endregion
 
-    //flytta allt detta till spawn enemy state?
+    //flytta allt detta till spawn enemy state? flyttat lite
     #region Spawn Enemy Ability
     //vet inte om denna ska användas
     public System.Collections.IEnumerator SpawnEnemyAbility(float distanceFromBoss, GameObject[] enemiesToSpawn)
@@ -386,6 +386,7 @@ public class BossAIScript : Entity
         yield return null;
     }
 
+    //flyttad och funkar
     public void SpawnEnemy(Vector3 spawnPositionOffset, GameObject enemy)
     {
         GameObject spawnedEnemy = (GameObject)Instantiate(enemy, transform.TransformPoint(spawnPositionOffset), Quaternion.identity);
@@ -932,10 +933,10 @@ public class BossPhaseOneState : State<BossAIScript>
     {
         owner.bossCombatState = new BossPhaseOneCombatState(owner.minAttackSpeed, owner.attackSpeedIncreaseMax, owner.minAttackCooldown, owner.meleeRange, owner.drainRange);
 
-        //owner.actionStateMachine.ChangeState(owner.bossCombatState);
+        owner.actionStateMachine.ChangeState(owner.bossCombatState);
 
         //owner.actionStateMachine.ChangeState(owner.aoeAttackState);
-        owner.actionStateMachine.ChangeState(owner.spawnEnemiesAbilityState);
+        //owner.actionStateMachine.ChangeState(owner.spawnEnemiesAbilityState);
     }
 
     public override void ExitState(BossAIScript owner)
@@ -1217,7 +1218,7 @@ public class BossPhaseTwoState : State<BossAIScript>
 
     public override void EnterState(BossAIScript owner)
     {
-        owner.bossCombatState = new BossPhaseTwoCombatState(owner.minAttackSpeed, owner.attackSpeedIncreaseMax, owner.minAttackCooldown, owner.meleeRange, owner.drainRange);
+        owner.bossCombatState = new BossPhaseTwoCombatState(owner.minAttackSpeed, owner.attackSpeedIncreaseMax, owner.minAttackCooldown, owner.meleeRange, owner.drainRange, owner.aoeAttackCooldown);
         //om man vill ändra värden för states gör mad det här
 
         owner.actionStateMachine.ChangeState(owner.bossCombatState);
@@ -1230,22 +1231,27 @@ public class BossPhaseTwoState : State<BossAIScript>
 
     public override void UpdateState(BossAIScript owner)
     {
-        //Debug.Log("nu chillar vi i Phase 2 :)");
+        Debug.Log("nu chillar vi i Phase 2 :)");
     }
 }
 public class BossPhaseTwoCombatState : State<BossAIScript>
 {
-    private Timer _timer;
-    private float _minAttackSpeed;
-    private float _attackSpeedIncreaseMax;
-    private float _attackSpeed;
-    private float _baseMinAttackCooldown;
-    private float _minAttackCooldown;
+    private Timer _meleeAttackTimer;
+    private Timer _AOEAttackTimer;
+
+    private float _aoeAttackCooldown;
+
+
+    private float _minMeleeAttackSpeed;
+    private float _meleeAttackSpeedIncreaseMax;
+    private float _meleeAttackSpeed;
+    private float _baseMinMeleeAttackCooldown;
+    private float _minMeleeAttackCooldown;
+
     private float _meleeAttackRange;
     private float _drainAttackRange;
 
     private Vector3 _destination;
-    //private Vector3 _direction;
     private Vector3 _dashAttackDirection;
     private float _dashAttackAngle;
 
@@ -1253,64 +1259,67 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
 
     private RaycastHit _hit;
 
-    public BossPhaseTwoCombatState(float minAttackSpeed, float attackSpeedIncreaseMax, float minAttackCooldown, float meleeAttackRange, float drainAttackRange)
+    public BossPhaseTwoCombatState(float minAttackSpeed, float attackSpeedIncreaseMax, float minAttackCooldown, float meleeAttackRange, float drainAttackRange, float aoeAttackCooldown)
     {
-        _minAttackSpeed = minAttackSpeed;
-        _attackSpeedIncreaseMax = attackSpeedIncreaseMax / 2;
-        _baseMinAttackCooldown = minAttackCooldown;
+        _minMeleeAttackSpeed = minAttackSpeed;
+        _meleeAttackSpeedIncreaseMax = attackSpeedIncreaseMax / 2;
+        _baseMinMeleeAttackCooldown = minAttackCooldown;
         _meleeAttackRange = meleeAttackRange;
         _drainAttackRange = drainAttackRange;
+        _aoeAttackCooldown = aoeAttackCooldown;
 
-        GenerateNewAttackSpeed();
-        _timer = new Timer(_attackSpeed);
+        GenerateNewMeleeAttackSpeed();
+        _meleeAttackTimer = new Timer(_meleeAttackSpeed);
+
+        _AOEAttackTimer = new Timer(_aoeAttackCooldown);
     }
 
     public override void EnterState(BossAIScript owner)
     {
-        //Debug.Log("in i PhaseOneCombatState");
-        if (_timer.Expired)
+        if (_meleeAttackTimer.Expired)
         {
-            GenerateNewAttackSpeed();
-            _timer = new Timer(_attackSpeed);
-            _minAttackCooldown = _baseMinAttackCooldown;
+            GenerateNewMeleeAttackSpeed();
+            _meleeAttackTimer = new Timer(_meleeAttackSpeed);
+            _minMeleeAttackCooldown = _baseMinMeleeAttackCooldown;
         }
         else
         {
-            _minAttackCooldown += _timer.Time;
+            _minMeleeAttackCooldown += _meleeAttackTimer.Time;
         }
     }
 
-    private void GenerateNewAttackSpeed()
+    private void GenerateNewMeleeAttackSpeed()
     {
-        _attackSpeed = _minAttackSpeed;
-        _attackSpeed += UnityEngine.Random.Range(0f, _attackSpeedIncreaseMax);
-        _attackSpeed += UnityEngine.Random.Range(0f, _attackSpeedIncreaseMax);
+        _meleeAttackSpeed = _minMeleeAttackSpeed;
+        _meleeAttackSpeed += UnityEngine.Random.Range(0f, _meleeAttackSpeedIncreaseMax);
+        _meleeAttackSpeed += UnityEngine.Random.Range(0f, _meleeAttackSpeedIncreaseMax);
     }
 
     public override void ExitState(BossAIScript owner)
     {
-        //Debug.Log("hej då PhaseOneCombatState");
         owner.agent.SetDestination(owner.transform.position);
     }
 
     //tycker synd om er om ni behöver kolla i denna update (:
     public override void UpdateState(BossAIScript owner)
     {
-        //Debug.Log("it work i think?");
         owner.FacePlayer();
 
-        _timer.Time += Time.deltaTime;
+        _meleeAttackTimer.Time += Time.deltaTime;
+        _AOEAttackTimer.Time += Time.deltaTime;
 
-        //kanske borde dela upp detta i olika movement states pga animationer men vet inte om det behövs
-
-        //kolla om spelaren är nära nog att slå
-        if (_timer.Time > _minAttackCooldown && _meleeAttackRange > Vector3.Distance(owner.transform.position, owner.player.transform.position))
+        if (_AOEAttackTimer.Expired)
         {
-            //kanske göra AOE attack här för att tvinga iväg spelaren?
+            _AOEAttackTimer = new Timer(_aoeAttackCooldown);
+            owner.actionStateMachine.ChangeState(owner.aoeAttackState);
+        }
+        //kolla om spelaren är nära nog att slå
+        else if (_meleeAttackTimer.Time > _minMeleeAttackCooldown && _meleeAttackRange > Vector3.Distance(owner.transform.position, owner.player.transform.position))
+        {
             owner.actionStateMachine.ChangeState(owner.meleeAttackOneState);
         }
         //kolla om man ska attackera
-        else if (_timer.Expired && _timer.Time > _minAttackCooldown)
+        else if (_meleeAttackTimer.Expired && _meleeAttackTimer.Time > _minMeleeAttackCooldown)
         {
             //nära nog för att göra melee attacken
             if (_drainAttackRange > Vector3.Distance(owner.transform.position, owner.player.transform.position))
@@ -1331,6 +1340,7 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
             }
         }
         //idle movement
+        //kanske borde dela upp detta i olika movement states pga animationer men vet inte om det behövs
         else
         {
             //flytta till fixed uppdate (kanske)
@@ -1342,7 +1352,7 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
                 //gör så att den byter mellan att gå höger och vänster
                 int strafeSign = 0;
 
-                if (_timer.Ratio > 0.5f)
+                if (_meleeAttackTimer.Ratio > 0.5f)
                 {
                     strafeSign = -1;
                 }
@@ -1368,7 +1378,7 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
                     }
                 }
 
-                //random dash in combat
+                //random dash in combat (vet inte om detta ska vara med)
                 if (UnityEngine.Random.Range(0f, 100f) > 100f - owner.dashChansePerFrame)
                 {
                     if (owner.CheckDashPath(owner.movementDirection))

@@ -1306,7 +1306,7 @@ PrefabInstance:
     - target: {fileID: 7694847546053077630, guid: c5358eddfcf88294eac46262dcd5fb64,
         type: 3}
       propertyPath: phaseTwoTransitionHP
-      value: 0.5
+      value: 0.955
       objectReference: {fileID: 0}
     - target: {fileID: 7694847546053077630, guid: c5358eddfcf88294eac46262dcd5fb64,
         type: 3}
@@ -1362,6 +1362,11 @@ PrefabInstance:
         type: 3}
       propertyPath: spawnAbilityCastTime
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7694847546053077630, guid: c5358eddfcf88294eac46262dcd5fb64,
+        type: 3}
+      propertyPath: aoeAttackCooldown
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 1866876205393537901, guid: c5358eddfcf88294eac46262dcd5fb64,
         type: 3}
@@ -3742,6 +3747,7 @@ MonoBehaviour:
   chasingSpeed: 6
   chasingAcceleration: 40
   murkyWaterPrefab: {fileID: 0}
+  aoeAttackCooldown: 0
   spiralLayers: 0
   spiralArms: 0
   spiralIntensity: 0
@@ -4247,17 +4253,17 @@ PrefabInstance:
     - target: {fileID: 5420518576761327287, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.00000047683716
       objectReference: {fileID: 0}
     - target: {fileID: 5420518576761327287, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.000000029802322
       objectReference: {fileID: 0}
     - target: {fileID: 5420518576761327287, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.00000011920929
       objectReference: {fileID: 0}
     - target: {fileID: 5420518576337565886, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
@@ -4297,17 +4303,17 @@ PrefabInstance:
     - target: {fileID: 5420518577412540099, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0000004714425
+      value: -0.0000028286547
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577412540099, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.00000007038909
+      value: 0.00000042233455
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577412540099, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0000000126911175
+      value: 0.000000076146534
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0018251b900274d4f82d88118599e2eb, type: 3}
