@@ -112,6 +112,15 @@ public abstract class BaseAIMovementController : Entity
         _attackRateTimer = new Timer(_attackSpeed);
     }
 
+    public void GenerateNewAttackTimer(float minSpeedIncrease, float maxSpeedIncrease)
+    {
+        _attackSpeed = minSpeedIncrease;
+        _attackSpeed += UnityEngine.Random.Range(0f, maxSpeedIncrease / 2);
+        _attackSpeed += UnityEngine.Random.Range(0f, maxSpeedIncrease / 2);
+
+        _attackRateTimer = new Timer(_attackSpeed);
+    }
+
     public void OnDeathDrop()
     {
         GameObject dropObject = Instantiate(_dropPrefab, this.transform.position + new Vector3(0, 0.5f, 0), this.transform.rotation);
