@@ -63,18 +63,7 @@ public class BossAIScript : Entity
     public SpawnEnemiesAbilityState spawnEnemiesAbilityState;
     #endregion
 
-
     [SerializeField] public GameObject _fill;
-
-    
-    [SerializeField] public GameObject enemyToSpawnPrefab;
-    [SerializeField] public GameObject[] enemySpawnList;
-
-    [SerializeField] public LayerMask targetLayers;
-    [SerializeField] public LayerMask dashCollisionLayers;
-
-    //galet nog är alla variabler som heter test något, inte planerat att vara permanenta
-    [SerializeField] [Range(0, 1)] public float phaseTwoTransitionHP = 0.5f;
 
     [SerializeField] public HitboxGroup meleeAttackHitboxGroup;
     [SerializeField] public HitboxGroup drainAttackHitboxGroup;
@@ -127,11 +116,29 @@ public class BossAIScript : Entity
     [Tooltip("Om denna är 0 försvinner de aldrig")]
     [SerializeField] public float poolTimeToLive;
     [SerializeField] public float spawnTimeBetweenPools; 
-    [SerializeField] public float spaceBetweenLayers; 
+    [SerializeField] public float spaceBetweenLayers;
+    #endregion
+
+    #region Spawn Enemy Variables
+    [Header("Spawn Enemy Variables")]
+
+    [SerializeField] public GameObject enemyToSpawnPrefab;
+    [SerializeField] public float spawnedEnemyAggroRange;
+    [SerializeField] public float spawnedEnemyUnaggroRange;
+    [SerializeField] public float spawnAbilityCastTime;
+
+    //old?
+    [SerializeField] public GameObject[] enemySpawnList;
+
     #endregion
 
     #region Misc Variables
     [Header("Misc Variables")]
+
+    [SerializeField] public LayerMask targetLayers;
+    [SerializeField] public LayerMask dashCollisionLayers;
+
+    [SerializeField] [Range(0, 1)] public float phaseTwoTransitionHP = 0.5f;
 
     [SerializeField] public float aggroRange = 10f;
     [SerializeField] public float defaultTurnSpeed = 5f;
@@ -164,6 +171,7 @@ public class BossAIScript : Entity
     [NonSerialized] public bool animationEnded;
     [NonSerialized] public bool facePlayerBool = true;
 
+    //old
     [NonSerialized] public bool AOEAbilityOver;
     [NonSerialized] public bool SpawnAbilityOver;
     #endregion
@@ -186,7 +194,7 @@ public class BossAIScript : Entity
         drainAttackChargeState = new DrainAttackChargeState(drainChargeTime);
         drainAttackActiveState = new DrainAttackActiveState(drainAttackTime);
         aoeAttackState = new AOEAttackState(murkyWaterPrefab, spiralLayers, spiralArms, spiralIntensity, poolTimeToLive, spawnTimeBetweenPools, spaceBetweenLayers);
-        spawnEnemiesAbilityState = new SpawnEnemiesAbilityState();
+        spawnEnemiesAbilityState = new SpawnEnemiesAbilityState(enemyToSpawnPrefab, spawnedEnemyAggroRange, spawnedEnemyUnaggroRange, spawnAbilityCastTime);
 
         //borde inte göras såhär at the end of the day men måste göra skit med spelaren då och vet inte om jag får det
         player = GlobalState.state.Player.gameObject;
@@ -361,6 +369,7 @@ public class BossAIScript : Entity
 
     //flytta allt detta till spawn enemy state?
     #region Spawn Enemy Ability
+    //vet inte om denna ska användas
     public System.Collections.IEnumerator SpawnEnemyAbility(float distanceFromBoss, GameObject[] enemiesToSpawn)
     {
         Vector3 spawnPos;
@@ -822,26 +831,58 @@ public class AOEAttackState : State<BossAIScript>
         }
     }
 }
+//vet inte hur den ska funka men så här funkar den nu 
 public class SpawnEnemiesAbilityState : State<BossAIScript>
 {
+    private Timer _timer;
+    private GameObject _enemy;
+    private float _newAggroRange;
+    private float _newUnaggroRange;
+    private float _abilityCastTime;
+
+    public SpawnEnemiesAbilityState(GameObject enemy, float newAggroRange, float newUnaggroRange, float abilityCastTime)
+    {
+        _enemy = enemy;
+        _newAggroRange = newAggroRange;
+        _newUnaggroRange = newUnaggroRange;
+        _abilityCastTime = abilityCastTime;
+    }
+
     public override void EnterState(BossAIScript owner)
     {
         owner.agent.SetDestination(owner.transform.position);
+        _timer = new Timer(_abilityCastTime);
 
-        owner.StartCoroutine(owner.SpawnEnemyAbility(3f, owner.enemySpawnList));
+        SpawnEnemy(owner, Vector3.forward);
+
+        //owner.StartCoroutine(owner.SpawnEnemyAbility(3f, owner.enemySpawnList));
     }
 
     public override void ExitState(BossAIScript owner)
     {
-        owner.SpawnAbilityOver = false;
+        //owner.SpawnAbilityOver = false;
     }
 
     public override void UpdateState(BossAIScript owner)
     {
-        if (owner.SpawnAbilityOver)
+        //if (owner.SpawnAbilityOver)
+        //{
+        //    owner.actionStateMachine.ChangeState(owner.bossCombatState);
+        //}
+        _timer.Time += Time.deltaTime;
+
+        if (_timer.Expired)
         {
             owner.actionStateMachine.ChangeState(owner.bossCombatState);
         }
+
+    }
+    //vet inte hur den ska funka men så här funkar den nu 
+    public void SpawnEnemy(BossAIScript owner, Vector3 spawnPositionOffset)
+    {
+        GameObject spawnedEnemy = UnityEngine.Object.Instantiate(_enemy, owner.transform.TransformPoint(spawnPositionOffset), Quaternion.identity);
+        spawnedEnemy.GetComponent<BaseAIMovementController>()._aggroRange = _newAggroRange;
+        spawnedEnemy.GetComponent<BaseAIMovementController>()._unaggroRange = _newUnaggroRange;
     }
 }
 
@@ -889,13 +930,12 @@ public class BossPhaseOneState : State<BossAIScript>
 {
     public override void EnterState(BossAIScript owner)
     {
-        //owner.actionStateMachine.ChangeState(owner.aoeAttackState);
-        //owner.actionStateMachine.ChangeState(owner.spawnEnemiesAbilityState);
-
         owner.bossCombatState = new BossPhaseOneCombatState(owner.minAttackSpeed, owner.attackSpeedIncreaseMax, owner.minAttackCooldown, owner.meleeRange, owner.drainRange);
 
         //owner.actionStateMachine.ChangeState(owner.bossCombatState);
-        owner.actionStateMachine.ChangeState(owner.aoeAttackState);
+
+        //owner.actionStateMachine.ChangeState(owner.aoeAttackState);
+        owner.actionStateMachine.ChangeState(owner.spawnEnemiesAbilityState);
     }
 
     public override void ExitState(BossAIScript owner)

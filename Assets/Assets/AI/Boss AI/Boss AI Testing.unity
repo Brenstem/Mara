@@ -1296,7 +1296,7 @@ PrefabInstance:
     - target: {fileID: 7694847546053077630, guid: c5358eddfcf88294eac46262dcd5fb64,
         type: 3}
       propertyPath: dashAttackChanse
-      value: 100
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7694847546053077630, guid: c5358eddfcf88294eac46262dcd5fb64,
         type: 3}
@@ -1306,7 +1306,7 @@ PrefabInstance:
     - target: {fileID: 7694847546053077630, guid: c5358eddfcf88294eac46262dcd5fb64,
         type: 3}
       propertyPath: phaseTwoTransitionHP
-      value: 0.509
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7694847546053077630, guid: c5358eddfcf88294eac46262dcd5fb64,
         type: 3}
@@ -1347,6 +1347,21 @@ PrefabInstance:
         type: 3}
       propertyPath: spaceBetweenLayers
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7694847546053077630, guid: c5358eddfcf88294eac46262dcd5fb64,
+        type: 3}
+      propertyPath: spawnedEnemyAggroRange
+      value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7694847546053077630, guid: c5358eddfcf88294eac46262dcd5fb64,
+        type: 3}
+      propertyPath: spawnedEnemyUnaggroRange
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7694847546053077630, guid: c5358eddfcf88294eac46262dcd5fb64,
+        type: 3}
+      propertyPath: spawnAbilityCastTime
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1866876205393537901, guid: c5358eddfcf88294eac46262dcd5fb64,
         type: 3}
@@ -3709,15 +3724,6 @@ MonoBehaviour:
     testP2value3: 0
   desiredDistanceValues: []
   _fill: {fileID: 0}
-  enemyToSpawnPrefab: {fileID: 0}
-  enemySpawnList: []
-  targetLayers:
-    serializedVersion: 2
-    m_Bits: 2359
-  dashCollisionLayers:
-    serializedVersion: 2
-    m_Bits: 311
-  phaseTwoTransitionHP: 0.5
   meleeAttackHitboxGroup: {fileID: 0}
   drainAttackHitboxGroup: {fileID: 0}
   minAttackSpeed: 5
@@ -3742,6 +3748,18 @@ MonoBehaviour:
   poolTimeToLive: 0
   spawnTimeBetweenPools: 0
   spaceBetweenLayers: 0
+  enemyToSpawnPrefab: {fileID: 0}
+  spawnedEnemyAggroRange: 0
+  spawnedEnemyUnaggroRange: 0
+  spawnAbilityCastTime: 0
+  enemySpawnList: []
+  targetLayers:
+    serializedVersion: 2
+    m_Bits: 2359
+  dashCollisionLayers:
+    serializedVersion: 2
+    m_Bits: 311
+  phaseTwoTransitionHP: 0.5
   aggroRange: 10
   defaultTurnSpeed: 5
   drainActiveTurnSpeed: 5
@@ -4229,47 +4247,47 @@ PrefabInstance:
     - target: {fileID: 5420518576761327287, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.00000047683716
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5420518576761327287, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.000000029802322
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5420518576761327287, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.00000011920929
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5420518576337565886, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.00000047683716
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5420518576337565886, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.000000029802322
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5420518576337565886, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.00000011920929
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577660149752, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.00000047683716
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577660149752, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.000000029802322
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577660149752, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.00000011920929
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577468967629, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
@@ -4279,17 +4297,17 @@ PrefabInstance:
     - target: {fileID: 5420518577412540099, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.000000942885
+      value: -0.0000004714425
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577412540099, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.00000014077818
+      value: 0.00000007038909
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577412540099, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.000000025382235
+      value: 0.0000000126911175
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0018251b900274d4f82d88118599e2eb, type: 3}
