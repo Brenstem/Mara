@@ -438,12 +438,15 @@ MonoBehaviour:
   _anim: {fileID: 0}
   _animationOver: 0
   _canEnterHitStun: 0
-  _insanityIncreaseOnDeath: 0
+  _dropPrefab: {fileID: 4130683122775444156, guid: 3ca44147400209e4485ae8ab86c71962,
+    type: 3}
+  _insanityIncreaseAmount: 1
   _projectile: {fileID: 8366055604816629108, guid: 634054fb0d9b0864c9b35bbdfd9ef739,
     type: 3}
   _projectileSpawnPos: {fileID: 3882684762693499996}
   _fill: {fileID: 730838367674231687}
   _firerate: 2
+  _aimAssistDistanceCutOff: 0
   _canTurn: 0
 --- !u!1001 &4669090988226794240
 PrefabInstance:

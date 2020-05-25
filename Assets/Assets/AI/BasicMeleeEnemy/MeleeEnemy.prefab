@@ -118,7 +118,9 @@ MonoBehaviour:
   _anim: {fileID: 0}
   _animationOver: 0
   _canEnterHitStun: 0
-  _insanityIncreaseOnDeath: 2
+  _dropPrefab: {fileID: 4130683122775444156, guid: 3ca44147400209e4485ae8ab86c71962,
+    type: 3}
+  _insanityIncreaseAmount: 1
   _fill: {fileID: 5418900163542067587}
 --- !u!1 &4503388721576541945
 GameObject:
