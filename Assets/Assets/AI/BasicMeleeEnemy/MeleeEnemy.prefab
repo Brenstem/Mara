@@ -122,6 +122,7 @@ MonoBehaviour:
     type: 3}
   _insanityIncreaseAmount: 1
   _fill: {fileID: 5418900163542067587}
+  hitboxGroup: {fileID: 4594331576501799848}
 --- !u!1 &4503388721576541945
 GameObject:
   m_ObjectHideFlags: 0
@@ -563,6 +564,11 @@ PrefabInstance:
       propertyPath: hitboxEventHandler
       value: 
       objectReference: {fileID: 2063459491429104663}
+    - target: {fileID: 2778033842384518024, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
+        type: 3}
+      propertyPath: _enabledByDefault
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2778033842924246593, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
       propertyPath: _size.x
@@ -621,6 +627,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1823912998899003424}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4594331576501799848 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2778033842384518024, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
+    type: 3}
+  m_PrefabInstance: {fileID: 1823912998899003424}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef3d454b079a7dd4fa4e70762dc708fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4594331577027454564 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2778033842924246596, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
