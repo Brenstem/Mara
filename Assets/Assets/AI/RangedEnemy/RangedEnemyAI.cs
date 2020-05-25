@@ -18,6 +18,7 @@ public class RangedEnemyAI : BaseAIMovementController
 
     [Header("Ranged Attack")]
     [SerializeField] private float _firerate;
+    [SerializeField] private float _aimAssistDistanceCutOff;
 
     [HideInInspector] public Timer _hitStunTimer;
     [HideInInspector] public bool _canTurn;
@@ -82,15 +83,26 @@ public class RangedEnemyAI : BaseAIMovementController
 
     public override void FacePlayer()
     {
-        Vector3 targetVelocity = _target.GetComponent<PlayerRevamp>().CurrentDirection * _target.GetComponent<PlayerRevamp>().CurrentSpeed;
-        Vector3 direction;
+        // Only use autoaim if target is a bit away, this prevents the dude from spazzing tf out when player comes too close
 
-        PredictiveAim(_projectileSpawnPos.position, _projectile.GetComponent<ProjectileBehaviour>().Speed, _target.transform.position, targetVelocity, 0, out direction);
+        if (Vector3.Distance(_target.transform.position, transform.position) > _aimAssistDistanceCutOff)
+        {
+            Vector3 targetVelocity = _target.GetComponent<PlayerRevamp>().CurrentDirection * _target.GetComponent<PlayerRevamp>().CurrentSpeed;
+            Vector3 direction;
 
-        direction = direction.normalized;
+            PredictiveAim(_projectileSpawnPos.position, _projectile.GetComponent<ProjectileBehaviour>().Speed, _target.transform.position, targetVelocity, 0, out direction);
 
-        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-        this.transform.rotation = Quaternion.Lerp(this.transform.rotation, lookRotation, Time.deltaTime * _turnSpeed); //ändrat från Slerp till Lerp MVH Måns
+            direction = direction.normalized;
+
+            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+            this.transform.rotation = Quaternion.Lerp(this.transform.rotation, lookRotation, Time.deltaTime * _turnSpeed); //ändrat från Slerp till Lerp MVH Måns
+        }
+        else
+        {
+            Vector3 direction = (_target.transform.position - this.transform.position).normalized;
+            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+            this.transform.rotation = Quaternion.Slerp(this.transform.rotation, lookRotation, Time.deltaTime * _turnSpeed);
+        }
     }
 
     // Full derivation by Kain Shin exists here:
