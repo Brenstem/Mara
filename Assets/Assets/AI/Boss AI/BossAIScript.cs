@@ -39,20 +39,19 @@ public class BossAIScript : Entity
     [NonSerialized] public List<float> desiredDistanceAngleValues = new List<float>();
     [NonSerialized] public List<float> desiredDistanceSpeedIncreseValues = new List<float>();
 
-
+    #region Fas State Machine saker
     public StateMachine<BossAIScript> phaseStateMachine;
 
     public PreBossFightState preBossFightState = new PreBossFightState();
-    //public OldBossPhaseOneState bossPhaseOneState = new OldBossPhaseOneState();
     public BossPhaseOneState bossPhaseOneState = new BossPhaseOneState();
     public BossPhaseTwoState bossPhaseTwoState = new BossPhaseTwoState();
     public BossDeadState bossDeadState = new BossDeadState();
+    #endregion
 
-
+    #region Action State Machine saker
     public StateMachine<BossAIScript> actionStateMachine;
 
     public BossIdleActionState bossIdleActionState;
-    //public BossPhaseOneCombatState bossCombatState;
     public State<BossAIScript> bossCombatState;
     public BossDashState bossDashState;
     public ChaseToAttackState chaseToAttackState;
@@ -62,8 +61,7 @@ public class BossAIScript : Entity
     public DrainAttackActiveState drainAttackActiveState;
     public AOEAttackState aoeAttackState;
     public SpawnEnemiesAbilityState spawnEnemiesAbilityState;
-
-    public BaseAttackState baseAttackState;
+    #endregion
 
 
     [SerializeField] public GameObject _fill;
@@ -124,10 +122,12 @@ public class BossAIScript : Entity
     [SerializeField] public GameObject murkyWaterPrefab;
 
     [SerializeField] public int spiralLayers;
-    [SerializeField] public int poolsPerSpiralLayer;
+    [SerializeField] public int spiralArms;
     [SerializeField] public float spiralIntensity;
+    [Tooltip("Om denna är 0 försvinner de aldrig")]
     [SerializeField] public float poolTimeToLive;
-
+    [SerializeField] public float spawnTimeBetweenPools; 
+    [SerializeField] public float spaceBetweenLayers; 
     #endregion
 
     #region Misc Variables
@@ -185,7 +185,7 @@ public class BossAIScript : Entity
         meleeAttackOneState = new MeleeAttackOneState();
         drainAttackChargeState = new DrainAttackChargeState(drainChargeTime);
         drainAttackActiveState = new DrainAttackActiveState(drainAttackTime);
-        aoeAttackState = new AOEAttackState(murkyWaterPrefab, spiralLayers, poolsPerSpiralLayer, spiralIntensity, poolTimeToLive);
+        aoeAttackState = new AOEAttackState(murkyWaterPrefab, spiralLayers, spiralArms, spiralIntensity, poolTimeToLive, spawnTimeBetweenPools, spaceBetweenLayers);
         spawnEnemiesAbilityState = new SpawnEnemiesAbilityState();
 
         //borde inte göras såhär at the end of the day men måste göra skit med spelaren då och vet inte om jag får det
@@ -246,8 +246,9 @@ public class BossAIScript : Entity
         return Physics.OverlapBox(transform.TransformPoint(dashCheckOffsetVector), dashCheckBoxSize, Quaternion.LookRotation(dashCheckVector.normalized), dashCollisionLayers).Length <= 0;
     }
 
-    //flytta allt detta till aoe state?
+    //flytta allt detta till aoe state? flyttat lite
     #region Murky Water Testing (AOE)
+    //flyttad och funkar
     public System.Collections.IEnumerator MurkyWaterSpiralAbility(int layers, int poolsPerLayer, float spiralIntensity, float timeToLive)
     {
         Vector3 spawnPos = Vector3.forward;
@@ -323,6 +324,7 @@ public class BossAIScript : Entity
         yield return null;
     }
 
+    //flyttad och funkar
     //hur fan ska det funka med olika Y nivå? får typ raycasta upp och ner när den spawnas för att hitta vart marken är och sen flytta den dit och rotera den baserat på normalen eller något, låter jobbigt :(
     public void SpawnMurkyWater(Vector3 spawnPositionOffset, float timeToLive = 0f)
     {
@@ -339,6 +341,7 @@ public class BossAIScript : Entity
         }
     }
 
+    //flyttad och funkar(?)
     //hur fan ska det funka med olika Y nivå? får typ raycasta upp och ner när den spawnas för att hitta vart marken är och sen flytta den dit och rotera den baserat på normalen eller något, låter jobbigt :(
     public void SpawnMurkyWater(float timeToLive = 0f)
     {
@@ -735,29 +738,32 @@ public class AOEAttackState : State<BossAIScript>
     private int _poolsPerLayer;
     private float _spiralIntensity;
     private float _timeToLive;
+    private float _spawnTimeBetweenPools;
+    private float _spaceBetweenLayers;
+
 
     //construktor där man tar in murkyWater objektet?
-    public AOEAttackState(GameObject murkyWaterPrefab, int layers, int poolsPerLayer, float spiralIntensity, float timeToLive)
+    public AOEAttackState(GameObject murkyWaterPrefab, int layers, int poolsPerLayer, float spiralIntensity, float timeToLive, float spawnTimeBetweenPools, float spaceBetweenLayers)
     {
         _murkyWater = murkyWaterPrefab;
         _layers = layers;
         _poolsPerLayer = poolsPerLayer;
         _spiralIntensity = spiralIntensity;
         _timeToLive = timeToLive;
+        _spawnTimeBetweenPools = spawnTimeBetweenPools;
+        _spaceBetweenLayers = spaceBetweenLayers;
     }
 
     public override void EnterState(BossAIScript owner)
     {
-        //ändra till stop?
         owner.agent.SetDestination(owner.transform.position);
-
-
-        Debug.Log("aoe tezt");
 
         //SpawnMurkyWater(owner, Vector3.forward, 5f);
 
+        owner.StartCoroutine(MurkyWaterSpiralAbility(owner));
 
-        owner.StartCoroutine(MurkyWaterSpiralAbility(owner, 10, 8, 1.5f, 0f));
+
+        //owner.StartCoroutine(MurkyWaterSpiralAbility(owner, 10, 8, 1.5f, 2.5f, 0.03f, 1f));
 
         //owner.StartCoroutine(owner.MurkyWaterSpiralAbility(10, 8, 1.5f, 0f));
 
@@ -778,36 +784,38 @@ public class AOEAttackState : State<BossAIScript>
         //}
     }
 
-    public System.Collections.IEnumerator MurkyWaterSpiralAbility(BossAIScript owner, int layers, int poolsPerLayer, float spiralIntensity, float timeToLive)
+    public System.Collections.IEnumerator MurkyWaterSpiralAbility(BossAIScript owner)
     {
         Vector3 spawnPos = Vector3.forward;
-        //float rotationAmount
-        for (int i = 0; i < layers; i++)
+
+        for (int i = 0; i < _layers; i++)
         {
-            for (int j = 0; j < poolsPerLayer; j++)
+            for (int j = 0; j < _poolsPerLayer; j++)
             {
-                spawnPos = Quaternion.AngleAxis(360f / poolsPerLayer + spiralIntensity, Vector3.up) * spawnPos;
-                SpawnMurkyWater(owner, spawnPos * (i + 1), timeToLive);
-                yield return new WaitForSeconds(0.03f);
+                spawnPos = Quaternion.AngleAxis(360f / _poolsPerLayer + _spiralIntensity, Vector3.up) * spawnPos;
+                SpawnMurkyWater(owner, spawnPos * ((i + 1) * _spaceBetweenLayers), _timeToLive);
+                yield return new WaitForSeconds(_spawnTimeBetweenPools);
             }
         }
-        //AOEAbilityOver = true;
         owner.actionStateMachine.ChangeState(owner.bossCombatState);
         yield return null;
     }
 
+    //kanske vill lägga in en funktion som spawnar dem på en sett pos
     public void SpawnMurkyWater(BossAIScript owner, Vector3 spawnPositionOffset, float timeToLive = 0f)
     {
-        GameObject murkyWater = UnityEngine.Object.Instantiate(owner.murkyWaterPrefab, owner.transform.TransformPoint(spawnPositionOffset), Quaternion.identity);
+        //GameObject murkyWater = UnityEngine.Object.Instantiate(owner.murkyWaterPrefab, owner.transform.TransformPoint(spawnPositionOffset), Quaternion.identity);
+        GameObject murkyWater = UnityEngine.Object.Instantiate(_murkyWater, owner.transform.TransformPoint(spawnPositionOffset), Quaternion.identity);
         if (timeToLive > 0.01f)
         {
             murkyWater.GetComponentInChildren<MurkyWaterScript>().timeToLive = timeToLive;
         }
     }
 
+    //vet inte om denna behövs, tror inte den ska användas
     public void SpawnMurkyWater(BossAIScript owner, float timeToLive = 0f)
     {
-        GameObject murkyWater = UnityEngine.Object.Instantiate(owner.murkyWaterPrefab, owner.transform.position, Quaternion.identity);
+        GameObject murkyWater = UnityEngine.Object.Instantiate(_murkyWater, owner.transform.position, Quaternion.identity);
         if (timeToLive > 0.1f)
         {
             murkyWater.GetComponentInChildren<MurkyWaterScript>().timeToLive = timeToLive;
@@ -837,7 +845,10 @@ public class SpawnEnemiesAbilityState : State<BossAIScript>
     }
 }
 
-#region Basic Attack State
+#endregion
+
+#region Base Attack State
+//använder bara denna som en mall för att göra nya states för jag e lat, den borde inte användas
 public class BaseAttackState : State<BossAIScript>
 {
     private float _durration;
@@ -868,7 +879,6 @@ public class BaseAttackState : State<BossAIScript>
         }
     }
 }
-#endregion
 #endregion
 
 //////////////////

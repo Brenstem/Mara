@@ -1308,6 +1308,46 @@ PrefabInstance:
       propertyPath: phaseTwoTransitionHP
       value: 0.509
       objectReference: {fileID: 0}
+    - target: {fileID: 7694847546053077630, guid: c5358eddfcf88294eac46262dcd5fb64,
+        type: 3}
+      propertyPath: spiralLayers
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7694847546053077630, guid: c5358eddfcf88294eac46262dcd5fb64,
+        type: 3}
+      propertyPath: poolsPerSpiralLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7694847546053077630, guid: c5358eddfcf88294eac46262dcd5fb64,
+        type: 3}
+      propertyPath: spiralIntensity
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7694847546053077630, guid: c5358eddfcf88294eac46262dcd5fb64,
+        type: 3}
+      propertyPath: poolTimeToLive
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7694847546053077630, guid: c5358eddfcf88294eac46262dcd5fb64,
+        type: 3}
+      propertyPath: spawnTimeBetweenPools
+      value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 7694847546053077630, guid: c5358eddfcf88294eac46262dcd5fb64,
+        type: 3}
+      propertyPath: spaceBetweenPools
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7694847546053077630, guid: c5358eddfcf88294eac46262dcd5fb64,
+        type: 3}
+      propertyPath: spiralArms
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7694847546053077630, guid: c5358eddfcf88294eac46262dcd5fb64,
+        type: 3}
+      propertyPath: spaceBetweenLayers
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1866876205393537901, guid: c5358eddfcf88294eac46262dcd5fb64,
         type: 3}
       propertyPath: m_Radius
@@ -3669,7 +3709,6 @@ MonoBehaviour:
     testP2value3: 0
   desiredDistanceValues: []
   _fill: {fileID: 0}
-  murkyWaterPrefab: {fileID: 0}
   enemyToSpawnPrefab: {fileID: 0}
   enemySpawnList: []
   targetLayers:
@@ -3696,6 +3735,13 @@ MonoBehaviour:
   maxAngleDashAttackToPlayer: 125.2
   chasingSpeed: 6
   chasingAcceleration: 40
+  murkyWaterPrefab: {fileID: 0}
+  spiralLayers: 0
+  spiralArms: 0
+  spiralIntensity: 0
+  poolTimeToLive: 0
+  spawnTimeBetweenPools: 0
+  spaceBetweenLayers: 0
   aggroRange: 10
   defaultTurnSpeed: 5
   drainActiveTurnSpeed: 5
@@ -4198,32 +4244,32 @@ PrefabInstance:
     - target: {fileID: 5420518576337565886, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.00000047683716
       objectReference: {fileID: 0}
     - target: {fileID: 5420518576337565886, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.000000029802322
       objectReference: {fileID: 0}
     - target: {fileID: 5420518576337565886, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.00000011920929
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577660149752, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.00000047683716
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577660149752, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.000000029802322
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577660149752, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.00000011920929
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577468967629, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
@@ -4233,17 +4279,17 @@ PrefabInstance:
     - target: {fileID: 5420518577412540099, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0000004714425
+      value: -0.000000942885
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577412540099, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.00000007038909
+      value: 0.00000014077818
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577412540099, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0000000126911175
+      value: 0.000000025382235
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0018251b900274d4f82d88118599e2eb, type: 3}
