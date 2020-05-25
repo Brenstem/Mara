@@ -20,6 +20,12 @@ public class RangedEnemyAI : BaseAIMovementController
     [SerializeField] private float _firerate;
     [SerializeField] private float _aimAssistDistanceCutOff;
 
+    [Header("Melee Attack")]
+    [SerializeField] public float _meleeRange;
+    [SerializeField] public HitboxGroup _meleeHitBoxGroup;
+    [SerializeField] public float _minMeleeAttackSpeed;
+    [SerializeField] public float _maxMeleeAttackSpeed;
+
     [HideInInspector] public Timer _hitStunTimer;
     [HideInInspector] public bool _canTurn;
 
@@ -35,6 +41,9 @@ public class RangedEnemyAI : BaseAIMovementController
     protected override void Update()
     {
         base.Update();
+
+        print(stateMachine.currentState);
+
         _anim.SetFloat("Blend", _agent.velocity.magnitude);
     }
 
@@ -244,6 +253,7 @@ public class RangedEnemyAI : BaseAIMovementController
         return Random.Range(0.01f, 0.1f);
     }
 }
+
 /* === IDLE STATE === */
 public class RangedEnemyIdleState : BaseIdleState
 {
@@ -270,6 +280,7 @@ public class RangedEnemyChasingState : BaseChasingState
         base.UpdateState(owner);
     }
 }
+
 /* === ATTACKING STATE === */
 public class RangedEnemyAttackingState : BaseAttackingState
 {
@@ -280,23 +291,29 @@ public class RangedEnemyAttackingState : BaseAttackingState
 
     public override void UpdateState(BaseAIMovementController owner)
     {
-        float range = owner._attackRange;
-
-        if (range < Vector3.Distance(owner._target.transform.position, owner.transform.position))
+        if (owner._attackRange < Vector3.Distance(owner._target.transform.position, owner.transform.position))
         {
             owner.stateMachine.ChangeState(_chasingState);
+        }
+        else if (Vector3.Distance(owner._target.transform.position, owner.transform.position) < owner.rangedAI._meleeRange)
+        {
+            if (owner._attackRateTimer.Expired)
+            {
+                owner.stateMachine.ChangeState(new RangedEnemySwingState());
+            }
         }
 
         owner._attackRateTimer += Time.deltaTime;
 
         owner.rangedAI.FacePlayer();
 
-        if (owner._attackRateTimer.Expired)
+        if (owner._attackRateTimer.Expired && Vector3.Distance(owner._target.transform.position, owner.transform.position) > owner.rangedAI._meleeRange)
         {
             owner.stateMachine.ChangeState(new RangedEnemyFiringState());
         }
     }
 }
+
 /* === FIRING STATE === */
 public class RangedEnemyFiringState : State<BaseAIMovementController>
 {
@@ -326,6 +343,36 @@ public class RangedEnemyFiringState : State<BaseAIMovementController>
         }
     }
 }
+
+/* === SWING STATE === */
+public class RangedEnemySwingState : State<BaseAIMovementController>
+{
+    public override void EnterState(BaseAIMovementController owner)
+    {
+        owner._anim.SetTrigger("Swing");
+        owner._canEnterHitStun = false;
+        owner.rangedAI._meleeHitBoxGroup.enabled = true;
+    }
+
+    public override void ExitState(BaseAIMovementController owner)
+    {
+        owner._animationOver = false;
+        owner._canEnterHitStun = owner._usesHitStun;
+        owner.GenerateNewAttackTimer(owner.rangedAI._minMeleeAttackSpeed, owner.rangedAI._maxMeleeAttackSpeed);
+        owner.rangedAI._meleeHitBoxGroup.enabled = false;
+    }
+
+    public override void UpdateState(BaseAIMovementController owner)
+    {
+        owner.FacePlayer();
+
+        if (owner._animationOver)
+        {
+            owner.stateMachine.ChangeState(new RangedEnemyAttackingState());
+        }
+    }
+}
+
 /* === RETURN TO IDLE STATE === */
 public class RangedEnemyReturnToIdleState : BaseReturnToIdlePosState
 {
@@ -346,6 +393,7 @@ public class RangedEnemyReturnToIdleState : BaseReturnToIdlePosState
         base.ExitState(owner);
     }
 }
+
 /* === HITSTUN STATE === */ 
 public class RangedAIHitStunState : State<BaseAIMovementController>
 {
