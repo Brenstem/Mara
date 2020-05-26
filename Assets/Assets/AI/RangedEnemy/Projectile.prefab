@@ -216,11 +216,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2778033842924246595, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.00551
-      objectReference: {fileID: 0}
     - target: {fileID: 2778033842924246593, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
       propertyPath: hitboxValues.damageValue
@@ -236,12 +231,8 @@ PrefabInstance:
       propertyPath: hitboxValues.hitstopTime
       value: 0.11
       objectReference: {fileID: 0}
-    - target: {fileID: 2778033842924246593, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
-        type: 3}
-      propertyPath: hitboxValues.parryable
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1580157566788852647, guid: d4a7c34f967a3df49a8e3ebb9aa373a5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d4a7c34f967a3df49a8e3ebb9aa373a5, type: 3}
 --- !u!4 &7241626263866510752 stripped
 Transform:

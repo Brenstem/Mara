@@ -5,8 +5,11 @@ using UnityEngine.InputSystem.Interactions;
 
 public class BasicMeleeAI : BaseAIMovementController
 {
+    [Header("Parry")]
+    [SerializeField] private float _hitstunOnParry;
+
     [Header("References")]
-    [SerializeField] public GameObject _fill;
+    [SerializeField] public GameObject _healthBar;
     [SerializeField] public HitboxGroup hitboxGroup;
 
     [HideInInspector] public Timer _hitStunTimer;
@@ -14,7 +17,11 @@ public class BasicMeleeAI : BaseAIMovementController
     /* === UNITY FUNCTIONS === */
     void Start()
     {
-        _fill.SetActive(false);
+        for (int i = 0; i < _healthBar.transform.childCount; i++)
+        {
+            _healthBar.transform.GetChild(i).gameObject.SetActive(false);
+        }
+
         stateMachine.ChangeState(new BasicMeleeIdleState());
         meleeEnemy = this;
         GenerateNewAttackTimer();
@@ -41,12 +48,16 @@ public class BasicMeleeAI : BaseAIMovementController
         EnableHitstun(hitbox.hitstunTime, hitbox.ignoreArmor);
         GlobalState.state.AudioManager.FloatingEnemyHurtAudio(this.transform.position);
         base.TakeDamage(hitbox, attacker);
-        _fill.SetActive(true);
+
+        for (int i = 0; i < _healthBar.transform.childCount; i++)
+        {
+            _healthBar.transform.GetChild(i).gameObject.SetActive(true);
+        }
     }
 
     public override void Parried()
     {
-        EnableHitstun(0.1f, true);
+        EnableHitstun(_hitstunOnParry, true);
         //Debug.LogWarning("Parried implementation missing", this);
     }
 
@@ -169,7 +180,11 @@ public class BasicMeleeReturnToIdleState : BaseReturnToIdlePosState
 
     public override void ExitState(BaseAIMovementController owner)
     {
-        owner.meleeEnemy._fill.SetActive(false);
+        for (int i = 0; i < owner.meleeEnemy._healthBar.transform.childCount; i++)
+        {
+            owner.meleeEnemy._healthBar.transform.GetChild(i).gameObject.SetActive(false);
+        }
+
         base.ExitState(owner);
     }
 
