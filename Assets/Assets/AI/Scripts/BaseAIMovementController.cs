@@ -41,11 +41,9 @@ public abstract class BaseAIMovementController : Entity
     [SerializeField] private GameObject _dropPrefab;
     [SerializeField] private float _insanityIncreaseAmount;
 
-    [Header("Temp")]
-    // [SerializeField] private float _insanityIncreaseOnDeath;
-
     [NonSerialized] public BasicMeleeAI meleeEnemy;
     [NonSerialized] public RangedEnemyAI rangedAI;
+    [NonSerialized] public MylingAI mylingAI;
 
     [HideInInspector] public StateMachine<BaseAIMovementController> stateMachine;
 
@@ -142,7 +140,7 @@ public class BaseIdleState : State<BaseAIMovementController>
 {
     private RaycastHit _hit;
     private int _pathingIndex = 0;
-    protected BaseChasingState _chasingState;
+    protected BaseChasingState _chasingState; // TODO Move these variables to a constructor or something similar
 
     public override void EnterState(BaseAIMovementController owner) { }
 
@@ -217,7 +215,7 @@ public class BaseChasingState : State<BaseAIMovementController>
     {
         float range = owner._attackRange - owner._agent.stoppingDistance;
 
-        Vector3 vectorToPlayer = (owner._target.transform.position - owner.transform.position).normalized * range;
+        Vector3 vectorToPlayer = (owner._target.transform.position - owner.transform.position).normalized * (range - 0.5f);
         Vector3 targetPosition = owner._target.transform.position - vectorToPlayer;
 
         owner._agent.SetDestination(targetPosition);
