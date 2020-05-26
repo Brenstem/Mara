@@ -6,28 +6,34 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class SaveData
 {
-    public static void SavePlayer(PlayerData playerData)
+    public static void Save_Data(Data data)
     {
-        BinaryFormatter bf = new BinaryFormatter();
-        string path = Application.persistentDataPath + "/player.data";
+        if (data.path == null)
+        {
+            Debug.LogError("No path given");
+        }
+        else
+        {
+            BinaryFormatter bf = new BinaryFormatter();
 
-        FileStream stream = new FileStream(path, FileMode.Create);
+            string path = Application.persistentDataPath + "/" + data.path + ".data";
 
-        Debug.Log(GlobalState.state.Player.gameObject.transform.eulerAngles.y);
+            FileStream stream = new FileStream(path, FileMode.Create);
 
-        bf.Serialize(stream, playerData);
-        stream.Close();
+            bf.Serialize(stream, data);
+            stream.Close();
+        }
     }
 
-    public static PlayerData LoadPlayer()
+    public static Data Load_Data(string datapath)
     {
-        string path = Application.persistentDataPath + "/player.data";
+        string path = Application.persistentDataPath +"/"+ datapath + ".data";
         if (File.Exists(path))
         {
             BinaryFormatter bf = new BinaryFormatter();
             FileStream stream = new FileStream(path, FileMode.Open);
 
-            PlayerData data = bf.Deserialize(stream) as PlayerData;
+            Data data = bf.Deserialize(stream) as Data;
             stream.Close();
 
             return data;

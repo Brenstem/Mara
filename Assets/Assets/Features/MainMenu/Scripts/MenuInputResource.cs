@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 
 public class MenuInputResource : MonoBehaviour
 {
+    public static Dictionary<System.Guid, string> overrides;
+
     public static PlayerInput _playerInput;
     public static PlayerInput PlayerInput
     {
@@ -25,20 +27,25 @@ public class MenuInputResource : MonoBehaviour
 
     public static void SaveOverrides()
     {
-        //overrides = new Dictionary<System.Guid, string>();
+        overrides = new Dictionary<System.Guid, string>();
         foreach (var map in PlayerInput.asset.actionMaps) // https://forum.unity.com/threads/saving-user-bindings.805722/#post-5384310
         {
             foreach (var binding in map.bindings)
             {
                 if (!string.IsNullOrEmpty(binding.overridePath))
                 {
-                    //overrides[binding.id] = binding.overridePath;
+                    overrides[binding.id] = binding.overridePath;
 
                     //binding.id.ToByteArray(); // key
-                    // overrides[binding.id] // value
+                    //overrides[binding.id] // value
                 }
             }
         }
+
+        OptionData data = new OptionData(overrides);
+        
+        SaveData.Save_Data(data);
+
         PlayerInput.PlayerControls.Disable();
     }
 
