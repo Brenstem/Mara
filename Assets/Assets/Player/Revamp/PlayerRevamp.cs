@@ -652,11 +652,22 @@ public class MovementState : State<PlayerRevamp>
     private float time = 0;
     public float idleBlendDuration = 0.15f;
 
-    public override void EnterState(PlayerRevamp owner) { }
+    public override void EnterState(PlayerRevamp owner) 
+    {
+        if (owner.actionAttackActive)
+        {
+            if (owner.actionHitboxGroup)
+                owner.actionHitboxGroup.enabled = true;
+        }
+    }
+
     public override void ExitState(PlayerRevamp owner)
     {
         _isMoving = false;
         //owner.playerAnimator.SetBool("Running", _isMoving);
+
+        if (owner.actionHitboxGroup)
+            owner.actionHitboxGroup.enabled = false;
     }
 
     public float movingThreshold = 0.09f;
