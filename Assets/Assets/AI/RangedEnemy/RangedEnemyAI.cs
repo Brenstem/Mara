@@ -26,6 +26,9 @@ public class RangedEnemyAI : BaseAIMovementController
     [SerializeField] public float _minMeleeAttackSpeed;
     [SerializeField] public float _maxMeleeAttackSpeed;
 
+    [Header("Parry")]
+    [SerializeField] private float _hitstunOnParry;
+
     [HideInInspector] public Timer _hitStunTimer;
     [HideInInspector] public bool _canTurn;
 
@@ -74,7 +77,7 @@ public class RangedEnemyAI : BaseAIMovementController
 
     public override void Parried()
     {
-        EnableHitstun(0.1f, true);
+        EnableHitstun(_hitstunOnParry, true);
         UnityEngine.Debug.LogWarning("Parried implementation missing", this);
     }
 

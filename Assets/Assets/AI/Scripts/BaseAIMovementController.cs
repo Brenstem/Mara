@@ -201,6 +201,7 @@ public class BaseIdleState : State<BaseAIMovementController>
         }
     }
 }
+
 /* === CHASING STATE === */
 public class BaseChasingState : State<BaseAIMovementController>
 {
@@ -231,6 +232,7 @@ public class BaseChasingState : State<BaseAIMovementController>
         }
     }
 }
+
 /* === ATTACKING STATE === */
 public class BaseAttackingState : State<BaseAIMovementController>
 {
@@ -257,6 +259,7 @@ public class BaseAttackingState : State<BaseAIMovementController>
         }
     }
 }
+
 /* === RETURN TO IDLE STATE === */
 public class BaseReturnToIdlePosState : State<BaseAIMovementController>
 {
@@ -293,6 +296,7 @@ public class BaseReturnToIdlePosState : State<BaseAIMovementController>
 
     }
 }
+
 /* === DEAD STATE === */
 public class DeadState : State<BaseAIMovementController>
 {

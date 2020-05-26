@@ -44,7 +44,7 @@ public class MylingAI : BaseAIMovementController
 
         for (int i = 0; i < _healthBar.transform.childCount; i++)
         {
-            _healthBar.transform.GetChild(i).gameObject.SetActive(true);
+            // _healthBar.transform.GetChild(i).gameObject.SetActive(true);
         }
     }
 }
@@ -97,19 +97,35 @@ public class MylingChasingState : BaseChasingState
 
 public class MylingAttackingState : BaseAttackingState
 {
+    private float time = 0;
+    public float idleBlendDuration = 0.1f;
+
     public override void EnterState(BaseAIMovementController owner)
     {
         _chasingState = new MylingChasingState();
 
-        owner._anim.SetTrigger("Attack");
+        float magnitude = owner._agent.speed;
+        owner._anim.SetFloat("Blend", Mathf.Lerp(magnitude, 0, time / (idleBlendDuration * magnitude)));
+
         owner.mylingAI._hitBox.enabled = true;
+        owner.GenerateNewAttackTimer();
 
         base.EnterState(owner);
     }
 
     public override void UpdateState(BaseAIMovementController owner)
     {
+        float magnitude = owner._agent.speed;
+        owner._anim.SetFloat("Blend", Mathf.Lerp(magnitude, 0, time / (idleBlendDuration * magnitude)));
+
         base.UpdateState(owner);
+        owner._attackRateTimer += Time.deltaTime;
+        time += Time.deltaTime;
+
+        if (owner._attackRateTimer.Expired)
+        {
+            owner._anim.SetTrigger("Attack");
+        }
 
         if (owner._animationOver)
         {
@@ -120,6 +136,7 @@ public class MylingAttackingState : BaseAttackingState
     public override void ExitState(BaseAIMovementController owner)
     {
         owner.mylingAI._hitBox.enabled = false;
+        owner.GenerateNewAttackTimer();
 
         base.ExitState(owner);
     }

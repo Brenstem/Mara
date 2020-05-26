@@ -5,6 +5,9 @@ using UnityEngine.InputSystem.Interactions;
 
 public class BasicMeleeAI : BaseAIMovementController
 {
+    [Header("Parry")]
+    [SerializeField] private float _hitstunOnParry;
+
     [Header("References")]
     [SerializeField] public GameObject _healthBar;
     [SerializeField] public HitboxGroup hitboxGroup;
@@ -54,7 +57,7 @@ public class BasicMeleeAI : BaseAIMovementController
 
     public override void Parried()
     {
-        EnableHitstun(0.1f, true);
+        EnableHitstun(_hitstunOnParry, true);
         //Debug.LogWarning("Parried implementation missing", this);
     }
 
