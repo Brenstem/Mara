@@ -28,6 +28,23 @@ public class GlobalState : MonoBehaviour
 
     [SerializeField] private LayerMask _groundMask;
 
+    [SerializeField] private bool _lockCursorOnStart;
+
+    public bool LockCursor
+    {
+        set
+        {
+            if (value)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Confined;
+            }
+        }
+    }
+
     public PlayerRevamp Player
     {
         get { return _player; }
@@ -88,6 +105,8 @@ public class GlobalState : MonoBehaviour
             DontDestroyOnLoad(this);
             _state = this;
         }
+
+        LockCursor = _lockCursorOnStart;
     }
 
     private void OnDestroy() {

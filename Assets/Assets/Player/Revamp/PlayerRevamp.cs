@@ -10,8 +10,29 @@ public class PlayerRevamp : Entity
 {
     #region Inspector
     /* === DEBUG === */
-    [Header("Debug")]
-    [SerializeField] private bool _lockCursor = true;
+    //[Header("Debug")]
+    //sköts av global state nu
+    //[SerializeField] private bool _lockCursor = true;
+    public bool EnabledControls
+    {
+        get
+        {
+            return _playerInput.PlayerControls.enabled;
+        }
+        set
+        {
+            if (value)
+            {
+                _playerInput.PlayerControls.Enable();
+            }
+            else
+            {
+                _playerInput.PlayerControls.Disable();
+            }
+        }
+    }
+
+
 
     /* === INSPECTOR VARIABLES === */
     [Header("References and logic")]
@@ -124,8 +145,8 @@ public class PlayerRevamp : Entity
 
     public bool IsLockedOn { get { return _lockedOn; } }
 
-    private void OnEnable() { _playerInput.PlayerControls.Enable(); }
-    private void OnDisable() { _playerInput.PlayerControls.Disable(); }
+    private void OnEnable() { EnabledControls = true; }
+    private void OnDisable() { EnabledControls = false; }
 
     /* === COMBAT === */
     private Timer _hitstunImmunityTimer;
@@ -141,8 +162,9 @@ public class PlayerRevamp : Entity
     {
         base.Awake();
 
-        if (_lockCursor)
-            Cursor.lockState = CursorLockMode.Locked;
+        //sköts av global state nu
+        //if (_lockCursor)
+        //    Cursor.lockState = CursorLockMode.Locked;
 
         _originalMaxSpeed = maxSpeed;
 
@@ -180,6 +202,12 @@ public class PlayerRevamp : Entity
         /* === MODIFIER EVENTS === */
         modifier.AttackSpeedMultiplier.onModified += UpdateAttackSpeed;
         modifier.MovementSpeedMultiplier.onModified += UpdateMoveSpeed;
+
+    }
+
+    private void Start()
+    {
+        EnabledControls = false;
     }
 
     private void Update()
@@ -422,7 +450,7 @@ public class PlayerRevamp : Entity
             }
         }
     }
-    
+
     private void SnapCamera()
     {
         if (_doSnapCamera)
@@ -456,7 +484,7 @@ public class PlayerRevamp : Entity
         playerAnimator.SetBool("LockedOn", _lockedOn);
         _lockonCam.LookAt = pointOfInterest;
     }
-    
+
     public void DisableLockon()
     {
         _lockedOn = false;
@@ -652,7 +680,7 @@ public class MovementState : State<PlayerRevamp>
     private float time = 0;
     public float idleBlendDuration = 0.15f;
 
-    public override void EnterState(PlayerRevamp owner) 
+    public override void EnterState(PlayerRevamp owner)
     {
         if (owner.actionAttackActive)
         {
