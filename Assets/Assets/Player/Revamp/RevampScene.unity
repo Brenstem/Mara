@@ -127,7 +127,7 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 486761198}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &201662657
+--- !u!114 &255690142
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -312,6 +312,9 @@ MonoBehaviour:
   isHit: []
   priority: 0
   id: 1
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
   hitboxValues:
     damageValue: 0
     hitstunTime: 0
@@ -367,7 +370,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Profile: {fileID: 11400000, guid: d4094e955f07d024c9a950368e679e61, type: 2}
   m_StaticLightingSkyUniqueID: 2
-  m_SkySettings: {fileID: 201662657}
+  m_SkySettings: {fileID: 255690142}
   m_SkySettingsFromProfile: {fileID: 2606652218056383274, guid: d4094e955f07d024c9a950368e679e61,
     type: 2}
 --- !u!114 &481561930
@@ -1505,6 +1508,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlayerPackagePrefab (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 7815140510396567954, guid: 0018251b900274d4f82d88118599e2eb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7815140510396567955, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1568,17 +1576,17 @@ PrefabInstance:
     - target: {fileID: 5420518577412540099, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0000004714425
+      value: -0.000000942885
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577412540099, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.00000007038909
+      value: 0.00000014077818
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577412540099, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0000000126911175
+      value: 0.000000025382235
       objectReference: {fileID: 0}
     - target: {fileID: 5420518576761327287, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
@@ -1613,17 +1621,17 @@ PrefabInstance:
     - target: {fileID: 5420518577660149752, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.00000047683716
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577660149752, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.000000029802322
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577660149752, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.00000011920929
       objectReference: {fileID: 0}
     - target: {fileID: 3189860239037640066, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
@@ -1670,6 +1678,11 @@ PrefabInstance:
       propertyPath: actionHitboxGroup
       value: 
       objectReference: {fileID: 471028576}
+    - target: {fileID: 5420518576247655275, guid: 0018251b900274d4f82d88118599e2eb,
+        type: 3}
+      propertyPath: _lockCursor
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5420518576247655279, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: _attackspeedBuff
@@ -1749,6 +1762,36 @@ PrefabInstance:
         type: 3}
       propertyPath: hitboxValues.hitstopTime
       value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3189860240616168050, guid: 0018251b900274d4f82d88118599e2eb,
+        type: 3}
+      propertyPath: m_Name
+      value: Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 3189860240616168050, guid: 0018251b900274d4f82d88118599e2eb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3189860240616168048, guid: 0018251b900274d4f82d88118599e2eb,
+        type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3189860240616168048, guid: 0018251b900274d4f82d88118599e2eb,
+        type: 3}
+      propertyPath: m_ReferenceResolution.x
+      value: 1920
+      objectReference: {fileID: 0}
+    - target: {fileID: 3189860240616168048, guid: 0018251b900274d4f82d88118599e2eb,
+        type: 3}
+      propertyPath: m_ReferenceResolution.y
+      value: 1080
+      objectReference: {fileID: 0}
+    - target: {fileID: 5420518576247655273, guid: 0018251b900274d4f82d88118599e2eb,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0018251b900274d4f82d88118599e2eb, type: 3}
@@ -2166,6 +2209,9 @@ MonoBehaviour:
   isHit: []
   priority: 0
   id: 1
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
   hitboxValues:
     damageValue: 0
     hitstunTime: 0
@@ -3031,6 +3077,9 @@ MonoBehaviour:
   isHit: []
   priority: 0
   id: 1
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
   hitboxValues:
     damageValue: 0
     hitstunTime: 0
@@ -9412,6 +9461,9 @@ MonoBehaviour:
   isHit: []
   priority: 0
   id: 1
+  targetLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
   hitboxValues:
     damageValue: 0
     hitstunTime: 0.4

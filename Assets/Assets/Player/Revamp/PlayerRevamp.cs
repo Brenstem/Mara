@@ -136,10 +136,27 @@ public class PlayerRevamp : Entity
     [HideInInspector] public bool isParrying;
     [HideInInspector] public bool walkCancel;
 
+    private void LoadControls()
+    {
+        OptionData d = (OptionData)SaveData.Load_Data("controls");
+
+        Dictionary<System.Guid, string> ovr = new Dictionary<System.Guid, string>();
+
+        int i = 0;
+        foreach (byte[] key in d.controlKeyArray)
+        {
+            ovr.Add(new System.Guid(key), d.valueArray[i]);
+            i++;
+        }
+
+        MenuInputResource.LoadOverrides(ref _playerInput, ovr);
+    }
+
     /* === Unity Functions === */
     private new void Awake()
     {
         base.Awake();
+
 
         if (_lockCursor)
             Cursor.lockState = CursorLockMode.Locked;
@@ -150,6 +167,8 @@ public class PlayerRevamp : Entity
         _playerInput = new PlayerInput();
         stateMachine = new StateMachine<PlayerRevamp>(this);
         stateMachine.ChangeState(new IdleState());
+
+        LoadControls();
 
         inputBuffer = new CircularBuffer<InputType>(inputBufferSize);
 

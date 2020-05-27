@@ -15,7 +15,8 @@ public class OptionData : Data
 
     public OptionData(Dictionary<System.Guid, string> controls)
     {
-        
+        controlKeyArray = new byte[controls.Keys.Count][];
+        valueArray = new string[controls.Values.Count];
         path = "controls";
 
         width = Screen.width;

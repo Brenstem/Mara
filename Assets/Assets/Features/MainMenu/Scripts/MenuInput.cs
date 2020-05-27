@@ -43,26 +43,35 @@ public class MenuInput : MonoBehaviour
             }
         }
 
+
+
         int c = _gamepadControls ? 1 : 0;
         switch (inputType)
         {
             case InputType.AttackLight:
-                _label.text = MenuInputResource.PlayerInput.PlayerControls.AttackLight.controls[c].displayName;
+
+                _label.text = MenuInputResource.PlayerInput.PlayerControls.AttackLight.bindings[c].path; // cut everthing before second forward slash
+                //_label.text = MenuInputResource.PlayerInput.PlayerControls.AttackLight.controls[c].displayName;
                 break;
             case InputType.AttackHeavy:
-                _label.text = MenuInputResource.PlayerInput.PlayerControls.AttackHeavy.controls[c].displayName;
+                _label.text = MenuInputResource.PlayerInput.PlayerControls.AttackHeavy.bindings[c].path;
+                //_label.text = MenuInputResource.PlayerInput.PlayerControls.AttackHeavy.controls[c].displayName;
                 break;
             case InputType.Dash:
-                _label.text = MenuInputResource.PlayerInput.PlayerControls.Dash.controls[c].displayName;
+                _label.text = MenuInputResource.PlayerInput.PlayerControls.Dash.bindings[c].path;
+                //_label.text = MenuInputResource.PlayerInput.PlayerControls.Dash.controls[c].displayName;
                 break;
             case InputType.Jump:
-                _label.text = MenuInputResource.PlayerInput.PlayerControls.Jump.controls[c].displayName;
+                _label.text = MenuInputResource.PlayerInput.PlayerControls.Jump.bindings[c].path;
+                //_label.text = MenuInputResource.PlayerInput.PlayerControls.Jump.controls[c].displayName;
                 break;
             case InputType.Lockon:
-                _label.text = MenuInputResource.PlayerInput.PlayerControls.Lockon.controls[c].displayName;
+                _label.text = MenuInputResource.PlayerInput.PlayerControls.Lockon.bindings[c].path;
+                //_label.text = MenuInputResource.PlayerInput.PlayerControls.Lockon.controls[c].displayName;
                 break;
             case InputType.Parry:
-                _label.text = MenuInputResource.PlayerInput.PlayerControls.Parry.controls[c].displayName;
+                _label.text = MenuInputResource.PlayerInput.PlayerControls.Parry.bindings[c].path;
+                //_label.text = MenuInputResource.PlayerInput.PlayerControls.Parry.controls[c].displayName;
                 break;
             default:
                 break;
