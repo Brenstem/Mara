@@ -4,26 +4,26 @@ using UnityEngine;
 
 public class RangedEnemyAnimEventHandler : MonoBehaviour
 {
-    [SerializeField] private RangedEnemyAI parentAI;
+    [SerializeField] private RangedEnemyAI _parentAI;
 
     public void FireEvent()
     {
-        parentAI.Fire();
+        _parentAI.Fire();
     }
 
     public void TurnInterruptEvent()
     {
-        parentAI._canTurn = false;
+        _parentAI._canTurn = false;
     }
 
     public void EndAnim()
     {
-        parentAI._animationOver = true;
+        _parentAI._animationOver = true;
     }
 
     public void DestroyThis()
     {
-        parentAI.stateMachine.ChangeState(new BaseIdleState()); // Do this to call exitstate on death state before destroying object
-        Destroy(this.parentAI.gameObject);
+        _parentAI.stateMachine.ChangeState(new BaseIdleState()); // Do this to call exitstate on death state before destroying object
+        Destroy(this._parentAI.gameObject);
     }
 }

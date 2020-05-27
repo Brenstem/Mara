@@ -5,8 +5,11 @@ using UnityEngine.InputSystem.Interactions;
 
 public class BasicMeleeAI : BaseAIMovementController
 {
+    [Header("Parry")]
+    [SerializeField] private float _hitstunOnParry;
+
     [Header("References")]
-    [SerializeField] public GameObject _fill;
+    [SerializeField] public GameObject _healthBar;
     [SerializeField] public HitboxGroup hitboxGroup;
 
     [HideInInspector] public Timer _hitStunTimer;
@@ -14,7 +17,11 @@ public class BasicMeleeAI : BaseAIMovementController
     /* === UNITY FUNCTIONS === */
     void Start()
     {
-        _fill.SetActive(false);
+        for (int i = 0; i < _healthBar.transform.childCount; i++)
+        {
+            _healthBar.transform.GetChild(i).gameObject.SetActive(false);
+        }
+
         stateMachine.ChangeState(new BasicMeleeIdleState());
         meleeEnemy = this;
         GenerateNewAttackTimer();
@@ -41,12 +48,16 @@ public class BasicMeleeAI : BaseAIMovementController
         EnableHitstun(hitbox.hitstunTime, hitbox.ignoreArmor);
         GlobalState.state.AudioManager.FloatingEnemyHurtAudio(this.transform.position);
         base.TakeDamage(hitbox, attacker);
-        _fill.SetActive(true);
+
+        for (int i = 0; i < _healthBar.transform.childCount; i++)
+        {
+            _healthBar.transform.GetChild(i).gameObject.SetActive(true);
+        }
     }
 
     public override void Parried()
     {
-        EnableHitstun(0.1f, true);
+        EnableHitstun(_hitstunOnParry, true);
         //Debug.LogWarning("Parried implementation missing", this);
     }
 
@@ -64,6 +75,7 @@ public class BasicMeleeAI : BaseAIMovementController
         }
     }
 }
+
 /* === IDLE STATE === */
 public class BasicMeleeIdleState : BaseIdleState
 {
@@ -77,6 +89,7 @@ public class BasicMeleeIdleState : BaseIdleState
         owner._attackRateTimer += Time.deltaTime;
     }
 }
+
 /* === CHASING STATE === */ 
 public class BasicMeleeChasingState : BaseChasingState
 {
@@ -93,6 +106,7 @@ public class BasicMeleeChasingState : BaseChasingState
         owner._attackRateTimer += Time.deltaTime;
     }
 }
+
 /* === ATTACKING STATE === */
 public class BasicMeleeAttackingState : BaseAttackingState
 {
@@ -123,6 +137,7 @@ public class BasicMeleeAttackingState : BaseAttackingState
         }
     }
 }
+
 /* === SWING STATE === */
 public class BasicMeleeSwingState : State<BaseAIMovementController>
 {
@@ -153,6 +168,7 @@ public class BasicMeleeSwingState : State<BaseAIMovementController>
         }
     }
 }
+
 /* === RETURN TO IDLE STATE === */
 public class BasicMeleeReturnToIdleState : BaseReturnToIdlePosState
 {
@@ -164,7 +180,11 @@ public class BasicMeleeReturnToIdleState : BaseReturnToIdlePosState
 
     public override void ExitState(BaseAIMovementController owner)
     {
-        owner.meleeEnemy._fill.SetActive(false);
+        for (int i = 0; i < owner.meleeEnemy._healthBar.transform.childCount; i++)
+        {
+            owner.meleeEnemy._healthBar.transform.GetChild(i).gameObject.SetActive(false);
+        }
+
         base.ExitState(owner);
     }
 
@@ -175,6 +195,7 @@ public class BasicMeleeReturnToIdleState : BaseReturnToIdlePosState
     }
 
 }
+
 /* === HITSTUN STATE === */
 public class MeleeAIHitstunState : State<BaseAIMovementController>
 {
@@ -188,6 +209,9 @@ public class MeleeAIHitstunState : State<BaseAIMovementController>
     public override void ExitState(BaseAIMovementController owner) 
     {
         owner._anim.SetBool("InHitstun", false);
+
+        // Dont know if we want this feature??
+        owner.GenerateNewAttackTimer(1f);
     }
 
     public override void UpdateState(BaseAIMovementController owner)

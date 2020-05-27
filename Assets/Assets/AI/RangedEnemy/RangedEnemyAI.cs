@@ -14,7 +14,7 @@ public class RangedEnemyAI : BaseAIMovementController
     [Header("References")]
     [SerializeField] private GameObject _projectile;
     [SerializeField] private Transform _projectileSpawnPos;
-    [SerializeField] public GameObject _fill;
+    [SerializeField] public GameObject _healthBar;
 
     [Header("Ranged Attack")]
     [SerializeField] private float _firerate;
@@ -26,13 +26,20 @@ public class RangedEnemyAI : BaseAIMovementController
     [SerializeField] public float _minMeleeAttackSpeed;
     [SerializeField] public float _maxMeleeAttackSpeed;
 
+    [Header("Parry")]
+    [SerializeField] private float _hitstunOnParry;
+
     [HideInInspector] public Timer _hitStunTimer;
     [HideInInspector] public bool _canTurn;
 
     /* === UNITY FUNCTIONS === */
     private void Start()
     {
-        _fill.SetActive(false);
+        for (int i = 0; i < _healthBar.transform.childCount; i++)
+        {
+            _healthBar.transform.GetChild(i).gameObject.SetActive(false);
+        }
+
         stateMachine.ChangeState(new RangedEnemyIdleState());
         rangedAI = this;
         _canTurn = true; // Declare variable default values like this
@@ -59,13 +66,18 @@ public class RangedEnemyAI : BaseAIMovementController
     public override void TakeDamage(HitboxValues hitbox, Entity attacker)
     {
         EnableHitstun(hitbox.hitstunTime, hitbox.ignoreArmor);
+        GlobalState.state.AudioManager.FloatingEnemyHurtAudio(this.transform.position);
         base.TakeDamage(hitbox, attacker);
-        _fill.SetActive(true);
+
+        for (int i = 0; i < _healthBar.transform.childCount; i++)
+        {
+            _healthBar.transform.GetChild(i).gameObject.SetActive(true);
+        }
     }
 
     public override void Parried()
     {
-        EnableHitstun(0.1f, true);
+        EnableHitstun(_hitstunOnParry, true);
         UnityEngine.Debug.LogWarning("Parried implementation missing", this);
     }
 
@@ -389,7 +401,11 @@ public class RangedEnemyReturnToIdleState : BaseReturnToIdlePosState
 
     public override void ExitState(BaseAIMovementController owner)
     {
-        owner.rangedAI._fill.SetActive(false);
+        for (int i = 0; i < owner.rangedAI._healthBar.transform.childCount; i++)
+        {
+            owner.rangedAI._healthBar.transform.GetChild(i).gameObject.SetActive(false);
+        }
+
         base.ExitState(owner);
     }
 }

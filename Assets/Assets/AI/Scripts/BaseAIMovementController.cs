@@ -41,11 +41,9 @@ public abstract class BaseAIMovementController : Entity
     [SerializeField] private GameObject _dropPrefab;
     [SerializeField] private float _insanityIncreaseAmount;
 
-    [Header("Temp")]
-    // [SerializeField] private float _insanityIncreaseOnDeath;
-
     [NonSerialized] public BasicMeleeAI meleeEnemy;
     [NonSerialized] public RangedEnemyAI rangedAI;
+    [NonSerialized] public MylingAI mylingAI;
 
     [HideInInspector] public StateMachine<BaseAIMovementController> stateMachine;
 
@@ -112,6 +110,15 @@ public abstract class BaseAIMovementController : Entity
         _attackRateTimer = new Timer(_attackSpeed);
     }
 
+    public void GenerateNewAttackTimer(float delayAmount)
+    {
+        _attackSpeed = _minAttackSpeed;
+        _attackSpeed += UnityEngine.Random.Range(0f, _maxAttackSpeedIncrease / 2);
+        _attackSpeed += UnityEngine.Random.Range(0f, _maxAttackSpeedIncrease / 2);
+
+        _attackRateTimer = new Timer(_attackSpeed + delayAmount);
+    }
+
     public void GenerateNewAttackTimer(float minSpeedIncrease, float maxSpeedIncrease)
     {
         _attackSpeed = minSpeedIncrease;
@@ -133,7 +140,7 @@ public class BaseIdleState : State<BaseAIMovementController>
 {
     private RaycastHit _hit;
     private int _pathingIndex = 0;
-    protected BaseChasingState _chasingState;
+    protected BaseChasingState _chasingState; // TODO Move these variables to a constructor or something similar
 
     public override void EnterState(BaseAIMovementController owner) { }
 
@@ -194,6 +201,7 @@ public class BaseIdleState : State<BaseAIMovementController>
         }
     }
 }
+
 /* === CHASING STATE === */
 public class BaseChasingState : State<BaseAIMovementController>
 {
@@ -208,7 +216,7 @@ public class BaseChasingState : State<BaseAIMovementController>
     {
         float range = owner._attackRange - owner._agent.stoppingDistance;
 
-        Vector3 vectorToPlayer = (owner._target.transform.position - owner.transform.position).normalized * range;
+        Vector3 vectorToPlayer = (owner._target.transform.position - owner.transform.position).normalized * (range - 0.5f);
         Vector3 targetPosition = owner._target.transform.position - vectorToPlayer;
 
         owner._agent.SetDestination(targetPosition);
@@ -224,6 +232,7 @@ public class BaseChasingState : State<BaseAIMovementController>
         }
     }
 }
+
 /* === ATTACKING STATE === */
 public class BaseAttackingState : State<BaseAIMovementController>
 {
@@ -250,6 +259,7 @@ public class BaseAttackingState : State<BaseAIMovementController>
         }
     }
 }
+
 /* === RETURN TO IDLE STATE === */
 public class BaseReturnToIdlePosState : State<BaseAIMovementController>
 {
@@ -286,6 +296,7 @@ public class BaseReturnToIdlePosState : State<BaseAIMovementController>
 
     }
 }
+
 /* === DEAD STATE === */
 public class DeadState : State<BaseAIMovementController>
 {

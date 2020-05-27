@@ -8,7 +8,7 @@ public class MurkyWaterScript : MonoBehaviour
     //göra så bossen/fiender kan ta skada av dem och ändra pölarnas weight för navmeshen, fast inte för de som svävar (?)
     [Tooltip("Vilka som ska kunna bli påvärkade av pölarna")]
     [SerializeField] private LayerMask _collisionLayers;
-    [SerializeField] private float _damagePerSecond = 1f;
+    [SerializeField] private float _damagePerSecond;
 
 
     //[SerializeField] private bool _destroyAfterCertainTime = false;
@@ -69,7 +69,7 @@ public class MurkyWaterScript : MonoBehaviour
 		print("nu ser jag något");
 		if (_collisionLayers == (_collisionLayers | 1 << other.gameObject.layer)) {
 			if (other.CompareTag("Player")) {
-				other.GetComponent<PlayerInsanity>().Damage(_damagePerSecond);
+				other.GetComponent<PlayerInsanity>().Damage(_damagePerSecond * Time.deltaTime);
 			}
 		}
 	}
