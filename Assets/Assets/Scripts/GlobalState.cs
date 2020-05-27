@@ -28,7 +28,8 @@ public class GlobalState : MonoBehaviour
 
     [SerializeField] private LayerMask _groundMask;
 
-    [SerializeField] private bool _lockCursorOnStart;
+    [Header("Debug")]
+    [SerializeField] private bool _lockCursorOnStart = true;
 
     public bool LockCursor
     {
@@ -105,8 +106,13 @@ public class GlobalState : MonoBehaviour
             DontDestroyOnLoad(this);
             _state = this;
         }
+    }
 
+    private void Start()
+    {
+        //debug 
         LockCursor = _lockCursorOnStart;
+        _player.EnabledControls = _lockCursorOnStart;
     }
 
     private void OnDestroy() {

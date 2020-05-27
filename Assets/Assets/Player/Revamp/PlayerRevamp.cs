@@ -207,7 +207,8 @@ public class PlayerRevamp : Entity
 
     private void Start()
     {
-        EnabledControls = false;
+        //anänds inte när vi har _lockCursorOnStart boolen i global state men när vi tar bort den ska denna rad vara med
+        //EnabledControls = false;
     }
 
     private void Update()
