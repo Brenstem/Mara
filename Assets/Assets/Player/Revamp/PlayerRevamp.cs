@@ -71,6 +71,12 @@ public class PlayerRevamp : Entity
     public float heavyStepSpeed;
     public float heavyChargeTime = 2.0f;
     public float heavyMaxDamageMultiplier = 1.0f;
+    public float heavyMaxHitstopMultiplier = 1.0f;
+
+    [Header("Action Attack")]
+    public HitboxGroup actionHitboxGroup;
+
+    public bool actionAttackActive;
 
     [Header("Insanity events")]
     [SerializeField] float _moveSpeedBuffMultiplier = 1.1f;
@@ -129,6 +135,7 @@ public class PlayerRevamp : Entity
     [HideInInspector] public bool isParrying;
     [HideInInspector] public bool walkCancel;
 
+    /* === Unity Functions === */
     private new void Awake()
     {
         base.Awake();
@@ -174,20 +181,13 @@ public class PlayerRevamp : Entity
         modifier.MovementSpeedMultiplier.onModified += UpdateMoveSpeed;
     }
 
-    /* === INPUT === */
-    private void AttackStep() { attackStep = true; }
-    private void AttackStepEnd() { attackStep = false; }
-    private void IASA() { interruptable = true; }
-    private void WalkCancel() { walkCancel = true; }
-    private void AnimationOver() { attackAnimationOver = true; }
-    private void Action(InputType type) { inputBuffer.Enqueue(type); }
-
-
     private void Update()
     {
         stateMachine.Update();
         playerAnimator.SetFloat("StrafeDirX", Input.x);
         playerAnimator.SetFloat("StrafeDirY", Input.y);
+
+        print(stateMachine.currentState);
 
         Gravity();
 
@@ -205,6 +205,15 @@ public class PlayerRevamp : Entity
         Action(InputType.Idle);
     }
 
+    /* === INPUT === */
+    private void AttackStep() { attackStep = true; }
+    private void AttackStepEnd() { attackStep = false; }
+    private void IASA() { interruptable = true; }
+    private void WalkCancel() { walkCancel = true; }
+    private void AnimationOver() { attackAnimationOver = true; }
+    private void Action(InputType type) { inputBuffer.Enqueue(type); }
+
+    #region Public Functions
     private bool _hitstunImmunity;
     [HideInInspector] public bool successfulParry;
     public override void TakeDamage(HitboxValues hitbox, Entity attacker = null)
@@ -232,17 +241,39 @@ public class PlayerRevamp : Entity
     {
         Debug.LogWarning("Parried implementation missing", this);
     }
-    
-    private void UpdateMoveSpeed()
+
+    public void FaceDirection(Transform target)
     {
-        maxSpeed = _originalMaxSpeed;
-        maxSpeed *= modifier.MovementSpeedMultiplier;
+        if (target != null)
+        {
+            Vector3 _direction = (target.position - transform.position);
+            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(_direction.x, 0, _direction.z));
+            transform.rotation = lookRotation;
+        }
     }
 
-    private void UpdateAttackSpeed()
+    public GameObject FindTarget()
     {
-        playerAnimator.SetFloat("AttackSpeedModifier", 1.0f * modifier.AttackSpeedMultiplier);
+        GameObject _target = _targetFinder.FindTarget(); // Find target to pass to attack function in first frame of attack
+        if (_target != null)
+        {
+            var t = GlobalState.state.Player.gameObject.GetComponent<LockonFunctionality>().Target;
+
+            if (t != null)
+            {
+                if (Vector3.Distance(transform.position, t.position) <= _targetFinder.trackRadius)
+                    _target = t.gameObject;
+            }
+        }
+        return _target;
     }
+
+    public override void KillThis()
+    {
+        stateMachine.ChangeState(new PlayerDeathState());
+        playerAnimator.SetBool("Dead", true);
+    }
+
 
     public void IncreaseMoveSpeedOverValue(float insValueModStart, float insValueModEnd, float multiplier)
     {
@@ -269,6 +300,44 @@ public class PlayerRevamp : Entity
             modifier.MovementSpeedMultiplier.Reset();
             maxSpeed *= modifier.MovementSpeedMultiplier;
         }
+    }
+
+
+    public void Dash()
+    {
+        if (dashCooldownTimer.Expired && _airDashes < airDashAmount)
+        {
+            _airDashes++;
+            dashCooldownTimer.Reset();
+            //GlobalState.state.Player.ResetAnim();
+            stateMachine.ChangeState(new DashingState());
+        }
+    }
+
+    public void Jump()
+    {
+        if (IsGrounded && !playerAnimator.GetBool("HasJumped"))
+        {
+            _velocity.y = Mathf.Sqrt(_jumpHeight) * -_gravity;
+            playerAnimator.SetBool("HasJumped", true);
+            playerAnimator.SetTrigger("Jump");
+            inputBuffer.Clear();
+            GlobalState.state.AudioManager.PlayerJumpAudio(this.transform.position);
+        }
+    }
+    #endregion
+
+
+    #region Private Functions
+    private void UpdateMoveSpeed()
+    {
+        maxSpeed = _originalMaxSpeed;
+        maxSpeed *= modifier.MovementSpeedMultiplier;
+    }
+
+    private void UpdateAttackSpeed()
+    {
+        playerAnimator.SetFloat("AttackSpeedModifier", 1.0f * modifier.AttackSpeedMultiplier);
     }
 
     private void Gravity()
@@ -353,9 +422,6 @@ public class PlayerRevamp : Entity
         }
     }
     
-    /// <summary>
-    /// Snaps camera after returning to free look camera
-    /// </summary>
     private void SnapCamera()
     {
         if (_doSnapCamera)
@@ -364,29 +430,6 @@ public class PlayerRevamp : Entity
             //var loc = new Vector2(_lockonCam.m_XAxis.Value, _lockonCam.m_YAxis.Value);
             _freeLookCam.m_XAxis.Value = transform.eulerAngles.y;
             _doSnapCamera = false;
-        }
-    }
-
-    public void Dash()
-    {
-        if (dashCooldownTimer.Expired && _airDashes < airDashAmount)
-        {
-            _airDashes++;
-            dashCooldownTimer.Reset();
-            //GlobalState.state.Player.ResetAnim();
-            stateMachine.ChangeState(new DashingState());
-        }
-    }
-
-    public void Jump()
-    {
-        if (IsGrounded && !playerAnimator.GetBool("HasJumped"))
-        {
-            _velocity.y = Mathf.Sqrt(_jumpHeight) * -_gravity;
-            playerAnimator.SetBool("HasJumped", true);
-            playerAnimator.SetTrigger("Jump");
-            inputBuffer.Clear();
-            GlobalState.state.AudioManager.PlayerJumpAudio(this.transform.position);
         }
     }
 
@@ -446,40 +489,8 @@ public class PlayerRevamp : Entity
             }
         }
     }
-    /// <summary>
-    /// Character looks towards direction
-    /// </summary>
-    public void FaceDirection(Transform target)
-    {
-        if (target != null)
-        {
-            Vector3 _direction = (target.position - transform.position);
-            Quaternion lookRotation = Quaternion.LookRotation(new Vector3(_direction.x, 0, _direction.z));
-            transform.rotation = lookRotation;
-        }
-    }
 
-    public GameObject FindTarget()
-    {
-        GameObject _target = _targetFinder.FindTarget(); // Find target to pass to attack function in first frame of attack
-        if (_target != null)
-        {
-            var t = GlobalState.state.Player.gameObject.GetComponent<LockonFunctionality>().Target;
-
-            if (t != null)
-            {
-                if (Vector3.Distance(transform.position, t.position) <= _targetFinder.trackRadius)
-                    _target = t.gameObject;
-            }
-        }
-        return _target;
-    }
-
-    public override void KillThis()
-    {
-        stateMachine.ChangeState(new PlayerDeathState());
-        playerAnimator.SetBool("Dead", true);
-    }
+    #endregion 
 }
 
 public class IdleState : State<PlayerRevamp>
@@ -769,6 +780,11 @@ public class DashingState : State<PlayerRevamp>
     {
         owner.useGravity = false;
 
+        if (owner.actionAttackActive)
+        {
+            owner.actionHitboxGroup.enabled = true;
+        }
+
         owner.playerAnimator.SetFloat("DashSpeed", owner.dashSpeed / owner.dashAnimationNumerator);
 
         if (owner.invulerableWhenDashing)
@@ -800,6 +816,7 @@ public class DashingState : State<PlayerRevamp>
     {
         owner.useGravity = true;
         owner.dashPerformed = false;
+        owner.actionHitboxGroup.enabled = false;
 
         if (owner.invulerableWhenDashing)
         {
@@ -1031,6 +1048,7 @@ public class HeavyAttackState : State<PlayerRevamp>
 
         owner.interruptable = false;
         owner.attackAnimationOver = false;
+        owner.heavyHitboxGroup.enabled = true;
         owner.playerAnimator.SetTrigger("AttackHeavy"); // Set animation trigger for first attack
         owner.playerAnimator.SetBool("HeavyCharge", true);
 
@@ -1044,6 +1062,7 @@ public class HeavyAttackState : State<PlayerRevamp>
         owner.interruptable = false;
         owner.attackAnimationOver = false;
         owner.walkCancel = false;
+        owner.heavyHitboxGroup.enabled = false;
         owner.playerAnimator.SetBool("HeavyCharge", false);
 
         if (_previousDamageMultiplier != 0.0f)
@@ -1077,8 +1096,6 @@ public class HeavyAttackState : State<PlayerRevamp>
             }
             else
             {
-                owner.heavyHitboxGroup.enabled = true;
-
                 if (owner.attackStep)
                 {
                     if (_target != null)
@@ -1088,6 +1105,7 @@ public class HeavyAttackState : State<PlayerRevamp>
 
                 if (owner.interruptable && owner.inputBuffer.Contains(PlayerRevamp.InputType.AttackLight))
                 {
+                    owner.playerAnimator.SetTrigger("AttackLight");
                     owner.stateMachine.ChangeState(new LightAttackOneState());
                 }
 
