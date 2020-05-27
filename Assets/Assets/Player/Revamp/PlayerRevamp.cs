@@ -138,7 +138,7 @@ public class PlayerRevamp : Entity
 
     private void LoadControls()
     {
-        OptionData d = (OptionData)SaveData.Load_Data("controls");
+        /*OptionData d = (OptionData)SaveData.Load_Data("controls");
 
         Dictionary<System.Guid, string> ovr = new Dictionary<System.Guid, string>();
 
@@ -149,7 +149,7 @@ public class PlayerRevamp : Entity
             i++;
         }
 
-        MenuInputResource.LoadOverrides(ref _playerInput, ovr);
+        MenuInputResource.LoadOverrides(ref _playerInput, ovr); */
     }
 
     /* === Unity Functions === */
