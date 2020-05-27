@@ -8,11 +8,20 @@ public class OptionData : Data
     public byte[][] controlKeyArray;
     public string[] valueArray;
     public float mouseSensitivity;
+    public int qualityLevel;
+    public bool isFullscreen;
+    public int width;
+    public int height;
 
     public OptionData(Dictionary<System.Guid, string> controls)
     {
-
+        
         path = "controls";
+
+        width = Screen.width;
+        height = Screen.height;
+        isFullscreen = Screen.fullScreen;
+        qualityLevel = QualitySettings.GetQualityLevel();
 
         int i = 0;
         foreach (var key in controls.Keys)
@@ -21,7 +30,5 @@ public class OptionData : Data
             valueArray[i] = controls[key];
             i++;
         }
-
     }
-
 }
