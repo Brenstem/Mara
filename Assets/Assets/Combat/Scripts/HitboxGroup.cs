@@ -18,7 +18,7 @@ public class HitboxGroup : MonoBehaviour
     private List<Hitbox> _hitTimes;
 
     private bool _eventLess;
-    [SerializeField] private bool _enabledByDefault;
+    public bool enabledByDefault;
     private Entity _parentEntity;
 
     void Awake() {
@@ -49,7 +49,7 @@ public class HitboxGroup : MonoBehaviour
         }
 
         _parentEntity = GetComponentInParent<Entity>();
-        enabled = _enabledByDefault;
+        enabled = enabledByDefault;
     }
 
     public void EnableEvent(int id = 0)

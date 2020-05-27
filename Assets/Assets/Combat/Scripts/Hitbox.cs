@@ -51,6 +51,7 @@ public class Hitbox : MonoBehaviour
         originalHitStun = hitboxValues.hitstunTime;
 
         _parent = transform.parent.GetComponent<HitboxGroup>();
+        enabled = _parent.enabledByDefault;
     }
 
     private void OnEnable() { } // TODO: Parryable indicator

@@ -225,6 +225,8 @@ public class PlayerRevamp : Entity
 
             if (attacker != null)
                 attacker.Parried();
+
+            // parrya alla fiender inom en viss radie
         }
         else
         {
@@ -765,7 +767,6 @@ public class MovementState : State<PlayerRevamp>
 
                 //owner.playerAnimator.SetFloat("Blend", owner.Input.magnitude > 1 ? 1 : owner.Input.magnitude);
                 float magnitude = owner.Input.magnitude > 1 ? 1 : owner.Input.magnitude;
-                owner.playerAnimator.SetFloat("Blend", Mathf.Lerp(0, magnitude, time / (idleBlendDuration * magnitude)));
                 time += Time.deltaTime;
 
                 //owner.playerAnimator.SetBool("Running", true);

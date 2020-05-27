@@ -34,7 +34,6 @@ public class GenerateDropdownFullscreen : MonoBehaviour
                 }
                 
             }
-
             _dropdown.AddOptions(options);
             _dropdown.value = currentIndex;
         }
