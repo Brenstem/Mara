@@ -21,6 +21,7 @@ public struct HitboxValues
 }
 
 // DW
+[RequireComponent(typeof(HitboxController))]
 public class Hitbox : MonoBehaviour
 {
     private HitboxGroup _parent;
@@ -51,7 +52,7 @@ public class Hitbox : MonoBehaviour
         originalHitStun = hitboxValues.hitstunTime;
 
         _parent = transform.parent.GetComponent<HitboxGroup>();
-        enabled = _parent.enabledByDefault;
+        enabled = _parent.enabledByDefault/* || _parent.eventLess*/;
     }
 
     private void OnEnable() { } // TODO: Parryable indicator
@@ -64,8 +65,7 @@ public class Hitbox : MonoBehaviour
             transform.position = followPoint.position + _offset;
             transform.rotation = followPoint.rotation;
         }
-
-        LayerMask mask = targetLayerMask == 0 ? _parent.targetLayerMask : targetLayerMask;
+        LayerMask mask = targetLayerMask.value != 0 ? targetLayerMask : _parent.targetLayerMask;
 
         //Lägger in objekt som är i hitboxen i arrayn
         //isHit = Physics.OverlapBox(transform.position + _offset, _size * 0.5f, transform.rotation, _parent.targetLayerMask);
