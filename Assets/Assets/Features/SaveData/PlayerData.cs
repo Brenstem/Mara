@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class PlayerData
+public class PlayerData : Data
 {
     public float playerHealth;
     //public float playerRotation;
@@ -12,6 +12,9 @@ public class PlayerData
 
     public PlayerData(float health, Transform spawnPosition)
     {
+
+        path = "player";
+
         playerHealth = health;
 
         playerPosition = new float[3];

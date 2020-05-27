@@ -62,13 +62,13 @@ public class CheckpointHandler : MonoBehaviour
 
 
         _activeCheckPoint = new PlayerData(insanity , position);
-        SaveData.SavePlayer(_activeCheckPoint);
+        SaveData.Save_Data(_activeCheckPoint);
     }
 
     // Respawn player using checkpoint data
     private void Spawn()
     {
-        PlayerData data = SaveData.LoadPlayer();
+        PlayerData data = (PlayerData)SaveData.Load_Data("player");
 
         GlobalState.state.Player.gameObject.GetComponent<CharacterController>().enabled = false;
 
@@ -81,9 +81,11 @@ public class CheckpointHandler : MonoBehaviour
 
         GlobalState.state.Player.gameObject.transform.position = position;
         GlobalState.state.Player.gameObject.transform.rotation = _rotationQ;
+
         GlobalState.state.Player.gameObject.GetComponent<PlayerInsanity>().SetInsanity(data.playerHealth);
 
         GlobalState.state.Player.gameObject.GetComponent<CharacterController>().enabled = true;
+
     }
 
     void RespawnPlayer()
