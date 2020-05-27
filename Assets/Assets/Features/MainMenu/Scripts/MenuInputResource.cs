@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 
 public class MenuInputResource : MonoBehaviour
 {
+    public static Dictionary<System.Guid, string> overrides;
+
     public static float cameraSensitivity;
     public static float lockonCameraSensitivity;
 
