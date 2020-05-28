@@ -121,6 +121,8 @@ MonoBehaviour:
   _dropPrefab: {fileID: 4130683122775444156, guid: 3ca44147400209e4485ae8ab86c71962,
     type: 3}
   _insanityIncreaseAmount: 1
+  _hitstunOnParry: 0
+  _attackDelayAfterHitstun: 0
   _healthBar: {fileID: 2444308342576148252}
   hitboxGroup: {fileID: 4594331576501799848}
 --- !u!114 &1505761187
@@ -388,7 +390,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 225aa5a660074c74fbccd6278afae392,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.456
+      value: 0.25
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 225aa5a660074c74fbccd6278afae392,
         type: 3}
