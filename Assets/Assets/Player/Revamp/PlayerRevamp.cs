@@ -77,7 +77,6 @@ public class PlayerRevamp : Entity
     [Header("Action Attack")]
     public HitboxGroup actionHitboxGroup;
     public bool actionAttackActive;
-    public float actionThreshold;
 
     [Header("Insanity events")]
     [SerializeField] float _moveSpeedBuffMultiplier = 1.1f;
@@ -255,7 +254,7 @@ public class PlayerRevamp : Entity
                 stateMachine.ChangeState(new HitstunState());
                 health.Damage(hitbox);
                 _hitstunImmunity = true;
-                if (actionAttackActive && hitbox.damageValue >= actionThreshold)
+                if (actionAttackActive)
                 {
                     actionHitboxGroup.enabled = true;
                 }

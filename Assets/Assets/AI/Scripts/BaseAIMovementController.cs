@@ -40,6 +40,7 @@ public abstract class BaseAIMovementController : Entity
     [Header("Insanity increase drop")]
     [SerializeField] private GameObject _dropPrefab;
     [SerializeField] private float _insanityIncreaseAmount;
+    [SerializeField] public bool deathDrop = true;
 
     [NonSerialized] public BasicMeleeAI meleeEnemy;
     [NonSerialized] public RangedEnemyAI rangedAI;
@@ -293,18 +294,24 @@ public class BaseReturnToIdlePosState : State<BaseAIMovementController>
         {
             owner.stateMachine.ChangeState(_idleState);
         }
-
     }
 }
 
 /* === DEAD STATE === */
 public class DeadState : State<BaseAIMovementController>
 {
-    public override void EnterState(BaseAIMovementController owner) {  }
+    public override void EnterState(BaseAIMovementController owner) 
+    {
+        owner.GetComponent<CapsuleCollider>().enabled = false;    
+        owner.invulerable = true;
+
+        if (owner.deathDrop)
+            owner.OnDeathDrop();
+    }
 
     public override void ExitState(BaseAIMovementController owner)
     {
-        owner.OnDeathDrop();
+        
     }
 
     public override void UpdateState(BaseAIMovementController owner) { }
