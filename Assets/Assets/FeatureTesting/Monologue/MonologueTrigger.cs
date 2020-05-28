@@ -6,7 +6,16 @@ public class MonologueTrigger : MonoBehaviour
 {
     public bool onlyTriggerOnce;
 
-    public Monologue monologue;
+    public Monologue monologueSwedish;
+    public Monologue monologueEnglish;
+
+    public enum LanguageEnum
+    {
+        Swedish,
+        English
+    };
+
+    public LanguageEnum language;
 
 
     private bool _hasTriggered;
@@ -36,6 +45,13 @@ public class MonologueTrigger : MonoBehaviour
 
     public void triggerMonologue()
     {
-        _monologueManager.StartMonologue(monologue);
+        if (language == LanguageEnum.Swedish)
+        {
+            _monologueManager.StartMonologue(monologueSwedish);
+        }
+        else if (language == LanguageEnum.English)
+        {
+            _monologueManager.StartMonologue(monologueEnglish);
+        }
     }
 }
