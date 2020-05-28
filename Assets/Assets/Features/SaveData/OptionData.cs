@@ -12,6 +12,7 @@ public class OptionData : Data
     public bool isFullscreen;
     public int width;
     public int height;
+    public int currentLanguage;
 
     public OptionData(Dictionary<System.Guid, string> controls)
     {
@@ -23,6 +24,8 @@ public class OptionData : Data
         height = Screen.height;
         isFullscreen = Screen.fullScreen;
         qualityLevel = QualitySettings.GetQualityLevel();
+
+        //spara språk
 
         int i = 0;
         foreach (var key in controls.Keys)
