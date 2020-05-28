@@ -106,23 +106,23 @@ MonoBehaviour:
   _targetLayers:
     serializedVersion: 2
     m_Bits: 2359
-  _turnSpeed: 5
+  _turnSpeed: 7
   _cyclePathing: 0
   _waitAtPoints: 0
   _waitTime: 0
   _idlePathingPoints: []
-  _attackRange: 0
-  _minAttackSpeed: 0.2
+  _attackRange: 1.2
+  _minAttackSpeed: 0.4
   _maxAttackSpeedIncrease: 1
-  _usesHitStun: 0
+  _usesHitStun: 1
   _anim: {fileID: 0}
   _animationOver: 0
   _canEnterHitStun: 0
   _dropPrefab: {fileID: 4130683122775444156, guid: 3ca44147400209e4485ae8ab86c71962,
     type: 3}
   _insanityIncreaseAmount: 1
-  _hitstunOnParry: 0
-  _attackDelayAfterHitstun: 0
+  _hitstunOnParry: 0.2
+  _attackDelayAfterHitstun: 10
   _healthBar: {fileID: 2444308342576148252}
   hitboxGroup: {fileID: 4594331576501799848}
 --- !u!114 &1505761187
