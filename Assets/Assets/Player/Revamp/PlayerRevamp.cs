@@ -76,8 +76,8 @@ public class PlayerRevamp : Entity
 
     [Header("Action Attack")]
     public HitboxGroup actionHitboxGroup;
-
     public bool actionAttackActive;
+    public float actionThreshold;
 
     [Header("Insanity events")]
     [SerializeField] float _moveSpeedBuffMultiplier = 1.1f;
@@ -244,6 +244,8 @@ public class PlayerRevamp : Entity
 
             if (attacker != null)
                 attacker.Parried();
+
+            // parrya alla fiender inom en viss radie
         }
         else
         {
@@ -253,6 +255,10 @@ public class PlayerRevamp : Entity
                 stateMachine.ChangeState(new HitstunState());
                 health.Damage(hitbox);
                 _hitstunImmunity = true;
+                if (actionAttackActive && hitbox.damageValue >= actionThreshold)
+                {
+                    actionHitboxGroup.enabled = true;
+                }
             }
         }
     }
@@ -343,9 +349,21 @@ public class PlayerRevamp : Entity
             playerAnimator.SetTrigger("Jump");
             inputBuffer.Clear();
             GlobalState.state.AudioManager.PlayerJumpAudio(this.transform.position);
+
+            StartCoroutine(ActionAttackForOneFrame());
         }
     }
     #endregion
+
+    private IEnumerator ActionAttackForOneFrame()
+    {
+        if (actionAttackActive)
+        {
+            actionHitboxGroup.enabled = true;
+            yield return new WaitForFixedUpdate();
+            actionHitboxGroup.enabled = false;
+        }
+    }
 
 
     #region Private Functions
@@ -396,6 +414,7 @@ public class PlayerRevamp : Entity
                 {
                     GlobalState.state.AudioManager.PlayerLandAudio(_groundCheckPosition.position);
                     _playedLandingSound = true;
+                    //StartCoroutine(ActionAttackForOneFrame());
                 }
             }
             else
@@ -673,20 +692,12 @@ public class MovementState : State<PlayerRevamp>
 
     public override void EnterState(PlayerRevamp owner) 
     {
-        if (owner.actionAttackActive)
-        {
-            if (owner.actionHitboxGroup)
-                owner.actionHitboxGroup.enabled = true;
-        }
     }
 
     public override void ExitState(PlayerRevamp owner)
     {
         _isMoving = false;
         //owner.playerAnimator.SetBool("Running", _isMoving);
-
-        if (owner.actionHitboxGroup)
-            owner.actionHitboxGroup.enabled = false;
     }
 
     public float movingThreshold = 0.09f;
@@ -782,9 +793,8 @@ public class MovementState : State<PlayerRevamp>
 
 
 
-                //owner.playerAnimator.SetFloat("Blend", owner.Input.magnitude > 1 ? 1 : owner.Input.magnitude);
                 float magnitude = owner.Input.magnitude > 1 ? 1 : owner.Input.magnitude;
-                owner.playerAnimator.SetFloat("Blend", Mathf.Lerp(0, magnitude, time / (idleBlendDuration * magnitude)));
+                owner.playerAnimator.SetFloat("Blend", magnitude);
                 time += Time.deltaTime;
 
                 //owner.playerAnimator.SetBool("Running", true);
@@ -828,8 +838,7 @@ public class DashingState : State<PlayerRevamp>
 
         if (owner.actionAttackActive)
         {
-            if (owner.actionHitboxGroup)
-                owner.actionHitboxGroup.enabled = true;
+            owner.actionHitboxGroup.enabled = true;
         }
 
         owner.playerAnimator.SetFloat("DashSpeed", owner.dashSpeed / owner.dashAnimationNumerator);
@@ -864,8 +873,7 @@ public class DashingState : State<PlayerRevamp>
         owner.useGravity = true;
         owner.dashPerformed = false;
 
-        if (owner.actionHitboxGroup)
-            owner.actionHitboxGroup.enabled = false;
+        owner.actionHitboxGroup.enabled = false;
 
         if (owner.invulerableWhenDashing)
         {
@@ -921,6 +929,10 @@ public class LightAttackOneState : State<PlayerRevamp>
 
     public override void EnterState(PlayerRevamp owner)
     {
+        if (owner.actionAttackActive)
+        {
+                owner.actionHitboxGroup.enabled = true;
+        }
         owner.walkCancel = false;
         owner.interruptable = false;
         owner.attackAnimationOver = false;
@@ -940,6 +952,8 @@ public class LightAttackOneState : State<PlayerRevamp>
         owner.playerAnimator.SetBool("LightAttackOne", false); // Set animation bool
 
         _secondAttack = false; // Reset member variable
+
+        owner.actionHitboxGroup.enabled = false;
         owner.light1HitboxGroup.enabled = false;
         owner.interruptable = false;
         owner.attackAnimationOver = false;
@@ -1008,6 +1022,10 @@ public class LightAttackTwoState : State<PlayerRevamp>
 
     public override void EnterState(PlayerRevamp owner)
     {
+        if (owner.actionAttackActive)
+        {
+            owner.actionHitboxGroup.enabled = true;
+        }
         owner.walkCancel = false;
         owner.interruptable = false;
         owner.attackAnimationOver = false;
@@ -1022,6 +1040,7 @@ public class LightAttackTwoState : State<PlayerRevamp>
         owner.playerAnimator.SetBool("LightAttackTwo", false); // Set animation bool
 
         _secondAttack = false;
+        owner.actionHitboxGroup.enabled = false;
         owner.light2HitboxGroup.enabled = false;
         owner.interruptable = false;
         owner.attackAnimationOver = false;
@@ -1087,6 +1106,7 @@ public class LightAttackTwoState : State<PlayerRevamp>
 public class HeavyAttackState : State<PlayerRevamp>
 {
     private GameObject _target;
+    private bool _playedSound;
     private bool _isCharging;
 
     private float _previousDamageMultiplier;
@@ -1096,6 +1116,11 @@ public class HeavyAttackState : State<PlayerRevamp>
     {
         _chargeTimer = new Timer(owner.heavyChargeTime);
         _isCharging = true;
+
+        if (owner.actionAttackActive)
+        {
+            owner.actionHitboxGroup.enabled = true;
+        }
 
         owner.walkCancel = false;
         owner.interruptable = false;
@@ -1110,6 +1135,8 @@ public class HeavyAttackState : State<PlayerRevamp>
     public override void ExitState(PlayerRevamp owner)
     {
         _isCharging = false;
+        _playedSound = false;
+        owner.actionHitboxGroup.enabled = false;
         owner.heavyHitboxGroup.enabled = false;
         owner.interruptable = false;
         owner.attackAnimationOver = false;
@@ -1138,18 +1165,28 @@ public class HeavyAttackState : State<PlayerRevamp>
                 {
                     _isCharging = false;
                     owner.playerAnimator.SetBool("HeavyCharge", false);
-
+                    owner.actionHitboxGroup.enabled = false; // charge state krävs för att synkronisera med animationen (exit time)
                     if (owner.modifier.DamageMultiplier.IsModified)
                         _previousDamageMultiplier = owner.modifier.DamageMultiplier.Multiplier;
                     owner.modifier.DamageMultiplier *= 1f + _chargeTimer.Time / owner.heavyChargeTime * owner.heavyMaxDamageMultiplier;
 
-                    GlobalState.state.AudioManager.PlayerSwordSwingAudio(owner.transform.position);
                 }
             }
             else
             {
+                if (owner.actionAttackActive)
+                {
+                    owner.actionHitboxGroup.enabled = true;
+                }
+
                 if (owner.attackStep)
                 {
+                    if (!_playedSound)
+                    {
+                        GlobalState.state.AudioManager.PlayerSwordSwingAudio(owner.transform.position); // play sound event?
+                        _playedSound = true;
+                    }
+
                     if (_target != null)
                         owner.FaceDirection(_target.transform);
                     owner.controller.Move(owner.transform.forward * owner.heavyStepSpeed * Time.deltaTime);
@@ -1195,6 +1232,7 @@ public class HitstunState : State<PlayerRevamp>
     public override void ExitState(PlayerRevamp owner)
     {
         owner.playerAnimator.SetBool("InHitstun", false);
+        owner.actionHitboxGroup.enabled = false;
     }
 
     public override void UpdateState(PlayerRevamp owner)
@@ -1220,10 +1258,16 @@ public class ParryState : State<PlayerRevamp>
         owner.playerAnimator.SetTrigger("Parry");
         owner.playerAnimator.SetBool("IsParrying", true);
         owner.playerAnimator.SetBool("ParryLag", false);
+
+        if (owner.actionAttackActive)
+        {
+            owner.actionHitboxGroup.enabled = true;
+        }
     }
 
     public override void ExitState(PlayerRevamp owner)
     {
+        owner.actionHitboxGroup.enabled = false;
         owner.successfulParry = false;
         owner.attackAnimationOver = false;
         owner.isParrying = false;
@@ -1253,6 +1297,7 @@ public class ParryState : State<PlayerRevamp>
                 if (_parryTimer.Expired)
                 {
                     owner.isParrying = false;
+                    owner.actionHitboxGroup.enabled = false;
                     owner.playerAnimator.SetBool("IsParrying", false);
                     owner.playerAnimator.SetBool("ParryLag", true);
                     _parryLagTimer.Time += Time.deltaTime;
@@ -1270,6 +1315,11 @@ public class SuccessfulParryState : State<PlayerRevamp>
 {
     public override void EnterState(PlayerRevamp owner)
     {
+        if (owner.actionAttackActive)
+        {
+            owner.actionHitboxGroup.enabled = true;
+        }
+
         owner.attackAnimationOver = true;
         owner.isParrying = false;
         owner.inputBuffer.Clear();
@@ -1277,6 +1327,7 @@ public class SuccessfulParryState : State<PlayerRevamp>
 
     public override void ExitState(PlayerRevamp owner)
     {
+        owner.actionHitboxGroup.enabled = false;
         owner.attackAnimationOver = false;
         owner.playerAnimator.SetBool("IsParrying", false);
     }

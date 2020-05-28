@@ -17,17 +17,17 @@ public class HitboxGroup : MonoBehaviour
     [HideInInspector] public List<GameObject> _alreadyHit;
     private List<Hitbox> _hitTimes;
 
-    private bool _eventLess;
-    [SerializeField] private bool _enabledByDefault;
+    public bool eventLess;
+    public bool enabledByDefault;
     private Entity _parentEntity;
 
     void Awake() {
         _alreadyHit = new List<GameObject>();
         _hitTimes = new List<Hitbox>();
 
-        _eventLess = GetComponentInChildren<HitboxController>() == null ? true : false;
+       // eventLess = GetComponentInChildren<HitboxController>() == null ? true : false;
 
-        if (!_eventLess)
+        if (!eventLess)
         {
             if (hitboxEventHandler == null)
             {
@@ -49,7 +49,7 @@ public class HitboxGroup : MonoBehaviour
         }
 
         _parentEntity = GetComponentInParent<Entity>();
-        enabled = _enabledByDefault;
+        enabled = enabledByDefault;
     }
 
     public void EnableEvent(int id = 0)
@@ -70,7 +70,7 @@ public class HitboxGroup : MonoBehaviour
 
     void LateUpdate()
     {
-        if (!_eventLess)
+        if (!eventLess)
             HitDetection();
     }
 
@@ -158,7 +158,7 @@ public class HitboxGroup : MonoBehaviour
     public void AddHitbox(Hitbox hitbox)
     {
         _hitTimes.Add(hitbox);
-        if (_eventLess)
+        if (eventLess)
         {
             HitDetection();
         }
@@ -166,18 +166,22 @@ public class HitboxGroup : MonoBehaviour
 
     private void OnEnable()
     {
-        if (!_eventLess)
+        if (!eventLess)
         {
             hitboxEventHandler.onEnableHitboxes += EnableEvent;
             hitboxEventHandler.onDisableHitboxes += DisableEvent;
             hitboxEventHandler.onEndAnim += ResetList;
+        }
+        else
+        {
+            EnableEvent(0);
         }
 
         ResetList();
     }
 
     private void OnDisable() {
-        if (!_eventLess)
+        if (!eventLess)
         {
             hitboxEventHandler.onEnableHitboxes -= EnableEvent;
             hitboxEventHandler.onDisableHitboxes -= DisableEvent;
