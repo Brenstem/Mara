@@ -1,0 +1,268 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6923757205506633349
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 479466109830248288}
+  - component: {fileID: 6001437849881889528}
+  - component: {fileID: 3262627338068411220}
+  - component: {fileID: 1794141228582241245}
+  - component: {fileID: 6923757205506633348}
+  - component: {fileID: 6923757205506633351}
+  - component: {fileID: 6923757205506633350}
+  - component: {fileID: 6923757205506633353}
+  m_Layer: 0
+  m_Name: GlobalState
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &479466109830248288
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6923757205506633349}
+  m_LocalRotation: {x: 0.0019711645, y: -0.12925377, z: -0.0015671216, w: 0.9916084}
+  m_LocalPosition: {x: -2.573658, y: 5.656898, z: -100.769005}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0.201, y: -14.853001, z: -0.20700002}
+--- !u!114 &6001437849881889528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6923757205506633349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 472b6d0e019343e4c876554e79c44ed1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _entryTimeFraction: 0.043
+  _exitTimeFraction: 0.22
+  _player: {fileID: 0}
+  _camera: {fileID: 0}
+  _audioManager: {fileID: 3262627338068411220}
+  _checkpointHandler: {fileID: 1794141228582241245}
+  _playerMask:
+    serializedVersion: 2
+    m_Bits: 2048
+  _enemyMask:
+    serializedVersion: 2
+    m_Bits: 4096
+  _groundMask:
+    serializedVersion: 2
+    m_Bits: 256
+  language: 0
+--- !u!114 &3262627338068411220
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6923757205506633349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8798d1d51161f8c47a9ae254063dbe54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  InsanityEventAudio: event:/SFX/Player/Insanity manager
+  insanityDecayAudio: 
+  insanityRegen: 
+  PlayerFootsteps: event:/SFX/Player/movement/Footsteps
+  playerSwordSwingAudio: event:/SFX/Player/Attacks/Sword
+  playerHeavyAttackAudio: 
+  playerDodgeAudio: event:/SFX/Player/movement/Dash
+  playerJumpAudio: event:/SFX/Player/movement/Jump
+  playerLandAudio: 
+  playerHurtAudio: event:/SFX/Player/Hurt
+  playerHeartBeatAudio: event:/SFX/Player/Heartbeats
+  parryIndicatorAudio: event:/SFX/Player/Parry indicator
+  parrySuccessAudio: event:/SFX/Player/Parry
+  parryBreakAudio: 
+  unparryableAttackAudio: 
+  rangedEnemyFireAudio: event:/SFX/Fiender/Ranged enemy/Fire shoot
+  rangedProjectileHit: 
+  rangedEnemyAlertAudio: event:/SFX/Fiender/Basic Enemy/Basic Enemy Alerted
+  rangedEnemyMeleeAttackAudio: 
+  rangedEnemyMeleeAttackHitAudio: 
+  rangedEnemyChantAudio: 
+  floatingEnemyHurtAudio: event:/SFX/Fiender/Basic Enemy/Basic Enemy hurt
+  basicEnemyAttack: event:/SFX/Fiender/Basic Enemy/Basic Enemy Attack
+  basicEnemyHitPlayer: 
+  basicEnemyAlerted: 
+  basicEnemyDies: 
+  mylingAlertedAudio: 
+  mylingChargeAttackAudio: 
+  mylingDiesAudio: 
+  mylingFootstepAudio: 
+  sisterAlertedAudio: 
+  sisterDissappearAudio: 
+  sisteridleAudio: 
+  bossHurtAudio: event:/SFX/Fiender/BirdBoss/Birdhurt
+  bossHeavyHurt: 
+  bossDashAudio: event:/SFX/Fiender/BirdBoss/Wings OR Dash
+  birdAoeAttackAudio: 
+  birdAttackAudio: 
+  birdWalkAudio: 
+  birdSpawnEnemyAudio: 
+  birdDrainLaser: 
+  checkpointAudio: event:/SFX/Environment and ambience/Checkpoint
+  collectibleAudio: event:/SFX/Object/Pickup Collectible
+  idleCollectibleAudio: 
+  grusRasAudio: 
+  murkyWater: 
+  murkyWaterDamage: 
+--- !u!114 &1794141228582241245
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6923757205506633349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cbfb955a1b677845ab3697fba9b64f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  respawnTime: 0
+--- !u!114 &6923757205506633348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6923757205506633349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_RawSignal: {fileID: 11400000, guid: 68313d46f8a6bb340be94d1215f045ed, type: 2}
+    m_AmplitudeGain: 2
+    m_FrequencyGain: 2
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 1
+          value: 0
+          inSlope: -2.2641516
+          outSlope: -2.2641516
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0.087499976
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 1.5
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 2.1474836e+9
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 2.147484e+9
+--- !u!114 &6923757205506633351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6923757205506633349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: 0
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.1
+  m_BuildHeightMesh: 0
+  m_NavMeshData: {fileID: 23800000, guid: 80e3be9d0c44bba4f8a7bf6e45080eac, type: 2}
+--- !u!114 &6923757205506633350
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6923757205506633349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51976babaad22d84286fd107cb4507fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6923757205506633353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6923757205506633349}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a5ac11cc976e418e8d13136b07e1f52, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_AgentTypeID: -334000983
+  m_CollectObjects: 0
+  m_Size: {x: 10, y: 10, z: 10}
+  m_Center: {x: 0, y: 2, z: 0}
+  m_LayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_UseGeometry: 0
+  m_DefaultArea: 0
+  m_IgnoreNavMeshAgent: 1
+  m_IgnoreNavMeshObstacle: 1
+  m_OverrideTileSize: 0
+  m_TileSize: 256
+  m_OverrideVoxelSize: 0
+  m_VoxelSize: 0.16666667
+  m_BuildHeightMesh: 0
+  m_NavMeshData: {fileID: 23800000, guid: f95a982a95c027b42a3c4117afbefc7f, type: 2}

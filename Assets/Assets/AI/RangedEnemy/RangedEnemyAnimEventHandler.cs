@@ -6,6 +6,11 @@ public class RangedEnemyAnimEventHandler : MonoBehaviour
 {
     [SerializeField] private RangedEnemyAI _parentAI;
 
+    private void Start()
+    {
+        _parentAI.GetComponentInParent<RangedEnemyAI>();
+    }
+
     public void FireEvent()
     {
         _parentAI.Fire();

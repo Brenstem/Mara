@@ -250,6 +250,8 @@ public class PlayerRevamp : Entity
         }
         else
         {
+            GlobalState.state.AudioManager.RangedEnemyMeleeAttackHitAudio(this.transform.position);
+
             if (!_hitstunImmunity)
             {
                 hitstunDuration = hitbox.hitstunTime;
@@ -1131,6 +1133,9 @@ public class HeavyAttackState : State<PlayerRevamp>
         owner.playerAnimator.SetBool("HeavyCharge", true);
 
         _target = owner.FindTarget();
+
+        GlobalState.state.AudioManager.PlayerHeavyAttackAudio(0, owner.transform); // play sound event?
+
     }
 
     public override void ExitState(PlayerRevamp owner)
@@ -1162,15 +1167,16 @@ public class HeavyAttackState : State<PlayerRevamp>
             if (_isCharging)
             {
                 _chargeTimer += Time.deltaTime;
+
                 if (_chargeTimer.Expired || owner.inputBuffer.Contains(PlayerRevamp.InputType.AttackHeavyReleased))
                 {
+                    //GlobalState.state.AudioManager.PlayerHeavyAttackAudio(1, owner.transform); // play sound event?
                     _isCharging = false;
                     owner.playerAnimator.SetBool("HeavyCharge", false);
                     owner.actionHitboxGroup.enabled = false; // charge state krävs för att synkronisera med animationen (exit time)
                     if (owner.modifier.DamageMultiplier.IsModified)
                         _previousDamageMultiplier = owner.modifier.DamageMultiplier.Multiplier;
                     owner.modifier.DamageMultiplier *= 1f + _chargeTimer.Time / owner.heavyChargeTime * owner.heavyMaxDamageMultiplier;
-
                 }
             }
             else
@@ -1184,7 +1190,7 @@ public class HeavyAttackState : State<PlayerRevamp>
                 {
                     if (!_playedSound)
                     {
-                        GlobalState.state.AudioManager.PlayerSwordSwingAudio(owner.transform.position); // play sound event?
+                        GlobalState.state.AudioManager.PlayerHeavyAttackAudio(2, owner.transform); // play sound event?
                         _playedSound = true;
                     }
 
@@ -1259,6 +1265,7 @@ public class ParryState : State<PlayerRevamp>
         owner.playerAnimator.SetTrigger("Parry");
         owner.playerAnimator.SetBool("IsParrying", true);
         owner.playerAnimator.SetBool("ParryLag", false);
+        GlobalState.state.AudioManager.ParryindicatorAudio(owner.transform.position);
 
         if (owner.actionAttackActive)
         {
@@ -1324,6 +1331,8 @@ public class SuccessfulParryState : State<PlayerRevamp>
         owner.attackAnimationOver = true;
         owner.isParrying = false;
         owner.inputBuffer.Clear();
+
+        GlobalState.state.AudioManager.ParrySuccessAudio(owner.transform.position);
     }
 
     public override void ExitState(PlayerRevamp owner)

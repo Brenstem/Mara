@@ -28,6 +28,8 @@ public class ProjectileBehaviour : MonoBehaviour
         Vector3 offset = new Vector3(0, 1.2f, 0);
         Vector3 direction = (_playerPos + offset) - this.transform.position;
 
+        GlobalState.state.AudioManager.RangedEnemyFireAudio(this.transform.position);
+
         direction = direction.normalized;
 
         direction.x = transform.forward.x;
@@ -59,6 +61,7 @@ public class ProjectileBehaviour : MonoBehaviour
     IEnumerator DestroyProjectile()
     {
         yield return StartCoroutine(WaitFor.Frames(3));
+        GlobalState.state.AudioManager.RangedProjectileHit(this.transform.position);
         Destroy(this.gameObject);
     }
 }

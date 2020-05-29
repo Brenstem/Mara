@@ -16,4 +16,9 @@ public class MylingEventHandler : MonoBehaviour
         _parentAI.stateMachine.ChangeState(new BaseIdleState());
         Destroy(this._parentAI.gameObject);
     }
+
+    public void FootStep()
+    {
+        GlobalState.state.AudioManager.MylingFootstepAudio(this.transform.position);
+    }
 }
