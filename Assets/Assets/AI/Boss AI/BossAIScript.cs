@@ -205,7 +205,7 @@ public class BossAIScript : Entity
         player = GlobalState.state.Player.gameObject;
 
         bossAnimator = GetComponent<Animator>();
-        agent = GetComponentInParent<NavMeshAgent>();
+        agent = GetComponent<NavMeshAgent>();
 
         idlePos = transform.position;
         turnSpeed = defaultTurnSpeed;
@@ -233,8 +233,12 @@ public class BossAIScript : Entity
 
     void Update()
     {
+        Debug.Log(animationEnded);
         phaseStateMachine.Update();
         actionStateMachine.Update();
+        //print(actionStateMachine.currentState);
+        //print(movementDirection);
+        //agent.SetDestination(Vector3.forward);
     }
 
     public void FacePlayer()
@@ -732,7 +736,6 @@ public class DrainAttackActiveState : State<BossAIScript>
 
     public override void ExitState(BossAIScript owner)
     {
-        owner.bossAnimator.SetBool("drainActiveBool", false);
         owner.drainAttackHitboxGroup.enabled = false;
         owner.turnSpeed = owner.defaultTurnSpeed;
         owner.animationEnded = false;
@@ -745,8 +748,12 @@ public class DrainAttackActiveState : State<BossAIScript>
 
         owner.FacePlayer();
 
-        //fixa så den går ut vid animationEnded, inte när timern är slut
         if (_timer.Expired)
+        {
+            owner.bossAnimator.SetBool("drainActiveBool", false);
+        }
+
+        if (owner.animationEnded)
         {
             owner.actionStateMachine.ChangeState(owner.bossCombatState);
         }
@@ -1188,6 +1195,7 @@ public class BossPhaseOneCombatState : State<BossAIScript>
                     //ändra 5an till typ destinationAmplifier
                     _destination = owner.transform.position + owner.movementDirection * 5;
                     owner.agent.SetDestination(_destination);
+                    //Debug.Log(_destination);
                 }
             }
             //om bossen inte kan se spelaren
