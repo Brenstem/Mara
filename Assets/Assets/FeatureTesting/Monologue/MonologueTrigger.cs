@@ -6,7 +6,8 @@ public class MonologueTrigger : MonoBehaviour
 {
     public bool onlyTriggerOnce;
 
-    public Monologue monologue;
+    public Monologue monologueSwedish;
+    public Monologue monologueEnglish;
 
 
     private bool _hasTriggered;
@@ -36,6 +37,13 @@ public class MonologueTrigger : MonoBehaviour
 
     public void triggerMonologue()
     {
-        _monologueManager.StartMonologue(monologue);
+        if (GlobalState.state.language == GlobalState.LanguageEnum.Swedish)
+        {
+            _monologueManager.StartMonologue(monologueSwedish);
+        }
+        else if (GlobalState.state.language == GlobalState.LanguageEnum.English)
+        {
+            _monologueManager.StartMonologue(monologueEnglish);
+        }
     }
 }

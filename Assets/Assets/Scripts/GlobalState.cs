@@ -19,7 +19,7 @@ public class GlobalState : MonoBehaviour
     [SerializeField] private Camera _camera;
 
     [SerializeField] private AudioManager _audioManager;
-    
+
     [SerializeField] private CheckpointHandler _checkpointHandler;
 
     [SerializeField] private LayerMask _playerMask;
@@ -27,6 +27,14 @@ public class GlobalState : MonoBehaviour
     [SerializeField] private LayerMask _enemyMask;
 
     [SerializeField] private LayerMask _groundMask;
+
+    [SerializeField] public enum LanguageEnum
+    {
+        Swedish,
+        English
+    };
+
+    public LanguageEnum language;
 
     public PlayerRevamp Player
     {
@@ -61,6 +69,11 @@ public class GlobalState : MonoBehaviour
     public LayerMask GroundMask
     {
         get { return _groundMask; }
+    }
+
+    public LanguageEnum CurrentLanguage
+    {
+        get { return language; }
     }
 
     private static GlobalState _state;
