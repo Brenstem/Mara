@@ -38,6 +38,11 @@ public class MenuAction : MonoBehaviour
         //QualitySettings.SetQualityLevel(qualityIndex);
     }
 
+    public void SetLanguage(int language)
+    {
+        GlobalState.state.language = (GlobalState.LanguageEnum)language;
+    }
+
     public void ExitGame()
     {
         #if UNITY_EDITOR

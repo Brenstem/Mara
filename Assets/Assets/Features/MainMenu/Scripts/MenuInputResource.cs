@@ -47,7 +47,6 @@ public class MenuInputResource : MonoBehaviour
 
         OptionData data = new OptionData(overrides);
 
-
         SaveData.Save_Data(data);
 
         PlayerInput.PlayerControls.Disable();
