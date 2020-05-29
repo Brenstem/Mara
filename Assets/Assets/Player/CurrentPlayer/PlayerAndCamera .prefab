@@ -1963,7 +1963,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   _alreadyHit: []
-  _enabledByDefault: 0
+  eventLess: 0
+  enabledByDefault: 0
 --- !u!1 &5233828651196988756
 GameObject:
   m_ObjectHideFlags: 0
@@ -2328,8 +2329,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5703443194901230138}
-  m_LocalRotation: {x: 0.1816114, y: 0.9684102, z: -0.16915776, w: -0.024181094}
-  m_LocalPosition: {x: -0.00000166893, y: -0.00000029802322, z: 0.00000023841858}
+  m_LocalRotation: {x: -0.17568982, y: -0.9156983, z: 0.15935998, w: 0.32439813}
+  m_LocalPosition: {x: -0.00000029802322, y: 0.00000011920929, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5703443196563736581}
@@ -2411,7 +2412,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5703443194921373126}
-  m_LocalRotation: {x: -0.02115929, y: 0.7027052, z: -0.17725757, w: -0.6887218}
+  m_LocalRotation: {x: 0.08744468, y: -0.6975641, z: 0.11140598, w: 0.7023863}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -2449,7 +2450,7 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 80
     OrthographicSize: 10
-    NearClipPlane: 0.1
+    NearClipPlane: 0.001
     FarClipPlane: 5000
     Dutch: 0
     LensShift: {x: 0, y: 0}
@@ -2494,8 +2495,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5703443195090076725}
-  m_LocalRotation: {x: 0.26257628, y: 0.9543304, z: -0.14210416, w: -0.010659724}
-  m_LocalPosition: {x: -0.00000166893, y: -0.00000029802322, z: 0.00000023841858}
+  m_LocalRotation: {x: -0.41482717, y: -0.8392166, z: 0.21153098, w: 0.2808709}
+  m_LocalPosition: {x: -0.0000004172325, y: 0, z: -0.00000023841858}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5703443194442019034}
@@ -2980,9 +2981,9 @@ MonoBehaviour:
   dashSpeed: 12
   dashAnimationNumerator: 8.5
   invulerableWhenDashing: 0
-  hitstunImmunityTime: 0
+  hitstunImmunityTime: 1
   heavyHitstunThreshold: 1
-  parryDuration: 0.33
+  parryDuration: 0.5
   parryLag: 0.2
   light1HitboxGroup: {fileID: 7625044985771684810}
   light1StepSpeed: 4
@@ -2993,8 +2994,9 @@ MonoBehaviour:
   heavyChargeTime: 2
   heavyMaxDamageMultiplier: 1
   heavyMaxHitstopMultiplier: 1
-  actionHitboxGroup: {fileID: 0}
+  actionHitboxGroup: {fileID: 5035931491724709742}
   actionAttackActive: 0
+  actionThreshold: 0
   _moveSpeedBuffMultiplier: 1.1
   _moveSpeedDebuffMultiplier: 0.9
   pointOfInterest: {fileID: 0}
@@ -3117,7 +3119,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5703443195479338760}
-  m_LocalRotation: {x: 0.03988005, y: -0.7020053, z: 0.21622089, w: 0.67738223}
+  m_LocalRotation: {x: -0.116648614, y: 0.6933938, z: -0.14060792, w: -0.6970134}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3155,7 +3157,7 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 80
     OrthographicSize: 10
-    NearClipPlane: 0.1
+    NearClipPlane: 0.001
     FarClipPlane: 5000
     Dutch: 0
     LensShift: {x: 0, y: 0}
@@ -3360,7 +3362,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5703443195946703442}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.7322406, y: -0.3437584, z: -5.450814}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5703443195479338763}
@@ -3393,7 +3395,7 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 80
     OrthographicSize: 10
-    NearClipPlane: 0.1
+    NearClipPlane: 0.001
     FarClipPlane: 5000
     Dutch: 0
     LensShift: {x: 0, y: 0}
@@ -3568,8 +3570,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5703443195972097611}
-  m_LocalRotation: {x: 0.19991313, y: 0.6736582, z: -0.19698294, w: 0.6836791}
-  m_LocalPosition: {x: -2.8255744, y: 3.3527713, z: -5.5015182}
+  m_LocalRotation: {x: -0.25188494, y: -0.4233149, z: 0.12378073, w: -0.8614156}
+  m_LocalPosition: {x: -1.8581523, y: 2.8527713, z: -1.434039}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5703443196072605252}
@@ -3599,7 +3601,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.1
+  near clip plane: 0.01
   far clip plane: 5000
   field of view: 80
   orthographic: 0
@@ -3944,7 +3946,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5703443196162587206}
-  m_LocalRotation: {x: 0.20752728, y: -0.6716076, z: -0.071182646, w: 0.7076785}
+  m_LocalRotation: {x: 0.17877941, y: -0.6798251, z: -0.04102407, w: 0.7100654}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -3982,7 +3984,7 @@ MonoBehaviour:
   m_Lens:
     FieldOfView: 80
     OrthographicSize: 10
-    NearClipPlane: 0.1
+    NearClipPlane: 0.001
     FarClipPlane: 5000
     Dutch: 0
     LensShift: {x: 0, y: 0}
@@ -4027,8 +4029,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5703443196183413616}
-  m_LocalRotation: {x: 0.65879667, y: 0.7435952, z: -0.10700517, w: 0.040039595}
-  m_LocalPosition: {x: -0.00000166893, y: -0.00000029802322, z: 0.00000023841858}
+  m_LocalRotation: {x: -0.32942054, y: -0.879522, z: 0.1527831, w: 0.3075394}
+  m_LocalPosition: {x: -0.00000011920929, y: -0.0000003874302, z: 0.0000035762787}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5703443196373191561}
@@ -4114,7 +4116,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5703443196352902652}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3.1001039, y: -0.42154384, z: -2.6044104}
+  m_LocalPosition: {x: -0.74853855, y: -0.49912903, z: 2.2401178}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5703443194901230141}
@@ -5494,9 +5496,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   hitboxValues:
-    damageValue: 0
-    hitstunTime: 0
-    hitstopTime: 0
+    damageValue: 15
+    hitstunTime: 0.4
+    hitstopTime: 0.07
     parryable: 0
     ignoreArmor: 0
   _size: {x: 0.73, y: 2.03, z: 1.27}
@@ -5567,9 +5569,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   hitboxValues:
-    damageValue: 0
-    hitstunTime: 0
-    hitstopTime: 0
+    damageValue: 15
+    hitstunTime: 0.25
+    hitstopTime: 0.07
     parryable: 0
     ignoreArmor: 0
   _size: {x: 0.73, y: 2.03, z: 1.27}
@@ -5638,7 +5640,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   _alreadyHit: []
-  _enabledByDefault: 0
+  eventLess: 0
+  enabledByDefault: 0
 --- !u!1 &7625044985026173050
 GameObject:
   m_ObjectHideFlags: 0
@@ -5688,7 +5691,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   _alreadyHit: []
-  _enabledByDefault: 0
+  eventLess: 0
+  enabledByDefault: 0
 --- !u!1 &7625044985768142699
 GameObject:
   m_ObjectHideFlags: 0
@@ -5740,9 +5744,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   hitboxValues:
-    damageValue: 0
-    hitstunTime: 0
-    hitstopTime: 0
+    damageValue: 25
+    hitstunTime: 0.5
+    hitstopTime: 0.1
     parryable: 0
     ignoreArmor: 1
   _size: {x: 2.63, y: 2.03, z: 1.27}
@@ -5811,7 +5815,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   _alreadyHit: []
-  _enabledByDefault: 0
+  eventLess: 0
+  enabledByDefault: 0
 --- !u!1 &7691103185605782299
 GameObject:
   m_ObjectHideFlags: 0
