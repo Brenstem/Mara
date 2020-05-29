@@ -9,14 +9,6 @@ public class MonologueTrigger : MonoBehaviour
     public Monologue monologueSwedish;
     public Monologue monologueEnglish;
 
-    public enum LanguageEnum
-    {
-        Swedish,
-        English
-    };
-
-    public LanguageEnum language;
-
 
     private bool _hasTriggered;
     private LayerMask _triggerDetectionLayers;
@@ -45,11 +37,11 @@ public class MonologueTrigger : MonoBehaviour
 
     public void triggerMonologue()
     {
-        if (language == LanguageEnum.Swedish)
+        if (GlobalState.state.language == GlobalState.LanguageEnum.Swedish)
         {
             _monologueManager.StartMonologue(monologueSwedish);
         }
-        else if (language == LanguageEnum.English)
+        else if (GlobalState.state.language == GlobalState.LanguageEnum.English)
         {
             _monologueManager.StartMonologue(monologueEnglish);
         }

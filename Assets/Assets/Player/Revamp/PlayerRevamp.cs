@@ -135,9 +135,11 @@ public class PlayerRevamp : Entity
     [HideInInspector] public bool isParrying;
     [HideInInspector] public bool walkCancel;
 
-    private void LoadControls()
+    private void LoadData()
     {
         /*OptionData d = (OptionData)SaveData.Load_Data("controls");
+
+        GlobalState.state.language = (GlobalState.LanguageEnum)d.currentLanguage;
 
         Dictionary<System.Guid, string> ovr = new Dictionary<System.Guid, string>();
 
@@ -167,7 +169,7 @@ public class PlayerRevamp : Entity
         stateMachine = new StateMachine<PlayerRevamp>(this);
         stateMachine.ChangeState(new IdleState());
 
-        LoadControls();
+        LoadData();
 
         inputBuffer = new CircularBuffer<InputType>(inputBufferSize);
 
