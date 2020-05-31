@@ -463,6 +463,20 @@ retry:
             }
         }
 
+        public static void AttachInstanceToGameObject(FMOD.Studio.EventInstance instance, Transform transform)
+        {
+            AttachedInstance attachedInstance = Instance.attachedInstances.Find(x => x.instance.handle == instance.handle);
+            if (attachedInstance == null)
+            {
+                attachedInstance = new AttachedInstance();
+                Instance.attachedInstances.Add(attachedInstance);
+            }
+
+            instance.set3DAttributes(RuntimeUtils.To3DAttributes(transform));
+            attachedInstance.transform = transform;
+            attachedInstance.instance = instance;
+        }
+
         public static void AttachInstanceToGameObject(FMOD.Studio.EventInstance instance, Transform transform, Rigidbody rigidBody)
         {
             AttachedInstance attachedInstance = Instance.attachedInstances.Find(x => x.instance.handle == instance.handle);

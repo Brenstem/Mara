@@ -191,10 +191,13 @@ public class AudioManager : MonoBehaviour
         RuntimeManager.PlayOneShot(playerSwordSwingAudio, position);
     }
 
-    public void PlayerHeavyAttackAudio(float heavyattackvalue)                  //added (kan dela upp denna ljudeffekten om det är lättare att spela upp / timea separata events)
+    public void PlayerHeavyAttackAudio(int heavyattackvalue, Transform transform)                  //added (kan dela upp denna ljudeffekten om det är lättare att spela upp / timea separata events)
     {
         Heavyattack = RuntimeManager.CreateInstance(playerHeavyAttackAudio);
         Heavyattack.setParameterByName("Charge attack", heavyattackvalue);      // 0= charge, 1= charge done, 2= attack
+
+        RuntimeManager.AttachInstanceToGameObject(Heavyattack, transform);
+
         Heavyattack.start();
     }
 
@@ -222,6 +225,7 @@ public class AudioManager : MonoBehaviour
     {
         InsanityEvent = RuntimeManager.CreateInstance(InsanityEventAudio);        // Create a new FMOD::Studio::EventInstance.
         InsanityEvent.setParameterByName("InsanityBar", insanityPercentage);     // string-värdet är parameternamnet och insanitypercentage är float-värdet
+        
         InsanityEvent.start();                                                  // spelar upp ljudet
     }
 
@@ -318,7 +322,7 @@ public class AudioManager : MonoBehaviour
         RuntimeManager.PlayOneShot(rangedEnemyMeleeAttackAudio);
     }
 
-    public void RangedEnemeyMeleeAttackHitAudio(Vector3 position)                   //added
+    public void RangedEnemyMeleeAttackHitAudio(Vector3 position)                   //added
     {
         RuntimeManager.PlayOneShot(rangedEnemyMeleeAttackHitAudio, position);
     }

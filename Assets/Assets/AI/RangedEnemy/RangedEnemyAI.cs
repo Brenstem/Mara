@@ -364,6 +364,8 @@ public class RangedEnemySwingState : State<BaseAIMovementController>
         owner._anim.SetTrigger("Swing");
         owner._canEnterHitStun = false;
         owner.rangedAI._meleeHitBoxGroup.enabled = true;
+
+        GlobalState.state.AudioManager.RangedEnemyMeleeAttackAudio(owner.rangedAI.transform.position);
     }
 
     public override void ExitState(BaseAIMovementController owner)

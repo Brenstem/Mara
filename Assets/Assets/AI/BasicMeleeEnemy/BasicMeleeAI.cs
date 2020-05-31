@@ -42,6 +42,7 @@ public class BasicMeleeAI : BaseAIMovementController
     /* === PUBLIC FUNCTIONS === */
     public override void KillThis()
     {
+        GlobalState.state.AudioManager.BasicEnemyDies(this.transform.position);
         stateMachine.ChangeState(new DeadState());
         _anim.SetBool("Dead", true);
         _agent.SetDestination(transform.position);
@@ -107,7 +108,7 @@ public class BasicMeleeChasingState : BaseChasingState
     {
         _attackingState = new BasicMeleeAttackingState();
         _returnToIdleState = new BasicMeleeReturnToIdleState();
-        // GlobalState.state.AudioManager.RangedEnemyAlertAudio(owner._meleeEnemy.transform.position);
+        GlobalState.state.AudioManager.BasicEnemyAlerted(owner.transform.position);
         
     }
     public override void UpdateState(BaseAIMovementController owner)
