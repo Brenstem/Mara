@@ -1321,7 +1321,7 @@ public class SuccessfulParryState : State<PlayerRevamp>
         }
 
         owner.attackAnimationOver = true;
-        owner.isParrying = false;
+        owner.isParrying = true;
         owner.inputBuffer.Clear();
     }
 
@@ -1330,6 +1330,7 @@ public class SuccessfulParryState : State<PlayerRevamp>
         owner.actionHitboxGroup.enabled = false;
         owner.attackAnimationOver = false;
         owner.playerAnimator.SetBool("IsParrying", false);
+        owner.isParrying = false;
     }
 
     public override void UpdateState(PlayerRevamp owner)
