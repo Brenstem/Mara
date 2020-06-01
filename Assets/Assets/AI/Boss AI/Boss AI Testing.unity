@@ -3914,6 +3914,7 @@ MonoBehaviour:
   chasingSpeed: 6
   chasingAcceleration: 40
   murkyWaterPrefabs: []
+  baseSpawnPosOffset: {x: 0, y: 0, z: 0}
   aoeAttackCooldown: 0
   useSpiral: 0
   spiralLayers: 0
@@ -4468,17 +4469,17 @@ PrefabInstance:
     - target: {fileID: 5420518577660149752, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.00000047683716
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577660149752, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.000000029802322
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577660149752, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.00000011920929
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577468967629, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
@@ -4488,17 +4489,17 @@ PrefabInstance:
     - target: {fileID: 5420518577412540099, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.0000004714425
+      value: -0.0000023572125
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577412540099, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.00000007038909
+      value: 0.0000003519454
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577412540099, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.0000000126911175
+      value: 0.00000006345567
       objectReference: {fileID: 0}
     - target: {fileID: 5420518576247655275, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}

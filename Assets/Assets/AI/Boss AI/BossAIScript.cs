@@ -108,6 +108,8 @@ public class BossAIScript : Entity
 
     [SerializeField] public GameObject[] murkyWaterPrefabs;
 
+    [SerializeField] public Vector3 baseSpawnPosOffset;
+
     [SerializeField] public float aoeAttackCooldown;
     //temp variabel för design
     [SerializeField] public bool useSpiral;
@@ -199,7 +201,7 @@ public class BossAIScript : Entity
         meleeAttackOneState = new MeleeAttackOneState();
         drainAttackChargeState = new DrainAttackChargeState(drainChargeTime);
         drainAttackActiveState = new DrainAttackActiveState(drainAttackTime);
-        aoeAttackState = new AOEAttackState(murkyWaterPrefabs, spiralLayers, poolsPerLayer, spiralIntensity, poolTimeToLive, spawnTimeBetweenPools, spaceBetweenLayers, firstLayerOffset);
+        aoeAttackState = new AOEAttackState(murkyWaterPrefabs, spiralLayers, poolsPerLayer, spiralIntensity, poolTimeToLive, spawnTimeBetweenPools, spaceBetweenLayers, firstLayerOffset, baseSpawnPosOffset);
         spawnEnemiesAbilityState = new SpawnEnemiesAbilityState(enemyToSpawnPrefab, spawnedEnemyAggroRange, spawnedEnemyUnaggroRange, spawnEnemyAbilityCastTime, spawnPos);
 
         player = GlobalState.state.Player.gameObject;
@@ -770,10 +772,11 @@ public class AOEAttackState : State<BossAIScript>
     private float _spawnTimeBetweenPools;
     private float _spaceBetweenLayers;
     private float _firstLayerOffset;
+    private Vector3 _baseSpawnPosOffset;
 
 
     //construktor där man tar in murkyWater objektet?
-    public AOEAttackState(GameObject[] murkyWaterPrefabs, int layers, int poolsPerLayer, float spiralIntensity, float timeToLive, float spawnTimeBetweenPools, float spaceBetweenLayers, float firstLayerOffset)
+    public AOEAttackState(GameObject[] murkyWaterPrefabs, int layers, int poolsPerLayer, float spiralIntensity, float timeToLive, float spawnTimeBetweenPools, float spaceBetweenLayers, float firstLayerOffset, Vector3 baseSpawnPosOffset)
     {
         _murkyWaterArray = murkyWaterPrefabs;
         _layers = layers;
@@ -783,6 +786,7 @@ public class AOEAttackState : State<BossAIScript>
         _spawnTimeBetweenPools = spawnTimeBetweenPools;
         _spaceBetweenLayers = spaceBetweenLayers;
         _firstLayerOffset = firstLayerOffset;
+        _baseSpawnPosOffset = baseSpawnPosOffset;
     }
 
     public override void EnterState(BossAIScript owner)
@@ -897,7 +901,7 @@ public class AOEAttackState : State<BossAIScript>
     public void SpawnMurkyWater(BossAIScript owner, Vector3 spawnPositionOffset, float timeToLive = 0f)
     {
         //GameObject murkyWater = UnityEngine.Object.Instantiate(owner.murkyWaterPrefab, owner.transform.TransformPoint(spawnPositionOffset), Quaternion.identity);
-        GameObject murkyWater = UnityEngine.Object.Instantiate(_murkyWaterArray[UnityEngine.Random.Range(0, _murkyWaterArray.Length)], owner.transform.TransformPoint(spawnPositionOffset), Quaternion.identity);
+        GameObject murkyWater = UnityEngine.Object.Instantiate(_murkyWaterArray[UnityEngine.Random.Range(0, _murkyWaterArray.Length)], owner.transform.TransformPoint(spawnPositionOffset + _baseSpawnPosOffset), Quaternion.identity);
         if (timeToLive > 0.01f)
         {
             murkyWater.GetComponentInChildren<MurkyWaterScript>().timeToLive = timeToLive;
