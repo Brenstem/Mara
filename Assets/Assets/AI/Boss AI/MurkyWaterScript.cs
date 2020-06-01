@@ -35,15 +35,9 @@ public class MurkyWaterScript : MonoBehaviour
 
     void Start()
     {
-        //print("nu körs start för murky water");
         if (_destroyAfterCertainTime)
         {
-            //print("kms in " + _timeToLive);
             timer = new Timer(_timeToLive);
-        }
-        else
-        {
-            //print("IM GONNA LIVE FOREVER!!!");
         }
     }
 
@@ -58,7 +52,6 @@ public class MurkyWaterScript : MonoBehaviour
 
             if (timer.Expired)
             {
-                print("nu ska murky water dö");
                 //kanske spela någon animation här för att förtydliga att den försvinner
                 Destroy(this.transform.parent.gameObject);
             }
@@ -66,7 +59,6 @@ public class MurkyWaterScript : MonoBehaviour
     }
 
 	private void OnTriggerStay(Collider other) {
-		print("nu ser jag något");
 		if (_collisionLayers == (_collisionLayers | 1 << other.gameObject.layer)) {
 			if (other.CompareTag("Player")) {
 				other.GetComponent<PlayerInsanity>().Damage(_damagePerSecond * Time.deltaTime);
