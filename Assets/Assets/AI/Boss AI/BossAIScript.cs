@@ -106,7 +106,7 @@ public class BossAIScript : Entity
     #region AOE Variables
     [Header("AOE Variables")]
 
-    [SerializeField] public GameObject murkyWaterPrefab;
+    [SerializeField] public GameObject[] murkyWaterPrefabs;
 
     [SerializeField] public float aoeAttackCooldown;
     //temp variabel för design
@@ -199,7 +199,7 @@ public class BossAIScript : Entity
         meleeAttackOneState = new MeleeAttackOneState();
         drainAttackChargeState = new DrainAttackChargeState(drainChargeTime);
         drainAttackActiveState = new DrainAttackActiveState(drainAttackTime);
-        aoeAttackState = new AOEAttackState(murkyWaterPrefab, spiralLayers, poolsPerLayer, spiralIntensity, poolTimeToLive, spawnTimeBetweenPools, spaceBetweenLayers, firstLayerOffset);
+        aoeAttackState = new AOEAttackState(murkyWaterPrefabs, spiralLayers, poolsPerLayer, spiralIntensity, poolTimeToLive, spawnTimeBetweenPools, spaceBetweenLayers, firstLayerOffset);
         spawnEnemiesAbilityState = new SpawnEnemiesAbilityState(enemyToSpawnPrefab, spawnedEnemyAggroRange, spawnedEnemyUnaggroRange, spawnEnemyAbilityCastTime, spawnPos);
 
         player = GlobalState.state.Player.gameObject;
@@ -233,7 +233,6 @@ public class BossAIScript : Entity
 
     void Update()
     {
-        Debug.Log(animationEnded);
         phaseStateMachine.Update();
         actionStateMachine.Update();
         //print(actionStateMachine.currentState);
@@ -740,6 +739,8 @@ public class DrainAttackActiveState : State<BossAIScript>
         owner.turnSpeed = owner.defaultTurnSpeed;
         owner.animationEnded = false;
         owner.placeholoderDranBeam.SetActive(false);
+        //har den här ifall man går ut pga att man byter fas
+        owner.bossAnimator.SetBool("drainActiveBool", false);
     }
 
     public override void UpdateState(BossAIScript owner)
@@ -761,7 +762,7 @@ public class DrainAttackActiveState : State<BossAIScript>
 }
 public class AOEAttackState : State<BossAIScript>
 {
-    private GameObject _murkyWater;
+    private GameObject[] _murkyWaterArray;
     private int _layers;
     private int _poolsPerLayer;
     private float _spiralIntensity;
@@ -772,9 +773,9 @@ public class AOEAttackState : State<BossAIScript>
 
 
     //construktor där man tar in murkyWater objektet?
-    public AOEAttackState(GameObject murkyWaterPrefab, int layers, int poolsPerLayer, float spiralIntensity, float timeToLive, float spawnTimeBetweenPools, float spaceBetweenLayers, float firstLayerOffset)
+    public AOEAttackState(GameObject[] murkyWaterPrefabs, int layers, int poolsPerLayer, float spiralIntensity, float timeToLive, float spawnTimeBetweenPools, float spaceBetweenLayers, float firstLayerOffset)
     {
-        _murkyWater = murkyWaterPrefab;
+        _murkyWaterArray = murkyWaterPrefabs;
         _layers = layers;
         _poolsPerLayer = poolsPerLayer;
         _spiralIntensity = spiralIntensity;
@@ -896,7 +897,7 @@ public class AOEAttackState : State<BossAIScript>
     public void SpawnMurkyWater(BossAIScript owner, Vector3 spawnPositionOffset, float timeToLive = 0f)
     {
         //GameObject murkyWater = UnityEngine.Object.Instantiate(owner.murkyWaterPrefab, owner.transform.TransformPoint(spawnPositionOffset), Quaternion.identity);
-        GameObject murkyWater = UnityEngine.Object.Instantiate(_murkyWater, owner.transform.TransformPoint(spawnPositionOffset), Quaternion.identity);
+        GameObject murkyWater = UnityEngine.Object.Instantiate(_murkyWaterArray[UnityEngine.Random.Range(0, _murkyWaterArray.Length)], owner.transform.TransformPoint(spawnPositionOffset), Quaternion.identity);
         if (timeToLive > 0.01f)
         {
             murkyWater.GetComponentInChildren<MurkyWaterScript>().timeToLive = timeToLive;
@@ -906,7 +907,7 @@ public class AOEAttackState : State<BossAIScript>
     //vet inte om denna behövs, tror inte den ska användas
     public void SpawnMurkyWater(BossAIScript owner, float timeToLive = 0f)
     {
-        GameObject murkyWater = UnityEngine.Object.Instantiate(_murkyWater, owner.transform.position, Quaternion.identity);
+        GameObject murkyWater = UnityEngine.Object.Instantiate(_murkyWaterArray[UnityEngine.Random.Range(0, _murkyWaterArray.Length)], owner.transform.position, Quaternion.identity);
         if (timeToLive > 0.1f)
         {
             murkyWater.GetComponentInChildren<MurkyWaterScript>().timeToLive = timeToLive;
@@ -1028,6 +1029,7 @@ public class BossPhaseOneState : State<BossAIScript>
 
         //owner.actionStateMachine.ChangeState(owner.aoeAttackState);
         //owner.actionStateMachine.ChangeState(owner.spawnEnemiesAbilityState);
+        //owner.actionStateMachine.ChangeState(owner.meleeAttackOneState);
     }
 
     public override void ExitState(BossAIScript owner)
@@ -1312,7 +1314,7 @@ public class BossPhaseTwoState : State<BossAIScript>
     {
         owner.bossCombatState = new BossPhaseTwoCombatState(owner.minAttackSpeed, owner.attackSpeedIncreaseMax, owner.minAttackCooldown, owner.meleeRange, owner.drainRange, owner.aoeAttackCooldown, owner.spawnEnemyAbilityCooldown);
         //om man vill ändra värden för states gör mad det här
-
+        owner.bossAnimator.SetTrigger("newPhaseTrigger");
         owner.actionStateMachine.ChangeState(owner.bossCombatState);
     }
 
@@ -1322,7 +1324,7 @@ public class BossPhaseTwoState : State<BossAIScript>
 
     public override void UpdateState(BossAIScript owner)
     {
-        Debug.Log("nu chillar vi i Phase 2 :)");
+        //Debug.Log("nu chillar vi i Phase 2 :)");
     }
 }
 public class BossPhaseTwoCombatState : State<BossAIScript>
