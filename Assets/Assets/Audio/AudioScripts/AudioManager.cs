@@ -60,6 +60,10 @@ public class AudioManager : MonoBehaviour
     [EventRef]
     [SerializeField] string collectibleAudio;
 
+    [Header("Music")]
+    [EventRef]
+    [SerializeField] string combatMusic;
+
 
     #region Player Audio
     public void PlayerFootStepsAudio(Transform transform, string groundMaterial, Rigidbody rb)
@@ -194,6 +198,11 @@ public class AudioManager : MonoBehaviour
     public void BossMusicAudio()
     {
 
+    }
+
+    public void CombatMusicParamUpdate(float enemyAmount)
+    {
+        RuntimeManager.StudioSystem.setParameterByName(combatMusic, enemyAmount);
     }
     #endregion
 }

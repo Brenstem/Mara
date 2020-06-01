@@ -27,6 +27,7 @@ public class LockonFunctionality : MonoBehaviour
     private Transform _pointOfInterest;
     private PlayerInput _playerInput;
     private PlayerRevamp _player;
+    private float _enemyAmount;
 
     public Transform Target
     {
@@ -74,10 +75,10 @@ public class LockonFunctionality : MonoBehaviour
         //_movementController.DisableLockon();
     }
 
-    private float _enemyAmount;
-
     void TargetRecognition()
     {
+        GlobalState.state.AudioManager.CombatMusicParamUpdate(_enemyAmount);
+
         _enemyAmount = 0; // Don't know why i need to do this twice but okay
 
         if (!_player.IsLockedOn)
