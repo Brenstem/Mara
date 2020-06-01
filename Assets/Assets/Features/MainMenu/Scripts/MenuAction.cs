@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.IO;
 
 public class MenuAction : MonoBehaviour
 {
@@ -17,6 +18,10 @@ public class MenuAction : MonoBehaviour
     public int sceneIndex;
     public void ChangeScene()
     {
+        /*if(!File.Exists(Application.persistentDataPath + "/controls.data"))
+        {
+            OptionData d = new OptionData();
+        }*/
         SceneManager.LoadScene(sceneIndex);
     }
 
