@@ -1,5 +1,419 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &77441733
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 77441734}
+  - component: {fileID: 77441736}
+  - component: {fileID: 77441735}
+  m_Layer: 9
+  m_Name: MusicTransition4
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &77441734
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 77441733}
+  m_LocalRotation: {x: -0, y: 0.1353697, z: -0, w: 0.9907952}
+  m_LocalPosition: {x: 102.41, y: -24.18, z: 56.68}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4614874529162583396}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 15.56, z: 0}
+--- !u!114 &77441736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 77441733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: Player
+  Emitters:
+  - Target: {fileID: 4614874530639040514}
+    Params:
+    - Name: ToCave
+      Value: 1
+  TriggerEvent: 3
+--- !u!65 &77441735
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 77441733}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.53, y: 8.17, z: 0.49}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1089804559
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1089804560}
+  - component: {fileID: 1089804562}
+  - component: {fileID: 1089804561}
+  m_Layer: 9
+  m_Name: MusicTransition2
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1089804560
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1089804559}
+  m_LocalRotation: {x: 0, y: 0.4557779, z: 0, w: 0.89009356}
+  m_LocalPosition: {x: 11.55, y: 6.403, z: -48.27}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4614874529162583396}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 54.23, z: 0}
+--- !u!65 &1089804562
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1089804559}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.2, y: 4.95, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1089804561
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1089804559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: Player
+  Emitters:
+  - Target: {fileID: 4614874530639040514}
+    Params:
+    - Name: DoorstepPassed
+      Value: 1
+  TriggerEvent: 3
+--- !u!1 &1255859930
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1255859931}
+  - component: {fileID: 1255859933}
+  - component: {fileID: 1255859932}
+  m_Layer: 9
+  m_Name: MusicTransition3
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1255859931
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1255859930}
+  m_LocalRotation: {x: 0, y: 0.1353697, z: 0, w: 0.9907952}
+  m_LocalPosition: {x: 104.22, y: -16.734, z: 41.31}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4614874529162583396}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 15.56, z: 0}
+--- !u!114 &1255859933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1255859930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: Player
+  Emitters:
+  - Target: {fileID: 4614874530639040514}
+    Params:
+    - Name: ToCave
+      Value: 1
+  TriggerEvent: 3
+--- !u!65 &1255859932
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1255859930}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.53, y: 8.17, z: 0.49}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1301986347
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1301986348}
+  - component: {fileID: 1301986352}
+  - component: {fileID: 1301986351}
+  - component: {fileID: 1301986350}
+  - component: {fileID: 1301986349}
+  m_Layer: 9
+  m_Name: MusicTransition1 (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1301986348
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1301986347}
+  m_LocalRotation: {x: -0, y: -0.10452837, z: -0, w: 0.9945219}
+  m_LocalPosition: {x: -9.540001, y: 7.04, z: -81.26}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4614874529162583396}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: -12, z: 0}
+--- !u!114 &1301986352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1301986347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: Player
+  Emitters:
+  - Target: {fileID: 4614874530639040514}
+    Params:
+    - Name: IntroOver
+      Value: 1
+    - Name: Stage2
+      Value: 1
+  TriggerEvent: 3
+--- !u!65 &1301986351
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1301986347}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.8, y: 3.89, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!65 &1301986350
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1301986347}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.93, y: 3.14, z: 1}
+  m_Center: {x: 2.42, y: 0.01, z: 0.23}
+--- !u!65 &1301986349
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1301986347}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.01, y: 2.05, z: 2.62}
+  m_Center: {x: -1.92, y: -0.55, z: 1.83}
+--- !u!1 &1450113963
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1450113964}
+  - component: {fileID: 1450113966}
+  - component: {fileID: 1450113965}
+  m_Layer: 9
+  m_Name: MusicTransition4 (Return)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1450113964
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1450113963}
+  m_LocalRotation: {x: -0, y: 0.1353697, z: -0, w: 0.9907952}
+  m_LocalPosition: {x: 102.58, y: -24.18, z: 59.903}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4614874529162583396}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 15.56, z: 0}
+--- !u!114 &1450113966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1450113963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: Player
+  Emitters:
+  - Target: {fileID: 4614874530639040514}
+    Params:
+    - Name: ToCave
+      Value: 0
+  TriggerEvent: 3
+--- !u!65 &1450113965
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1450113963}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.53, y: 8.17, z: 0.49}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &2046172240
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2046172241}
+  - component: {fileID: 2046172243}
+  - component: {fileID: 2046172242}
+  m_Layer: 9
+  m_Name: MusicTransition3 (Return)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2046172241
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2046172240}
+  m_LocalRotation: {x: 0, y: 0.099319756, z: 0, w: 0.9950556}
+  m_LocalPosition: {x: 104.02, y: -16.734, z: 37.9}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4614874529162583396}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 11.4, z: 0}
+--- !u!114 &2046172243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2046172240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: Player
+  Emitters:
+  - Target: {fileID: 4614874530639040514}
+    Params:
+    - Name: ToCave
+      Value: 0
+  TriggerEvent: 3
+--- !u!65 &2046172242
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2046172240}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 6.4, y: 9.07, z: 0.49}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4614874529162583397
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,7 +423,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4614874529162583396}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MusicPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33,6 +447,12 @@ Transform:
   - {fileID: 4614874530295238824}
   - {fileID: 4614874530588399033}
   - {fileID: 4614874529309991391}
+  - {fileID: 1301986348}
+  - {fileID: 1089804560}
+  - {fileID: 1255859931}
+  - {fileID: 2046172241}
+  - {fileID: 1450113964}
+  - {fileID: 77441734}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -49,7 +469,7 @@ GameObject:
   - component: {fileID: 4614874529309991389}
   - component: {fileID: 552188042}
   - component: {fileID: 5441360604459458402}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SpiralMusicTopCounter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -141,8 +561,8 @@ GameObject:
   - component: {fileID: 4614874530295238824}
   - component: {fileID: 4614874530295238830}
   - component: {fileID: 4614874530295238831}
-  m_Layer: 0
-  m_Name: MusicTransition3
+  m_Layer: 9
+  m_Name: MusicTransitionx3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -209,8 +629,8 @@ GameObject:
   - component: {fileID: 4614874530355935299}
   - component: {fileID: 4614874530355935297}
   - component: {fileID: 4614874530355935298}
-  m_Layer: 0
-  m_Name: MusicTransition2
+  m_Layer: 9
+  m_Name: MusicTransitionx2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -250,8 +670,6 @@ MonoBehaviour:
       Value: 1
     - Name: To SpiralStairs
       Value: 0
-    - Name: GraveyardProgress
-      Value: 1
   TriggerEvent: 3
 --- !u!135 &4614874530355935298
 SphereCollider:
@@ -277,7 +695,7 @@ GameObject:
   - component: {fileID: 4614874530588399033}
   - component: {fileID: 4614874530588399039}
   - component: {fileID: 4614874530588399032}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MusicTransition1(Return)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -314,8 +732,6 @@ MonoBehaviour:
   Emitters:
   - Target: {fileID: 4614874530639040514}
     Params:
-    - Name: To Beginning
-      Value: 1
     - Name: To Graveyard
       Value: 0
   TriggerEvent: 3
@@ -342,7 +758,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4614874530639040515}
   - component: {fileID: 4614874530639040514}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: MusicPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -399,8 +815,8 @@ GameObject:
   - component: {fileID: 4614874530718734604}
   - component: {fileID: 4614874530718734594}
   - component: {fileID: 4614874530718734595}
-  m_Layer: 0
-  m_Name: MusicTransition1
+  m_Layer: 9
+  m_Name: MusicTransitionx1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -436,8 +852,6 @@ MonoBehaviour:
   Emitters:
   - Target: {fileID: 4614874530639040514}
     Params:
-    - Name: To Beginning
-      Value: 0
     - Name: To Graveyard
       Value: 1
   TriggerEvent: 3
