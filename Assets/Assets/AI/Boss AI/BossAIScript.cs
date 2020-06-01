@@ -118,7 +118,7 @@ public class BossAIScript : Entity
     [SerializeField] public float spiralIntensity;
     [Tooltip("Om denna är 0 försvinner de aldrig")]
     [SerializeField] public float poolTimeToLive;
-    [SerializeField] public float spawnTimeBetweenPools; 
+    [SerializeField] public float spawnTimeBetweenPools;
     [SerializeField] public float spaceBetweenLayers;
     [SerializeField] public float firstLayerOffset;
     #endregion
@@ -246,7 +246,7 @@ public class BossAIScript : Entity
         Quaternion lookRotation = Quaternion.LookRotation(new Vector3(lookDirection.x, 0, lookDirection.z));
         this.transform.rotation = Quaternion.Slerp(this.transform.rotation, lookRotation, Time.deltaTime * turnSpeed);
     }
-    
+
     public override void TakeDamage(HitboxValues hitbox, Entity attacker)
     {
         health.Damage(hitbox);
@@ -1025,9 +1025,9 @@ public class BossPhaseOneState : State<BossAIScript>
     {
         owner.bossCombatState = new BossPhaseOneCombatState(owner.minAttackSpeed, owner.attackSpeedIncreaseMax, owner.minAttackCooldown, owner.meleeRange, owner.drainRange);
 
-        owner.actionStateMachine.ChangeState(owner.bossCombatState);
+        //owner.actionStateMachine.ChangeState(owner.bossCombatState);
 
-        //owner.actionStateMachine.ChangeState(owner.aoeAttackState);
+        owner.actionStateMachine.ChangeState(owner.aoeAttackState);
         //owner.actionStateMachine.ChangeState(owner.spawnEnemiesAbilityState);
         //owner.actionStateMachine.ChangeState(owner.meleeAttackOneState);
     }
@@ -1617,7 +1617,10 @@ public class BossDeadState : State<BossAIScript>
         owner.GetComponent<HitboxEventHandler>().EndAnim();
         owner.agent.SetDestination(owner.transform.position);
         owner.StopAllCoroutines();
-        owner.spawnedEnemy.GetComponent<BaseAIMovementController>().KillThis();
+        if (owner.spawnedEnemy)
+        {
+            owner.spawnedEnemy.GetComponent<BaseAIMovementController>().KillThis();
+        }
         owner.actionStateMachine.ChangeState(owner.bossIdleActionState);
     }
 
