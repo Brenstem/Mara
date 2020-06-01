@@ -73,17 +73,32 @@ public class LockonFunctionality : MonoBehaviour
         _playerInput.Disable();
         //_movementController.DisableLockon();
     }
-    
+
+    private float _enemyAmount;
+
     void TargetRecognition()
     {
+        _enemyAmount = 0; // Don't know why i need to do this twice but okay
+
         if (!_player.IsLockedOn)
         {
             _cols = Physics.OverlapSphere(transform.position, _trackRadius, _enemyMask);
             float _smallestAngle = 180;
             _closestTarget = null;
             _pointOfInterest = null;
+
             foreach (Collider collider in _cols)
             {
+                _enemyAmount = 0; // Don't know why i need to do this twice but okay
+
+                foreach (Collider col in _cols)
+                {
+                    if (col.GetComponent<BaseAIMovementController>()._aggroed)
+                    {
+                        _enemyAmount++;
+                    }
+                }
+
                 if (collider.tag == lockonTag)
                 {
                     Vector3 direction = collider.transform.position - transform.position;
@@ -198,6 +213,8 @@ public class LockonFunctionality : MonoBehaviour
             _player.DisableLockon();
         }
         TargetRecognition();
+
+        print(_enemyAmount);
     }
 
     private void OnDrawGizmos()

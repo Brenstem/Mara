@@ -13,6 +13,8 @@ public abstract class BaseAIMovementController : Entity
     [SerializeField] public float _unaggroRange = 20f;
     [SerializeField] public LayerMask _targetLayers;
 
+    public bool _aggroed;
+
     [Header("Pathing")]
     [SerializeField] public float _turnSpeed = 5f;
     [SerializeField] public bool _cyclePathing;
@@ -208,7 +210,10 @@ public class BaseChasingState : State<BaseAIMovementController>
     protected BaseReturnToIdlePosState _returnToIdleState;
     protected BaseAttackingState _attackingState;
 
-    public override void EnterState(BaseAIMovementController owner) { }
+    public override void EnterState(BaseAIMovementController owner) 
+    {
+        owner._aggroed = true;
+    }
 
     public override void ExitState(BaseAIMovementController owner) { }
 
@@ -268,7 +273,10 @@ public class BaseReturnToIdlePosState : State<BaseAIMovementController>
     protected BaseIdleState _idleState;
 
 
-    public override void EnterState(BaseAIMovementController owner) { }
+    public override void EnterState(BaseAIMovementController owner) 
+    {
+        owner._aggroed = false;
+    }
 
     public override void ExitState(BaseAIMovementController owner) { }
 
@@ -300,7 +308,11 @@ public class BaseReturnToIdlePosState : State<BaseAIMovementController>
 /* === DEAD STATE === */
 public class DeadState : State<BaseAIMovementController>
 {
-    public override void EnterState(BaseAIMovementController owner) {  }
+    public override void EnterState(BaseAIMovementController owner) 
+    {
+        owner.GetComponent<CapsuleCollider>().enabled = false;    
+        owner.invulerable = true;
+        owner._aggroed = false;
 
     public override void ExitState(BaseAIMovementController owner)
     {
