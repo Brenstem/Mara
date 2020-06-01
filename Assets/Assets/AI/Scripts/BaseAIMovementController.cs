@@ -308,11 +308,12 @@ public class BaseReturnToIdlePosState : State<BaseAIMovementController>
 /* === DEAD STATE === */
 public class DeadState : State<BaseAIMovementController>
 {
-    public override void EnterState(BaseAIMovementController owner) 
+    public override void EnterState(BaseAIMovementController owner)
     {
-        owner.GetComponent<CapsuleCollider>().enabled = false;    
+        owner.GetComponent<CapsuleCollider>().enabled = false;
         owner.invulerable = true;
         owner._aggroed = false;
+    }
 
     public override void ExitState(BaseAIMovementController owner)
     {
