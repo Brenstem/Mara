@@ -77,29 +77,28 @@ public class LockonFunctionality : MonoBehaviour
 
     void TargetRecognition()
     {
+        _cols = Physics.OverlapSphere(transform.position, _trackRadius, _enemyMask);
+
         GlobalState.state.AudioManager.CombatMusicParamUpdate(_enemyAmount);
 
         _enemyAmount = 0; // Don't know why i need to do this twice but okay
 
+        foreach (Collider col in _cols)
+        {
+            if (col.GetComponent<BaseAIMovementController>()._aggroed)
+            {
+                _enemyAmount++;
+            }
+        }
+
         if (!_player.IsLockedOn)
         {
-            _cols = Physics.OverlapSphere(transform.position, _trackRadius, _enemyMask);
             float _smallestAngle = 180;
             _closestTarget = null;
             _pointOfInterest = null;
 
             foreach (Collider collider in _cols)
             {
-                _enemyAmount = 0; // Don't know why i need to do this twice but okay
-
-                foreach (Collider col in _cols)
-                {
-                    if (col.GetComponent<BaseAIMovementController>()._aggroed)
-                    {
-                        _enemyAmount++;
-                    }
-                }
-
                 if (collider.tag == lockonTag)
                 {
                     Vector3 direction = collider.transform.position - transform.position;

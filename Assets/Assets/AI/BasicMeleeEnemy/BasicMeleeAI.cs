@@ -108,7 +108,7 @@ public class BasicMeleeChasingState : BaseChasingState
     {
         _attackingState = new BasicMeleeAttackingState();
         _returnToIdleState = new BasicMeleeReturnToIdleState();
-        GlobalState.state.AudioManager.BasicEnemyAlerted(owner.transform.position);
+        // GlobalState.state.AudioManager.BasicEnemyAlerted(owner.transform.position);
         base.EnterState(owner);
     }
 
