@@ -337,7 +337,6 @@ public class PlayerRevamp : Entity
         if (dashCooldownTimer.Expired && _airDashes < airDashAmount)
         {
             _airDashes++;
-            dashCooldownTimer.Reset();
             //GlobalState.state.Player.ResetAnim();
             stateMachine.ChangeState(new DashingState());
         }
@@ -884,6 +883,8 @@ public class DashingState : State<PlayerRevamp>
         }
 
         owner.playerAnimator.SetBool("IsDashing", false);
+        owner.playerAnimator.SetBool("HasJumped", false);
+        owner.dashCooldownTimer.Reset();
     }
 
     public override void UpdateState(PlayerRevamp owner)
@@ -1239,6 +1240,7 @@ public class HitstunState : State<PlayerRevamp>
     public override void ExitState(PlayerRevamp owner)
     {
         owner.playerAnimator.SetBool("InHitstun", false);
+        owner.playerAnimator.SetBool("HasJumped", false);
         owner.actionHitboxGroup.enabled = false;
     }
 
@@ -1295,13 +1297,48 @@ public class ParryState : State<PlayerRevamp>
         {
             if (owner.successfulParry)
             {
-                owner.stateMachine.ChangeState(new SuccessfulParryState());
+                owner.playerAnimator.SetBool("ParryLag", false);
+                if (_parryTimer.Expired && owner.attackAnimationOver)
+                {
+                    owner.stateMachine.ChangeState(new SuccessfulParryState());
+                }
+                else
+                {
+                    if (owner.Input != Vector2.zero)
+                    {
+                        owner.stateMachine.ChangeState(new MovementState());
+                    }
+                    else
+                    {
+                        foreach (PlayerRevamp.InputType item in owner.inputBuffer)
+                        {
+                            switch (item)
+                            {
+                                case PlayerRevamp.InputType.AttackLight:
+                                    if (owner.IsGrounded)
+                                    {
+                                        owner.stateMachine.ChangeState(new LightAttackTwoState());
+                                        return;
+                                    }
+                                    break;
+                                case PlayerRevamp.InputType.AttackHeavy:
+                                    if (owner.IsGrounded)
+                                    {
+                                        owner.stateMachine.ChangeState(new HeavyAttackState());
+                                        return;
+                                    }
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                    }
+
+                }
             }
             else if (owner.attackAnimationOver)
             {
                 owner.isParrying = true;
-                _parryTimer.Time += Time.deltaTime;
-
                 if (_parryTimer.Expired)
                 {
                     owner.isParrying = false;
@@ -1315,7 +1352,14 @@ public class ParryState : State<PlayerRevamp>
                     }
                 }
             }
+
+            _parryTimer.Time += Time.deltaTime;
         }
+    }
+
+    private void Reset()
+    {
+
     }
 }
 

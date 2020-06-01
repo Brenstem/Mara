@@ -121,82 +121,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &1455319
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3df29e7cc05fbec4aa43e06ea875565d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  active: 1
-  m_AdvancedMode: 0
-  rotation:
-    m_OverrideState: 0
-    m_Value: 0
-    min: 0
-    max: 360
-  skyIntensityMode:
-    m_OverrideState: 0
-    m_Value: 0
-  exposure:
-    m_OverrideState: 0
-    m_Value: 0
-  multiplier:
-    m_OverrideState: 0
-    m_Value: 1
-    min: 0
-  upperHemisphereLuxValue:
-    m_OverrideState: 0
-    m_Value: 1
-    min: 0
-  desiredLuxValue:
-    m_OverrideState: 0
-    m_Value: 20000
-  updateMode:
-    m_OverrideState: 0
-    m_Value: 0
-  updatePeriod:
-    m_OverrideState: 0
-    m_Value: 0
-    min: 0
-  includeSunInBaking:
-    m_OverrideState: 0
-    m_Value: 0
-  sunSize:
-    m_OverrideState: 0
-    m_Value: 0.04
-    min: 0
-    max: 1
-  sunSizeConvergence:
-    m_OverrideState: 0
-    m_Value: 5
-    min: 1
-    max: 10
-  atmosphereThickness:
-    m_OverrideState: 0
-    m_Value: 1
-    min: 0
-    max: 5
-  skyTint:
-    m_OverrideState: 0
-    m_Value: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-    hdr: 0
-    showAlpha: 1
-    showEyeDropper: 1
-  groundColor:
-    m_OverrideState: 0
-    m_Value: {r: 0.369, g: 0.349, b: 0.341, a: 1}
-    hdr: 0
-    showAlpha: 1
-    showEyeDropper: 1
-  enableSunDisk:
-    m_OverrideState: 0
-    m_Value: 1
 --- !u!1 &37364699
 GameObject:
   m_ObjectHideFlags: 0
@@ -867,7 +791,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Profile: {fileID: 11400000, guid: d4094e955f07d024c9a950368e679e61, type: 2}
   m_StaticLightingSkyUniqueID: 2
-  m_SkySettings: {fileID: 1455319}
+  m_SkySettings: {fileID: 1463671426}
   m_SkySettingsFromProfile: {fileID: 2606652218056383274, guid: d4094e955f07d024c9a950368e679e61,
     type: 2}
 --- !u!114 &481561930
@@ -1023,6 +947,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 4888146114267909224, guid: b807af36e0443f34ca0390bead88dd65,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 18
+      objectReference: {fileID: 0}
     - target: {fileID: 313704346685451411, guid: b807af36e0443f34ca0390bead88dd65,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -1037,11 +966,6 @@ PrefabInstance:
         type: 3}
       propertyPath: _billBoarding
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4888146114267909224, guid: b807af36e0443f34ca0390bead88dd65,
-        type: 3}
-      propertyPath: m_StaticEditorFlags
-      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 865647615362324923, guid: b807af36e0443f34ca0390bead88dd65,
         type: 3}
@@ -2701,7 +2625,7 @@ MonoBehaviour:
   hitboxValues:
     damageValue: 15
     hitstunTime: 0
-    hitstopTime: 0.1
+    hitstopTime: 0
     parryable: 0
     ignoreArmor: 0
   _size: {x: 3.5, y: 3.5, z: 1.27}
@@ -3071,6 +2995,82 @@ MonoBehaviour:
   - {fileID: 679620664}
   - {fileID: 1695323788}
   - {fileID: 1424080316}
+--- !u!114 &1463671426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3df29e7cc05fbec4aa43e06ea875565d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 1
+  m_AdvancedMode: 0
+  rotation:
+    m_OverrideState: 0
+    m_Value: 0
+    min: 0
+    max: 360
+  skyIntensityMode:
+    m_OverrideState: 0
+    m_Value: 0
+  exposure:
+    m_OverrideState: 0
+    m_Value: 0
+  multiplier:
+    m_OverrideState: 0
+    m_Value: 1
+    min: 0
+  upperHemisphereLuxValue:
+    m_OverrideState: 0
+    m_Value: 1
+    min: 0
+  desiredLuxValue:
+    m_OverrideState: 0
+    m_Value: 20000
+  updateMode:
+    m_OverrideState: 0
+    m_Value: 0
+  updatePeriod:
+    m_OverrideState: 0
+    m_Value: 0
+    min: 0
+  includeSunInBaking:
+    m_OverrideState: 0
+    m_Value: 0
+  sunSize:
+    m_OverrideState: 0
+    m_Value: 0.04
+    min: 0
+    max: 1
+  sunSizeConvergence:
+    m_OverrideState: 0
+    m_Value: 5
+    min: 1
+    max: 10
+  atmosphereThickness:
+    m_OverrideState: 0
+    m_Value: 1
+    min: 0
+    max: 5
+  skyTint:
+    m_OverrideState: 0
+    m_Value: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    hdr: 0
+    showAlpha: 1
+    showEyeDropper: 1
+  groundColor:
+    m_OverrideState: 0
+    m_Value: {r: 0.369, g: 0.349, b: 0.341, a: 1}
+    hdr: 0
+    showAlpha: 1
+    showEyeDropper: 1
+  enableSunDisk:
+    m_OverrideState: 0
+    m_Value: 1
 --- !u!1 &1519865753
 GameObject:
   m_ObjectHideFlags: 3
@@ -7411,7 +7411,6 @@ MonoBehaviour:
   heavyMaxHitstopMultiplier: 1
   actionHitboxGroup: {fileID: 0}
   actionAttackActive: 0
-  actionThreshold: 0
   _moveSpeedBuffMultiplier: 1.1
   _moveSpeedDebuffMultiplier: 0.9
   pointOfInterest: {fileID: 0}
@@ -8746,6 +8745,7 @@ MonoBehaviour:
   _groundMask:
     serializedVersion: 2
     m_Bits: 256
+  language: 0
 --- !u!4 &3391068280436979425
 Transform:
   m_ObjectHideFlags: 0
@@ -9618,21 +9618,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InsanityEventAudio: event:/SFX/Player/Insanity manager
+  insanityDecayAudio: 
+  insanityRegen: 
   PlayerFootsteps: event:/SFX/Player/movement/Footsteps
   playerSwordSwingAudio: event:/SFX/Player/Attacks/Sword
+  playerHeavyAttackAudio: 
   playerDodgeAudio: event:/SFX/Player/movement/Dash
   playerJumpAudio: event:/SFX/Player/movement/Jump
   playerLandAudio: 
   playerHurtAudio: event:/SFX/Player/Hurt
   playerHeartBeatAudio: event:/SFX/Player/Heartbeats
+  parryIndicatorAudio: 
+  parrySuccessAudio: 
+  parryBreakAudio: 
+  unparryableAttackAudio: 
   rangedEnemyFireAudio: event:/SFX/Fiender/Ranged enemy/Fire shoot
+  rangedProjectileHit: 
   rangedEnemyAlertAudio: event:/SFX/Fiender/Basic Enemy/Basic Enemy Alerted
+  rangedEnemyMeleeAttackAudio: 
+  rangedEnemyMeleeAttackHitAudio: 
+  rangedEnemyChantAudio: 
   floatingEnemyHurtAudio: event:/SFX/Fiender/Basic Enemy/Basic Enemy hurt
   basicEnemyAttack: event:/SFX/Fiender/Basic Enemy/Basic Enemy Attack
+  basicEnemyHitPlayer: 
+  basicEnemyAlerted: 
+  basicEnemyDies: 
+  mylingAlertedAudio: 
+  mylingChargeAttackAudio: 
+  mylingDiesAudio: 
+  mylingFootstepAudio: 
+  sisterAlertedAudio: 
+  sisterDissappearAudio: 
+  sisteridleAudio: 
   bossHurtAudio: event:/SFX/Fiender/BirdBoss/Birdhurt
+  bossHeavyHurt: 
   bossDashAudio: event:/SFX/Fiender/BirdBoss/Wings OR Dash
+  birdAoeAttackAudio: 
+  birdAttackAudio: 
+  birdWalkAudio: 
+  birdSpawnEnemyAudio: 
+  birdDrainLaser: 
   checkpointAudio: event:/SFX/Environment and ambience/Checkpoint
   collectibleAudio: event:/SFX/Object/Pickup Collectible
+  idleCollectibleAudio: 
+  grusRasAudio: 
+  murkyWater: 
+  murkyWaterDamage: 
 --- !u!1 &4448483531712740233
 GameObject:
   m_ObjectHideFlags: 0
@@ -10369,6 +10400,7 @@ MonoBehaviour:
   _groundMask:
     serializedVersion: 2
     m_Bits: 256
+  language: 0
 --- !u!1 &4872092266125017851
 GameObject:
   m_ObjectHideFlags: 0
@@ -11006,7 +11038,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5420518576434001224}
   m_LocalRotation: {x: 0.24943301, y: -0.45197254, z: 0.11817962, w: 0.84825563}
-  m_LocalPosition: {x: -0.00000047683716, y: 0.000000029802322, z: 0.00000011920929}
+  m_LocalPosition: {x: -0.00000059604645, y: 0.00000008940697, z: 0.00000011920929}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5420518578027302775}
@@ -11088,8 +11120,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5420518576448441012}
-  m_LocalRotation: {x: 0.08428002, y: -0.6978987, z: 0.07920391, w: 0.7067964}
-  m_LocalPosition: {x: -0.0000004714425, y: 0.00000007038909, z: 0.0000000126911175}
+  m_LocalRotation: {x: 0.084280014, y: -0.6978986, z: 0.079203926, w: 0.70679635}
+  m_LocalPosition: {x: -0.00000047144246, y: 0.00000007038908, z: 0.0000000126911175}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5420518577032957395}
@@ -11187,7 +11219,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5420518576815817543}
   m_LocalRotation: {x: 0.21226938, y: -0.31830055, z: 0.11968869, w: 0.91613376}
-  m_LocalPosition: {x: -0.00000047683716, y: 0.000000029802322, z: 0.00000011920929}
+  m_LocalPosition: {x: -0.00000059604645, y: 0.00000008940697, z: 0.00000011920929}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5420518576238901160}
@@ -11299,8 +11331,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5420518576947718266}
-  m_LocalRotation: {x: -0.69059205, y: -0.13184841, z: 0.70541185, w: -0.08996023}
-  m_LocalPosition: {x: -0.0000004714425, y: 0.00000007038909, z: 0.0000000126911175}
+  m_LocalRotation: {x: -0.69059205, y: -0.13184826, z: 0.70541185, w: -0.08996039}
+  m_LocalPosition: {x: -0.00000047144246, y: 0.00000007038908, z: 0.0000000126911175}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5420518577058736775}
@@ -11401,7 +11433,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   invulerable: 0
   health: {fileID: 5420518576977555607}
-  _lockCursor: 0
+  _lockCursor: 1
   playerAnimator: {fileID: 3751767826401152159}
   cameraAnimator: {fileID: 5420518576977555605}
   _groundCheckPosition: {fileID: 5420518577626487937}
@@ -11417,7 +11449,7 @@ MonoBehaviour:
   _jumpHeight: 0.3
   airRotationSpeed: 4
   airSpeed: 5
-  _dashCooldownTime: 0.25
+  _dashCooldownTime: 0.88
   airDashAmount: 1
   dashTime: 0.25
   dashLag: 0.15
@@ -11439,7 +11471,6 @@ MonoBehaviour:
   heavyMaxHitstopMultiplier: 1
   actionHitboxGroup: {fileID: 325406464}
   actionAttackActive: 1
-  actionThreshold: 0
   _moveSpeedBuffMultiplier: 1.1
   _moveSpeedDebuffMultiplier: 0.9
   pointOfInterest: {fileID: 0}
@@ -11890,7 +11921,7 @@ MonoBehaviour:
     m_DecelTime: 0.1
     m_InputAxisName: Mouse Y
     m_InputAxisValue: 0
-    m_InvertInput: 0
+    m_InvertInput: 1
     m_MinValue: 0
     m_MaxValue: 1
     m_Wrap: 0
@@ -12143,7 +12174,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5420518577511649593}
-  m_LocalRotation: {x: 0.22974668, y: -0.0071826875, z: 0.001695618, w: 0.9732225}
+  m_LocalRotation: {x: 0.22974667, y: -0.0071826875, z: 0.0016956106, w: 0.9732225}
   m_LocalPosition: {x: 0.059039593, y: 3.1799998, z: -3.999564}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -12430,7 +12461,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5420518577718707202}
   m_LocalRotation: {x: 0.09169052, y: -0.34490216, z: 0.35459048, w: 0.8642343}
-  m_LocalPosition: {x: -0.00000047683716, y: 0.000000029802322, z: 0.00000011920929}
+  m_LocalPosition: {x: -0.00000059604645, y: 0.00000008940697, z: 0.00000011920929}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5420518578166467835}
@@ -12705,8 +12736,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5420518577890819380}
-  m_LocalRotation: {x: 0.34547928, y: 0.61214066, z: -0.43780124, w: -0.5605872}
-  m_LocalPosition: {x: -0.00000188577, y: 0.00000028155637, z: 0.00000005076447}
+  m_LocalRotation: {x: 0.34547916, y: 0.6121407, z: -0.4378012, w: -0.5605872}
+  m_LocalPosition: {x: -0.0000018857698, y: 0.0000002815563, z: 0.00000005076447}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5420518577445812945}
@@ -12847,7 +12878,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5420518578087424654}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.0779592, y: -0.44280025, z: -0.031358242}
+  m_LocalPosition: {x: -1.0779591, y: -0.4428003, z: -0.031358242}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5420518576434001231}
@@ -13492,21 +13523,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   InsanityEventAudio: event:/SFX/Player/Insanity manager
+  insanityDecayAudio: 
+  insanityRegen: 
   PlayerFootsteps: event:/SFX/Player/movement/Footsteps
   playerSwordSwingAudio: event:/SFX/Player/Attacks/Sword
+  playerHeavyAttackAudio: 
   playerDodgeAudio: event:/SFX/Player/movement/Dash
   playerJumpAudio: event:/SFX/Player/movement/Jump
   playerLandAudio: event:/SFX/Player/movement/Land
   playerHurtAudio: event:/SFX/Player/Hurt
   playerHeartBeatAudio: event:/SFX/Player/Heartbeats
+  parryIndicatorAudio: 
+  parrySuccessAudio: 
+  parryBreakAudio: 
+  unparryableAttackAudio: 
   rangedEnemyFireAudio: event:/SFX/Fiender/Ranged enemy/Fire shoot
+  rangedProjectileHit: 
   rangedEnemyAlertAudio: event:/SFX/Fiender/Basic Enemy/Basic Enemy Alerted
+  rangedEnemyMeleeAttackAudio: 
+  rangedEnemyMeleeAttackHitAudio: 
+  rangedEnemyChantAudio: 
   floatingEnemyHurtAudio: event:/SFX/Fiender/Basic Enemy/Basic Enemy hurt
   basicEnemyAttack: event:/SFX/Fiender/Basic Enemy/Basic Enemy Attack
+  basicEnemyHitPlayer: 
+  basicEnemyAlerted: 
+  basicEnemyDies: 
+  mylingAlertedAudio: 
+  mylingChargeAttackAudio: 
+  mylingDiesAudio: 
+  mylingFootstepAudio: 
+  sisterAlertedAudio: 
+  sisterDissappearAudio: 
+  sisteridleAudio: 
   bossHurtAudio: event:/SFX/Fiender/BirdBoss/Birdhurt
+  bossHeavyHurt: 
   bossDashAudio: event:/SFX/Fiender/BirdBoss/Wings OR Dash
+  birdAoeAttackAudio: 
+  birdAttackAudio: 
+  birdWalkAudio: 
+  birdSpawnEnemyAudio: 
+  birdDrainLaser: 
   checkpointAudio: event:/SFX/Environment and ambience/Checkpoint
   collectibleAudio: event:/SFX/Object/Pickup Collectible
+  idleCollectibleAudio: 
+  grusRasAudio: 
+  murkyWater: 
+  murkyWaterDamage: 
 --- !u!1 &5796860060501699672
 GameObject:
   m_ObjectHideFlags: 0
