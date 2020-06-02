@@ -200,6 +200,7 @@ GameObject:
   - component: {fileID: 6257417211099871587}
   - component: {fileID: 4512572359050523162}
   - component: {fileID: 341123445817726690}
+  - component: {fileID: 7436874011522037043}
   m_Layer: 0
   m_Name: cabinet
   m_TagString: Untagged
@@ -267,3 +268,17 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &7436874011522037043
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5275150971623199708}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: -6531174569082035124, guid: 36a668730c5e8dd4aa0550667c2c61e4, type: 3}

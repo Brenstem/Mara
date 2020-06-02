@@ -89,6 +89,7 @@ GameObject:
   - component: {fileID: 8377753966426550258}
   - component: {fileID: 7860101525518737411}
   - component: {fileID: 1583153358881652187}
+  - component: {fileID: 7443901861893741277}
   m_Layer: 0
   m_Name: nattugsbord
   m_TagString: Untagged
@@ -156,6 +157,20 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &7443901861893741277
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3473758578690806542}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: -6886370570373954407, guid: d1964f97d967cb242b9db0b3fa10a755, type: 3}
 --- !u!1 &5604918385731634091
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,8 +11,9 @@ GameObject:
   - component: {fileID: 5427598893355162220}
   - component: {fileID: 3893839962540597338}
   - component: {fileID: 7292800848352517283}
+  - component: {fileID: 671309655222058743}
   m_Layer: 0
-  m_Name: Table_Square
+  m_Name: Prefab_tableSquare
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,3 +79,17 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &671309655222058743
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9009993900742027391}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: 1935786896508559001, guid: fd2fafa1ebf12de4f8a1a5a038f909bf, type: 3}
