@@ -7,10 +7,10 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_dissolveish
-  m_Shader: {fileID: -6465566751694194690, guid: 28148ea0d13d6284d9fff8ae2d42a377,
+  m_Name: Shader Graphs_toxic_bubbles
+  m_Shader: {fileID: -6465566751694194690, guid: a993adfa7e9ae7b4b93ca60da0f20ea9,
     type: 3}
-  m_ShaderKeywords: _ALPHATEST_ON _BLENDMODE_ALPHA _DOUBLESIDED_ON _SURFACE_TYPE_TRANSPARENT
+  m_ShaderKeywords: _BLENDMODE_ALPHA _DOUBLESIDED_ON _SURFACE_TYPE_TRANSPARENT
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 1
@@ -24,28 +24,23 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - Texture2D_3DA3E704:
-        m_Texture: {fileID: 2800000, guid: 7968eaa96d93405419b093b3fd03620e, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - Texture2D_78274B52:
-        m_Texture: {fileID: 2800000, guid: b218ff30994b62c4293687714d0ca0e0, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - Texture2D_A4BD1893:
-        m_Texture: {fileID: 2800000, guid: de04812430a245f48b1b09aa6731a428, type: 3}
+    - Texture2D_C0E6AE77:
+        m_Texture: {fileID: 2800000, guid: 97ba22b5066670e4b9ca8dc7b54d0428, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_82415C6: 15
-    - Vector1_E56540C8: 0
+    - Vector1_1A0D5F1A: 2
+    - Vector1_96209F0B: 1.2
+    - Vector1_9D766A44: 0.05
+    - Vector1_E73D1758: 5
     - _AlphaCutoff: 0.5
-    - _AlphaCutoffEnable: 1
+    - _AlphaCutoffEnable: 0
     - _AlphaDstBlend: 10
     - _AlphaSrcBlend: 1
     - _BlendMode: 0
     - _CullMode: 0
     - _CullModeForward: 0
+    - _DiffusionProfileHash: 0
     - _DoubleSidedEnable: 1
     - _DoubleSidedNormalMode: 2
     - _DstBlend: 10
@@ -69,10 +64,13 @@ Material:
     - _TransparentSortPriority: 0
     - _UseShadowThreshold: 0
     - _ZTestDepthEqualForOpaque: 4
-    - _ZTestGBuffer: 3
+    - _ZTestGBuffer: 4
     - _ZTestTransparent: 4
     - _ZWrite: 0
     m_Colors:
-    - Color_363EBC61: {r: 0, g: 0, b: 0, a: 0}
+    - Color_3FBD2343: {r: 1.749389, g: 0.452175, b: 1.86911, a: 0}
+    - Vector2_5B325CA5: {r: 0, g: -0.3, b: 0, a: 0}
+    - Vector2_EFD2411F: {r: -0.1, g: -0.5, b: 0, a: 0}
+    - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
     - _DoubleSidedConstants: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}

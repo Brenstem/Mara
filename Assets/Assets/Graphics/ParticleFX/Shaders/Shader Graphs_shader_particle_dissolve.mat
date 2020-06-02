@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_dissolveish
-  m_Shader: {fileID: -6465566751694194690, guid: 28148ea0d13d6284d9fff8ae2d42a377,
+  m_Name: Shader Graphs_shader_particle_dissolve
+  m_Shader: {fileID: -6465566751694194690, guid: 43f036bcf34de3245b4a71d8f2693214,
     type: 3}
   m_ShaderKeywords: _ALPHATEST_ON _BLENDMODE_ALPHA _DOUBLESIDED_ON _SURFACE_TYPE_TRANSPARENT
   m_LightmapFlags: 4
@@ -24,6 +24,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - Texture2D_2FB99444:
+        m_Texture: {fileID: 2800000, guid: a90600ecc89154042912dcafcbac6e18, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - Texture2D_3DA3E704:
         m_Texture: {fileID: 2800000, guid: 7968eaa96d93405419b093b3fd03620e, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -37,7 +41,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_82415C6: 15
+    - Vector1_82415C6: 20
     - Vector1_E56540C8: 0
     - _AlphaCutoff: 0.5
     - _AlphaCutoffEnable: 1
