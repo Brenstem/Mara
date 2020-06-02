@@ -7,23 +7,25 @@ public class Collectible : MonoBehaviour
     private bool _destroyOnPickup = true;
     private float _incrementAmount = 1;
     private PlayerInsanity _playerInsanity;
-
-    [SerializeField] private Vector3 _dropDirection;
-    [SerializeField] private float _dropForce;
+    private Collider _playerCollider;
+    private SphereCollider _mySphereCollider;
+    private Rigidbody _myRigidbody;
 
 
     private void Awake()
     {
-        Spawned(_dropDirection, _dropForce);
+        _playerCollider = GlobalState.state.Player.GetComponent<Collider>();
+        _mySphereCollider = GetComponent<SphereCollider>();
+        _myRigidbody = GetComponent<Rigidbody>();
+
+        Physics.IgnoreCollision(_mySphereCollider, _playerCollider, true);
+
+        Spawned(Vector3.zero, 0f);
     }
 
-    private void Spawned(Vector3 dropDirection, float dropForce)
+    public void Spawned(Vector3 dropDirection, float dropForce)
     {
-        GetComponent<SphereCollider>().enabled = true;
-        Physics.IgnoreLayerCollision(13, 11);
-        Physics.IgnoreLayerCollision(13, 12);
-        GetComponent<Rigidbody>().AddForce(dropDirection.normalized * dropForce);
-        GetComponent<FloatingObjectScript>().enabled = false;
+        _myRigidbody.AddForce(dropDirection.normalized * dropForce);
     }
 
     public void SetIncrementAmount(float amount)
@@ -49,21 +51,17 @@ public class Collectible : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        print("meme");
-
         ActivateCollectible();
     }
 
     private void ActivateCollectible()
     {
-        GetComponent<Rigidbody>().isKinematic = true;
-        GetComponent<Rigidbody>().useGravity = false;
+        _myRigidbody.isKinematic = true;
+        _myRigidbody.useGravity = false;
 
-        GetComponent<SphereCollider>().enabled = false;
-
-        Physics.IgnoreLayerCollision(13, 11, false);
-        Physics.IgnoreLayerCollision(13, 12, false);
-
+        _mySphereCollider.enabled = false;
         GetComponent<FloatingObjectScript>().enabled = true;
+
+        Physics.IgnoreCollision(_mySphereCollider, _playerCollider, false);
     }
 }

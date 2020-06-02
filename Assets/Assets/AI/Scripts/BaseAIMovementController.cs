@@ -39,8 +39,20 @@ public abstract class BaseAIMovementController : Entity
 
     [Header("Insanity increase drop")]
     [SerializeField] private GameObject _dropPrefab;
-    [SerializeField] private float _insanityIncreaseAmount;
     [SerializeField] public bool deathDrop = true;
+    [SerializeField] private float _insanityIncreaseAmount;
+
+    [SerializeField] private float _dropForceMin;
+    [SerializeField] private float _dropForceMax;
+    [SerializeField] private float _dropAngleUpMin;
+    [SerializeField] private float _dropAngleUpMax;
+
+    [SerializeField] private int _dropAmount;
+
+
+    [NonSerialized] private Vector3 _dropDirection;
+
+
 
     [NonSerialized] public BasicMeleeAI meleeEnemy;
     [NonSerialized] public RangedEnemyAI rangedAI;
@@ -131,8 +143,19 @@ public abstract class BaseAIMovementController : Entity
 
     public void OnDeathDrop()
     {
-        GameObject dropObject = Instantiate(_dropPrefab, this.transform.position + new Vector3(0, 0.5f, 0), this.transform.rotation);
-        dropObject.SendMessage("SetIncrementAmount", _insanityIncreaseAmount);
+
+        for (int i = 0; i < _dropAmount; i++)
+        {
+            GameObject dropObject = Instantiate(_dropPrefab, this.transform.position + new Vector3(0, 1.5f, 0), this.transform.rotation);
+            //får nog göra om hur jag gör detta
+            dropObject.SendMessage("SetIncrementAmount", _insanityIncreaseAmount / _dropAmount);
+
+
+            _dropDirection = Vector3.forward;
+            _dropDirection = Quaternion.AngleAxis(UnityEngine.Random.Range(_dropAngleUpMin, _dropAngleUpMax), -Vector3.right) * _dropDirection;
+            _dropDirection = Quaternion.AngleAxis(UnityEngine.Random.Range(0.0f, 360f), Vector3.up) * _dropDirection;
+            dropObject.GetComponent<Collectible>().Spawned(_dropDirection, UnityEngine.Random.Range(_dropForceMin, _dropForceMax));
+        }
     }
 }
 
@@ -300,9 +323,9 @@ public class BaseReturnToIdlePosState : State<BaseAIMovementController>
 /* === DEAD STATE === */
 public class DeadState : State<BaseAIMovementController>
 {
-    public override void EnterState(BaseAIMovementController owner) 
+    public override void EnterState(BaseAIMovementController owner)
     {
-        owner.GetComponent<CapsuleCollider>().enabled = false;    
+        owner.GetComponent<CapsuleCollider>().enabled = false;
         owner.invulerable = true;
 
         if (owner.deathDrop)
@@ -311,7 +334,7 @@ public class DeadState : State<BaseAIMovementController>
 
     public override void ExitState(BaseAIMovementController owner)
     {
-        
+
     }
 
     public override void UpdateState(BaseAIMovementController owner) { }

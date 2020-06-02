@@ -76,7 +76,6 @@ public class BasicMeleeAI : BaseAIMovementController
         }
         else if (duration > 0.0f && _canEnterHitStun)
         {
-            print("meme");
             _hitStunTimer = new Timer(duration);
             stateMachine.ChangeState(new MeleeAIHitstunState());
         }

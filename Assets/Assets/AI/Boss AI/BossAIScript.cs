@@ -1091,6 +1091,7 @@ public class BossPhaseOneCombatState : State<BossAIScript>
         }
         else
         {
+            //fan wack fixa sen
             _minAttackCooldown += _timer.Time;
         }
     }
