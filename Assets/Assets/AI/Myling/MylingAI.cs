@@ -98,14 +98,14 @@ public class MylingChasingState : BaseChasingState
 public class MylingAttackingState : BaseAttackingState
 {
     private float time = 0;
-    public float idleBlendDuration = 0.1f;
+    public float idleBlendDuration = 0.05f;
 
     public override void EnterState(BaseAIMovementController owner)
     {
         _chasingState = new MylingChasingState();
 
         float magnitude = owner._agent.speed;
-        owner._anim.SetFloat("Blend", Mathf.Lerp(magnitude, 0, time / (idleBlendDuration * magnitude)));
+        // owner._anim.SetFloat("Blend", Mathf.Lerp(magnitude, 0, time / (idleBlendDuration * magnitude)));
 
         owner.mylingAI._hitBox.enabled = true;
         owner.GenerateNewAttackTimer();
@@ -116,11 +116,11 @@ public class MylingAttackingState : BaseAttackingState
     public override void UpdateState(BaseAIMovementController owner)
     {
         float magnitude = owner._agent.speed;
-        owner._anim.SetFloat("Blend", Mathf.Lerp(magnitude, 0, time / (idleBlendDuration * magnitude)));
 
-        base.UpdateState(owner);
         owner._attackRateTimer += Time.deltaTime;
         time += Time.deltaTime;
+        owner._anim.SetFloat("Blend", Mathf.Lerp(magnitude, 0, time / (idleBlendDuration)));
+
 
         if (owner._attackRateTimer.Expired)
         {
