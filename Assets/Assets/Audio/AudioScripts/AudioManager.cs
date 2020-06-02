@@ -6,6 +6,13 @@ using FMODUnity;
 
 public class AudioManager : MonoBehaviour
 {
+    [Header("Music")]
+    [EventRef]
+    [SerializeField] string combatMusic;
+
+    [EventRef]
+    [SerializeField] string deathStingerMusic;
+
     [Header("Player Audio")]
     [EventRef]
     [SerializeField] string InsanityEventAudio;
@@ -423,9 +430,9 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    public void FloatingWorldMusic()
+    public void DeathStingerMusic()
     {
-
+        RuntimeManager.PlayOneShot(deathStingerMusic);
     }
 
     public void CaveMusic()
@@ -436,6 +443,11 @@ public class AudioManager : MonoBehaviour
     public void BossMusicAudio()
     {
 
+    }
+
+    public void CombatMusicParamUpdate(float enemyAmount)
+    {
+        RuntimeManager.StudioSystem.setParameterByName("CombatNumberOfEnemies", enemyAmount);
     }
     #endregion
 }
