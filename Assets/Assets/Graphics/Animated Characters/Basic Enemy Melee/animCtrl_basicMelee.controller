@@ -95,7 +95,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: anim_basic_meleeAttack
-  m_Speed: 1.5
+  m_Speed: 1.2
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 7872981621013890915}
@@ -111,7 +111,7 @@ AnimatorState:
   m_TimeParameterActive: 0
   m_Motion: {fileID: 825782122800668635, guid: 225aa5a660074c74fbccd6278afae392, type: 3}
   m_Tag: 
-  m_SpeedParameter: 
+  m_SpeedParameter: Blend
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
   m_TimeParameter: 

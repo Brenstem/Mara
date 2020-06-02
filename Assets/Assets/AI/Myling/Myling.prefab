@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 648613035391747720}
   - component: {fileID: 648613035391747723}
   - component: {fileID: 7497086228146343657}
+  - component: {fileID: 4390230549897137113}
   m_Layer: 12
   m_Name: Myling
   m_TagString: Lockon
@@ -48,7 +49,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac2019947aa47dc45b41d13851ab1ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 100
+  _maxHealth: 1
   _healthBar: {fileID: 1795850162233969449}
 --- !u!195 &648613035391747720
 NavMeshAgent:
@@ -60,7 +61,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 7
+  m_Speed: 10
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -85,8 +86,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   invulerable: 0
-  health: {fileID: 0}
-  _aggroRange: 10
+  health: {fileID: 648613035391747721}
+  _aggroRange: 19
   _unaggroRange: 20
   _targetLayers:
     serializedVersion: 2
@@ -96,7 +97,7 @@ MonoBehaviour:
   _waitAtPoints: 0
   _waitTime: 0
   _idlePathingPoints: []
-  _attackRange: 2
+  _attackRange: 1.5
   _minAttackSpeed: 0
   _maxAttackSpeedIncrease: 0
   _usesHitStun: 1
@@ -581,11 +582,6 @@ PrefabInstance:
       propertyPath: hitboxEventHandler
       value: 
       objectReference: {fileID: 648613035466919867}
-    - target: {fileID: 2778033842384518024, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
-        type: 3}
-      propertyPath: _enabledByDefault
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 2778033842924246593, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
       propertyPath: targetLayerMask.m_Bits
@@ -609,7 +605,7 @@ PrefabInstance:
     - target: {fileID: 2778033842924246593, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
       propertyPath: circleRadius
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2778033842924246596, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
