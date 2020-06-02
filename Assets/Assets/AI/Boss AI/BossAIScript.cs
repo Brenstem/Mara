@@ -624,6 +624,7 @@ public class BossDashState : State<BossAIScript>
         }
     }
 }
+
 //public class BossDashAttackState : State<BossAIScript>
 //{
 //    private float _durration;
