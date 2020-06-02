@@ -18,6 +18,7 @@ public class CameraManager : MonoBehaviour
     private void Start()
     {
         _baseInputType = CinemachineCore.GetInputAxis;
+        //_defaultcontrols.PlayerControls.Look.performed += ctx => _lookDelta = ctx.ReadValue<Vector2>();
     }
 
     private void Update()

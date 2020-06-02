@@ -17,17 +17,17 @@ public class HitboxGroup : MonoBehaviour
     [HideInInspector] public List<GameObject> _alreadyHit;
     private List<Hitbox> _hitTimes;
 
-    private bool _eventLess;
-    [SerializeField] private bool _enabledByDefault;
+    public bool eventLess;
+    public bool enabledByDefault;
     private Entity _parentEntity;
 
     void Awake() {
         _alreadyHit = new List<GameObject>();
         _hitTimes = new List<Hitbox>();
 
-        _eventLess = GetComponentInChildren<HitboxController>() == null ? true : false;
+       // eventLess = GetComponentInChildren<HitboxController>() == null ? true : false;
 
-        if (!_eventLess)
+        if (!eventLess)
         {
             if (hitboxEventHandler == null)
             {
@@ -49,10 +49,10 @@ public class HitboxGroup : MonoBehaviour
         }
 
         _parentEntity = GetComponentInParent<Entity>();
-        enabled = _enabledByDefault;
+        enabled = enabledByDefault;
     }
 
-    private void EnableEvent(int id)
+    public void EnableEvent(int id = 0)
     {
         if (onEnableHitboxes != null)
             onEnableHitboxes(id);
@@ -60,7 +60,7 @@ public class HitboxGroup : MonoBehaviour
             Debug.LogWarning("No object is subscribed to the \"onEnableHitboxes\" event!", this);
     }
 
-    private void DisableEvent(int id)
+    public void DisableEvent(int id = 0)
     {
         if (onDisableHitboxes != null)
             onDisableHitboxes(id);
@@ -70,7 +70,7 @@ public class HitboxGroup : MonoBehaviour
 
     void LateUpdate()
     {
-        if (!_eventLess)
+        if (!eventLess)
             HitDetection();
     }
 
@@ -91,26 +91,29 @@ public class HitboxGroup : MonoBehaviour
             {
                 if (enemy != null && !_alreadyHit.Contains(enemy.gameObject))
                 {
-                    Hitbox hitbox = _hitTimes[highestPriorityIndex];
                     var targetEntity = enemy.gameObject.GetComponent<Entity>();
-                    if (targetEntity == null)
+                    if (!targetEntity.invulerable) // intangible behavior atm, stöd för båda borde finnas! Man blir samt slagen om invun. tar slut medans man blir träffad
                     {
-                        Debug.LogWarning("Object derived from Entity class is missing! Resorting to find in children...", this);
-                        targetEntity = enemy.gameObject.GetComponentInChildren<Entity>();
+                        Hitbox hitbox = _hitTimes[highestPriorityIndex];
                         if (targetEntity == null)
                         {
-                            Debug.LogError("Object derived from Entity class is missing from \"" + enemy.gameObject.name + "\"!", this);
+                            Debug.LogWarning("Object derived from Entity class is missing! Resorting to find in children...", this);
+                            targetEntity = enemy.gameObject.GetComponentInChildren<Entity>();
+                            if (targetEntity == null)
+                            {
+                                Debug.LogError("Object derived from Entity class is missing from \"" + enemy.gameObject.name + "\"!", this);
+                            }
+                            else
+                            {
+                                TakeDamage(targetEntity, hitbox.hitboxValues);
+                            }
                         }
                         else
                         {
-                            TakeDamage(targetEntity, hitbox);
+                            TakeDamage(targetEntity, hitbox.hitboxValues);
                         }
+                        _alreadyHit.Add(enemy.gameObject);
                     }
-                    else
-                    {
-                        TakeDamage(targetEntity, hitbox);
-                    }
-                    _alreadyHit.Add(enemy.gameObject);
                 }
             }
 
@@ -118,37 +121,44 @@ public class HitboxGroup : MonoBehaviour
         }
     }
 
-    private void TakeDamage(Entity target, Hitbox hitbox)
+    private void TakeDamage(Entity target, HitboxValues hitbox)
     {
         if (_parentEntity != null && _parentEntity.modifier != null)
-        {
-            if (_parentEntity.modifier.IsModified)
-                hitbox *= _parentEntity.modifier; // overloaded * operator
-        }
-        
-        target.TakeDamage(hitbox);
+            target.TakeDamage(hitbox * _parentEntity.modifier, _parentEntity);
+        else
+            target.TakeDamage(hitbox, _parentEntity);
 
         if (hitbox.hitstopTime > 0)
         {
-            StartCoroutine(HitStop(hitbox.hitstopTime));
+            if (_parentEntity != null && _parentEntity.GetType() == typeof(PlayerRevamp)) // if the player is attacking, temporary solution
+            {
+                GlobalState.state.HitStop(hitbox);
+            }
+            else
+            {
+                if (hitbox.parryable && target.GetType() == typeof(PlayerRevamp)) // if player is the reciever and is parrying
+                {
+                    if (!(target as PlayerRevamp).isParrying)
+                    {
+                        GlobalState.state.HitStop(hitbox);
+                    }
+                    else
+                    {
+                        // GlobalState.state.HitStop(hitbox.hitstopTime, hitbox); // parry time
+                    }
+                }
+                else
+                {
+                    GlobalState.state.HitStop(hitbox);
+                }
+            }
         }
-    }
-
-    bool hitstopRunning;
-    public IEnumerator HitStop(float duration)
-    {
-        hitstopRunning = true;
-        Time.timeScale = 0.0f;
-        yield return new WaitForSecondsRealtime(duration);
-        Time.timeScale = 1f;
-        hitstopRunning = false;
-        yield return 0;
     }
 
     public void AddHitbox(Hitbox hitbox)
     {
         _hitTimes.Add(hitbox);
-        if (_eventLess)
+        if (eventLess)
         {
             HitDetection();
         }
@@ -156,18 +166,22 @@ public class HitboxGroup : MonoBehaviour
 
     private void OnEnable()
     {
-        if (!_eventLess)
+        if (!eventLess)
         {
             hitboxEventHandler.onEnableHitboxes += EnableEvent;
             hitboxEventHandler.onDisableHitboxes += DisableEvent;
             hitboxEventHandler.onEndAnim += ResetList;
+        }
+        else
+        {
+            EnableEvent(0);
         }
 
         ResetList();
     }
 
     private void OnDisable() {
-        if (!_eventLess)
+        if (!eventLess)
         {
             hitboxEventHandler.onEnableHitboxes -= EnableEvent;
             hitboxEventHandler.onDisableHitboxes -= DisableEvent;
@@ -178,8 +192,6 @@ public class HitboxGroup : MonoBehaviour
 
     private void ResetList()
     {
-        print("i reset");
-        DisableEvent(0);
         _alreadyHit.Clear();
     }
 }

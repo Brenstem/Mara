@@ -11,7 +11,7 @@ public class TargetFinder : MonoBehaviour
 
 
 
-    public GameObject FindTarget()
+    public GameObject FindTarget(float angle = -1)
     {
         Collider[] toHit = Physics.OverlapSphere(transform.position, trackRadius, targets);
         GameObject targetToHit = null;
@@ -22,7 +22,7 @@ public class TargetFinder : MonoBehaviour
         {
             if (target != null)
             {
-                Vector2 input = GlobalState.state.Player.input.direction;
+                // Vector2 input = GlobalState.state.Player.gameObject.GetComponent<PlayerRevamp>().Input.direction;
                 /* INPUT DEPENDANT */
                 /*if (input != Vector2.zero)
                 {
@@ -31,17 +31,20 @@ public class TargetFinder : MonoBehaviour
                 else
                 {
                     */
-                    /* DISTANCE DEPENDANT */
-                    if (temp > Vector3.Distance(transform.position, target.transform.position))
-                    {
-                        temp = Vector3.Distance(transform.position, target.transform.position);
-                        Vector3 targetRotation = target.transform.position - transform.position;
+                /* DISTANCE DEPENDANT */
+                if (temp > Vector3.Distance(transform.position, target.transform.position))
+                {
+                    temp = Vector3.Distance(transform.position, target.transform.position);
+                    Vector3 targetRotation = target.transform.position - transform.position;
 
-                        if (_playerAngle * Mathf.Deg2Rad > Mathf.Acos((Vector3.Dot(playerRotation, targetRotation)) / (playerRotation.magnitude * targetRotation.magnitude)))
-                        {
-                            targetToHit = target.gameObject;
-                        }
+                    if (angle == -1)
+                        angle = _playerAngle;
+
+                    if (angle * Mathf.Deg2Rad > Mathf.Acos((Vector3.Dot(playerRotation, targetRotation)) / (playerRotation.magnitude * targetRotation.magnitude)))
+                    {
+                        targetToHit = target.gameObject;
                     }
+                }
                 //}
             }
         }

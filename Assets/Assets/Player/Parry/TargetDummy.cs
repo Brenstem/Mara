@@ -5,13 +5,18 @@ using UnityEngine;
 [RequireComponent(typeof(EnemyHealth))]
 public class TargetDummy : Entity
 {
-    public override void TakeDamage(Hitbox hitbox)
+    public override void Parried()
     {
-        GetComponent<EnemyHealth>().Damage(hitbox.damageValue);
+        Debug.LogWarning("Parried implementation missing", this);
     }
 
-    public override void TakeDamage(float damage)
+    public override void KillThis()
     {
-        GetComponent<EnemyHealth>().Damage(damage);
+        Destroy(this.gameObject);
+    }
+
+    public override void TakeDamage(HitboxValues hitbox, Entity attacker)
+    {
+        health.Damage(hitbox);
     }
 }

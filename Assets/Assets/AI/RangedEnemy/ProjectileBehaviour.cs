@@ -1,15 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+//using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class ProjectileBehaviour : MonoBehaviour
 {
-    [SerializeField] private float _speed;
+    [SerializeField] public float _speed;
     [SerializeField] private float _lifeSpan;
+
+    public float Speed { get { return _speed; } }
 
     private Rigidbody _rb;
     private Timer lifespanTimer;
     private Vector3 _playerPos;
+    Vector3 destination;
 
     private void Awake()
     {
@@ -20,9 +25,16 @@ public class ProjectileBehaviour : MonoBehaviour
 
     private void Start()
     {
-        Vector3 _targetOffset = new Vector3(0, 1.2f, 0);
-        Vector3 destination = (_playerPos + _targetOffset) - this.transform.position;
-        destination = (destination.normalized) * _speed;
+        Vector3 offset = new Vector3(0, 1.2f, 0);
+        Vector3 direction = (_playerPos + offset) - this.transform.position;
+
+        direction = direction.normalized;
+
+        direction.x = transform.forward.x;
+        direction.z = transform.forward.z;
+
+        destination = (direction.normalized) * _speed;
+
         _rb.velocity = destination;
     }
 
@@ -38,7 +50,7 @@ public class ProjectileBehaviour : MonoBehaviour
 
     private void OnTriggerEnter(Collider hitInfo)
     {
-        if (!hitInfo.CompareTag("Lockon"))
+        if (!hitInfo.CompareTag("Player"))
         {
             StartCoroutine(DestroyProjectile());
         }

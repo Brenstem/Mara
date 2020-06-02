@@ -34,7 +34,7 @@ public class Timer {
 
     // Constructors
     public Timer(float duration, float time = 0) {
-        _duration = duration;
+            _duration = duration;
         if (time < 0)
             Debug.Log("Time can not be less than 0");
         else
@@ -49,5 +49,11 @@ public class Timer {
     public override string ToString() {
         string s = "Time: " + _time + ", Time left: " + (Duration - _time) + ", Ratio: " + Ratio;
         return s;
+    }
+
+    public static Timer operator +(Timer t, float v)
+    {
+        t.Time += v;
+        return t;
     }
 }

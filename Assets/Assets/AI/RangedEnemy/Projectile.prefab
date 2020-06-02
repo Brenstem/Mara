@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 2167317500024775603}
   - component: {fileID: 1466249247714015457}
   - component: {fileID: 4779265263707882666}
+  - component: {fileID: 7508950721750463396}
   m_Layer: 0
   m_Name: Projectile
   m_TagString: Untagged
@@ -61,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 73c176f402d2c2f4d929aa5da7585d17, type: 2}
+  - {fileID: 2100000, guid: 6951c245dd6abf547807493a0f2c5758, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -107,7 +108,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab50527a5b9aed64aa72f720b94a59c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 10
+  _speed: 30
   _lifeSpan: 5
 --- !u!54 &4779265263707882666
 Rigidbody:
@@ -125,6 +126,29 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 112
   m_CollisionDetection: 1
+--- !u!114 &7508950721750463396
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8366055604816629108}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  Event: event:/SFX/Fiender/Ranged enemy/Fire shoot
+  PlayEvent: 1
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1001 &4824168528144807465
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -192,48 +216,23 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2778033842384518024, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
+    - target: {fileID: 2778033842924246593, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
-      propertyPath: targetLayerMask.m_Bits
-      value: 2048
-      objectReference: {fileID: 0}
-    - target: {fileID: 2778033842384518024, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
-        type: 3}
-      propertyPath: _eventLess
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2778033842384518024, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
+      propertyPath: hitboxValues.damageValue
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 2778033842924246593, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
-      propertyPath: _size.x
-      value: 0.25
+      propertyPath: hitboxValues.hitstunTime
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 2778033842924246593, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
-      propertyPath: _size.y
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 2778033842924246593, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
-        type: 3}
-      propertyPath: _size.z
-      value: 0.25
-      objectReference: {fileID: 0}
-    - target: {fileID: 2778033842924246593, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
-        type: 3}
-      propertyPath: damageValue
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2778033842924246593, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
-        type: 3}
-      propertyPath: isParryable
-      value: 1
+      propertyPath: hitboxValues.hitstopTime
+      value: 0.11
       objectReference: {fileID: 0}
     m_RemovedComponents:
-    - {fileID: 2778033842924246594, guid: d4a7c34f967a3df49a8e3ebb9aa373a5, type: 3}
+    - {fileID: 1580157566788852647, guid: d4a7c34f967a3df49a8e3ebb9aa373a5, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: d4a7c34f967a3df49a8e3ebb9aa373a5, type: 3}
 --- !u!4 &7241626263866510752 stripped
 Transform:
