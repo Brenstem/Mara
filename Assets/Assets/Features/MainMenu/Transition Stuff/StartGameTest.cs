@@ -9,6 +9,7 @@ public class StartGameTest : MonoBehaviour
 
     private PlayerRevamp _playerRevamp;
     private CinemachineStateDrivenCamera _cinemachineStateDrivenCamera;
+    [SerializeField, Range(0.0f, 1.0f)] private float _activeControlsFaction;
 
     private void Awake()
     {
@@ -24,13 +25,12 @@ public class StartGameTest : MonoBehaviour
         _playerRevamp.cameraAnimator.SetTrigger("GameStarted");
 
         GlobalState.state.LockCursor = true;
-
-        StartCoroutine(StartGameTransition(_cinemachineStateDrivenCamera.m_CustomBlends.m_CustomBlends[START_CAMERA_BLEND_INDEX].m_Blend.m_Time));
+        StartCoroutine(StartGameTransition(_cinemachineStateDrivenCamera.m_CustomBlends.m_CustomBlends[START_CAMERA_BLEND_INDEX].m_Blend.m_Time * _activeControlsFaction));
     }
 
     private IEnumerator StartGameTransition(float transitionTime)
     {
-        yield return new WaitForSeconds(transitionTime);
+        yield return new WaitForSecondsRealtime(transitionTime);
 
         _playerRevamp.EnabledControls = true;
     }

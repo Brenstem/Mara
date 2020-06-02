@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class StartMenuManagerTest : MonoBehaviour
 {
-    [SerializeField] private float _fadeSpeed;
+    [SerializeField] private float _fadeTime;
+    private float _timer;
 
     public void StartGame()
     {
@@ -15,7 +16,8 @@ public class StartMenuManagerTest : MonoBehaviour
     {
         if (this.GetComponent<CanvasGroup>().alpha > 0f)
         {
-            this.GetComponent<CanvasGroup>().alpha -= Time.fixedDeltaTime * _fadeSpeed;
+            _timer += Time.fixedDeltaTime;
+            this.GetComponent<CanvasGroup>().alpha = 1 - _timer / _fadeTime;
             yield return new WaitForFixedUpdate();
             StartCoroutine(FadeOut());
         }

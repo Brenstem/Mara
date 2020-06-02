@@ -21,6 +21,7 @@ public class PlayerRevamp : Entity
         }
         set
         {
+            print("aaa: " + value);
             if (value)
             {
                 _playerInput.PlayerControls.Enable();
@@ -1182,6 +1183,7 @@ public class HeavyAttackState : State<PlayerRevamp>
         owner.walkCancel = false;
         owner.heavyHitboxGroup.enabled = false;
         owner.playerAnimator.SetBool("HeavyCharge", false);
+        
 
         if (_previousDamageMultiplier != 0.0f)
             owner.modifier.DamageMultiplier *= _previousDamageMultiplier;
@@ -1214,11 +1216,6 @@ public class HeavyAttackState : State<PlayerRevamp>
             }
             else
             {
-                if (owner.actionAttackActive)
-                {
-                    owner.actionHitboxGroup.enabled = true;
-                }
-
                 if (owner.attackStep)
                 {
                     if (!_playedSound)
