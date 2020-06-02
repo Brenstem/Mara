@@ -202,7 +202,7 @@ public class AudioManager : MonoBehaviour
 
     public void CombatMusicParamUpdate(float enemyAmount)
     {
-        RuntimeManager.StudioSystem.setParameterByName(combatMusic, enemyAmount);
+        RuntimeManager.StudioSystem.setParameterByName("CombatNumberOfEnemies", enemyAmount);
     }
     #endregion
 }
