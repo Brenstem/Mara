@@ -89,11 +89,17 @@ public class BossAIScript : Entity
     [SerializeField] [Range(0, 100)] public float dashAttackChanse = 20f;
 
     [SerializeField] public float dashSpeed = 20f;
-    [SerializeField] public float dashDistance = 5f;
-    //[SerializeField] public float dashDistanceMin = 5f;
-    [SerializeField] public float dashLagDurration = 0.5f;
     [SerializeField] public float dashAcceleration = 2000f;
-    [SerializeField] [Range(1, 180)] public float maxAngleDashAttackToPlayer = 90f;
+
+    //[SerializeField] public float dashDistance = 5f;
+
+    [SerializeField] public float dashAttackDistanceMin = 5f;
+    [SerializeField] public float dashAttackDistanceMax = 5f;
+
+    [SerializeField] public float dashLagDurration = 0.5f;
+
+    [NonSerialized] public float dashDistance = 5f;
+    //[SerializeField] [Range(1, 180)] public float maxAngleDashAttackToPlayer = 90f;
     #endregion
 
     #region Chasing Variables
@@ -107,6 +113,8 @@ public class BossAIScript : Entity
     [Header("AOE Variables")]
 
     [SerializeField] public GameObject[] murkyWaterPrefabs;
+
+    [SerializeField] public Vector3 baseSpawnPosOffset;
 
     [SerializeField] public float aoeAttackCooldown;
     //temp variabel för design
@@ -199,7 +207,7 @@ public class BossAIScript : Entity
         meleeAttackOneState = new MeleeAttackOneState();
         drainAttackChargeState = new DrainAttackChargeState(drainChargeTime);
         drainAttackActiveState = new DrainAttackActiveState(drainAttackTime);
-        aoeAttackState = new AOEAttackState(murkyWaterPrefabs, spiralLayers, poolsPerLayer, spiralIntensity, poolTimeToLive, spawnTimeBetweenPools, spaceBetweenLayers, firstLayerOffset);
+        aoeAttackState = new AOEAttackState(murkyWaterPrefabs, spiralLayers, poolsPerLayer, spiralIntensity, poolTimeToLive, spawnTimeBetweenPools, spaceBetweenLayers, firstLayerOffset, baseSpawnPosOffset);
         spawnEnemiesAbilityState = new SpawnEnemiesAbilityState(enemyToSpawnPrefab, spawnedEnemyAggroRange, spawnedEnemyUnaggroRange, spawnEnemyAbilityCastTime, spawnPos);
 
         player = GlobalState.state.Player.gameObject;
@@ -258,11 +266,15 @@ public class BossAIScript : Entity
         Debug.LogWarning("Parried implementation missing", this);
     }
 
-    public bool CheckDashPath(Vector3 dashCheckVector)
+    public bool CheckDashPath(Vector3 dashCheckVector, float dashCheckDistance)
     {
         float dashCheckAngle = Vector3.SignedAngle(transform.forward, dashCheckVector.normalized, transform.up);
 
+        dashCheckOffsetVector = new Vector3(0f, 1f, dashCheckDistance / 2);
+
         dashCheckOffsetVector = Quaternion.AngleAxis(dashCheckAngle, Vector3.up) * dashCheckOffsetVector;
+
+        dashCheckBoxSize = new Vector3(0.75f, 0.75f, dashCheckDistance / 2);
 
         return Physics.OverlapBox(transform.TransformPoint(dashCheckOffsetVector), dashCheckBoxSize, Quaternion.LookRotation(dashCheckVector.normalized), dashCollisionLayers).Length <= 0;
     }
@@ -522,6 +534,8 @@ public class BossIdleActionState : State<BossAIScript>
     {
     }
 }
+
+
 public class BossDashState : State<BossAIScript>
 {
     private float _dashSpeed;
@@ -565,14 +579,16 @@ public class BossDashState : State<BossAIScript>
         _oldSpeed = owner.agent.speed;
         _oldAcceleration = owner.agent.acceleration;
 
+        owner.agent.speed = _dashSpeed;
+        owner.agent.acceleration = _dashAcceleration;
+
+        _dashDistance = owner.dashDistance;
+
         _dashDurration = (_dashDistance - owner.agent.stoppingDistance) / _dashSpeed;
         //Debug.Log("zoom for, " + _dashDurration + " MPH, " + _dashSpeed);
         //Debug.Log(_dashDistance + " " + owner.bossPhaseOneParentScript.agent.stoppingDistance + " " + _dashSpeed);
         _dashTimer = new Timer(_dashDurration);
         _lagTimer = new Timer(_lagDurration);
-
-        owner.agent.speed = _dashSpeed;
-        owner.agent.acceleration = _dashAcceleration;
 
         _dashDirection = owner.movementDirection.normalized;
         _dashDestination = owner.transform.position + _dashDirection * _dashDistance;
@@ -608,6 +624,54 @@ public class BossDashState : State<BossAIScript>
         }
     }
 }
+
+//public class BossDashAttackState : State<BossAIScript>
+//{
+//    private float _durration;
+//    private Timer _timer;
+
+
+//    private float _dashSpeed;
+//    private float _oldSpeed;
+//    private float _dashAcceleration;
+//    private float _oldAcceleration;
+
+
+//    private Vector3 _dashDirection;
+//    private Vector3 _dashDestination;
+//    public BossDashAttackState(float dashSpeed, float dashAcceleration)
+//    {
+//        _dashSpeed = dashSpeed;
+//        _dashAcceleration = dashAcceleration;
+//    }
+
+
+//    public override void EnterState(BossAIScript owner)
+//    {
+//        _oldSpeed = owner.agent.speed;
+//        _oldAcceleration = owner.agent.acceleration;
+
+//        owner.agent.speed = _dashSpeed;
+//        owner.agent.acceleration = _dashAcceleration;
+//    }
+
+//    public override void ExitState(BossAIScript owner)
+//    {
+//        owner.agent.speed = _oldSpeed;
+//        owner.agent.acceleration = _oldAcceleration;
+//        owner.agent.SetDestination(owner.transform.position);
+//    }
+
+//    public override void UpdateState(BossAIScript owner)
+//    {
+
+//        if (true)
+//        {
+//            owner.actionStateMachine.ChangeState(owner.meleeAttackOneState);
+//        }
+//    }
+//}
+
 public class MeleeAttackOneState : State<BossAIScript>
 {
     public override void EnterState(BossAIScript owner)
@@ -770,10 +834,11 @@ public class AOEAttackState : State<BossAIScript>
     private float _spawnTimeBetweenPools;
     private float _spaceBetweenLayers;
     private float _firstLayerOffset;
+    private Vector3 _baseSpawnPosOffset;
 
 
     //construktor där man tar in murkyWater objektet?
-    public AOEAttackState(GameObject[] murkyWaterPrefabs, int layers, int poolsPerLayer, float spiralIntensity, float timeToLive, float spawnTimeBetweenPools, float spaceBetweenLayers, float firstLayerOffset)
+    public AOEAttackState(GameObject[] murkyWaterPrefabs, int layers, int poolsPerLayer, float spiralIntensity, float timeToLive, float spawnTimeBetweenPools, float spaceBetweenLayers, float firstLayerOffset, Vector3 baseSpawnPosOffset)
     {
         _murkyWaterArray = murkyWaterPrefabs;
         _layers = layers;
@@ -783,6 +848,7 @@ public class AOEAttackState : State<BossAIScript>
         _spawnTimeBetweenPools = spawnTimeBetweenPools;
         _spaceBetweenLayers = spaceBetweenLayers;
         _firstLayerOffset = firstLayerOffset;
+        _baseSpawnPosOffset = baseSpawnPosOffset;
     }
 
     public override void EnterState(BossAIScript owner)
@@ -897,7 +963,7 @@ public class AOEAttackState : State<BossAIScript>
     public void SpawnMurkyWater(BossAIScript owner, Vector3 spawnPositionOffset, float timeToLive = 0f)
     {
         //GameObject murkyWater = UnityEngine.Object.Instantiate(owner.murkyWaterPrefab, owner.transform.TransformPoint(spawnPositionOffset), Quaternion.identity);
-        GameObject murkyWater = UnityEngine.Object.Instantiate(_murkyWaterArray[UnityEngine.Random.Range(0, _murkyWaterArray.Length)], owner.transform.TransformPoint(spawnPositionOffset), Quaternion.identity);
+        GameObject murkyWater = UnityEngine.Object.Instantiate(_murkyWaterArray[UnityEngine.Random.Range(0, _murkyWaterArray.Length)], owner.transform.TransformPoint(spawnPositionOffset + _baseSpawnPosOffset), Quaternion.identity);
         if (timeToLive > 0.01f)
         {
             murkyWater.GetComponentInChildren<MurkyWaterScript>().timeToLive = timeToLive;
@@ -1025,9 +1091,9 @@ public class BossPhaseOneState : State<BossAIScript>
     {
         owner.bossCombatState = new BossPhaseOneCombatState(owner.minAttackSpeed, owner.attackSpeedIncreaseMax, owner.minAttackCooldown, owner.meleeRange, owner.drainRange);
 
-        //owner.actionStateMachine.ChangeState(owner.bossCombatState);
+        owner.actionStateMachine.ChangeState(owner.bossCombatState);
 
-        owner.actionStateMachine.ChangeState(owner.aoeAttackState);
+        //owner.actionStateMachine.ChangeState(owner.aoeAttackState);
         //owner.actionStateMachine.ChangeState(owner.spawnEnemiesAbilityState);
         //owner.actionStateMachine.ChangeState(owner.meleeAttackOneState);
     }
@@ -1058,7 +1124,8 @@ public class BossPhaseOneCombatState : State<BossAIScript>
     private Vector3 _destination;
     //private Vector3 _direction;
     private Vector3 _dashAttackDirection;
-    private float _dashAttackAngle;
+    private float _dashDistance;
+    //private float _dashAttackAngle;
 
     private Vector3 _bossToPlayer;
 
@@ -1078,17 +1145,18 @@ public class BossPhaseOneCombatState : State<BossAIScript>
 
     public override void EnterState(BossAIScript owner)
     {
-        //Debug.Log("in i PhaseOneCombatState");
-        if (_timer.Expired)
-        {
-            GenerateNewAttackSpeed();
-            _timer = new Timer(_attackSpeed);
-            _minAttackCooldown = _baseMinAttackCooldown;
-        }
-        else
-        {
-            _minAttackCooldown += _timer.Time;
-        }
+        ////Debug.Log("in i PhaseOneCombatState");
+        //if (_timer.Expired)
+        //{
+        //    GenerateNewAttackSpeed();
+        //    _timer = new Timer(_attackSpeed);
+        //    _minAttackCooldown = _baseMinAttackCooldown;
+        //}
+        //else
+        //{
+        //    //fan wack fixa sen
+        //    _minAttackCooldown += _timer.Time;
+        //}
     }
 
     private void GenerateNewAttackSpeed()
@@ -1116,12 +1184,17 @@ public class BossPhaseOneCombatState : State<BossAIScript>
         //kolla om spelaren är nära nog att slå
         if (_timer.Time > _minAttackCooldown && _meleeAttackRange > Vector3.Distance(owner.transform.position, owner.player.transform.position))
         {
-            //kanske göra AOE attack här för att tvinga iväg spelaren?
+            _minAttackCooldown = _timer.Time + _baseMinAttackCooldown;
+
             owner.actionStateMachine.ChangeState(owner.meleeAttackOneState);
         }
         //kolla om man ska attackera
         else if (_timer.Expired && _timer.Time > _minAttackCooldown)
         {
+            GenerateNewAttackSpeed();
+            _timer = new Timer(_attackSpeed);
+            _minAttackCooldown = _baseMinAttackCooldown;
+
             //nära nog för att göra melee attacken
             if (_drainAttackRange > Vector3.Distance(owner.transform.position, owner.player.transform.position))
             {
@@ -1183,7 +1256,7 @@ public class BossPhaseOneCombatState : State<BossAIScript>
                 //random dash in combat
                 if (UnityEngine.Random.Range(0f, 100f) > 100f - owner.dashChansePerFrame)
                 {
-                    if (owner.CheckDashPath(owner.movementDirection))
+                    if (owner.CheckDashPath(owner.movementDirection, owner.dashDistance))
                     {
                         owner.actionStateMachine.ChangeState(owner.bossDashState);
                     }
@@ -1216,75 +1289,29 @@ public class BossPhaseOneCombatState : State<BossAIScript>
         {
             _bossToPlayer = owner.player.transform.position - owner.transform.position;
 
-            Physics.Raycast(owner.transform.position + new Vector3(0, 1, 0), _bossToPlayer.normalized, out _hit, owner.dashDistance + _meleeAttackRange, owner.targetLayers);
+            //Physics.Raycast(owner.transform.position + new Vector3(0, 1, 0), _bossToPlayer.normalized, out _hit, owner.dashAttackDistanceMax + _meleeAttackRange, owner.targetLayers);
 
             //är spelaren innom en bra range och innom LOS?
-            //if (_hit.transform == _ownerParentScript.player.transform && _bossToPlayer.magnitude < _ownerParentScript.dashDistanceMax + _meleeAttackRange / 2 && _bossToPlayer.magnitude > _ownerParentScript.dashDistanceMax - _meleeAttackRange / 2)
-            if (_hit.transform == owner.player.transform && _bossToPlayer.magnitude < owner.dashDistance + _meleeAttackRange / 2 && _bossToPlayer.magnitude > owner.dashDistance - _meleeAttackRange / 2)
+            if (/*_hit.transform == owner.player.transform &&*/ _bossToPlayer.magnitude < owner.dashAttackDistanceMax + _meleeAttackRange / 2 && _bossToPlayer.magnitude > owner.dashAttackDistanceMin + _meleeAttackRange / 2)
             {
-                int dashSign = 0;
+                _dashAttackDirection = _bossToPlayer.normalized;
 
-                if (UnityEngine.Random.Range(0f, 1f) > 0.5f)
+                _dashDistance = _bossToPlayer.magnitude - _meleeAttackRange / 2;
+
+                //är det något i vägen för dashen?
+                if (owner.CheckDashPath(_dashAttackDirection, _dashDistance))
                 {
-                    dashSign = 1;
-                }
-                else
-                {
-                    dashSign = -1;
-                }
-
-                _dashAttackAngle = Mathf.Rad2Deg * Mathf.Acos((Mathf.Pow(_bossToPlayer.magnitude, 2) + Mathf.Pow(owner.dashDistance, 2) - Mathf.Pow(_meleeAttackRange / 2, 2)) / (2 * _bossToPlayer.magnitude * owner.dashDistance));
-
-                _dashAttackDirection = _bossToPlayer;
-                _dashAttackDirection = Quaternion.AngleAxis(_dashAttackAngle * dashSign, Vector3.up) * _dashAttackDirection;
-
-                Vector3 _playerToDashPos = (owner.transform.position + _dashAttackDirection.normalized * owner.dashDistance) - owner.player.transform.position;
-                Vector3 _playerToBoss = owner.transform.position - owner.player.transform.position;
-                float _angleDashAttackToPlayer = Vector3.Angle(_playerToBoss, _playerToDashPos);
-
-                //är vinkeln mellan spelaren till dit bossen kommer dasha en ok vinkel 
-                if (_angleDashAttackToPlayer < owner.maxAngleDashAttackToPlayer)
-                {
-                    //ändra så det inte är en siffra utan att det beror på deras hittboxes storlek eller en parameter
-
-                    //ranomizar vart bossen kommer dasha, sålänge den inte skulle kunna krocka med spelaren
-                    if (_bossToPlayer.magnitude - 0.45f > owner.dashDistance)
-                    {
-                        _dashAttackAngle = UnityEngine.Random.Range(0, _dashAttackAngle);
-                        _dashAttackDirection = _bossToPlayer;
-                        _dashAttackDirection = Quaternion.AngleAxis(_dashAttackAngle * dashSign * -1, Vector3.up) * _dashAttackDirection;
-                    }
-                    //är det något i vägen för dashen?
-                    if (owner.CheckDashPath(_dashAttackDirection))
-                    {
-                        owner.movementDirection = _dashAttackDirection;
-                        owner.dashAttack = true;
-                        return true;
-                    }
-                    else
-                    {
-                        _dashAttackDirection = _bossToPlayer;
-                        //"*-1" för att få andra sidan av spelaren
-                        _dashAttackDirection = Quaternion.AngleAxis(_dashAttackAngle * dashSign * -1, Vector3.up) * _dashAttackDirection;
-
-                        //är något i vägen om den dashar till andra sidan av spelaren?
-                        if (owner.CheckDashPath(_dashAttackDirection))
-                        {
-                            owner.movementDirection = _dashAttackDirection;
-                            owner.dashAttack = true;
-                            return true;
-                        }
-                        //kan tas bort, finns bara för debug 
-                        else
-                        {
-                            Debug.Log("kan inte dasha med all denna skit ivägen juuuuuöööööö");
-                        }
-                    }
+                    owner.movementDirection = _dashAttackDirection;
+                    owner.dashDistance = _dashDistance;
+                    //Debug.Log("_dashDistance " + _dashDistance);
+                    //Debug.Log("_bossToPlayer.mag " + _bossToPlayer.magnitude);
+                    owner.dashAttack = true;
+                    return true;
                 }
                 //kan tas bort, finns bara för debug 
                 else
                 {
-                    Debug.Log("no want dash tru player");
+                    Debug.Log("kan inte dasha med all denna skit ivägen juuuuuöööööö");
                 }
             }
             //kan tas bort, finns bara för debug 
@@ -1300,6 +1327,99 @@ public class BossPhaseOneCombatState : State<BossAIScript>
         }
         return false;
     }
+
+    //private bool TryToDashOld(BossAIScript owner)
+    //{
+    //    //vill den dash attacka?
+    //    if (UnityEngine.Random.Range(0f, 100f) > 100f - owner.dashAttackChanse)
+    //    {
+    //        _bossToPlayer = owner.player.transform.position - owner.transform.position;
+
+    //        Physics.Raycast(owner.transform.position + new Vector3(0, 1, 0), _bossToPlayer.normalized, out _hit, owner.dashDistance + _meleeAttackRange, owner.targetLayers);
+
+    //        //är spelaren innom en bra range och innom LOS?
+    //        //if (_hit.transform == _ownerParentScript.player.transform && _bossToPlayer.magnitude < _ownerParentScript.dashDistanceMax + _meleeAttackRange / 2 && _bossToPlayer.magnitude > _ownerParentScript.dashDistanceMax - _meleeAttackRange / 2)
+    //        if (_hit.transform == owner.player.transform && _bossToPlayer.magnitude < owner.dashDistance + _meleeAttackRange / 2 && _bossToPlayer.magnitude > owner.dashDistance - _meleeAttackRange / 2)
+    //        {
+    //            int dashSign = 0;
+
+    //            if (UnityEngine.Random.Range(0f, 1f) > 0.5f)
+    //            {
+    //                dashSign = 1;
+    //            }
+    //            else
+    //            {
+    //                dashSign = -1;
+    //            }
+
+    //            _dashAttackAngle = Mathf.Rad2Deg * Mathf.Acos((Mathf.Pow(_bossToPlayer.magnitude, 2) + Mathf.Pow(owner.dashDistance, 2) - Mathf.Pow(_meleeAttackRange / 2, 2)) / (2 * _bossToPlayer.magnitude * owner.dashDistance));
+
+    //            _dashAttackDirection = _bossToPlayer;
+    //            _dashAttackDirection = Quaternion.AngleAxis(_dashAttackAngle * dashSign, Vector3.up) * _dashAttackDirection;
+
+    //            Vector3 _playerToDashPos = (owner.transform.position + _dashAttackDirection.normalized * owner.dashDistance) - owner.player.transform.position;
+    //            Vector3 _playerToBoss = owner.transform.position - owner.player.transform.position;
+    //            float _angleDashAttackToPlayer = Vector3.Angle(_playerToBoss, _playerToDashPos);
+
+    //            //är vinkeln mellan spelaren till dit bossen kommer dasha en ok vinkel 
+    //            if (_angleDashAttackToPlayer < owner.maxAngleDashAttackToPlayer)
+    //            {
+    //                //ändra så det inte är en siffra utan att det beror på deras hittboxes storlek eller en parameter
+
+    //                //ranomizar vart bossen kommer dasha, sålänge den inte skulle kunna krocka med spelaren
+    //                if (_bossToPlayer.magnitude - 0.45f > owner.dashDistance)
+    //                {
+    //                    _dashAttackAngle = UnityEngine.Random.Range(0, _dashAttackAngle);
+    //                    _dashAttackDirection = _bossToPlayer;
+    //                    _dashAttackDirection = Quaternion.AngleAxis(_dashAttackAngle * dashSign * -1, Vector3.up) * _dashAttackDirection;
+    //                }
+    //                //är det något i vägen för dashen?
+    //                if (owner.CheckDashPath(_dashAttackDirection, owner.dashDistance))
+    //                {
+    //                    owner.movementDirection = _dashAttackDirection;
+    //                    owner.dashAttack = true;
+    //                    return true;
+    //                }
+    //                else
+    //                {
+    //                    _dashAttackDirection = _bossToPlayer;
+    //                    //"*-1" för att få andra sidan av spelaren
+    //                    _dashAttackDirection = Quaternion.AngleAxis(_dashAttackAngle * dashSign * -1, Vector3.up) * _dashAttackDirection;
+
+    //                    //är något i vägen om den dashar till andra sidan av spelaren?
+    //                    if (owner.CheckDashPath(_dashAttackDirection, owner.dashDistance))
+    //                    {
+    //                        owner.movementDirection = _dashAttackDirection;
+    //                        owner.dashAttack = true;
+    //                        return true;
+    //                    }
+    //                    //kan tas bort, finns bara för debug 
+    //                    else
+    //                    {
+    //                        Debug.Log("kan inte dasha med all denna skit ivägen juuuuuöööööö");
+    //                    }
+    //                }
+    //            }
+    //            //kan tas bort, finns bara för debug 
+    //            else
+    //            {
+    //                Debug.Log("no want dash tru player");
+    //            }
+    //        }
+    //        //kan tas bort, finns bara för debug 
+    //        else
+    //        {
+    //            Debug.Log("ITS TO FAR AWAY!!!! (or to close)");
+    //        }
+    //    }
+    //    //kan tas bort, finns bara för debug 
+    //    else
+    //    {
+    //        Debug.Log("no want dash tyvm");
+    //    }
+    //    return false;
+    //}
+
 }
 #endregion
 
@@ -1349,7 +1469,8 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
 
     private Vector3 _destination;
     private Vector3 _dashAttackDirection;
-    private float _dashAttackAngle;
+    private float _dashDistance;
+    //private float _dashAttackAngle;
 
     private Vector3 _bossToPlayer;
 
@@ -1373,16 +1494,16 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
 
     public override void EnterState(BossAIScript owner)
     {
-        if (_meleeAttackTimer.Expired)
-        {
-            GenerateNewMeleeAttackSpeed();
-            _meleeAttackTimer = new Timer(_meleeAttackSpeed);
-            _minMeleeAttackCooldown = _baseMinMeleeAttackCooldown;
-        }
-        else
-        {
-            _minMeleeAttackCooldown += _meleeAttackTimer.Time;
-        }
+        //if (_meleeAttackTimer.Expired)
+        //{
+        //    GenerateNewMeleeAttackSpeed();
+        //    _meleeAttackTimer = new Timer(_meleeAttackSpeed);
+        //    _minMeleeAttackCooldown = _baseMinMeleeAttackCooldown;
+        //}
+        //else
+        //{
+        //    _minMeleeAttackCooldown += _meleeAttackTimer.Time;
+        //}
     }
 
     private void GenerateNewMeleeAttackSpeed()
@@ -1421,11 +1542,17 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
         //kolla om spelaren är nära nog att slå
         else if (_meleeAttackTimer.Time > _minMeleeAttackCooldown && _meleeAttackRange > Vector3.Distance(owner.transform.position, owner.player.transform.position))
         {
+            _minMeleeAttackCooldown = _meleeAttackTimer.Time + _baseMinMeleeAttackCooldown;
+
             owner.actionStateMachine.ChangeState(owner.meleeAttackOneState);
         }
         //kolla om man ska attackera
         else if (_meleeAttackTimer.Expired && _meleeAttackTimer.Time > _minMeleeAttackCooldown)
         {
+            GenerateNewMeleeAttackSpeed();
+            _meleeAttackTimer = new Timer(_meleeAttackSpeed);
+            _minMeleeAttackCooldown = _baseMinMeleeAttackCooldown;
+
             //nära nog för att göra melee attacken
             if (_drainAttackRange > Vector3.Distance(owner.transform.position, owner.player.transform.position))
             {
@@ -1486,7 +1613,7 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
                 //random dash in combat (vet inte om detta ska vara med)
                 if (UnityEngine.Random.Range(0f, 100f) > 100f - owner.dashChansePerFrame)
                 {
-                    if (owner.CheckDashPath(owner.movementDirection))
+                    if (owner.CheckDashPath(owner.movementDirection, owner.dashDistance))
                     {
                         owner.actionStateMachine.ChangeState(owner.bossDashState);
                     }
@@ -1510,7 +1637,6 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
             }
         }
     }
-
     private bool TryToDash(BossAIScript owner)
     {
         //vill den dash attacka?
@@ -1518,91 +1644,137 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
         {
             _bossToPlayer = owner.player.transform.position - owner.transform.position;
 
-            Physics.Raycast(owner.transform.position + new Vector3(0, 1, 0), _bossToPlayer.normalized, out _hit, owner.dashDistance + _meleeAttackRange, owner.targetLayers);
+            //Physics.Raycast(owner.transform.position + new Vector3(0, 1, 0), _bossToPlayer.normalized, out _hit, owner.dashAttackDistanceMax + _meleeAttackRange, owner.targetLayers);
 
             //är spelaren innom en bra range och innom LOS?
-            //if (_hit.transform == _ownerParentScript.player.transform && _bossToPlayer.magnitude < _ownerParentScript.dashDistanceMax + _meleeAttackRange / 2 && _bossToPlayer.magnitude > _ownerParentScript.dashDistanceMax - _meleeAttackRange / 2)
-            if (_hit.transform == owner.player.transform && _bossToPlayer.magnitude < owner.dashDistance + _meleeAttackRange / 2 && _bossToPlayer.magnitude > owner.dashDistance - _meleeAttackRange / 2)
+            if (/*_hit.transform == owner.player.transform &&*/ _bossToPlayer.magnitude < owner.dashAttackDistanceMax + _meleeAttackRange / 2 && _bossToPlayer.magnitude > owner.dashAttackDistanceMin + _meleeAttackRange / 2)
             {
-                int dashSign = 0;
+                _dashAttackDirection = _bossToPlayer.normalized;
 
-                if (UnityEngine.Random.Range(0f, 1f) > 0.5f)
+                _dashDistance = _bossToPlayer.magnitude - _meleeAttackRange / 2;
+
+                //är det något i vägen för dashen?
+                if (owner.CheckDashPath(_dashAttackDirection, _dashDistance))
                 {
-                    dashSign = 1;
+                    owner.movementDirection = _dashAttackDirection;
+                    owner.dashDistance = _dashDistance;
+                    Debug.Log("_dashDistance " + _dashDistance);
+                    Debug.Log("_bossToPlayer.mag " + _bossToPlayer.magnitude);
+                    owner.dashAttack = true;
+                    return true;
                 }
+                //kan tas bort, finns bara för debug 
                 else
                 {
-                    dashSign = -1;
-                }
-
-                _dashAttackAngle = Mathf.Rad2Deg * Mathf.Acos((Mathf.Pow(_bossToPlayer.magnitude, 2) + Mathf.Pow(owner.dashDistance, 2) - Mathf.Pow(_meleeAttackRange / 2, 2)) / (2 * _bossToPlayer.magnitude * owner.dashDistance));
-
-                _dashAttackDirection = _bossToPlayer;
-                _dashAttackDirection = Quaternion.AngleAxis(_dashAttackAngle * dashSign, Vector3.up) * _dashAttackDirection;
-
-                Vector3 _playerToDashPos = (owner.transform.position + _dashAttackDirection.normalized * owner.dashDistance) - owner.player.transform.position;
-                Vector3 _playerToBoss = owner.transform.position - owner.player.transform.position;
-                float _angleDashAttackToPlayer = Vector3.Angle(_playerToBoss, _playerToDashPos);
-
-                //är vinkeln mellan spelaren till dit bossen kommer dasha en ok vinkel 
-                if (_angleDashAttackToPlayer < owner.maxAngleDashAttackToPlayer)
-                {
-                    //ändra så det inte är en siffra utan att det beror på deras hittboxes storlek eller en parameter
-
-                    //ranomizar vart bossen kommer dasha, sålänge den inte skulle kunna krocka med spelaren
-                    if (_bossToPlayer.magnitude - 0.45f > owner.dashDistance)
-                    {
-                        _dashAttackAngle = UnityEngine.Random.Range(0, _dashAttackAngle);
-                        _dashAttackDirection = _bossToPlayer;
-                        _dashAttackDirection = Quaternion.AngleAxis(_dashAttackAngle * dashSign * -1, Vector3.up) * _dashAttackDirection;
-                    }
-                    //är det något i vägen för dashen?
-                    if (owner.CheckDashPath(_dashAttackDirection))
-                    {
-                        owner.movementDirection = _dashAttackDirection;
-                        owner.dashAttack = true;
-                        return true;
-                    }
-                    else
-                    {
-                        _dashAttackDirection = _bossToPlayer;
-                        //"*-1" för att få andra sidan av spelaren
-                        _dashAttackDirection = Quaternion.AngleAxis(_dashAttackAngle * dashSign * -1, Vector3.up) * _dashAttackDirection;
-
-                        //är något i vägen om den dashar till andra sidan av spelaren?
-                        if (owner.CheckDashPath(_dashAttackDirection))
-                        {
-                            owner.movementDirection = _dashAttackDirection;
-                            owner.dashAttack = true;
-                            return true;
-                        }
-                        //saker va i vägen för dashen
-                        else
-                        {
-                            Debug.Log("kan inte dasha med all denna skit ivägen juuuuuöööööö");
-                            return false;
-                        }
-                    }
-                }
-                else
-                {
-                    Debug.Log("no want dash tru player");
-                    return false;
+                    Debug.Log("kan inte dasha med all denna skit ivägen juuuuuöööööö");
                 }
             }
+            //kan tas bort, finns bara för debug 
             else
             {
                 Debug.Log("ITS TO FAR AWAY!!!! (or to close)");
-                return false;
             }
         }
-        //springa och slå
+        //kan tas bort, finns bara för debug 
         else
         {
             Debug.Log("no want dash tyvm");
-            return false;
         }
+        return false;
     }
+
+    //private bool TryToDashOld(BossAIScript owner)
+    //{
+    //    //vill den dash attacka?
+    //    if (UnityEngine.Random.Range(0f, 100f) > 100f - owner.dashAttackChanse)
+    //    {
+    //        _bossToPlayer = owner.player.transform.position - owner.transform.position;
+
+    //        Physics.Raycast(owner.transform.position + new Vector3(0, 1, 0), _bossToPlayer.normalized, out _hit, owner.dashDistance + _meleeAttackRange, owner.targetLayers);
+
+    //        //är spelaren innom en bra range och innom LOS?
+    //        //if (_hit.transform == _ownerParentScript.player.transform && _bossToPlayer.magnitude < _ownerParentScript.dashDistanceMax + _meleeAttackRange / 2 && _bossToPlayer.magnitude > _ownerParentScript.dashDistanceMax - _meleeAttackRange / 2)
+    //        if (_hit.transform == owner.player.transform && _bossToPlayer.magnitude < owner.dashDistance + _meleeAttackRange / 2 && _bossToPlayer.magnitude > owner.dashDistance - _meleeAttackRange / 2)
+    //        {
+    //            int dashSign = 0;
+
+    //            if (UnityEngine.Random.Range(0f, 1f) > 0.5f)
+    //            {
+    //                dashSign = 1;
+    //            }
+    //            else
+    //            {
+    //                dashSign = -1;
+    //            }
+
+    //            _dashAttackAngle = Mathf.Rad2Deg * Mathf.Acos((Mathf.Pow(_bossToPlayer.magnitude, 2) + Mathf.Pow(owner.dashDistance, 2) - Mathf.Pow(_meleeAttackRange / 2, 2)) / (2 * _bossToPlayer.magnitude * owner.dashDistance));
+
+    //            _dashAttackDirection = _bossToPlayer;
+    //            _dashAttackDirection = Quaternion.AngleAxis(_dashAttackAngle * dashSign, Vector3.up) * _dashAttackDirection;
+
+    //            Vector3 _playerToDashPos = (owner.transform.position + _dashAttackDirection.normalized * owner.dashDistance) - owner.player.transform.position;
+    //            Vector3 _playerToBoss = owner.transform.position - owner.player.transform.position;
+    //            float _angleDashAttackToPlayer = Vector3.Angle(_playerToBoss, _playerToDashPos);
+
+    //            //är vinkeln mellan spelaren till dit bossen kommer dasha en ok vinkel 
+    //            if (_angleDashAttackToPlayer < owner.maxAngleDashAttackToPlayer)
+    //            {
+    //                //ändra så det inte är en siffra utan att det beror på deras hittboxes storlek eller en parameter
+
+    //                //ranomizar vart bossen kommer dasha, sålänge den inte skulle kunna krocka med spelaren
+    //                if (_bossToPlayer.magnitude - 0.45f > owner.dashDistance)
+    //                {
+    //                    _dashAttackAngle = UnityEngine.Random.Range(0, _dashAttackAngle);
+    //                    _dashAttackDirection = _bossToPlayer;
+    //                    _dashAttackDirection = Quaternion.AngleAxis(_dashAttackAngle * dashSign * -1, Vector3.up) * _dashAttackDirection;
+    //                }
+    //                //är det något i vägen för dashen?
+    //                if (owner.CheckDashPath(_dashAttackDirection, owner.dashDistance))
+    //                {
+    //                    owner.movementDirection = _dashAttackDirection;
+    //                    owner.dashAttack = true;
+    //                    return true;
+    //                }
+    //                else
+    //                {
+    //                    _dashAttackDirection = _bossToPlayer;
+    //                    //"*-1" för att få andra sidan av spelaren
+    //                    _dashAttackDirection = Quaternion.AngleAxis(_dashAttackAngle * dashSign * -1, Vector3.up) * _dashAttackDirection;
+
+    //                    //är något i vägen om den dashar till andra sidan av spelaren?
+    //                    if (owner.CheckDashPath(_dashAttackDirection, owner.dashDistance))
+    //                    {
+    //                        owner.movementDirection = _dashAttackDirection;
+    //                        owner.dashAttack = true;
+    //                        return true;
+    //                    }
+    //                    //saker va i vägen för dashen
+    //                    else
+    //                    {
+    //                        Debug.Log("kan inte dasha med all denna skit ivägen juuuuuöööööö");
+    //                        return false;
+    //                    }
+    //                }
+    //            }
+    //            else
+    //            {
+    //                Debug.Log("no want dash tru player");
+    //                return false;
+    //            }
+    //        }
+    //        else
+    //        {
+    //            Debug.Log("ITS TO FAR AWAY!!!! (or to close)");
+    //            return false;
+    //        }
+    //    }
+    //    //springa och slå
+    //    else
+    //    {
+    //        Debug.Log("no want dash tyvm");
+    //        return false;
+    //    }
+    //}
 }
 #endregion
 
