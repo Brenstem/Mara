@@ -303,27 +303,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1061508383 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1300380220, guid: 8e106d65a8b8b3143a8bc6f84b3a0855,
-    type: 3}
-  m_PrefabInstance: {fileID: 6899519095204235708}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1061508389
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1061508383}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62f35ce569f17c94eb607018ad68aaec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  type: 0
-  flag: 1
-  sceneIndex: 1
 --- !u!1 &1665041122
 GameObject:
   m_ObjectHideFlags: 0
@@ -829,16 +808,6 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6899519094183244715, guid: 8e106d65a8b8b3143a8bc6f84b3a0855,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: -0.000038146973
-      objectReference: {fileID: 0}
-    - target: {fileID: 6899519094022710874, guid: 8e106d65a8b8b3143a8bc6f84b3a0855,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6899519094022710874, guid: 8e106d65a8b8b3143a8bc6f84b3a0855,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -858,19 +827,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6899519094852916215, guid: 8e106d65a8b8b3143a8bc6f84b3a0855,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1300380223, guid: 8e106d65a8b8b3143a8bc6f84b3a0855, type: 3}
-      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
-      value: 
-      objectReference: {fileID: 1061508389}
-    - target: {fileID: 1300380223, guid: 8e106d65a8b8b3143a8bc6f84b3a0855, type: 3}
-      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetLanguage
       objectReference: {fileID: 0}
     - target: {fileID: 363737949, guid: 8e106d65a8b8b3143a8bc6f84b3a0855, type: 3}
       propertyPath: m_AnchorMax.x

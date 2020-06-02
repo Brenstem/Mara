@@ -838,6 +838,7 @@ GameObject:
   - component: {fileID: 1300380224}
   - component: {fileID: 1300380223}
   - component: {fileID: 1300380222}
+  - component: {fileID: 1061508389}
   m_Layer: 5
   m_Name: Language Dropdown
   m_TagString: Untagged
@@ -962,8 +963,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: SetResolution
+      - m_Target: {fileID: 1061508389}
+        m_MethodName: SetLanguage
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -988,6 +989,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c281385140218bb439e9a6dd713386a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1061508389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1300380220}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62f35ce569f17c94eb607018ad68aaec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  type: 0
+  flag: 1
+  sceneIndex: 1
 --- !u!1 &1323043504
 GameObject:
   m_ObjectHideFlags: 0
@@ -1426,6 +1442,11 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7292957802851650706, guid: 5b6f52791d498fa4fadf90bbe4d76356,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -0.000038146973
+      objectReference: {fileID: 0}
     - target: {fileID: 7292957802544078836, guid: 5b6f52791d498fa4fadf90bbe4d76356,
         type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1434,6 +1455,11 @@ PrefabInstance:
     - target: {fileID: 7292957803146221372, guid: 5b6f52791d498fa4fadf90bbe4d76356,
         type: 3}
       propertyPath: m_Value
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7292957803146221372, guid: 5b6f52791d498fa4fadf90bbe4d76356,
+        type: 3}
+      propertyPath: m_Size
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7292957802988591459, guid: 5b6f52791d498fa4fadf90bbe4d76356,
@@ -1454,11 +1480,6 @@ PrefabInstance:
     - target: {fileID: 7292957802174639310, guid: 5b6f52791d498fa4fadf90bbe4d76356,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7292957801362908183, guid: 5b6f52791d498fa4fadf90bbe4d76356,
-        type: 3}
-      propertyPath: m_Value
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
