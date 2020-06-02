@@ -3038,7 +3038,7 @@ PrefabInstance:
     - target: {fileID: 5536227234145099786, guid: beb5169a1cd342c43b2d95e17247168f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -23.78
+      value: -22.15
       objectReference: {fileID: 0}
     - target: {fileID: 5536227234145099786, guid: beb5169a1cd342c43b2d95e17247168f,
         type: 3}
@@ -3085,6 +3085,51 @@ PrefabInstance:
       propertyPath: _fill
       value: 
       objectReference: {fileID: 755188095}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: minAttackSpeed
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: phaseTwoTransitionHP
+      value: 0.384
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: desiredDistanceValues.Array.data[3].speedIncrese
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: minAttackCooldown
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: dashAttackDistanceMin
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: dashAttackChanse
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: desiredDistanceToPlayer
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: meleeRange
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: dashAttackDistanceMax
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8831550686162915866, guid: beb5169a1cd342c43b2d95e17247168f,
         type: 3}
       propertyPath: m_Radius
@@ -3492,17 +3537,17 @@ PrefabInstance:
     - target: {fileID: 386527908510245123, guid: cc925d04a25f2fc4ca771dcbbd07e329,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.05
+      value: 3.26
       objectReference: {fileID: 0}
     - target: {fileID: 386527908510245123, guid: cc925d04a25f2fc4ca771dcbbd07e329,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.79
+      value: 1.65
       objectReference: {fileID: 0}
     - target: {fileID: 386527908510245123, guid: cc925d04a25f2fc4ca771dcbbd07e329,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.056
+      value: 3.667
       objectReference: {fileID: 0}
     - target: {fileID: 386527908510245123, guid: cc925d04a25f2fc4ca771dcbbd07e329,
         type: 3}
@@ -5158,10 +5203,10 @@ MonoBehaviour:
   dashChansePerFrame: 0.1
   dashAttackChanse: 20
   dashSpeed: 20
-  dashDistance: 5
+  dashAttackDistanceMin: 5
+  dashAttackDistanceMax: 5
   dashLagDurration: 0.5
   dashAcceleration: 2000
-  maxAngleDashAttackToPlayer: 125.2
   chasingSpeed: 6
   chasingAcceleration: 40
   murkyWaterPrefabs: []
@@ -5690,17 +5735,17 @@ PrefabInstance:
     - target: {fileID: 5420518576761327287, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.00000047683716
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5420518576761327287, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.000000029802322
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5420518576761327287, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.00000011920929
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5420518576337565886, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
@@ -5720,17 +5765,17 @@ PrefabInstance:
     - target: {fileID: 5420518577660149752, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.00000047683716
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577660149752, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.000000029802322
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577660149752, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.00000011920929
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5420518577468967629, guid: 0018251b900274d4f82d88118599e2eb,
         type: 3}
