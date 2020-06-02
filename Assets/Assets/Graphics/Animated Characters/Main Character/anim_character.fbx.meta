@@ -118,6 +118,11 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: dark metal
+    second: {fileID: 2100000, guid: 601cd0bf263bc4441939d68c19af2346, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: initialShadingGroup
     second: {fileID: 2100000, guid: 16f4b5c880643c24aadeb985e7499b88, type: 2}
   - first:
@@ -136,6 +141,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: pupil
     second: {fileID: 2100000, guid: 16f4b5c880643c24aadeb985e7499b88, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: rusted metal
+    second: {fileID: 2100000, guid: 5f24a608b66218545b1fce6fa3413b56, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -169,7 +179,12 @@ ModelImporter:
       is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'head_rot'
       is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
       'anim_char_dash' has import animation warnings that might lower retargeting
-      quality:\n\t'spine_01' is inbetween humanoid transforms and has rotation animation
+      quality:\n\t'neck_rot' is inbetween humanoid transforms and has rotation animation
+      that will be discarded.\n\t'head_rot' is inbetween humanoid transforms and has
+      rotation animation that will be discarded.\n\nClip 'anim_char_dash_end' has
+      import animation warnings that might lower retargeting quality:\n\t'spine_01'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'l.foreArm'
+      has scale animation that will be discarded.\n\t'r.foreArm' has scale animation
       that will be discarded.\n\t'neck_rot' is inbetween humanoid transforms and has
       rotation animation that will be discarded.\n\t'head_rot' is inbetween humanoid
       transforms and has rotation animation that will be discarded.\n\nClip 'anim_char_jump_start'
@@ -247,11 +262,28 @@ ModelImporter:
       rotation animation that will be discarded.\n\t'neck_rot' is inbetween humanoid
       transforms and has rotation animation that will be discarded.\n\t'head_rot'
       is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'anim_char_dash_right' has import animation warnings that might lower retargeting
+      quality:\n\t'spine_01' is inbetween humanoid transforms and has rotation animation
+      that will be discarded.\n\t'l.foreArm' has scale animation that will be discarded.\n\t'r.foreArm'
+      has scale animation that will be discarded.\n\t'neck_rot' is inbetween humanoid
+      transforms and has rotation animation that will be discarded.\n\t'head_rot'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
       'anim_char_dash_left' has import animation warnings that might lower retargeting
       quality:\n\t'spine_01' is inbetween humanoid transforms and has rotation animation
-      that will be discarded.\n\t'neck_rot' is inbetween humanoid transforms and has
-      rotation animation that will be discarded.\n\t'head_rot' is inbetween humanoid
-      transforms and has rotation animation that will be discarded.\n"
+      that will be discarded.\n\t'r.foreArm' has scale animation that will be discarded.\n\t'neck_rot'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'head_rot'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'anim_char_dash_back' has import animation warnings that might lower retargeting
+      quality:\n\t'spine_01' is inbetween humanoid transforms and has rotation animation
+      that will be discarded.\n\t'l.foreArm' has scale animation that will be discarded.\n\t'neck_rot'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\t'head_rot'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n\nClip
+      'anim_char_parryLag' has import animation warnings that might lower retargeting
+      quality:\n\t'spine_01' is inbetween humanoid transforms and has rotation animation
+      that will be discarded.\n\t'l.toe' has scale animation that will be discarded.\n\t'r.toe'
+      has scale animation that will be discarded.\n\t'neck_rot' is inbetween humanoid
+      transforms and has rotation animation that will be discarded.\n\t'head_rot'
+      is inbetween humanoid transforms and has rotation animation that will be discarded.\n"
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 1
@@ -2125,7 +2157,7 @@ ModelImporter:
       takeName: anim_char_dash_back
       internalID: 0
       firstFrame: 0
-      lastFrame: 1
+      lastFrame: 33
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
