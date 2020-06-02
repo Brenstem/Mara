@@ -36,6 +36,24 @@ public class GlobalState : MonoBehaviour
 
     public LanguageEnum language;
 
+    [Header("Debug")]
+    [SerializeField] private bool _lockCursorOnStart = true;
+
+    public bool LockCursor
+    {
+        set
+        {
+            if (value)
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Confined;
+            }
+        }
+    }
+
     public PlayerRevamp Player
     {
         get { return _player; }
@@ -101,6 +119,13 @@ public class GlobalState : MonoBehaviour
             DontDestroyOnLoad(this);
             _state = this;
         }
+    }
+
+    private void Start()
+    {
+        //debug 
+        LockCursor = _lockCursorOnStart;
+        _player.EnabledControls = _lockCursorOnStart;
     }
 
     private void OnDestroy() {
