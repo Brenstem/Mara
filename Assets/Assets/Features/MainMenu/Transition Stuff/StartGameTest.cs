@@ -15,7 +15,7 @@ public class StartGameTest : MonoBehaviour
     private void Awake()
     {
         _playerRevamp = GlobalState.state.Player;
-        _cinemachineStateDrivenCamera = GlobalState.state.Camera.GetComponentInChildren<CinemachineStateDrivenCamera>();
+        _cinemachineStateDrivenCamera = GlobalState.state.StateDrivenCamera;
     }
 
     //kör denna när spelet ska startas
@@ -32,6 +32,8 @@ public class StartGameTest : MonoBehaviour
     private IEnumerator StartGameTransition(float transitionTime)
     {
         yield return new WaitForSecondsRealtime(transitionTime);
+        if (_canvas == null)
+            _canvas = GetComponentInParent<Canvas>().gameObject;
         _canvas.SetActive(false);
         _playerRevamp.EnabledControls = true;
     }

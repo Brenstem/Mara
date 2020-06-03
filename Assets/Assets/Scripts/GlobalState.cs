@@ -18,6 +18,8 @@ public class GlobalState : MonoBehaviour
 
     [SerializeField] private Camera _camera;
 
+    [SerializeField] private Cinemachine.CinemachineStateDrivenCamera _stateDrivenCamera;
+
     [SerializeField] private AudioManager _audioManager;
 
     [SerializeField] private CheckpointHandler _checkpointHandler;
@@ -62,6 +64,11 @@ public class GlobalState : MonoBehaviour
     public Camera Camera
     {
         get { return _camera; }
+    }
+
+    public Cinemachine.CinemachineStateDrivenCamera StateDrivenCamera
+    {
+        get { return _stateDrivenCamera; }
     }
 
     public CheckpointHandler CheckpointHandler
