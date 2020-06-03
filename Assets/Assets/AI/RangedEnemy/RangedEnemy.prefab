@@ -186,7 +186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac2019947aa47dc45b41d13851ab1ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 100
+  _maxHealth: 50
   _healthBar: {fileID: 2031900385075082054}
 --- !u!114 &8915456496256060790
 MonoBehaviour:
@@ -213,8 +213,8 @@ MonoBehaviour:
   _waitTime: 0
   _idlePathingPoints: []
   _attackRange: 15
-  _minAttackSpeed: 2
-  _maxAttackSpeedIncrease: 5
+  _minAttackSpeed: 1
+  _maxAttackSpeedIncrease: 3
   _usesHitStun: 1
   _anim: {fileID: 0}
   _animationOver: 0
@@ -222,23 +222,24 @@ MonoBehaviour:
   _dropPrefab: {fileID: 386527908510245126, guid: cc925d04a25f2fc4ca771dcbbd07e329,
     type: 3}
   deathDrop: 1
-  _insanityIncreaseAmount: 1
-  _dropForceMin: 0
-  _dropForceMax: 0
-  _dropAngleUpMin: 0
-  _dropAngleUpMax: 0
-  _dropAmount: 10
+  _insanityIncreaseAmount: 3
+  _dropForceMin: 1000
+  _dropForceMax: 1500
+  _dropAngleUpMin: -30
+  _dropAngleUpMax: 90
+  _dropAmount: 6
   _projectile: {fileID: 8366055604816629108, guid: 634054fb0d9b0864c9b35bbdfd9ef739,
     type: 3}
   _projectileSpawnPos: {fileID: 3882684762693499996}
   _healthBar: {fileID: 4975744970937386883}
-  _firerate: 2
-  _aimAssistDistanceCutOff: 5
+  _firerate: 0
+  _aimAssistDistanceCutOff: 3
   _meleeRange: 2
   _meleeHitBoxGroup: {fileID: 8004133527846166422}
   _minMeleeAttackSpeed: 0.5
   _maxMeleeAttackSpeed: 2
-  _hitstunOnParry: 0
+  _hitstunOnParry: 0.7
+  _attackDelayAfterHitstun: 1
   _canTurn: 0
 --- !u!1001 &345667101
 PrefabInstance:
@@ -314,43 +315,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1842488915344982679, guid: f9f6bfc7519c7bd409b2510523bb69d5,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1842488915344982679, guid: f9f6bfc7519c7bd409b2510523bb69d5,
-        type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1842488915344982679, guid: f9f6bfc7519c7bd409b2510523bb69d5,
-        type: 3}
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1842488916005633811, guid: f9f6bfc7519c7bd409b2510523bb69d5,
         type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1842488916005633811, guid: f9f6bfc7519c7bd409b2510523bb69d5,
-        type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1842488916005633811, guid: f9f6bfc7519c7bd409b2510523bb69d5,
-        type: 3}
       propertyPath: m_Enabled
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1842488916953003437, guid: f9f6bfc7519c7bd409b2510523bb69d5,
-        type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1842488916953003437, guid: f9f6bfc7519c7bd409b2510523bb69d5,
-        type: 3}
-      propertyPath: m_Materials.Array.data[1]
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 1842488916953003437, guid: f9f6bfc7519c7bd409b2510523bb69d5,
         type: 3}
@@ -530,11 +501,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8713683434502732735}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: adf34ba624f6f3549ace6940ab49be95,
-        type: 3}
-      propertyPath: m_Name
-      value: anim_basicEnemy_Ranged
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: adf34ba624f6f3549ace6940ab49be95,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -604,6 +570,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 1.75
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: adf34ba624f6f3549ace6940ab49be95,
+        type: 3}
+      propertyPath: m_Name
+      value: anim_basicEnemy_Ranged
       objectReference: {fileID: 0}
     - target: {fileID: -6057140222963153312, guid: adf34ba624f6f3549ace6940ab49be95,
         type: 3}
@@ -752,11 +723,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 9.5
       objectReference: {fileID: 0}
-    - target: {fileID: 2778033842384518024, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
-        type: 3}
-      propertyPath: hitboxEventHandler
-      value: 
-      objectReference: {fileID: 697183228}
     - target: {fileID: 2778033842384518024, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
       propertyPath: hitboxEventHandler
