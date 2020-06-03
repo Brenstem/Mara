@@ -13,6 +13,12 @@ public class EyeScript : MonoBehaviour
 
         Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, _moveSpeed * Time.deltaTime, 0);
 
-        transform.rotation = Quaternion.LookRotation(newDirection);
+        Quaternion rotation = Quaternion.LookRotation(newDirection);
+
+        //if (Quaternion.Angle(transform.rotation, ))
+        //restrict rotation to 85 degrees
+
+        transform.rotation = rotation;
+
     }
 }

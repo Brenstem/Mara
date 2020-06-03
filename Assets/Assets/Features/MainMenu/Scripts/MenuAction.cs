@@ -62,6 +62,14 @@ public class MenuAction : MonoBehaviour
         var rr = Screen.resolutions[index];
         Screen.SetResolution(rr.width, rr.height, Screen.fullScreenMode, rr.refreshRate);
     }
+
+    public void ResetOptions()
+    {
+        if (File.Exists(Application.persistentDataPath + "/controls.data"))
+        {
+            File.Delete(Application.persistentDataPath + "/controls.data");
+        }
+    }
 }
 
 /*

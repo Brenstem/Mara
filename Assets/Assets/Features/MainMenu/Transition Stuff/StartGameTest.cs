@@ -10,6 +10,7 @@ public class StartGameTest : MonoBehaviour
     private PlayerRevamp _playerRevamp;
     private CinemachineStateDrivenCamera _cinemachineStateDrivenCamera;
     [SerializeField, Range(0.0f, 1.0f)] private float _activeControlsFaction;
+    [SerializeField] private GameObject _canvas;
 
     private void Awake()
     {
@@ -31,7 +32,7 @@ public class StartGameTest : MonoBehaviour
     private IEnumerator StartGameTransition(float transitionTime)
     {
         yield return new WaitForSecondsRealtime(transitionTime);
-
+        _canvas.SetActive(false);
         _playerRevamp.EnabledControls = true;
     }
 }
