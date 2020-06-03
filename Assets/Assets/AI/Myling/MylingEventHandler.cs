@@ -25,7 +25,6 @@ public class MylingEventHandler : MonoBehaviour
     public void Scream()
     {
         _parentAI.invulerable = true;
-        print("meme");
         GlobalState.state.AudioManager.MylingChargeAttackAudio(this.transform.position);
     }
 }
