@@ -28,7 +28,7 @@ public class RangedEnemyAI : BaseAIMovementController
 
     [Header("Parry")]
     [SerializeField] private float _hitstunOnParry;
-    [SerializeField] private float _attackDelayAfterHitstun;
+    [SerializeField] public float _attackDelayAfterHitstun;
 
     [HideInInspector] public Timer _hitStunTimer;
     [HideInInspector] public bool _canTurn;
@@ -429,6 +429,7 @@ public class RangedAIHitStunState : State<BaseAIMovementController>
 
     public override void ExitState(BaseAIMovementController owner)
     {
+        owner.GenerateNewAttackTimer(owner.rangedAI._attackDelayAfterHitstun);
         owner._anim.SetBool("InHitstun", false);
     }
 
