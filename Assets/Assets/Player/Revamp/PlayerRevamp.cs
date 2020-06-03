@@ -56,6 +56,7 @@ public class PlayerRevamp : Entity
     public float maxSpeed = 5f;
     public float rotationSpeed = 15f;
     public float rotationAngleUntilMove = 30;
+    public float timeUntilIdle = 5f;
 
     [Header("Jump")]
     [SerializeField] private float _gravity = -9.82f;
@@ -177,7 +178,32 @@ public class PlayerRevamp : Entity
                 }
                 MenuInputResource.LoadOverrides(ref _playerInput, ovr);
             }
-        } 
+        }
+    }
+
+    private Timer _alertTimer;
+    private bool _isAlerted;
+    private float _alertTime;
+    private float _alertValue;
+    [SerializeField] private float _alertBlendDuration = 0.25f;
+
+    public bool IsAlert
+    {
+        get { return _isAlerted; }
+        set
+        {
+            if (!value)
+            {
+                _alertValue = playerAnimator.GetFloat("Alert");
+                _alertTime = 0;
+            }
+            else
+            {
+                playerAnimator.SetFloat("Alert", 1.0f);
+            }
+            _alertTimer.Reset();
+            _isAlerted = value;
+        }
     }
 
     /* === Unity Functions === */
@@ -185,6 +211,8 @@ public class PlayerRevamp : Entity
     {
         base.Awake();
 
+        _alertTimer = new Timer(timeUntilIdle);
+        IsAlert = false;
         //sköts av global state nu
         //if (_lockCursor)
         //    Cursor.lockState = CursorLockMode.Locked;
@@ -258,6 +286,24 @@ public class PlayerRevamp : Entity
         GroundCheck();
 
         Action(InputType.Idle);
+
+        AlertAnimation();
+    }
+
+    private void AlertAnimation()
+    {
+        if (!_isAlerted)
+        {
+            if (_alertTimer.Expired)
+            {
+                _alertTime += Time.deltaTime;
+                playerAnimator.SetFloat("Alert", Mathf.Lerp(_alertValue, 0, _alertTime / (_alertBlendDuration * _alertValue)));
+            }
+            else
+            {
+                _alertTimer += Time.deltaTime;
+            }
+        }
     }
 
     /* === INPUT === */
@@ -586,10 +632,14 @@ public class IdleState : State<PlayerRevamp>
 {
     private float time = 0;
     private float blend;
+
     public float idleBlendDuration = 0.15f;
+
     public override void EnterState(PlayerRevamp owner)
     {
         blend = owner.playerAnimator.GetFloat("Blend");
+        time = 0;
+        owner.IsAlert = false;
     }
 
     public override void ExitState(PlayerRevamp owner)
@@ -607,6 +657,7 @@ public class IdleState : State<PlayerRevamp>
         }
 
         owner.playerAnimator.SetFloat("Blend", Mathf.Lerp(blend, 0, time / (idleBlendDuration * blend)));
+
         time += Time.deltaTime;
 
         /*
@@ -739,9 +790,12 @@ public class MovementState : State<PlayerRevamp>
     private bool _isMoving;
     private float time = 0;
     public float idleBlendDuration = 0.15f;
+    private float blend;
 
     public override void EnterState(PlayerRevamp owner)
     {
+        blend = owner.playerAnimator.GetFloat("Blend");
+        owner.IsAlert = false;
     }
 
     public override void ExitState(PlayerRevamp owner)
@@ -844,8 +898,16 @@ public class MovementState : State<PlayerRevamp>
 
 
                 float magnitude = owner.Input.magnitude > 1 ? 1 : owner.Input.magnitude;
-                owner.playerAnimator.SetFloat("Blend", magnitude);
-                time += Time.deltaTime;
+                //owner.playerAnimator.SetFloat("Blend", magnitude);
+                if (time <= idleBlendDuration)
+                {
+                    owner.playerAnimator.SetFloat("Blend", Mathf.Lerp(blend, magnitude, time / (idleBlendDuration * blend)));
+                    time += Time.deltaTime;
+                }
+                else
+                {
+                    owner.playerAnimator.SetFloat("Blend", magnitude);
+                }
 
                 //owner.playerAnimator.SetBool("Running", true);
 
@@ -885,6 +947,7 @@ public class DashingState : State<PlayerRevamp>
     public override void EnterState(PlayerRevamp owner)
     {
         owner.useGravity = false;
+        owner.IsAlert = true;
 
         if (owner.actionAttackActive)
         {
@@ -902,6 +965,7 @@ public class DashingState : State<PlayerRevamp>
         _lagTimer = new Timer(owner.dashLag);
 
         owner.playerAnimator.SetTrigger("Dash");
+        owner.playerAnimator.SetFloat("Alert", 1.0f);
         owner.playerAnimator.SetBool("IsDashing", true);
         GlobalState.state.AudioManager.PlayerDodgeAudio(owner.transform.position);
 
@@ -940,6 +1004,7 @@ public class DashingState : State<PlayerRevamp>
         if (_timer.Expired)
         {
             //owner.playerAnimator.SetTrigger("DashLag");
+            owner.playerAnimator.SetBool("IsDashing", false);
             _lagTimer.Time += Time.deltaTime;
             owner.useGravity = true;
 
@@ -983,15 +1048,17 @@ public class LightAttackOneState : State<PlayerRevamp>
     {
         if (owner.actionAttackActive)
         {
-                owner.actionHitboxGroup.enabled = true;
+            owner.actionHitboxGroup.enabled = true;
         }
         owner.walkCancel = false;
         owner.interruptable = false;
         owner.attackAnimationOver = false;
         owner.light1HitboxGroup.enabled = true;
+        owner.IsAlert = true;
 
         owner.playerAnimator.SetTrigger("AttackLight"); // Set animation trigger for first attack
         owner.playerAnimator.SetBool("LightAttackTwo", false); // Reset the double combo animation bool upon entering state
+        owner.playerAnimator.SetFloat("Alert", 1.0f);
 
         GlobalState.state.AudioManager.PlayerSwordSwingAudio(owner.transform.position);
 
@@ -1078,10 +1145,12 @@ public class LightAttackTwoState : State<PlayerRevamp>
         {
             owner.actionHitboxGroup.enabled = true;
         }
+        owner.IsAlert = true;
         owner.walkCancel = false;
         owner.interruptable = false;
         owner.attackAnimationOver = false;
         owner.light2HitboxGroup.enabled = true;
+        owner.playerAnimator.SetFloat("Alert", 1.0f);
         GlobalState.state.AudioManager.PlayerSwordSwingAudio(owner.transform.position);
         _target = owner.FindTarget();
     }
@@ -1168,6 +1237,7 @@ public class HeavyAttackState : State<PlayerRevamp>
     {
         _chargeTimer = new Timer(owner.heavyChargeTime);
         _isCharging = true;
+        owner.IsAlert = true;
 
         if (owner.actionAttackActive)
         {
@@ -1180,6 +1250,7 @@ public class HeavyAttackState : State<PlayerRevamp>
         owner.heavyHitboxGroup.enabled = true;
         owner.playerAnimator.SetTrigger("AttackHeavy"); // Set animation trigger for first attack
         owner.playerAnimator.SetBool("HeavyCharge", true);
+        owner.playerAnimator.SetFloat("Alert", 1.0f);
 
         _target = owner.FindTarget();
 
@@ -1198,7 +1269,7 @@ public class HeavyAttackState : State<PlayerRevamp>
         owner.walkCancel = false;
         owner.heavyHitboxGroup.enabled = false;
         owner.playerAnimator.SetBool("HeavyCharge", false);
-        
+
 
         if (_previousDamageMultiplier != 0.0f)
             owner.modifier.DamageMultiplier *= _previousDamageMultiplier;
@@ -1279,6 +1350,7 @@ public class HitstunState : State<PlayerRevamp>
             owner.playerAnimator.SetTrigger("HitstunLight");
         }
         owner.playerAnimator.SetBool("InHitstun", true);
+        owner.IsAlert = true;
     }
 
     public override void ExitState(PlayerRevamp owner)
@@ -1311,6 +1383,7 @@ public class ParryState : State<PlayerRevamp>
         owner.playerAnimator.SetTrigger("Parry");
         owner.playerAnimator.SetBool("IsParrying", true);
         owner.playerAnimator.SetBool("ParryLag", false);
+        owner.IsAlert = true;
         GlobalState.state.AudioManager.ParryindicatorAudio(owner.transform.position);
 
         if (owner.actionAttackActive)
@@ -1419,6 +1492,7 @@ public class SuccessfulParryState : State<PlayerRevamp>
         owner.attackAnimationOver = true;
         owner.isParrying = true;
         owner.inputBuffer.Clear();
+        owner.IsAlert = true;
 
         GlobalState.state.AudioManager.ParrySuccessAudio(owner.transform.position);
     }
