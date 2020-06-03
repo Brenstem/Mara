@@ -158,24 +158,25 @@ public class PlayerRevamp : Entity
 
     private void LoadData()
     {
-        /* OptionData d = (OptionData)SaveData.Load_Data("controls");
+        OptionData d = (OptionData)SaveData.Load_Data("controls");
         if (d != null)
         {
             GlobalState.state.language = (GlobalState.LanguageEnum)d.currentLanguage;
             Screen.SetResolution(d.width, d.height, d.isFullscreen);
             QualitySettings.SetQualityLevel(d.qualityLevel);
 
-            Dictionary<System.Guid, string> ovr = new Dictionary<System.Guid, string>();
-
-            int i = 0;
-            foreach (byte[] key in d.controlKeyArray)
+            if (d.controlKeyArray.Length == 0)
             {
-                ovr.Add(new System.Guid(key), d.valueArray[i]);
-                i++;
+                Dictionary<System.Guid, string> ovr = new Dictionary<System.Guid, string>();
+                int i = 0;
+                foreach (byte[] key in d.controlKeyArray)
+                {
+                    ovr.Add(new System.Guid(key), d.valueArray[i]);
+                    i++;
+                }
+                MenuInputResource.LoadOverrides(ref _playerInput, ovr);
             }
-
-            MenuInputResource.LoadOverrides(ref _playerInput, ovr);
-        } */
+        } 
     }
 
     /* === Unity Functions === */
