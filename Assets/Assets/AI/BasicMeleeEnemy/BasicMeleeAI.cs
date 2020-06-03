@@ -9,7 +9,7 @@ public class BasicMeleeAI : BaseAIMovementController
     [SerializeField] private float _hitstunOnParry;
 
     [Header("Hitstun")]
-    [SerializeField] private float _attackDelayAfterHitstun;
+    [SerializeField] public float _attackDelayAfterHitstun;
 
     [Header("References")]
     [SerializeField] public GameObject _healthBar;
@@ -220,8 +220,9 @@ public class MeleeAIHitstunState : State<BaseAIMovementController>
     {
         owner._anim.SetBool("InHitstun", false);
 
-        // Dont know if we want this feature??
-        // owner.GenerateNewAttackTimer(owner.meleeEnemy._attackDelayAfterHitstun);
+        // Dont know if we want this feature?? 
+        // Update; we want this feature
+        owner.GenerateNewAttackTimer(owner.meleeEnemy._attackDelayAfterHitstun);
     }
 
     public override void UpdateState(BaseAIMovementController owner)
