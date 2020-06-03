@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 648613035391747720}
   - component: {fileID: 648613035391747723}
   - component: {fileID: 7497086228146343657}
-  - component: {fileID: 4390230549897137113}
   m_Layer: 12
   m_Name: Myling
   m_TagString: Lockon
@@ -104,10 +103,15 @@ MonoBehaviour:
   _anim: {fileID: 0}
   _animationOver: 0
   _canEnterHitStun: 0
-  _dropPrefab: {fileID: 4130683122775444156, guid: 3ca44147400209e4485ae8ab86c71962,
+  _dropPrefab: {fileID: 386527908510245126, guid: cc925d04a25f2fc4ca771dcbbd07e329,
     type: 3}
-  _insanityIncreaseAmount: 1
   deathDrop: 1
+  _insanityIncreaseAmount: 1
+  _dropForceMin: 0
+  _dropForceMax: 0
+  _dropAngleUpMin: 0
+  _dropAngleUpMax: 0
+  _dropAmount: 5
   _healthBar: {fileID: 5392630511110434561}
   _hitBox: {fileID: 3426633559148580248}
 --- !u!136 &7497086228146343657
@@ -582,6 +586,11 @@ PrefabInstance:
       propertyPath: hitboxEventHandler
       value: 
       objectReference: {fileID: 648613035466919867}
+    - target: {fileID: 2778033842924246596, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 2778033842924246593, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
       propertyPath: targetLayerMask.m_Bits
@@ -606,11 +615,6 @@ PrefabInstance:
         type: 3}
       propertyPath: circleRadius
       value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2778033842924246596, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
-        type: 3}
-      propertyPath: m_Layer
-      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4a7c34f967a3df49a8e3ebb9aa373a5, type: 3}

@@ -153,9 +153,9 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   m_Radius: 0.35
-  m_Height: 1.58
+  m_Height: 2.22
   m_Direction: 1
-  m_Center: {x: 0, y: 2.17, z: 0}
+  m_Center: {x: 0, y: 1.72, z: 0}
 --- !u!114 &7915258470840588278
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -223,7 +223,7 @@ MonoBehaviour:
   _anim: {fileID: 0}
   _animationOver: 0
   _canEnterHitStun: 0
-  _dropPrefab: {fileID: 4130683122775444156, guid: 3ca44147400209e4485ae8ab86c71962,
+  _dropPrefab: {fileID: 386527908510245126, guid: cc925d04a25f2fc4ca771dcbbd07e329,
     type: 3}
   deathDrop: 1
   _insanityIncreaseAmount: 1
@@ -231,7 +231,7 @@ MonoBehaviour:
   _dropForceMax: 0
   _dropAngleUpMin: 0
   _dropAngleUpMax: 0
-  _dropAmount: 0
+  _dropAmount: 10
   _hitstunOnParry: 0.2
   _attackDelayAfterHitstun: 10
   _healthBar: {fileID: 2444308342576148252}
@@ -324,11 +324,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2927921858668341449}
     m_Modifications:
-    - target: {fileID: 2778033842384518024, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
+    - target: {fileID: 2778033842384518026, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
-      propertyPath: hitboxEventHandler
-      value: 
-      objectReference: {fileID: 2063459491429104663}
+      propertyPath: m_Name
+      value: HitboxGroup
+      objectReference: {fileID: 0}
     - target: {fileID: 2778033842384518025, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -399,11 +399,6 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.01
       objectReference: {fileID: 0}
-    - target: {fileID: 2778033842384518026, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
-        type: 3}
-      propertyPath: m_Name
-      value: HitboxGroup
-      objectReference: {fileID: 0}
     - target: {fileID: 2778033842924246595, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -444,6 +439,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 9.5
       objectReference: {fileID: 0}
+    - target: {fileID: 2778033842384518024, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
+        type: 3}
+      propertyPath: hitboxEventHandler
+      value: 
+      objectReference: {fileID: 2063459491429104663}
     - target: {fileID: 2778033842924246593, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
       propertyPath: hitboxValues.damageValue
@@ -532,11 +532,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: anim_basicEnemy_melee
       objectReference: {fileID: 0}
-    - target: {fileID: -6057140222963153312, guid: 225aa5a660074c74fbccd6278afae392,
+    - target: {fileID: -927199367670048503, guid: 225aa5a660074c74fbccd6278afae392,
         type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 220354ee46eb79f4994401ca19da8d35, type: 2}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 225aa5a660074c74fbccd6278afae392,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -607,6 +607,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.025
       objectReference: {fileID: 0}
+    - target: {fileID: -6057140222963153312, guid: 225aa5a660074c74fbccd6278afae392,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 220354ee46eb79f4994401ca19da8d35, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 225aa5a660074c74fbccd6278afae392, type: 3}
 --- !u!1 &6529857940015022465 stripped

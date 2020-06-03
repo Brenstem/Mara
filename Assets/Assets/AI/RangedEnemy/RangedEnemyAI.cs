@@ -28,6 +28,7 @@ public class RangedEnemyAI : BaseAIMovementController
 
     [Header("Parry")]
     [SerializeField] private float _hitstunOnParry;
+    [SerializeField] private float _attackDelayAfterHitstun;
 
     [HideInInspector] public Timer _hitStunTimer;
     [HideInInspector] public bool _canTurn;
@@ -48,6 +49,8 @@ public class RangedEnemyAI : BaseAIMovementController
     protected override void Update()
     {
         base.Update();
+
+        print(this.gameObject + " " + stateMachine.currentState);
 
         _anim.SetFloat("Blend", _agent.velocity.magnitude);
     }
@@ -83,13 +86,17 @@ public class RangedEnemyAI : BaseAIMovementController
     {
         if (duration > 0.0f && ignoreArmor)
         {
-            stateMachine.ChangeState(new RangedAIHitStunState());
             _hitStunTimer = new Timer(duration);
+            stateMachine.ChangeState(new RangedAIHitStunState());
         }
         else if (duration > 0.0f && _canEnterHitStun)
         {
-            stateMachine.ChangeState(new RangedAIHitStunState());
             _hitStunTimer = new Timer(duration);
+            stateMachine.ChangeState(new RangedAIHitStunState());
+        }
+        else if (duration > 0.0f && !_canEnterHitStun)
+        {
+            GenerateNewAttackTimer(_attackDelayAfterHitstun);
         }
     }
 

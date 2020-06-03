@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 4739941682733901144}
   - component: {fileID: 9209333140864303414}
   - component: {fileID: 5132612282404845814}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PreFab_rockwall1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &5096274371912026604
 Transform:
@@ -26,13 +26,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1589222300207295684}
-  m_LocalRotation: {x: -0, y: 0.63978404, z: -0, w: 0.76855475}
+  m_LocalRotation: {x: 0, y: 0.63978106, z: 0, w: 0.76855725}
   m_LocalPosition: {x: -32.50252, y: 3.6989522, z: -74.99106}
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 79.551, z: 0}
 --- !u!33 &4739941682733901144
 MeshFilter:
   m_ObjectHideFlags: 0
