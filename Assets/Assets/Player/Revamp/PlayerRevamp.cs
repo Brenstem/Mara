@@ -159,7 +159,7 @@ public class PlayerRevamp : Entity
 
     private void LoadData()
     {
-        OptionData d = (OptionData)SaveData.Load_Data("controls");
+        /* OptionData d = (OptionData)SaveData.Load_Data("controls");
         if (d != null)
         {
             GlobalState.state.language = (GlobalState.LanguageEnum)d.currentLanguage;
@@ -177,7 +177,7 @@ public class PlayerRevamp : Entity
                 }
                 MenuInputResource.LoadOverrides(ref _playerInput, ovr);
             }
-        } 
+        }  */
     }
 
     /* === Unity Functions === */
