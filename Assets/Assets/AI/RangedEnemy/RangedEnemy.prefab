@@ -159,7 +159,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc63439ad9a4cae4592e2d23b9fcd5a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _parentAI: {fileID: 0}
+  _parentAI: {fileID: 8915456496256060790}
 --- !u!114 &6664184913126646969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -293,8 +293,13 @@ MonoBehaviour:
   _canEnterHitStun: 0
   _dropPrefab: {fileID: 4130683122775444156, guid: 3ca44147400209e4485ae8ab86c71962,
     type: 3}
-  _insanityIncreaseAmount: 1
   deathDrop: 1
+  _insanityIncreaseAmount: 1
+  _dropForceMin: 0
+  _dropForceMax: 0
+  _dropAngleUpMin: 0
+  _dropAngleUpMax: 0
+  _dropAmount: 0
   _projectile: {fileID: 8366055604816629108, guid: 634054fb0d9b0864c9b35bbdfd9ef739,
     type: 3}
   _projectileSpawnPos: {fileID: 3882684762693499996}
@@ -704,16 +709,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 410185227624118298}
     m_Modifications:
-    - target: {fileID: 2778033842384518026, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
-        type: 3}
-      propertyPath: m_Name
-      value: HitboxGroup
-      objectReference: {fileID: 0}
     - target: {fileID: 2778033842384518024, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
       propertyPath: hitboxEventHandler
       value: 
-      objectReference: {fileID: 2105987943}
+      objectReference: {fileID: 697183228}
+    - target: {fileID: 2778033842384518024, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
+        type: 3}
+      propertyPath: hitboxEventHandler
+      value: 
+      objectReference: {fileID: 697183228}
     - target: {fileID: 2778033842384518025, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -784,6 +789,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.005714285
       objectReference: {fileID: 0}
+    - target: {fileID: 2778033842384518026, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
+        type: 3}
+      propertyPath: m_Name
+      value: HitboxGroup
+      objectReference: {fileID: 0}
     - target: {fileID: 2778033842924246595, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
       propertyPath: m_LocalRotation.x
@@ -824,11 +834,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 9.5
       objectReference: {fileID: 0}
-    - target: {fileID: 2778033842384518024, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
-        type: 3}
-      propertyPath: hitboxEventHandler
-      value: 
-      objectReference: {fileID: 697183228}
     - target: {fileID: 2778033842924246593, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
       propertyPath: hitboxValues.damageValue

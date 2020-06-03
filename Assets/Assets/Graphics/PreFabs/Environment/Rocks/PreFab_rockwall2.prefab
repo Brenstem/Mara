@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3323980425359060871}
   - component: {fileID: 7823495177439933223}
   - component: {fileID: 1581460170133178923}
+  - component: {fileID: 4796996172460989040}
   m_Layer: 0
   m_Name: PreFab_rockwall2
   m_TagString: Untagged
@@ -78,3 +79,17 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!64 &4796996172460989040
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8066049738320081408}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: -5546347261141537002, guid: d0b9aab51032b034e8fbfc110a490e16, type: 3}
