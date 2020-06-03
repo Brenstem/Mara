@@ -6,6 +6,13 @@ using FMODUnity;
 
 public class AudioManager : MonoBehaviour
 {
+    [Header("Music")]
+    [EventRef]
+    [SerializeField] string combatMusic;
+
+    [EventRef]
+    [SerializeField] string deathStingerMusic;
+
     [Header("Player Audio")]
     [EventRef]
     [SerializeField] string InsanityEventAudio;
@@ -267,7 +274,7 @@ public class AudioManager : MonoBehaviour
 
     public void UnparryableAttackAudio(Vector3 position)                   //added
     {
-        RuntimeManager.PlayOneShot(unparryableAttackAudio);
+        RuntimeManager.PlayOneShot(unparryableAttackAudio, position);
     }
 
     #endregion
@@ -319,7 +326,7 @@ public class AudioManager : MonoBehaviour
 
     public void RangedEnemyMeleeAttackAudio(Vector3 position)                       //added
     {
-        RuntimeManager.PlayOneShot(rangedEnemyMeleeAttackAudio);
+        RuntimeManager.PlayOneShot(rangedEnemyMeleeAttackAudio, position);
     }
 
     public void RangedEnemyMeleeAttackHitAudio(Vector3 position)                   //added
@@ -328,7 +335,7 @@ public class AudioManager : MonoBehaviour
     }
     public void RangedEnemyChantAudio(Vector3 position)                             //added (might be used for boss enemy spawn if it don't fit
     {
-        RuntimeManager.PlayOneShot(rangedEnemyChantAudio);
+        RuntimeManager.PlayOneShot(rangedEnemyChantAudio, position);
     }
 
     #endregion
@@ -336,17 +343,17 @@ public class AudioManager : MonoBehaviour
     #region Myling
     public void MylingAlertedAudio (Vector3 position)               // not implemented in FMOD
     {
-        RuntimeManager.PlayOneShot(mylingAlertedAudio);
+        RuntimeManager.PlayOneShot(mylingAlertedAudio, position);
     }
 
     public void MylingChargeAttackAudio (Vector3 position)          // not implemented in FMOD
     {
-        RuntimeManager.PlayOneShot(mylingChargeAttackAudio);
+        RuntimeManager.PlayOneShot(mylingChargeAttackAudio, position);
     }
 
     public void MylingDiesAudio (Vector3 position)                  // not implemented in FMOD
     {
-        RuntimeManager.PlayOneShot(mylingDiesAudio);                
+        RuntimeManager.PlayOneShot(mylingDiesAudio, position);                
     }
 
     public void MylingFootstepAudio (Vector3 position)              // not implemented in FMOD
@@ -358,17 +365,17 @@ public class AudioManager : MonoBehaviour
     #region sister
     public void SisterAlertedAudio(Vector3 position)                // not implemented in FMOD
     {
-        RuntimeManager.PlayOneShot(sisterAlertedAudio);
+        RuntimeManager.PlayOneShot(sisterAlertedAudio, position);
     }
 
     public void SisterDissappearAudio(Vector3 position)             // not implemented in FMOD
     {
-        RuntimeManager.PlayOneShot(sisterAlertedAudio);
+        RuntimeManager.PlayOneShot(sisterAlertedAudio, position);
     }
 
     public void SisteridleAudio (Vector3 position)                  // not implemented in FMOD
     {
-        RuntimeManager.PlayOneShot(sisteridleAudio);
+        RuntimeManager.PlayOneShot(sisteridleAudio, position);
     }
 
     #endregion
@@ -427,9 +434,9 @@ public class AudioManager : MonoBehaviour
 
     }
 
-    public void FloatingWorldMusic()
+    public void DeathStingerMusic()
     {
-
+        RuntimeManager.PlayOneShot(deathStingerMusic);
     }
 
     public void CaveMusic()
@@ -440,6 +447,11 @@ public class AudioManager : MonoBehaviour
     public void BossMusicAudio()
     {
 
+    }
+
+    public void CombatMusicParamUpdate(float enemyAmount)
+    {
+        RuntimeManager.StudioSystem.setParameterByName("CombatNumberOfEnemies", enemyAmount);
     }
     #endregion
 }

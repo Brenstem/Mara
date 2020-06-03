@@ -21,4 +21,10 @@ public class MylingEventHandler : MonoBehaviour
     {
         GlobalState.state.AudioManager.MylingFootstepAudio(this.transform.position);
     }
+
+    public void Scream()
+    {
+        _parentAI.invulerable = true;
+        GlobalState.state.AudioManager.MylingChargeAttackAudio(this.transform.position);
+    }
 }
