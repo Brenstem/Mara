@@ -179,7 +179,7 @@ public class PlayerRevamp : Entity
                 }
                 MenuInputResource.LoadOverrides(ref _playerInput, ovr);
             }
-        } */
+        }
     }
 
     private Timer _alertTimer;
