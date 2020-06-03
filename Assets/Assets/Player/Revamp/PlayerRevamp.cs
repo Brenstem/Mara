@@ -38,6 +38,7 @@ public class PlayerRevamp : Entity
     [Header("References and logic")]
     public Animator playerAnimator;
     public Animator cameraAnimator;
+    public IKImplementation ikImplementationReference;
     [SerializeField] private Transform _groundCheckPosition;
     [SerializeField] private Cinemachine.CinemachineFreeLook _freeLookCam;
     [SerializeField] private Cinemachine.CinemachineFreeLook _lockonCam;
@@ -160,14 +161,14 @@ public class PlayerRevamp : Entity
 
     private void LoadData()
     {
-        /* OptionData d = (OptionData)SaveData.Load_Data("controls");
+         OptionData d = (OptionData)SaveData.Load_Data("controls");
         if (d != null)
         {
             GlobalState.state.language = (GlobalState.LanguageEnum)d.currentLanguage;
             Screen.SetResolution(d.width, d.height, d.isFullscreen);
             QualitySettings.SetQualityLevel(d.qualityLevel);
 
-            if (d.controlKeyArray.Length == 0)
+            if (d.controlKeyArray.Length > 0)
             {
                 Dictionary<System.Guid, string> ovr = new Dictionary<System.Guid, string>();
                 int i = 0;
@@ -319,13 +320,16 @@ public class PlayerRevamp : Entity
     [HideInInspector] public bool successfulParry;
     public override void TakeDamage(HitboxValues hitbox, Entity attacker = null)
     {
+        print(isParrying);
         if (isParrying && hitbox.parryable)
         {
             successfulParry = true;
-
+            playerAnimator.SetTrigger("ParrySuccessful");
+            GlobalState.state.AudioManager.ParrySuccessAudio(transform.position);
             if (attacker != null)
                 attacker.Parried();
 
+            //GlobalState.state.HitStop(new HitboxValues() { hitstopTime = 0.1f });
             // parrya alla fiender inom en viss radie
         }
         else
@@ -640,11 +644,12 @@ public class IdleState : State<PlayerRevamp>
         blend = owner.playerAnimator.GetFloat("Blend");
         time = 0;
         owner.IsAlert = false;
+        owner.ikImplementationReference.useIK = true;
     }
 
     public override void ExitState(PlayerRevamp owner)
     {
-
+        owner.ikImplementationReference.useIK = false;
     }
 
     public override void UpdateState(PlayerRevamp owner)
@@ -714,77 +719,6 @@ public class IdleState : State<PlayerRevamp>
     }
 }
 
-/*
-public class IdleAlertState : State<PlayerRevamp>
-{
-    public override void EnterState(PlayerRevamp owner)
-    {
-
-    }
-
-    public override void ExitState(PlayerRevamp owner)
-    {
-
-    }
-
-    public override void UpdateState(PlayerRevamp owner)
-    {
-        owner._currentDirection = Vector3.zero;
-
-        if (owner.Input != Vector2.zero)
-        {
-            owner.stateMachine.ChangeState(new MovementState());
-        }
-
-        owner.playerAnimator.SetFloat("Blend", owner.Input.magnitude);
-
-        if (!owner.IsLockedOn)
-        {
-            owner.stateMachine.ChangeState(new IdleState());
-        }
-        foreach (PlayerRevamp.InputType item in owner.inputBuffer)
-        {
-            switch (item)
-            {
-                case PlayerRevamp.InputType.Dash:
-                    if (owner.dashCooldownTimer.Expired)
-                    {
-                        owner.Dash();
-                        return;
-                    }
-                    break;
-                case PlayerRevamp.InputType.Jump:
-                    owner.Jump();
-                    return;
-                case PlayerRevamp.InputType.Parry:
-                    if (owner.IsGrounded)
-                    {
-                        owner.stateMachine.ChangeState(new ParryState());
-                        return;
-                    }
-                    break;
-                case PlayerRevamp.InputType.AttackLight:
-                    if (owner.IsGrounded)
-                    {
-                        owner.stateMachine.ChangeState(new LightAttackOneState());
-                        return;
-                    }
-                    break;
-                case PlayerRevamp.InputType.AttackHeavy:
-                    if (owner.IsGrounded)
-                    {
-                        owner.stateMachine.ChangeState(new HeavyAttackState());
-                        return;
-                    }
-                    break;
-            default:
-                    break;
-            }
-        }
-    }
-}
-*/
-
 public class MovementState : State<PlayerRevamp>
 {
     private bool _isMoving;
@@ -795,12 +729,14 @@ public class MovementState : State<PlayerRevamp>
     public override void EnterState(PlayerRevamp owner)
     {
         blend = owner.playerAnimator.GetFloat("Blend");
+        owner.ikImplementationReference.useIK = true;
         owner.IsAlert = false;
     }
 
     public override void ExitState(PlayerRevamp owner)
     {
         _isMoving = false;
+        owner.ikImplementationReference.useIK = false;
         //owner.playerAnimator.SetBool("Running", _isMoving);
     }
 
@@ -1381,7 +1317,7 @@ public class ParryState : State<PlayerRevamp>
         _parryLagTimer = new Timer(owner.parryLag);
         //owner.isParrying = true; // parry sedan startup
         owner.playerAnimator.SetTrigger("Parry");
-        owner.playerAnimator.SetBool("IsParrying", true);
+        owner.playerAnimator.SetBool("IsParrying", false);
         owner.playerAnimator.SetBool("ParryLag", false);
         owner.IsAlert = true;
         GlobalState.state.AudioManager.ParryindicatorAudio(owner.transform.position);
@@ -1400,6 +1336,7 @@ public class ParryState : State<PlayerRevamp>
         owner.isParrying = false;
         owner.playerAnimator.SetBool("IsParrying", false);
         owner.playerAnimator.SetBool("ParryLag", false);
+        owner.playerAnimator.SetBool("ParrySuccessful", false);
         _parryTimer.Reset();
         _parryLagTimer.Reset();
     }
@@ -1434,7 +1371,7 @@ public class ParryState : State<PlayerRevamp>
                                 case PlayerRevamp.InputType.AttackLight:
                                     if (owner.IsGrounded)
                                     {
-                                        owner.stateMachine.ChangeState(new LightAttackTwoState());
+                                        owner.stateMachine.ChangeState(new LightAttackOneState());
                                         return;
                                     }
                                     break;
@@ -1455,7 +1392,9 @@ public class ParryState : State<PlayerRevamp>
             }
             else if (owner.attackAnimationOver)
             {
+                owner.playerAnimator.SetBool("IsParrying", true);
                 owner.isParrying = true;
+                
                 if (_parryTimer.Expired)
                 {
                     owner.isParrying = false;
@@ -1493,8 +1432,6 @@ public class SuccessfulParryState : State<PlayerRevamp>
         owner.isParrying = true;
         owner.inputBuffer.Clear();
         owner.IsAlert = true;
-
-        GlobalState.state.AudioManager.ParrySuccessAudio(owner.transform.position);
     }
 
     public override void ExitState(PlayerRevamp owner)

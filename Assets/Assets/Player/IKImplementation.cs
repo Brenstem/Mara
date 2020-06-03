@@ -15,6 +15,7 @@ public class IKImplementation : MonoBehaviour
 
     [SerializeField] private LayerMask _collisionLayers;
 
+    public bool useIK = false;
     private Animator _anim;
     private LockonFunctionality _playerLockOn;
     private Transform _lookAtTarget = null;
@@ -27,62 +28,65 @@ public class IKImplementation : MonoBehaviour
 
     private void OnAnimatorIK(int layerIndex)
     {
-        if (_anim)
+        if (useIK)
         {
-            // Head
-            _anim.SetLookAtWeight(_lookAtIKWeight);
-
-            if (!GlobalState.state.Player.IsLockedOn)
+            if (_anim)
             {
-                _lookAtTarget = _playerLockOn.Target;
+                // Head
+                _anim.SetLookAtWeight(_lookAtIKWeight);
 
-                if (_lookAtTarget)
+                if (!GlobalState.state.Player.IsLockedOn)
                 {
-                    _anim.SetLookAtPosition(_lookAtTarget.position + new Vector3(0, _lookAtVerticalOffset, 0));
+                    _lookAtTarget = _playerLockOn.Target;
+
+                    if (_lookAtTarget)
+                    {
+                        _anim.SetLookAtPosition(_lookAtTarget.position + new Vector3(0, _lookAtVerticalOffset, 0));
+                    }
+                    else
+                    {
+                        _anim.SetLookAtPosition((GlobalState.state.Player.transform.position + new Vector3(0, _lookAtVerticalOffset, 0)) + GlobalState.state.Camera.transform.forward);
+                    }
                 }
                 else
                 {
                     _anim.SetLookAtPosition((GlobalState.state.Player.transform.position + new Vector3(0, _lookAtVerticalOffset, 0)) + GlobalState.state.Camera.transform.forward);
                 }
-            }
-            else
-            {
-                _anim.SetLookAtPosition((GlobalState.state.Player.transform.position + new Vector3(0, _lookAtVerticalOffset, 0)) + GlobalState.state.Camera.transform.forward);
-            }
 
-            // Left foot
-            _anim.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1f);
-            _anim.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 1f);
+                // Left foot
+                _anim.SetIKPositionWeight(AvatarIKGoal.LeftFoot, 1f);
+                _anim.SetIKRotationWeight(AvatarIKGoal.LeftFoot, 1f);
 
-            RaycastHit hit;
-            Ray ray = new Ray(_anim.GetIKPosition(AvatarIKGoal.LeftFoot) + Vector3.up, Vector3.down);
+                RaycastHit hit;
+                Ray ray = new Ray(_anim.GetIKPosition(AvatarIKGoal.LeftFoot) + Vector3.up, Vector3.down);
 
-            if (Physics.Raycast(ray, out hit, _distanceToGround + 1f, _collisionLayers))
-            {
-                Vector3 footPos = hit.point;
-                footPos.y += _distanceToGround;
+                if (Physics.Raycast(ray, out hit, _distanceToGround + 1f, _collisionLayers))
+                {
+                    Vector3 footPos = hit.point;
+                    footPos.y += _distanceToGround;
 
-                _anim.SetIKPosition(AvatarIKGoal.LeftFoot, footPos);
+                    _anim.SetIKPosition(AvatarIKGoal.LeftFoot, footPos);
 
-                Vector3 slope = new Vector3(hit.normal.y, -hit.normal.x);
-                Quaternion leftFootRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * transform.rotation;
-                _anim.SetIKRotation(AvatarIKGoal.LeftFoot, leftFootRotation);
-            }
+                    Vector3 slope = new Vector3(hit.normal.y, -hit.normal.x);
+                    Quaternion leftFootRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * transform.rotation;
+                    _anim.SetIKRotation(AvatarIKGoal.LeftFoot, leftFootRotation);
+                }
 
-            // Right foot
-            _anim.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1f);
-            _anim.SetIKRotationWeight(AvatarIKGoal.RightFoot, 1f);
-            
-            ray = new Ray(_anim.GetIKPosition(AvatarIKGoal.RightFoot) + Vector3.up, Vector3.down);
+                // Right foot
+                _anim.SetIKPositionWeight(AvatarIKGoal.RightFoot, 1f);
+                _anim.SetIKRotationWeight(AvatarIKGoal.RightFoot, 1f);
 
-            if (Physics.Raycast(ray, out hit, _distanceToGround + 1f, _collisionLayers))
-            {
-                Vector3 footPos = hit.point;
-                footPos.y += _distanceToGround;
+                ray = new Ray(_anim.GetIKPosition(AvatarIKGoal.RightFoot) + Vector3.up, Vector3.down);
 
-                _anim.SetIKPosition(AvatarIKGoal.RightFoot, footPos);
-                Quaternion rightFootRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * transform.rotation;
-                _anim.SetIKRotation(AvatarIKGoal.RightFoot, rightFootRotation);    
+                if (Physics.Raycast(ray, out hit, _distanceToGround + 1f, _collisionLayers))
+                {
+                    Vector3 footPos = hit.point;
+                    footPos.y += _distanceToGround;
+
+                    _anim.SetIKPosition(AvatarIKGoal.RightFoot, footPos);
+                    Quaternion rightFootRotation = Quaternion.FromToRotation(Vector3.up, hit.normal) * transform.rotation;
+                    _anim.SetIKRotation(AvatarIKGoal.RightFoot, rightFootRotation);
+                }
             }
         }
     }
