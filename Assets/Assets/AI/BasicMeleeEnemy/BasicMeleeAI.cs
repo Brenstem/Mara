@@ -52,8 +52,12 @@ public class BasicMeleeAI : BaseAIMovementController
     public override void TakeDamage(HitboxValues hitbox, Entity attacker)
     {
         EnableHitstun(hitbox.hitstunTime, hitbox.ignoreArmor);
-        GlobalState.state.AudioManager.FloatingEnemyHurtAudio(this.transform.position);
         base.TakeDamage(hitbox, attacker);
+
+        if (hitbox.damageValue > 5)
+        {
+            GlobalState.state.AudioManager.FloatingEnemyHurtAudio(this.transform.position);
+        }
 
         for (int i = 0; i < _healthBar.transform.childCount; i++)
         {

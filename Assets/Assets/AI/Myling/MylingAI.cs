@@ -82,6 +82,8 @@ public class MylingChasingState : BaseChasingState
         _returnToIdleState = new MylingRetToIdleState();
         _attackingState = new MylingAttackingState();
 
+        GlobalState.state.AudioManager.MylingAlertedAudio(owner.transform.position);
+
         base.EnterState(owner);
     }
 
@@ -120,7 +122,6 @@ public class MylingAttackingState : BaseAttackingState
         owner._attackRateTimer += Time.deltaTime;
         time += Time.deltaTime;
         owner._anim.SetFloat("Blend", Mathf.Lerp(magnitude, 0, time / (idleBlendDuration)));
-
 
         if (owner._attackRateTimer.Expired)
         {
