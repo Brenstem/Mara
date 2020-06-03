@@ -211,7 +211,7 @@ MonoBehaviour:
   _targetLayers:
     serializedVersion: 2
     m_Bits: 2359
-  _turnSpeed: 4
+  _turnSpeed: 7
   _cyclePathing: 0
   _waitAtPoints: 0
   _waitTime: 0
@@ -233,7 +233,7 @@ MonoBehaviour:
   _dropAngleUpMax: 90
   _dropAmount: 4
   _hitstunOnParry: 0.2
-  _attackDelayAfterHitstun: 1000
+  _attackDelayAfterHitstun: 1
   _healthBar: {fileID: 2444308342576148252}
   hitboxGroup: {fileID: 4594331576501799848}
 --- !u!114 &1505761187
@@ -537,11 +537,6 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 12
       objectReference: {fileID: 0}
-    - target: {fileID: -6057140222963153312, guid: 225aa5a660074c74fbccd6278afae392,
-        type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 220354ee46eb79f4994401ca19da8d35, type: 2}
     - target: {fileID: -4216859302048453862, guid: 225aa5a660074c74fbccd6278afae392,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -612,6 +607,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 0.025
       objectReference: {fileID: 0}
+    - target: {fileID: -6057140222963153312, guid: 225aa5a660074c74fbccd6278afae392,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 220354ee46eb79f4994401ca19da8d35, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 225aa5a660074c74fbccd6278afae392, type: 3}
 --- !u!1 &6529857940015022465 stripped

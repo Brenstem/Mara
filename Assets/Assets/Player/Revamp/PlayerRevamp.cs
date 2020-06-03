@@ -320,7 +320,6 @@ public class PlayerRevamp : Entity
     [HideInInspector] public bool successfulParry;
     public override void TakeDamage(HitboxValues hitbox, Entity attacker = null)
     {
-        print(isParrying);
         if (isParrying && hitbox.parryable)
         {
             successfulParry = true;

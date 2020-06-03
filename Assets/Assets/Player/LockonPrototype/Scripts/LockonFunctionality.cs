@@ -108,7 +108,7 @@ public class LockonFunctionality : MonoBehaviour
                             {
                                 if (!secondHit.collider.CompareTag(lockonTag))
                                 {
-                                    print(secondHit.collider.name);
+                                    // print(secondHit.collider.name);
                                     hit = true;
                                 }
                             }
