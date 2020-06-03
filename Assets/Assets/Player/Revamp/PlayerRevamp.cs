@@ -46,7 +46,7 @@ public class PlayerRevamp : Entity
 
     [Header("Ground Check")]
     [SerializeField] private float _groundDistance = 0.4f;
-
+    [SerializeField] private float _airBorneUntilFallingTime = 0.25f;
     private Vector3 _velocity;
     private bool _isGrounded;
     public bool IsGrounded { get { return _isGrounded; } }
@@ -117,6 +117,7 @@ public class PlayerRevamp : Entity
     private Vector2 _input;
     public Vector2 Input { get { return _input; } }
     [HideInInspector] public Collider[] groundHits;
+    [HideInInspector] private float _airBorneTimer;
 
     [HideInInspector] public Vector3 _currentDirection;
     [HideInInspector] public Vector3 CurrentDirection { get { return _currentDirection; } }
@@ -436,11 +437,15 @@ public class PlayerRevamp : Entity
         groundHits = Physics.OverlapSphere(_groundCheckPosition.position, _groundDistance, GlobalState.state.GroundMask);
         _isGrounded = groundHits.Length > 0 ? true : false;
 
+        _airBorneTimer += Time.deltaTime;
+
         if (_isGrounded)
         {
             if (_velocity.y < 0)
                 _velocity.y = -2f;
+            _airBorneTimer = 0;
             _airDashes = 0;
+
             playerAnimator.SetBool("HasJumped", false);
 
             if (playerAnimator.GetCurrentAnimatorStateInfo(0).IsName("Landing"))
@@ -457,7 +462,11 @@ public class PlayerRevamp : Entity
                 _playedLandingSound = false;
             }
         }
-        playerAnimator.SetBool("IsGrounded", _isGrounded);
+
+        if (_airBorneTimer > _airBorneUntilFallingTime && !_isGrounded)
+            playerAnimator.SetBool("IsGrounded", false);
+        else
+            playerAnimator.SetBool("IsGrounded", true);
     }
 
     private void IncreaseMoveSpeed()
@@ -562,6 +571,12 @@ public class PlayerRevamp : Entity
                 _doSnapCamera = true;
             }
         }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(_groundCheckPosition.position, _groundDistance);
     }
 
     #endregion 
