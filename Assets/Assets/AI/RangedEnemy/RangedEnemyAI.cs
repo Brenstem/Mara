@@ -50,8 +50,6 @@ public class RangedEnemyAI : BaseAIMovementController
     {
         base.Update();
 
-        print(this.gameObject + " " + stateMachine.currentState);
-
         _anim.SetFloat("Blend", _agent.velocity.magnitude);
     }
 
