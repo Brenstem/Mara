@@ -567,11 +567,11 @@ public class BossDashState : State<BossAIScript>
 
     public override void EnterState(BossAIScript owner)
     {
-        ////animation stuff
-        //if (owner.dashAttack)
-        //{
-        //    owner.bossAnimator.SetTrigger("dashForwardTrigger");
-        //}
+        //animation stuff
+        if (owner.dashAttack)
+        {
+            owner.bossAnimator.SetTrigger("dashForwardTrigger");
+        }
 
         _oldSpeed = owner.agent.speed;
         _oldAcceleration = owner.agent.acceleration;
@@ -582,6 +582,7 @@ public class BossDashState : State<BossAIScript>
         _dashDistance = owner.dashDistance;
 
         _dashDurration = (_dashDistance - owner.agent.stoppingDistance) / _dashSpeed;
+        Debug.Log(_dashDurration);
         //Debug.Log("zoom for, " + _dashDurration + " MPH, " + _dashSpeed);
         //Debug.Log(_dashDistance + " " + owner.bossPhaseOneParentScript.agent.stoppingDistance + " " + _dashSpeed);
         _dashTimer = new Timer(_dashDurration);
@@ -1265,7 +1266,9 @@ public class BossPhaseOneCombatState : State<BossAIScript>
                         owner.targetMovementDirection = Quaternion.AngleAxis(owner.desiredDistanceAngleValues[i] * strafeSign * -1, Vector3.up) * owner.targetMovementDirection;
                         owner.targetMovementDirection *= strafeSign;
 
-                        owner.currentMovementDirection = Vector3.Lerp(owner.currentMovementDirection, owner.targetMovementDirection, 0.5f * (Time.deltaTime / (1 - ((Vector3.Dot(owner.currentMovementDirection, owner.targetMovementDirection) + 1) / 2))));
+                        owner.currentMovementDirection = Vector3.Lerp(owner.currentMovementDirection, owner.targetMovementDirection, Time.deltaTime * ((Vector3.Dot(owner.currentMovementDirection, owner.targetMovementDirection) + 1) / 2));
+                        //Debug.Log(((Vector3.Dot(owner.currentMovementDirection, owner.targetMovementDirection) + 1) / 2));
+                        //owner.currentMovementDirection = Vector3.Lerp(owner.currentMovementDirection, owner.targetMovementDirection, 0.5f * (Time.deltaTime / (1 - ((Vector3.Dot(owner.currentMovementDirection, owner.targetMovementDirection) + 1) / 2))));
 
                         //Debug.Log(1 - ((Vector3.Dot(owner.currentMovementDirection, owner.targetMovementDirection) + 1) / 2));
                         owner.agent.speed = owner.defaultSpeed + owner.desiredDistanceSpeedIncreseValues[i];
@@ -1306,7 +1309,6 @@ public class BossPhaseOneCombatState : State<BossAIScript>
                     _destination = owner.transform.position + owner.currentMovementDirection * 5;
                     owner.agent.SetDestination(_destination);
                     owner.bossAnimator.SetFloat("WalkDirX", owner.transform.InverseTransformDirection(owner.currentMovementDirection).x);
-                    Debug.Log(owner.currentMovementDirection.x);
                     //Debug.DrawRay(owner.transform.position, owner.currentMovementDirection, Color.black);
                     owner.bossAnimator.SetFloat("WalkDirY", owner.transform.InverseTransformDirection(owner.currentMovementDirection).z);
                     //Debug.Log(_destination);
