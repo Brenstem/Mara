@@ -18,6 +18,7 @@ public class Fade : MonoBehaviour
     [SerializeField] protected float _toBlackFadeTime = 1.0f;
     [SerializeField] protected float _toTransparentFadeTime = 1.0f;
 
+    // KALLA DENHÄR NÄR DU SKA BÖRJA FADE
     public void FadeToggle()
     {
         if (Alpha == 0)

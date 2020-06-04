@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GlobalState : MonoBehaviour
 {
@@ -24,6 +25,8 @@ public class GlobalState : MonoBehaviour
 
     [SerializeField] private CheckpointHandler _checkpointHandler;
 
+    [SerializeField] private Fade _gameOver;
+
     [SerializeField] private LayerMask _playerMask;
 
     [SerializeField] private LayerMask _enemyMask;
@@ -40,6 +43,8 @@ public class GlobalState : MonoBehaviour
 
     [Header("Debug")]
     [SerializeField] private bool _lockCursorOnStart = true;
+
+    public bool GameStarted { get { return SceneData.gameStarted;  } set { SceneData.gameStarted = value; } }
 
     public bool LockCursor
     {
@@ -79,6 +84,11 @@ public class GlobalState : MonoBehaviour
     public AudioManager AudioManager
     {
         get { return _audioManager;  }
+    }
+
+    public Fade GameOver
+    {
+        get { return _gameOver; }
     }
 
     public LayerMask PlayerMask
@@ -123,7 +133,7 @@ public class GlobalState : MonoBehaviour
             Destroy(this.gameObject);
         }
         else {
-            DontDestroyOnLoad(this);
+            // DontDestroyOnLoad(this);
             _state = this;
         }
     }
@@ -132,7 +142,14 @@ public class GlobalState : MonoBehaviour
     {
         //debug 
         LockCursor = _lockCursorOnStart;
-        _player.EnabledControls = _lockCursorOnStart;
+        if (!SceneData.gameStarted)
+        {
+            _player.EnabledControls = _lockCursorOnStart;
+        }
+        else
+        {
+            LockCursor = true;
+        }
     }
 
     private void OnDestroy() {
