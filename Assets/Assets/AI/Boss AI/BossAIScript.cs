@@ -1103,11 +1103,11 @@ public class BossPhaseOneState : State<BossAIScript>
     {
         owner.bossCombatState = new BossPhaseOneCombatState(owner.minAttackSpeed, owner.attackSpeedIncreaseMax, owner.minAttackCooldown, owner.meleeRange, owner.drainRange);
 
-        owner.actionStateMachine.ChangeState(owner.bossCombatState);
+        //owner.actionStateMachine.ChangeState(owner.bossCombatState);
 
         //owner.actionStateMachine.ChangeState(owner.aoeAttackState);
         //owner.actionStateMachine.ChangeState(owner.spawnEnemiesAbilityState);
-        //owner.actionStateMachine.ChangeState(owner.meleeAttackOneState);
+        owner.actionStateMachine.ChangeState(owner.meleeAttackOneState);
     }
 
     public override void ExitState(BossAIScript owner)
