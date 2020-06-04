@@ -161,14 +161,14 @@ public class PlayerRevamp : Entity
 
     private void LoadData()
     {
-        /* OptionData d = (OptionData)SaveData.Load_Data("controls");
+        OptionData d = (OptionData)SaveData.Load_Data("controls");
         if (d != null)
         {
             GlobalState.state.language = (GlobalState.LanguageEnum)d.currentLanguage;
             Screen.SetResolution(d.width, d.height, d.isFullscreen);
             QualitySettings.SetQualityLevel(d.qualityLevel);
 
-            if (d.controlKeyArray.Length > 0)
+            if (d.controlKeyArray != null && d.controlKeyArray.Length > 0)
             {
                 Dictionary<System.Guid, string> ovr = new Dictionary<System.Guid, string>();
                 int i = 0;
@@ -179,7 +179,7 @@ public class PlayerRevamp : Entity
                 }
                 MenuInputResource.LoadOverrides(ref _playerInput, ovr);
             }
-        } */
+        }
     }
 
     private Timer _alertTimer;
