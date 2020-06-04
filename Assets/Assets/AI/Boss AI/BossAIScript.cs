@@ -1103,11 +1103,11 @@ public class BossPhaseOneState : State<BossAIScript>
     {
         owner.bossCombatState = new BossPhaseOneCombatState(owner.minAttackSpeed, owner.attackSpeedIncreaseMax, owner.minAttackCooldown, owner.meleeRange, owner.drainRange);
 
-        //owner.actionStateMachine.ChangeState(owner.bossCombatState);
+        owner.actionStateMachine.ChangeState(owner.bossCombatState);
 
         //owner.actionStateMachine.ChangeState(owner.aoeAttackState);
         //owner.actionStateMachine.ChangeState(owner.spawnEnemiesAbilityState);
-        owner.actionStateMachine.ChangeState(owner.meleeAttackOneState);
+        //owner.actionStateMachine.ChangeState(owner.meleeAttackOneState);
     }
 
     public override void ExitState(BossAIScript owner)
@@ -1266,7 +1266,15 @@ public class BossPhaseOneCombatState : State<BossAIScript>
                         owner.targetMovementDirection = Quaternion.AngleAxis(owner.desiredDistanceAngleValues[i] * strafeSign * -1, Vector3.up) * owner.targetMovementDirection;
                         owner.targetMovementDirection *= strafeSign;
 
-                        owner.currentMovementDirection = Vector3.Lerp(owner.currentMovementDirection, owner.targetMovementDirection, Time.deltaTime * ((Vector3.Dot(owner.currentMovementDirection, owner.targetMovementDirection) + 1) / 2));
+                        Debug.DrawRay(owner.transform.position, owner.targetMovementDirection, Color.black);
+
+                        //ändra så jag har ngn timer här eller ngt idk
+
+                        //owner.currentMovementDirection = Vector3.Lerp(owner.currentMovementDirection, owner.targetMovementDirection, Time.deltaTime /** ((Vector3.Dot(owner.currentMovementDirection, owner.targetMovementDirection) + 1) / 2)*/);
+
+                        //Time.deltaTime * ngn speed
+                        owner.currentMovementDirection = Vector3.MoveTowards(owner.currentMovementDirection, owner.targetMovementDirection, Time.deltaTime);
+
                         //Debug.Log(((Vector3.Dot(owner.currentMovementDirection, owner.targetMovementDirection) + 1) / 2));
                         //owner.currentMovementDirection = Vector3.Lerp(owner.currentMovementDirection, owner.targetMovementDirection, 0.5f * (Time.deltaTime / (1 - ((Vector3.Dot(owner.currentMovementDirection, owner.targetMovementDirection) + 1) / 2))));
 
@@ -1309,7 +1317,6 @@ public class BossPhaseOneCombatState : State<BossAIScript>
                     _destination = owner.transform.position + owner.currentMovementDirection * 5;
                     owner.agent.SetDestination(_destination);
                     owner.bossAnimator.SetFloat("WalkDirX", owner.transform.InverseTransformDirection(owner.currentMovementDirection).x);
-                    //Debug.DrawRay(owner.transform.position, owner.currentMovementDirection, Color.black);
                     owner.bossAnimator.SetFloat("WalkDirY", owner.transform.InverseTransformDirection(owner.currentMovementDirection).z);
                     //Debug.Log(_destination);
                 }
