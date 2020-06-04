@@ -1241,7 +1241,7 @@ public class HeavyAttackState : State<PlayerRevamp>
                 {
                     if (!_playedSound)
                     {
-                        GlobalState.state.AudioManager.PlayerHeavyAttackAudio(2, owner.transform); // play sound event?
+                        GlobalState.state.AudioManager.PlayerHeavyAudioUpdate(2); // play sound event?
                         _playedSound = true;
                     }
 
