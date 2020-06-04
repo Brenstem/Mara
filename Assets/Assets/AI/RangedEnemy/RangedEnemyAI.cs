@@ -86,15 +86,17 @@ public class RangedEnemyAI : BaseAIMovementController
         {
             _hitStunTimer = new Timer(duration);
             stateMachine.ChangeState(new RangedAIHitStunState());
+            GenerateNewAttackTimer(duration);
         }
         else if (duration > 0.0f && _canEnterHitStun)
         {
             _hitStunTimer = new Timer(duration);
             stateMachine.ChangeState(new RangedAIHitStunState());
+            AddToAttackTimer(_attackDelayAfterHitstun);
         }
         else if (duration > 0.0f && !_canEnterHitStun)
         {
-            GenerateNewAttackTimer(_attackDelayAfterHitstun);
+            AddToAttackTimer(_attackDelayAfterHitstun);
         }
     }
 
@@ -427,7 +429,7 @@ public class RangedAIHitStunState : State<BaseAIMovementController>
 
     public override void ExitState(BaseAIMovementController owner)
     {
-        owner.GenerateNewAttackTimer(owner.rangedAI._attackDelayAfterHitstun);
+        // owner.GenerateNewAttackTimer(owner.rangedAI._attackDelayAfterHitstun);
         owner._anim.SetBool("InHitstun", false);
     }
 

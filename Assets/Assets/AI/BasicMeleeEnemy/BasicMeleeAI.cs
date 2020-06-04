@@ -9,7 +9,7 @@ public class BasicMeleeAI : BaseAIMovementController
     [SerializeField] private float _hitstunOnParry;
 
     [Header("Hitstun")]
-    [SerializeField] public float _attackDelayAfterHitstun;
+    [SerializeField] public float _attackDelayAfterHitstun; 
 
     [Header("References")]
     [SerializeField] public GameObject _healthBar;
@@ -68,7 +68,6 @@ public class BasicMeleeAI : BaseAIMovementController
     public override void Parried()
     {
         EnableHitstun(_hitstunOnParry, true);
-        //Debug.LogWarning("Parried implementation missing", this);
     }
 
     public void EnableHitstun(float duration, bool ignoreArmor)
@@ -77,15 +76,17 @@ public class BasicMeleeAI : BaseAIMovementController
         {
             _hitStunTimer = new Timer(duration);
             stateMachine.ChangeState(new MeleeAIHitstunState());
+            GenerateNewAttackTimer(duration);
         }
         else if (duration > 0.0f && _canEnterHitStun)
         {
             _hitStunTimer = new Timer(duration);
             stateMachine.ChangeState(new MeleeAIHitstunState());
+            AddToAttackTimer(_attackDelayAfterHitstun);
         }
         else if (duration > 0.0f && !_canEnterHitStun)
         {
-            GenerateNewAttackTimer(_attackDelayAfterHitstun);
+            AddToAttackTimer(_attackDelayAfterHitstun);
         }
     }
 }
@@ -207,7 +208,6 @@ public class BasicMeleeReturnToIdleState : BaseReturnToIdlePosState
         base.UpdateState(owner);
         owner._attackRateTimer += Time.deltaTime;
     }
-
 }
 
 /* === HITSTUN STATE === */
@@ -223,10 +223,6 @@ public class MeleeAIHitstunState : State<BaseAIMovementController>
     public override void ExitState(BaseAIMovementController owner) 
     {
         owner._anim.SetBool("InHitstun", false);
-
-        // Dont know if we want this feature?? 
-        // Update; we want this feature
-        owner.GenerateNewAttackTimer(owner.meleeEnemy._attackDelayAfterHitstun);
     }
 
     public override void UpdateState(BaseAIMovementController owner)

@@ -132,6 +132,11 @@ public abstract class BaseAIMovementController : Entity
         _attackRateTimer = new Timer(_attackSpeed + delayAmount);
     }
 
+    public void AddToAttackTimer(float delayAmount)
+    {
+        _attackRateTimer.Time += delayAmount;
+    }
+
     public void GenerateNewAttackTimer(float minSpeedIncrease, float maxSpeedIncrease)
     {
         _attackSpeed = minSpeedIncrease;
