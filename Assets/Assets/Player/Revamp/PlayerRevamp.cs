@@ -263,6 +263,13 @@ public class PlayerRevamp : Entity
     {
         //anänds inte när vi har _lockCursorOnStart boolen i global state men när vi tar bort den ska denna rad vara med
         //EnabledControls = false;
+
+
+        if (GlobalState.state.GameStarted)
+        {
+            cameraAnimator.SetTrigger("GameStarted");
+            EnabledControls = true;
+        }
     }
 
     private void Update()
@@ -1241,7 +1248,7 @@ public class HeavyAttackState : State<PlayerRevamp>
                 {
                     if (!_playedSound)
                     {
-                        GlobalState.state.AudioManager.PlayerHeavyAttackAudio(2, owner.transform); // play sound event?
+                        GlobalState.state.AudioManager.PlayerHeavyAudioUpdate(2); // play sound event?
                         _playedSound = true;
                     }
 
@@ -1455,6 +1462,7 @@ public class PlayerDeathState : State<PlayerRevamp>
     public override void EnterState(PlayerRevamp owner)
     {
         owner.invulerable = true;
+        GlobalState.state.GameOver.FadeToggle();
     }
 
     public override void ExitState(PlayerRevamp owner)
