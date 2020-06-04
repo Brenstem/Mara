@@ -41,7 +41,7 @@ public class PlayerRevamp : Entity
     public IKImplementation ikImplementationReference;
     [SerializeField] private Transform _groundCheckPosition;
     [SerializeField] private Cinemachine.CinemachineFreeLook _freeLookCam;
-    [SerializeField] private Cinemachine.CinemachineFreeLook _lockonCam;
+    [SerializeField] private Cinemachine.CinemachineVirtualCamera _lockonCam;
     [SerializeField] private TargetFinder _targetFinder;
     [SerializeField, Range(1, 50)] private int inputBufferSize = 1;
 
