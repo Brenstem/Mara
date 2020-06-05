@@ -3152,7 +3152,7 @@ PrefabInstance:
     - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
         type: 3}
       propertyPath: phaseTwoTransitionHP
-      value: 0.501
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
         type: 3}
@@ -3227,7 +3227,7 @@ PrefabInstance:
     - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
         type: 3}
       propertyPath: drainRange
-      value: 15
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
         type: 3}
@@ -3237,6 +3237,46 @@ PrefabInstance:
     - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
         type: 3}
       propertyPath: drainAttackTime
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: poolsPerLayer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: aoeAttackCooldown
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: spawnEnemyAbilityCooldown
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: spiralLayers
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: useSpiral
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: poolTimeToLive
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: drainAttackCooldown
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: dashStoppingDistance
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8831550686162915866, guid: beb5169a1cd342c43b2d95e17247168f,
@@ -3264,6 +3304,11 @@ PrefabInstance:
       propertyPath: _healthBar
       value: 
       objectReference: {fileID: 755188097}
+    - target: {fileID: 8831550686162915870, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: _maxHealth
+      value: 500
+      objectReference: {fileID: 0}
     - target: {fileID: 1613292306923649698, guid: beb5169a1cd342c43b2d95e17247168f,
         type: 3}
       propertyPath: m_Layer
@@ -6344,22 +6389,22 @@ PrefabInstance:
     - target: {fileID: 7155705073490845384, guid: 28ad24a8753f56e43adfd634ea27f11f,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.110016905
+      value: -0.11001692
       objectReference: {fileID: 0}
     - target: {fileID: 7155705073490845384, guid: 28ad24a8753f56e43adfd634ea27f11f,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.57765406
+      value: 0.577654
       objectReference: {fileID: 0}
     - target: {fileID: 7155705073490845384, guid: 28ad24a8753f56e43adfd634ea27f11f,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.023826815
+      value: 0.023826843
       objectReference: {fileID: 0}
     - target: {fileID: 7155705073490845384, guid: 28ad24a8753f56e43adfd634ea27f11f,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.80848277
+      value: -0.8084828
       objectReference: {fileID: 0}
     - target: {fileID: 7155705073490845384, guid: 28ad24a8753f56e43adfd634ea27f11f,
         type: 3}
@@ -6519,6 +6564,7 @@ MonoBehaviour:
   minAttackSpeed: 5
   attackSpeedIncreaseMax: 5
   minAttackCooldown: 1
+  drainAttackCooldown: 6
   drainRange: 6
   drainChargeTime: 7
   drainAttackTime: 8
@@ -6528,6 +6574,7 @@ MonoBehaviour:
   dashAcceleration: 2000
   dashAttackDistanceMin: 5
   dashAttackDistanceMax: 5
+  dashStoppingDistance: 1
   dashLagDurration: 0.5
   chasingSpeed: 6
   chasingAcceleration: 40

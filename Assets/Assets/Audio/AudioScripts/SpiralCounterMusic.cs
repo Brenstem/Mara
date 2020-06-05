@@ -8,7 +8,7 @@ public class SpiralCounterMusic : MonoBehaviour
 {
     private Vector3 topPosition;
     private Vector3 playerPosition;
-    [Range(0, 180)] public float verticalDiff;
+    [Range(0, 200)] public float verticalDiff;
     
     //  [EventRef]
     //  [SerializeField] string spiralEventAudio;
@@ -23,9 +23,9 @@ public class SpiralCounterMusic : MonoBehaviour
 
         verticalDiff = verticalDiff / topPosition.y;
 
-        if (verticalDiff > 1.8f)
+        if (verticalDiff > 2f)
         {
-            verticalDiff = 1.8f;
+            verticalDiff = 2f;
         }
         if (verticalDiff < 0)
         {

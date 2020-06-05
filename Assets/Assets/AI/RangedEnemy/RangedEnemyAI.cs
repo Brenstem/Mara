@@ -278,6 +278,7 @@ public class RangedEnemyIdleState : BaseIdleState
     {
         owner.GenerateNewAttackTimer();
         _chasingState = new RangedEnemyChasingState();
+        base.EnterState(owner);
     }
 }
 
@@ -286,6 +287,8 @@ public class RangedEnemyChasingState : BaseChasingState
 {
     public override void EnterState(BaseAIMovementController owner)
     {
+        base.EnterState(owner);
+
         _attackingState = new RangedEnemyAttackingState();
         _returnToIdleState = new RangedEnemyReturnToIdleState();
 
@@ -399,6 +402,7 @@ public class RangedEnemyReturnToIdleState : BaseReturnToIdlePosState
     {
         _chasingState = new RangedEnemyChasingState();
         _idleState = new RangedEnemyIdleState();
+        base.EnterState(owner);
     }
 
     public override void UpdateState(BaseAIMovementController owner)
