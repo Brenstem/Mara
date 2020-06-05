@@ -92,7 +92,7 @@ public class HitboxGroup : MonoBehaviour
                 if (enemy != null && !_alreadyHit.Contains(enemy.gameObject))
                 {
                     var targetEntity = enemy.gameObject.GetComponent<Entity>();
-                    if (!targetEntity.invulerable) // intangible behavior atm, stöd för båda borde finnas! Man blir samt slagen om invun. tar slut medans man blir träffad
+                    if (targetEntity && !targetEntity.invulerable) // intangible behavior atm, stöd för båda borde finnas! Man blir samt slagen om invun. tar slut medans man blir träffad
                     {
                         Hitbox hitbox = _hitTimes[highestPriorityIndex];
                         if (targetEntity == null)

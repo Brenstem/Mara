@@ -6,7 +6,7 @@ public class FloatingObjectScript : MonoBehaviour
 {
     [SerializeField] private float _speed = 2f;
     [SerializeField] private float _amount = 2f;
-
+    [SerializeField] private Vector3 _direction = new Vector3(0, 1, 0);
     private float _time;
     private float _startPos;
 
@@ -20,6 +20,6 @@ public class FloatingObjectScript : MonoBehaviour
     {
         _time += Time.fixedDeltaTime % 360;
 
-        transform.Translate(new Vector3(0f, Mathf.Sin(_time * _speed) * (_amount * _speed * 0.001f), 0f));
+        transform.Translate(_direction.normalized * Mathf.Sin(_time * _speed) * (_amount * _speed * 0.001f));
     }
 }

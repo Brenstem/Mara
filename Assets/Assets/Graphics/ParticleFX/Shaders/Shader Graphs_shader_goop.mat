@@ -7,10 +7,10 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Shader Graphs_redflame_candle
-  m_Shader: {fileID: -6465566751694194690, guid: 3eb2b9671e7dfc74daae1b8d8efa1df1,
+  m_Name: Shader Graphs_shader_goop
+  m_Shader: {fileID: -6465566751694194690, guid: 3e4b5e0c8873862478cd87ce2861cf3b,
     type: 3}
-  m_ShaderKeywords: _BLENDMODE_ALPHA _DOUBLESIDED_ON _SURFACE_TYPE_TRANSPARENT
+  m_ShaderKeywords: _ALPHATEST_ON _BLENDMODE_ALPHA _DOUBLESIDED_ON _SURFACE_TYPE_TRANSPARENT
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 1
@@ -24,23 +24,25 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
-    - Texture2D_C0E6AE77:
-        m_Texture: {fileID: 2800000, guid: 5f7e9a39b22f19742a11201dc509bf58, type: 3}
+    - Texture2D_2FDF1F70:
+        m_Texture: {fileID: 2800000, guid: cebee4a22fbce274fa2ecb26a66dbf9c, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - Vector1_1A0D5F1A: -1
-    - Vector1_96209F0B: 1.2
-    - Vector1_9D766A44: 0
-    - Vector1_E73D1758: 5
+    - Vector1_13169EDF: 0.015
+    - Vector1_1BE856CD: 0.5
+    - Vector1_408C4D5C: 2
+    - Vector1_6D81D37E: 5
+    - Vector1_9989F3F3: 20
+    - Vector1_9DA1BD15: 7
+    - Vector1_A95F4A60: 1
     - _AlphaCutoff: 0.5
-    - _AlphaCutoffEnable: 0
+    - _AlphaCutoffEnable: 1
     - _AlphaDstBlend: 10
     - _AlphaSrcBlend: 1
     - _BlendMode: 0
     - _CullMode: 0
     - _CullModeForward: 0
-    - _DiffusionProfileHash: 0
     - _DoubleSidedEnable: 1
     - _DoubleSidedNormalMode: 2
     - _DstBlend: 10
@@ -64,13 +66,11 @@ Material:
     - _TransparentSortPriority: 0
     - _UseShadowThreshold: 0
     - _ZTestDepthEqualForOpaque: 4
-    - _ZTestGBuffer: 4
+    - _ZTestGBuffer: 3
     - _ZTestTransparent: 4
     - _ZWrite: 0
     m_Colors:
-    - Color_3FBD2343: {r: 28.864002, g: 10.8239, b: 4.3824925, a: 0}
-    - Vector2_5B325CA5: {r: 0, g: -0.3, b: 0, a: 0}
-    - Vector2_EFD2411F: {r: -0.2, g: -0.5, b: 0, a: 0}
-    - _DiffusionProfileAsset: {r: 0, g: 0, b: 0, a: 0}
+    - Color_765D907A: {r: 0.07058818, g: 0.07058818, b: 0.10980383, a: 1}
+    - Color_F23D99D1: {r: 0.07058824, g: 0.07058824, b: 0.1098039, a: 1}
     - _DoubleSidedConstants: {r: 1, g: 1, b: 1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}

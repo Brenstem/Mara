@@ -26,6 +26,7 @@ public class StartGameTest : MonoBehaviour
         _playerRevamp.cameraAnimator.SetTrigger("GameStarted");
 
         GlobalState.state.LockCursor = true;
+        GlobalState.state.GameStarted = true;
         StartCoroutine(StartGameTransition(_cinemachineStateDrivenCamera.m_CustomBlends.m_CustomBlends[START_CAMERA_BLEND_INDEX].m_Blend.m_Time * _activeControlsFaction));
     }
 
