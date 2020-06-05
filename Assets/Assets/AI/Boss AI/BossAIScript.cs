@@ -191,6 +191,8 @@ public class BossAIScript : Entity
 
     [NonSerialized] public bool animationEnded;
     [NonSerialized] public bool facePlayerBool = true;
+
+    [NonSerialized] public AudioManager audioManager;
     #endregion
 
     protected new void Awake()
@@ -224,6 +226,8 @@ public class BossAIScript : Entity
         dashCheckOffsetVector = new Vector3(0f, 1f, dashDistance / 2);
         dashCheckBoxSize = new Vector3(0.75f, 0.75f, dashDistance / 2);
         defaultSpeed = agent.speed;
+
+        audioManager = GlobalState.state.AudioManager;
     }
 
     void Start()
@@ -261,6 +265,7 @@ public class BossAIScript : Entity
     public override void TakeDamage(HitboxValues hitbox, Entity attacker)
     {
         health.Damage(hitbox);
+        audioManager.BossHurtAudio(transform.position);
         //spela hurtljud här
     }
 
@@ -440,7 +445,7 @@ public class BossAIScript : Entity
         Gizmos.DrawWireCube(Vector3.zero, dashCheckBoxSizeGizmo);
     }
 
-    #region Animation attack events
+    #region Action Animation events
 
     //Generella
     public void EndAnimation()
@@ -451,18 +456,19 @@ public class BossAIScript : Entity
     public void DontFacePlayer()
     {
         facePlayerBool = false;
-        //print("rotation stopped");
     }
     //P1
 
     public void EnableDrainBeam()
     {
         placeholoderDranBeam.SetActive(true);
+        audioManager.BossDrainLaserAudio(transform);
     }
 
     public void DisableDrainBeam()
     {
         placeholoderDranBeam.SetActive(false);
+        audioManager.BossDrainLaserAudioEnd();
     }
 
     public override void KillThis()
@@ -479,6 +485,22 @@ public class BossAIScript : Entity
     //{
     //    meleeHitboxActive = !meleeHitboxActive;
     //}
+
+
+    #endregion
+
+    #region Audio Animation events
+
+    public void PlayBossMeleeAudio()
+    {
+        audioManager.BirdMeleeAttackAudio(transform.position);
+    }
+    public void PlayBossWalkAudio()
+    {
+        audioManager.BossWalkAudio(transform.position);
+    }
+
+
     #endregion
 }
 
@@ -567,6 +589,9 @@ public class BossDashState : State<BossAIScript>
 
     public override void EnterState(BossAIScript owner)
     {
+        owner.audioManager.BossDashAudio(owner.transform.position);
+
+
         //animation stuff
         if (owner.dashAttack)
         {
@@ -676,6 +701,7 @@ public class MeleeAttackOneState : State<BossAIScript>
     {
         owner.bossAnimator.SetTrigger("melee1Trigger");
         owner.meleeAttackHitboxGroup.enabled = true;
+
     }
 
     public override void ExitState(BossAIScript owner)
@@ -853,6 +879,8 @@ public class AOEAttackState : State<BossAIScript>
     {
         owner.agent.SetDestination(owner.transform.position);
 
+        owner.audioManager.BossAOEAttackAudio(owner.transform);
+
         owner.bossAnimator.SetBool("spawnSpellBool", true);
 
         //SpawnMurkyWater(owner, Vector3.forward, 5f);
@@ -883,6 +911,7 @@ public class AOEAttackState : State<BossAIScript>
     public override void ExitState(BossAIScript owner)
     {
         owner.bossAnimator.SetBool("spawnSpellBool", false);
+        owner.audioManager.BossAOEAttackAudioEnd();
     }
 
     public override void UpdateState(BossAIScript owner)
@@ -1011,6 +1040,9 @@ public class SpawnEnemiesAbilityState : State<BossAIScript>
 
         owner.StartCoroutine(SpawnEnemyAfterTime(owner, _abilitySpawnTime));
 
+        owner.audioManager.BirdSpawnEnemyAudio(owner.transform);
+
+
         //SpawnEnemy(owner, Vector3.forward);
 
         //owner.StartCoroutine(owner.SpawnEnemyAbility(3f, owner.enemySpawnList));
@@ -1020,6 +1052,7 @@ public class SpawnEnemiesAbilityState : State<BossAIScript>
     {
         //owner.SpawnAbilityOver = false;
         owner.bossAnimator.SetBool("spawnSpellBool", false);
+        owner.audioManager.BirdSpawnEnemyAudioEnd();
     }
 
     public override void UpdateState(BossAIScript owner)
@@ -1105,7 +1138,7 @@ public class BossPhaseOneState : State<BossAIScript>
 
         owner.actionStateMachine.ChangeState(owner.bossCombatState);
 
-        //owner.actionStateMachine.ChangeState(owner.aoeAttackState);
+        //owner.actionStateMachine.ChangeState(owner.aoeAttackState);        
         //owner.actionStateMachine.ChangeState(owner.spawnEnemiesAbilityState);
         //owner.actionStateMachine.ChangeState(owner.meleeAttackOneState);
     }
@@ -1483,6 +1516,9 @@ public class BossPhaseTwoState : State<BossAIScript>
         owner.bossCombatState = new BossPhaseTwoCombatState(owner.minAttackSpeed, owner.attackSpeedIncreaseMax, owner.minAttackCooldown, owner.meleeRange, owner.drainRange, owner.aoeAttackCooldown, owner.spawnEnemyAbilityCooldown);
         //om man vill ändra värden för states gör mad det här
         owner.bossAnimator.SetTrigger("newPhaseTrigger");
+
+        owner.audioManager.BossChangePhaseAudio(owner.transform.position);
+
         owner.actionStateMachine.ChangeState(owner.bossCombatState);
     }
 
@@ -1641,22 +1677,52 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
                     strafeSign = 1;
                 }
 
-                owner.currentMovementDirection = owner.transform.right;
+                owner.targetMovementDirection = owner.transform.right;
 
                 //lägga till någon randomness variabel så movement inte blir lika predictable? (kan fucka animationerna?)
                 //kanske slurpa mellan de olika värdena (kan bli jobbigt och vet inte om det behövs)
                 float compairValue = Vector3.Distance(owner.transform.position, owner.player.transform.position);
 
+                //fixar så bossen går åt rätt håll baserat på desiredDistanceToPlayer och distansen från bossen till spelaren
                 for (int i = 0; i < owner.desiredDistanceValues.Length; i++)
                 {
                     if (compairValue > owner.desiredDistanceToPlayer + owner.desiredDistanceOffsetValues[i])
                     {
-                        owner.currentMovementDirection = Quaternion.AngleAxis(owner.desiredDistanceAngleValues[i] * strafeSign * -1, Vector3.up) * owner.currentMovementDirection;
-                        owner.currentMovementDirection *= strafeSign;
+                        owner.targetMovementDirection = Quaternion.AngleAxis(owner.desiredDistanceAngleValues[i] * strafeSign * -1, Vector3.up) * owner.targetMovementDirection;
+                        owner.targetMovementDirection *= strafeSign;
+
+                        Debug.DrawRay(owner.transform.position, owner.targetMovementDirection, Color.black);
+
+                        //ändra så jag har ngn timer här eller ngt idk
+
+                        //owner.currentMovementDirection = Vector3.Lerp(owner.currentMovementDirection, owner.targetMovementDirection, Time.deltaTime /** ((Vector3.Dot(owner.currentMovementDirection, owner.targetMovementDirection) + 1) / 2)*/);
+
+                        //Time.deltaTime * ngn speed
+                        owner.currentMovementDirection = Vector3.MoveTowards(owner.currentMovementDirection, owner.targetMovementDirection, Time.deltaTime);
+
+                        //Debug.Log(((Vector3.Dot(owner.currentMovementDirection, owner.targetMovementDirection) + 1) / 2));
+                        //owner.currentMovementDirection = Vector3.Lerp(owner.currentMovementDirection, owner.targetMovementDirection, 0.5f * (Time.deltaTime / (1 - ((Vector3.Dot(owner.currentMovementDirection, owner.targetMovementDirection) + 1) / 2))));
+
+                        //Debug.Log(1 - ((Vector3.Dot(owner.currentMovementDirection, owner.targetMovementDirection) + 1) / 2));
                         owner.agent.speed = owner.defaultSpeed + owner.desiredDistanceSpeedIncreseValues[i];
                         break;
                     }
                 }
+
+                //owner.currentMovementDirection = owner.transform.right;
+
+                //float compairValue = Vector3.Distance(owner.transform.position, owner.player.transform.position);
+
+                //for (int i = 0; i < owner.desiredDistanceValues.Length; i++)
+                //{
+                //    if (compairValue > owner.desiredDistanceToPlayer + owner.desiredDistanceOffsetValues[i])
+                //    {
+                //        owner.currentMovementDirection = Quaternion.AngleAxis(owner.desiredDistanceAngleValues[i] * strafeSign * -1, Vector3.up) * owner.currentMovementDirection;
+                //        owner.currentMovementDirection *= strafeSign;
+                //        owner.agent.speed = owner.defaultSpeed + owner.desiredDistanceSpeedIncreseValues[i];
+                //        break;
+                //    }
+                //}
 
                 //random dash in combat (vet inte om detta ska vara med)
                 if (UnityEngine.Random.Range(0f, 100f) > 100f - owner.dashChansePerFrame)
