@@ -3152,7 +3152,7 @@ PrefabInstance:
     - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
         type: 3}
       propertyPath: phaseTwoTransitionHP
-      value: 0.501
+      value: 0.639
       objectReference: {fileID: 0}
     - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
         type: 3}
@@ -3227,7 +3227,7 @@ PrefabInstance:
     - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
         type: 3}
       propertyPath: drainRange
-      value: 15
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
         type: 3}
@@ -3238,6 +3238,41 @@ PrefabInstance:
         type: 3}
       propertyPath: drainAttackTime
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: poolsPerLayer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: aoeAttackCooldown
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: spawnEnemyAbilityCooldown
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: spiralLayers
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: useSpiral
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: poolTimeToLive
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8831550686162915868, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: drainAttackCooldown
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8831550686162915866, guid: beb5169a1cd342c43b2d95e17247168f,
         type: 3}
@@ -3264,6 +3299,11 @@ PrefabInstance:
       propertyPath: _healthBar
       value: 
       objectReference: {fileID: 755188097}
+    - target: {fileID: 8831550686162915870, guid: beb5169a1cd342c43b2d95e17247168f,
+        type: 3}
+      propertyPath: _maxHealth
+      value: 500
+      objectReference: {fileID: 0}
     - target: {fileID: 1613292306923649698, guid: beb5169a1cd342c43b2d95e17247168f,
         type: 3}
       propertyPath: m_Layer
@@ -5914,17 +5954,17 @@ PrefabInstance:
     - target: {fileID: 7155705075074262921, guid: 28ad24a8753f56e43adfd634ea27f11f,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.08439057
+      value: 0.084390566
       objectReference: {fileID: 0}
     - target: {fileID: 7155705075074262921, guid: 28ad24a8753f56e43adfd634ea27f11f,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.49131447
+      value: 0.4913145
       objectReference: {fileID: 0}
     - target: {fileID: 7155705075074262921, guid: 28ad24a8753f56e43adfd634ea27f11f,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.04342518
+      value: -0.043425195
       objectReference: {fileID: 0}
     - target: {fileID: 7155705075074262921, guid: 28ad24a8753f56e43adfd634ea27f11f,
         type: 3}
@@ -6059,17 +6099,17 @@ PrefabInstance:
     - target: {fileID: 3072669508774342948, guid: 28ad24a8753f56e43adfd634ea27f11f,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.06833071
+      value: -0.06833072
       objectReference: {fileID: 0}
     - target: {fileID: 3072669508774342948, guid: 28ad24a8753f56e43adfd634ea27f11f,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.09109736
+      value: 0.09109733
       objectReference: {fileID: 0}
     - target: {fileID: 3072669508774342948, guid: 28ad24a8753f56e43adfd634ea27f11f,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.23148903
+      value: 0.23148905
       objectReference: {fileID: 0}
     - target: {fileID: 3072669508774342948, guid: 28ad24a8753f56e43adfd634ea27f11f,
         type: 3}
@@ -6519,6 +6559,7 @@ MonoBehaviour:
   minAttackSpeed: 5
   attackSpeedIncreaseMax: 5
   minAttackCooldown: 1
+  drainAttackCooldown: 6
   drainRange: 6
   drainChargeTime: 7
   drainAttackTime: 8
