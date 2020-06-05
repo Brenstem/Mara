@@ -198,7 +198,7 @@ public class AudioManager : MonoBehaviour
         RuntimeManager.PlayOneShot(playerSwordSwingAudio, position);
     }
 
-    public void PlayerHeavyAttackAudio(int heavyattackvalue, Transform transform)                  //added (kan dela upp denna ljudeffekten om det är lättare att spela upp / timea separata events)
+    public void PlayerHeavyAttackAudio(float heavyattackvalue, Transform transform)                  //added (kan dela upp denna ljudeffekten om det är lättare att spela upp / timea separata events)
     {
         Heavyattack = RuntimeManager.CreateInstance(playerHeavyAttackAudio);
         Heavyattack.setParameterByName("Charge attack", heavyattackvalue);      // 0= charge, 1= charge done, 2= attack
@@ -206,6 +206,10 @@ public class AudioManager : MonoBehaviour
         RuntimeManager.AttachInstanceToGameObject(Heavyattack, transform);
 
         Heavyattack.start();
+        if (heavyattackvalue == 2)
+        {
+            Heavyattack.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+        }
     }
 
     public void PlayerDodgeAudio(Vector3 position)
@@ -232,13 +236,13 @@ public class AudioManager : MonoBehaviour
     {
         InsanityEvent = RuntimeManager.CreateInstance(InsanityEventAudio);        // Create a new FMOD::Studio::EventInstance.
         InsanityEvent.setParameterByName("InsanityBar", insanityPercentage);     // string-värdet är parameternamnet och insanitypercentage är float-värdet
-        
+
         InsanityEvent.start();                                                  // spelar upp ljudet
     }
 
     public void InsanityDecay()                                  // not implemented in FMOD                                      
     {
-        
+
     }
 
     public void InsanityRegen()                                  // not implemented in FMOD
@@ -249,6 +253,10 @@ public class AudioManager : MonoBehaviour
     public void PlayerInsanityAudioUpdate(float insanityPercentage)
     {
         InsanityEvent.setParameterByName("InsanityBar", insanityPercentage);
+    }
+    public void PlayerHeavyAudioUpdate(float heavyattackvalue)
+    {
+        Heavyattack.setParameterByName("Charge attack", heavyattackvalue);
     }
 
     public void PlayerInsanityHeartBeat(Vector3 position)
@@ -341,22 +349,22 @@ public class AudioManager : MonoBehaviour
     #endregion
 
     #region Myling
-    public void MylingAlertedAudio (Vector3 position)               // not implemented in FMOD
+    public void MylingAlertedAudio(Vector3 position)               // added
     {
         RuntimeManager.PlayOneShot(mylingAlertedAudio, position);
     }
 
-    public void MylingChargeAttackAudio (Vector3 position)          // not implemented in FMOD
+    public void MylingChargeAttackAudio(Vector3 position)          // added
     {
         RuntimeManager.PlayOneShot(mylingChargeAttackAudio, position);
     }
 
-    public void MylingDiesAudio (Vector3 position)                  // not implemented in FMOD
+    public void MylingDiesAudio(Vector3 position)                  // added
     {
-        RuntimeManager.PlayOneShot(mylingDiesAudio, position);                
+        RuntimeManager.PlayOneShot(mylingDiesAudio, position);
     }
 
-    public void MylingFootstepAudio (Vector3 position)              // not implemented in FMOD
+    public void MylingFootstepAudio(Vector3 position)              // added
     {
         //kan behöva specialösning p.g.a fotsteg
     }
@@ -373,7 +381,7 @@ public class AudioManager : MonoBehaviour
         RuntimeManager.PlayOneShot(sisterAlertedAudio, position);
     }
 
-    public void SisteridleAudio (Vector3 position)                  // not implemented in FMOD
+    public void SisteridleAudio(Vector3 position)                  // not implemented in FMOD
     {
         RuntimeManager.PlayOneShot(sisteridleAudio, position);
     }
@@ -386,7 +394,7 @@ public class AudioManager : MonoBehaviour
         RuntimeManager.PlayOneShot(bossDashAudio, position);
     }
 
-    public void BirdAttackAudio (Vector3 position)
+    public void BirdAttackAudio(Vector3 position)
     {
         RuntimeManager.PlayOneShot(birdAttackAudio, position);
     }
@@ -412,7 +420,7 @@ public class AudioManager : MonoBehaviour
     {
         RuntimeManager.PlayOneShot(collectibleAudio, position);
     }
-    
+
     public void IdleCollectibleAudio(Vector3 position)                        // not implemented in FMOD
     {
     }

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class CheckpointHandler : MonoBehaviour
 {
@@ -68,6 +69,8 @@ public class CheckpointHandler : MonoBehaviour
     // Respawn player using checkpoint data
     private void Spawn()
     {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        /*
         PlayerData data = (PlayerData)SaveData.Load_Data("player");
 
         GlobalState.state.Player.gameObject.GetComponent<CharacterController>().enabled = false;
@@ -85,7 +88,7 @@ public class CheckpointHandler : MonoBehaviour
         GlobalState.state.Player.gameObject.GetComponent<PlayerInsanity>().SetInsanity(data.playerHealth);
 
         GlobalState.state.Player.gameObject.GetComponent<CharacterController>().enabled = true;
-
+        */
     }
 
     void RespawnPlayer()

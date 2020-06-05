@@ -18,12 +18,13 @@ public class Fade : MonoBehaviour
     [SerializeField] protected float _toBlackFadeTime = 1.0f;
     [SerializeField] protected float _toTransparentFadeTime = 1.0f;
 
+    // KALLA DENHÄR NÄR DU SKA BÖRJA FADE
     public void FadeToggle()
     {
         if (Alpha == 0)
-            FadeToTransparent();
-        else
             FadeToBlack();
+        else
+            FadeToTransparent();
     }
 
     private float _alpha;
@@ -43,12 +44,12 @@ public class Fade : MonoBehaviour
         }
     }
 
-    public void FadeToBlack()
+    public void FadeToTransparent()
     {
         StartCoroutine(FadeEnumerator(_toTransparentFadeTime, -1));
     }
     
-    public void FadeToTransparent()
+    public void FadeToBlack()
     {
         StartCoroutine(FadeEnumerator(_toBlackFadeTime, 1));
     }
@@ -81,9 +82,9 @@ public class Fade : MonoBehaviour
         {
             fadeTest = false;
             if (Alpha == 0)
-                FadeToTransparent();
-            else
                 FadeToBlack();
+            else
+                FadeToTransparent();
         }
     }
 }
