@@ -575,6 +575,7 @@ SkinnedMeshRenderer:
   - {fileID: 5942229802016136447, guid: 6b84c2718d84e16408af575d65c326a3, type: 3}
   - {fileID: -4740866918696808673, guid: 6b84c2718d84e16408af575d65c326a3, type: 3}
   - {fileID: 6719245597448002910, guid: 6b84c2718d84e16408af575d65c326a3, type: 3}
+  - {fileID: 6719245597448002910, guid: 6b84c2718d84e16408af575d65c326a3, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -599,7 +600,7 @@ SkinnedMeshRenderer:
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
   m_SkinnedMotionVectors: 1
-  m_Mesh: {fileID: -6525300956764944625, guid: 6b84c2718d84e16408af575d65c326a3, type: 3}
+  m_Mesh: {fileID: -6525300956764944625, guid: 389eff7f527583445a9c7d340b1d7c88, type: 3}
   m_Bones:
   - {fileID: 2396485533082171959}
   - {fileID: 1071993041697004827}
@@ -3562,6 +3563,7 @@ MonoBehaviour:
   minAttackSpeed: 1.5
   attackSpeedIncreaseMax: 1
   minAttackCooldown: 0
+  drainAttackCooldown: 6
   drainRange: 7
   drainChargeTime: 1
   drainAttackTime: 2.5
@@ -3571,6 +3573,7 @@ MonoBehaviour:
   dashAcceleration: 2000
   dashAttackDistanceMin: 7
   dashAttackDistanceMax: 10
+  dashStoppingDistance: 1
   dashLagDurration: 0
   chasingSpeed: 8
   chasingAcceleration: 20
