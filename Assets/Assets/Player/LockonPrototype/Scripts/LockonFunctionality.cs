@@ -85,7 +85,7 @@ public class LockonFunctionality : MonoBehaviour
 
         foreach (Collider col in _cols)
         {
-            if (col.GetComponent<BaseAIMovementController>()._aggroed)
+            if (col.GetComponent<BaseAIMovementController>() != null && col.GetComponent<BaseAIMovementController>()._aggroed)
             {
                 _enemyAmount++;
             }
