@@ -45,6 +45,10 @@ public class PlayerRevamp : Entity
     [SerializeField] private TargetFinder _targetFinder;
     [SerializeField, Range(1, 50)] private int inputBufferSize = 1;
 
+    [Header("VFX")]
+    [SerializeField] private GameObject _parryVFX;
+    [SerializeField] private GameObject _hurtVFX;
+
     [Header("Ground Check")]
     [SerializeField] private float _groundDistance = 0.4f;
     [SerializeField] private float _airBorneUntilFallingTime = 0.25f;
@@ -362,6 +366,12 @@ public class PlayerRevamp : Entity
             successfulParry = true;
             playerAnimator.SetTrigger("ParrySuccessful");
             GlobalState.state.AudioManager.ParrySuccessAudio(transform.position);
+
+            if (_parryVFX)
+            {
+                Instantiate(_parryVFX, this.transform.position + new Vector3(0, 1.25f, 0), this.transform.rotation);
+            }
+
             if (attacker != null)
                 attacker.Parried();
 
@@ -371,6 +381,11 @@ public class PlayerRevamp : Entity
         else
         {
             GlobalState.state.AudioManager.RangedEnemyMeleeAttackHitAudio(this.transform.position);
+
+            if (_hurtVFX)
+            {
+                Instantiate(_hurtVFX, this.transform.position + new Vector3(0, 0.75f, 0), this.transform.rotation);
+            }
 
             if (!_hitstunImmunity)
             {

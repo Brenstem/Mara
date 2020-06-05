@@ -14,6 +14,7 @@ public class BasicMeleeAI : BaseAIMovementController
     [Header("References")]
     [SerializeField] public GameObject _healthBar;
     [SerializeField] public HitboxGroup hitboxGroup;
+    [SerializeField] private GameObject _hurtVFX;
 
     // [SerializeField] public float _attackDelayAfterHitstun;
 
@@ -53,6 +54,8 @@ public class BasicMeleeAI : BaseAIMovementController
     {
         EnableHitstun(hitbox.hitstunTime, hitbox.ignoreArmor);
         base.TakeDamage(hitbox, attacker);
+
+        Instantiate(_hurtVFX, this.transform.position + new Vector3(0, 1.5f, 0), this.transform.rotation); ;
 
         if (hitbox.damageValue > 5)
         {
