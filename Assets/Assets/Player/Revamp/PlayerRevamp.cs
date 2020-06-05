@@ -44,6 +44,7 @@ public class PlayerRevamp : Entity
     [SerializeField] private Cinemachine.CinemachineVirtualCamera _lockonCam;
     [SerializeField] private TargetFinder _targetFinder;
     [SerializeField, Range(1, 50)] private int inputBufferSize = 1;
+    public float timeUntilFadeOnDeath = 2f;
 
     [Header("Ground Check")]
     [SerializeField] private float _groundDistance = 0.4f;
@@ -1488,13 +1489,14 @@ public class SuccessfulParryState : State<PlayerRevamp>
             owner.stateMachine.ChangeState(new IdleState());
     }
 }
-
 public class PlayerDeathState : State<PlayerRevamp>
 {
+    private Timer _timer;
+    private bool _played;
     public override void EnterState(PlayerRevamp owner)
     {
         owner.invulerable = true;
-        GlobalState.state.GameOver.FadeToggle();
+        _timer = new Timer(owner.timeUntilFadeOnDeath);
     }
 
     public override void ExitState(PlayerRevamp owner)
@@ -1503,5 +1505,19 @@ public class PlayerDeathState : State<PlayerRevamp>
         owner.playerAnimator.SetBool("Dead", false);
     }
 
-    public override void UpdateState(PlayerRevamp owner) { }
+    public override void UpdateState(PlayerRevamp owner)
+    {
+        if (!_played)
+        {
+            if (_timer.Expired)
+            {
+                GlobalState.state.GameOver.FadeToggle();
+                _played = true;
+            }
+            else
+            {
+                _timer += Time.fixedDeltaTime;
+            }
+        }
+    }
 }

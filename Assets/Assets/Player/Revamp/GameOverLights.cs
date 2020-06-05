@@ -10,6 +10,17 @@ public class GameOverLights : MonoBehaviour
     private CanvasGroup _canvasGroup;
     private List<RawImage> lights;
 
+    private Canvas _canvas;
+    private Canvas Canvas
+    {
+        get
+        {
+            if (_canvas == null)
+                _canvas = GetComponentInParent<Canvas>();
+            return _canvas;
+        }
+    }
+
     private void Awake()
     {
         lights = new List<RawImage>();
@@ -20,12 +31,24 @@ public class GameOverLights : MonoBehaviour
             Debug.LogError("Unable to find CanvasGroup!", this);
         }
 
+        if (SceneData.lightIndex == 0)
+            SceneData.lightIndex = lights.Count - 1;
+
         for (int i = 0; i < transform.childCount; i++)
         {
             lights.Add(transform.GetChild(i).GetComponent<RawImage>());
+
+            if (SceneData.lightIndex < i)
+            {
+                var c = lights[i].color;
+                c.a = 0;
+                lights[i].color = c;
+            }
         }
 
-        SceneData.lightIndex = lights.Count - 1;
+
+        Canvas.planeDistance = 0.14f;
+
         Fade.onFadeExit += Light;
     }
 
@@ -57,7 +80,6 @@ public class GameOverLights : MonoBehaviour
             StartCoroutine(FadeEnumerator(1.0f));
         }
     }
-
     protected IEnumerator FadeEnumerator(float fadeTime)
     {
         float time = 0.0f;
@@ -71,8 +93,9 @@ public class GameOverLights : MonoBehaviour
         var c = lights[SceneData.lightIndex].color;
         c.a = 1;
         lights[SceneData.lightIndex].color = c;
-
+        
         time = 0.0f;
+        float d = Canvas.planeDistance;
         while (time / fadeTime < 1) // Fade away single light
         {
             yield return new WaitForFixedUpdate();
@@ -97,6 +120,7 @@ public class GameOverLights : MonoBehaviour
             time += Time.fixedDeltaTime;
             GetComponent<CanvasGroup>().alpha = Mathf.Lerp(1.0f, 0.0f, time / fadeTime);
         }
+
 
         //transform.parent.GetComponent<Fade>().FadeToggle();
     }
