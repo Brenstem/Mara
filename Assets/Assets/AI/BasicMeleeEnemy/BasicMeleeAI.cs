@@ -100,6 +100,7 @@ public class BasicMeleeIdleState : BaseIdleState
     public override void EnterState(BaseAIMovementController owner)
     {
         _chasingState = new BasicMeleeChasingState();
+        base.EnterState(owner);
     }
     public override void UpdateState(BaseAIMovementController owner)
     {
@@ -118,6 +119,7 @@ public class BasicMeleeChasingState : BaseChasingState
         GlobalState.state.AudioManager.BasicEnemyAlerted(owner.transform.position);
         
     }
+
     public override void UpdateState(BaseAIMovementController owner)
     {
         base.UpdateState(owner);
@@ -194,6 +196,7 @@ public class BasicMeleeReturnToIdleState : BaseReturnToIdlePosState
     {
         _chasingState = new BasicMeleeChasingState();
         _idleState = new BasicMeleeIdleState();
+        base.EnterState(owner);
     }
 
     public override void ExitState(BaseAIMovementController owner)
