@@ -129,26 +129,29 @@ public class AudioManager : MonoBehaviour
     [SerializeField] string bossHurtAudio;                          // added
 
     [EventRef]
-    [SerializeField] string bossHeavyHurt;                          // not implemented in FMOD
+    [SerializeField] string bossHeavyHurt;                          // added
 
     [EventRef]
     [SerializeField] string bossDashAudio;                          // added
 
     [EventRef]
-    [SerializeField] string birdAoeAttackAudio;                     // not implemented in FMOD
+    [SerializeField] string birdAoeAttackAudio;                     // added
+    EventInstance birdAoeAttackEvent;
 
     [EventRef]
-    [SerializeField] string birdAttackAudio;                        // not implemented in FMOD
+    [SerializeField] string birdAttackAudio;                        // added
 
     [EventRef]
     [SerializeField] string birdWalkAudio;                          // added
 
     [EventRef]
-    [SerializeField] string birdSpawnEnemyAudio;                    // not implemented in FMOD
+    [SerializeField] string birdSpawnEnemyAudio;                    // added
+    EventInstance birdSpawnEnemyEvent;
+
 
     [EventRef]
-    [SerializeField] string birdDrainLaser;                         // not implemented in FMOD
-
+    [SerializeField] string birdDrainLaserAudio;                    // added
+    EventInstance birdDrainLaserEvent;
 
     [Header("SFX audio")]
     [EventRef]
@@ -389,25 +392,64 @@ public class AudioManager : MonoBehaviour
     #endregion
 
     #region Boss Audio
-    public void BossDash(Vector3 position)
+    public void BossDashAudio(Vector3 position)
     {
         RuntimeManager.PlayOneShot(bossDashAudio, position);
     }
 
-    public void BirdAttackAudio(Vector3 position)
+    public void BirdMeleeAttackAudio(Vector3 position)
     {
         RuntimeManager.PlayOneShot(birdAttackAudio, position);
     }
 
-    public void BirdSpawnEnemyAudio(Vector3 position)
+    public void BirdSpawnEnemyAudio(Transform position)
     {
-        RuntimeManager.PlayOneShot(birdSpawnEnemyAudio, position);
+        birdSpawnEnemyEvent = RuntimeManager.CreateInstance(birdSpawnEnemyAudio);
+        RuntimeManager.AttachInstanceToGameObject(birdSpawnEnemyEvent, position);
+        birdSpawnEnemyEvent.start();
+    }
+    public void BirdSpawnEnemyAudioEnd()
+    {
+        birdSpawnEnemyEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
 
-    public void BossHurt(Vector3 position)
+    public void BossHurtAudio(Vector3 position)
     {
         RuntimeManager.PlayOneShot(bossHurtAudio, position);
     }
+    public void BossChangePhaseAudio(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(bossHeavyHurt, position);
+    }
+
+    public void BossAOEAttackAudio(Transform position)
+    {
+        birdAoeAttackEvent = RuntimeManager.CreateInstance(birdAoeAttackAudio);
+        RuntimeManager.AttachInstanceToGameObject(birdAoeAttackEvent, position);
+        birdAoeAttackEvent.start();
+    }
+    public void BossAOEAttackAudioEnd()
+    {
+        birdAoeAttackEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    }
+    
+    public void BossWalkAudio(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(birdWalkAudio, position);
+    }
+
+    public void BossDrainLaserAudio(Transform position)
+    {
+        birdDrainLaserEvent = RuntimeManager.CreateInstance(birdDrainLaserAudio);
+        RuntimeManager.AttachInstanceToGameObject(birdDrainLaserEvent, position);
+        birdDrainLaserEvent.start();
+    }
+    public void BossDrainLaserAudioEnd()
+    {
+        birdDrainLaserEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    }
+
+
     #endregion
 
     #region SFX
