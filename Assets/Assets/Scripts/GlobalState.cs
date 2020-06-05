@@ -149,6 +149,7 @@ public class GlobalState : MonoBehaviour
         else
         {
             LockCursor = true;
+            GlobalState.state.GameOver.FadeToTransparent();
         }
     }
 

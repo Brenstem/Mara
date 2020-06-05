@@ -19,6 +19,16 @@ public class PlayerInsanity : EntityHealth
     [SerializeField] private Volume vol;
 
     private PlayerRevamp _player;
+    private PlayerRevamp Player
+    {
+        get
+        {
+            if (_player == null)
+                _player = GlobalState.state.Player;
+            return _player;
+        }
+    }
+
     private ChromaticAberration _chromaticAberration;
     private Vignette _vignette;
     private FilmGrain _filmGrain;
@@ -98,8 +108,6 @@ public class PlayerInsanity : EntityHealth
         }
 
         CurrentHealth = 0;
-
-        _player = GlobalState.state.Player.gameObject.GetComponent<PlayerRevamp>();
 
         GlobalState.state.AudioManager.PlayerInsanityAudio(0);
 
@@ -247,29 +255,29 @@ public class PlayerInsanity : EntityHealth
         if (Step(_attackspeedBuff, CurrentHealth) == 1)
             multiplier = _attackSpeedMultiplier;
 
-        _player.modifier.AttackSpeedMultiplier *= multiplier;
+        Player.modifier.AttackSpeedMultiplier *= multiplier;
 
         // Hitstun
         multiplier = 1;
         if (Step(_hitstunBuff, CurrentHealth) == 1)
             multiplier = _hitstunBuffMultiplier;
 
-        _player.modifier.HitstunMultiplier *= multiplier;
+        Player.modifier.HitstunMultiplier *= multiplier;
 
         // Movement speed
-        _player.IncreaseMoveSpeedOverValue(_movespeedRange.start, _movespeedRange.end, _moveSpeedBuffMultiplier);
+        Player.IncreaseMoveSpeedOverValue(_movespeedRange.start, _movespeedRange.end, _moveSpeedBuffMultiplier);
 
         // Damage buff
         multiplier = 1;
         if (Step(_damageBuff, CurrentHealth) == 1)
             multiplier = _damageBuffMultiplier;
 
-        _player.modifier.DamageMultiplier *= multiplier;
+        Player.modifier.DamageMultiplier *= multiplier;
 
         // Action attack buff
-        _player.actionAttackActive = false;
+        Player.actionAttackActive = false;
         if (Step(_actionAttackDebuff, CurrentHealth) == 1)
-            _player.actionAttackActive = true; 
+            Player.actionAttackActive = true; 
         #endregion
 
         #region Debuff FX

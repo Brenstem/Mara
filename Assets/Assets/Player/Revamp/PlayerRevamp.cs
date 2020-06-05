@@ -159,7 +159,28 @@ public class PlayerRevamp : Entity
     [HideInInspector] public bool isParrying;
     [HideInInspector] public bool walkCancel;
 
-    private void LoadData()
+    private void LoadPlayerData()
+    {
+        PlayerData data = (PlayerData)SaveData.Load_Data("player");
+        if (data != null)
+        {
+            GetComponent<CharacterController>().enabled = false;
+
+            Vector3 position = new Vector3(data.playerPosition[0], data.playerPosition[1], data.playerPosition[2]);
+            Vector3 rotation = new Vector3(data.playerRotation[0], data.playerRotation[1], data.playerRotation[2]);
+            
+            stateMachine.ChangeState(new IdleState());
+
+            transform.position = position;
+            transform.rotation = Quaternion.Euler(rotation);
+            
+            GetComponent<CharacterController>().enabled = true;
+            
+            GetComponent<PlayerInsanity>().SetInsanity(data.playerHealth);
+        }
+    }
+
+    private void LoadControls()
     {
         OptionData d = (OptionData)SaveData.Load_Data("controls");
         if (d != null)
@@ -225,7 +246,16 @@ public class PlayerRevamp : Entity
         stateMachine = new StateMachine<PlayerRevamp>(this);
         stateMachine.ChangeState(new IdleState());
 
-        LoadData();
+        LoadControls();
+
+#if UNITY_EDITOR
+        if (SceneData.gameStarted)
+        {
+            LoadPlayerData();
+        }
+#else
+        LoadPlayerData();
+#endif
 
         inputBuffer = new CircularBuffer<InputType>(inputBufferSize);
 
@@ -322,7 +352,7 @@ public class PlayerRevamp : Entity
     private void AnimationOver() { attackAnimationOver = true; }
     private void Action(InputType type) { inputBuffer.Enqueue(type); }
 
-    #region Public Functions
+#region Public Functions
     private bool _hitstunImmunity;
     [HideInInspector] public bool successfulParry;
     public override void TakeDamage(HitboxValues hitbox, Entity attacker = null)
@@ -445,7 +475,7 @@ public class PlayerRevamp : Entity
             StartCoroutine(ActionAttackForOneFrame());
         }
     }
-    #endregion
+#endregion
 
     private IEnumerator ActionAttackForOneFrame()
     {
@@ -458,7 +488,7 @@ public class PlayerRevamp : Entity
     }
 
 
-    #region Private Functions
+#region Private Functions
     private void UpdateMoveSpeed()
     {
         maxSpeed = _originalMaxSpeed;
@@ -635,7 +665,7 @@ public class PlayerRevamp : Entity
         Gizmos.DrawWireSphere(_groundCheckPosition.position, _groundDistance);
     }
 
-    #endregion 
+#endregion
 }
 
 public class IdleState : State<PlayerRevamp>
@@ -909,6 +939,8 @@ public class DashingState : State<PlayerRevamp>
         owner.playerAnimator.SetTrigger("Dash");
         owner.playerAnimator.SetFloat("Alert", 1.0f);
         owner.playerAnimator.SetBool("IsDashing", true);
+        owner.playerAnimator.SetBool("HasJumped", false);
+
         GlobalState.state.AudioManager.PlayerDodgeAudio(owner.transform.position);
 
         _dashDirection += Camera.main.transform.right * owner.Input.x;

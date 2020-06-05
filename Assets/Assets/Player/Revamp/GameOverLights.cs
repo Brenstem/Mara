@@ -8,7 +8,6 @@ public class GameOverLights : MonoBehaviour
     [SerializeField] private float _timeUntilFadeAway = 1.0f;
     [SerializeField] private float _fadeDelay;
     private CanvasGroup _canvasGroup;
-    private int currentIndex;
     private List<RawImage> lights;
 
     private void Awake()
@@ -26,7 +25,7 @@ public class GameOverLights : MonoBehaviour
             lights.Add(transform.GetChild(i).GetComponent<RawImage>());
         }
 
-        currentIndex = lights.Count - 1;
+        SceneData.lightIndex = lights.Count - 1;
         Fade.onFadeExit += Light;
     }
 
@@ -37,7 +36,7 @@ public class GameOverLights : MonoBehaviour
 
     private IEnumerator UpdateLight()
     {
-        if (currentIndex < 0)
+        if (SceneData.lightIndex < 0)
         {
             foreach (RawImage item in lights)
             {
@@ -45,7 +44,7 @@ public class GameOverLights : MonoBehaviour
                 c.a = 1;
                 item.color = c;
             }
-            currentIndex = lights.Count - 1;
+            SceneData.lightIndex = lights.Count - 1;
         }
         yield return new WaitForSecondsRealtime(_fadeDelay);
         DisableLight();
@@ -53,7 +52,7 @@ public class GameOverLights : MonoBehaviour
 
     public void DisableLight()
     {
-        if (currentIndex >= 0)
+        if (SceneData.lightIndex >= 0)
         {
             StartCoroutine(FadeEnumerator(1.0f));
         }
@@ -69,9 +68,9 @@ public class GameOverLights : MonoBehaviour
             GetComponent<CanvasGroup>().alpha = Mathf.Lerp(0.0f, 1.0f, time / fadeTime);
         }
 
-        var c = lights[currentIndex].color;
+        var c = lights[SceneData.lightIndex].color;
         c.a = 1;
-        lights[currentIndex].color = c;
+        lights[SceneData.lightIndex].color = c;
 
         time = 0.0f;
         while (time / fadeTime < 1) // Fade away single light
@@ -79,11 +78,11 @@ public class GameOverLights : MonoBehaviour
             yield return new WaitForFixedUpdate();
             time += Time.fixedDeltaTime;
             c.a = Mathf.Lerp(1.0f, 0.0f, time / fadeTime);
-            lights[currentIndex].color = c;
+            lights[SceneData.lightIndex].color = c;
         }
         c.a = 0;
-        lights[currentIndex].color = c;
-        currentIndex -= 1;
+        lights[SceneData.lightIndex].color = c;
+        SceneData.lightIndex -= 1;
 
 
 
@@ -99,6 +98,12 @@ public class GameOverLights : MonoBehaviour
             GetComponent<CanvasGroup>().alpha = Mathf.Lerp(1.0f, 0.0f, time / fadeTime);
         }
 
-        transform.parent.GetComponent<Fade>().FadeToggle();
+        //transform.parent.GetComponent<Fade>().FadeToggle();
+    }
+
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
+        Fade.onFadeExit -= Light;
     }
 }
