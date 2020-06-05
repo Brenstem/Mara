@@ -106,12 +106,12 @@ MonoBehaviour:
   _dropPrefab: {fileID: 386527908510245126, guid: cc925d04a25f2fc4ca771dcbbd07e329,
     type: 3}
   deathDrop: 1
-  _insanityIncreaseAmount: 1
-  _dropForceMin: 0
-  _dropForceMax: 0
-  _dropAngleUpMin: 0
-  _dropAngleUpMax: 0
-  _dropAmount: 5
+  _insanityIncreaseAmount: 5
+  _dropForceMin: 1000
+  _dropForceMax: 1500
+  _dropAngleUpMin: 90
+  _dropAngleUpMax: -30
+  _dropAmount: 10
   _healthBar: {fileID: 5392630511110434561}
   _hitBox: {fileID: 3426633559148580248}
 --- !u!136 &7497086228146343657
@@ -531,6 +531,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 12
       objectReference: {fileID: 0}
+    - target: {fileID: 2778033842384518024, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
+        type: 3}
+      propertyPath: hitboxEventHandler
+      value: 
+      objectReference: {fileID: 648613035466919867}
     - target: {fileID: 2778033842384518025, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -586,11 +591,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2778033842384518024, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
-        type: 3}
-      propertyPath: hitboxEventHandler
-      value: 
-      objectReference: {fileID: 648613035466919867}
     - target: {fileID: 2778033842924246596, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
       propertyPath: m_Layer
@@ -613,18 +613,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2778033842924246593, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
+      propertyPath: hitboxValues.hitstopTime
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2778033842924246593, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
+        type: 3}
       propertyPath: circleCollider
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2778033842924246593, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
       propertyPath: circleRadius
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 2778033842924246593, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
-        type: 3}
-      propertyPath: hitboxValues.hitstopTime
-      value: 0.2
+      value: 4.3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4a7c34f967a3df49a8e3ebb9aa373a5, type: 3}

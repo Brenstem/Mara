@@ -3559,17 +3559,17 @@ MonoBehaviour:
   _fill: {fileID: 0}
   meleeAttackHitboxGroup: {fileID: 6496311428754721636}
   drainAttackHitboxGroup: {fileID: 6496311429204840573}
-  minAttackSpeed: 3
+  minAttackSpeed: 1.5
   attackSpeedIncreaseMax: 1
-  minAttackCooldown: 0.5
-  drainRange: 10
-  drainChargeTime: 2
-  drainAttackTime: 3
+  minAttackCooldown: 0
+  drainRange: 7
+  drainChargeTime: 1
+  drainAttackTime: 2.5
   dashChansePerFrame: 0
   dashAttackChanse: 100
   dashSpeed: 20
   dashAcceleration: 2000
-  dashAttackDistanceMin: 5
+  dashAttackDistanceMin: 7
   dashAttackDistanceMax: 10
   dashLagDurration: 0
   chasingSpeed: 8
@@ -3612,7 +3612,7 @@ MonoBehaviour:
   aggroRange: 20
   defaultTurnSpeed: 4.5
   drainActiveTurnSpeed: 1
-  meleeRange: 1.5
+  meleeRange: 2.5
   desiredDistanceToPlayer: 1
   placeholoderDranBeam: {fileID: 1613292306923649698}
 --- !u!136 &8831550686162915867
