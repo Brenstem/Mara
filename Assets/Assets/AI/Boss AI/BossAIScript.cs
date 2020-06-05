@@ -97,6 +97,7 @@ public class BossAIScript : Entity
 
     [SerializeField] public float dashAttackDistanceMin = 5f;
     [SerializeField] public float dashAttackDistanceMax = 5f;
+    [SerializeField] public float dashStoppingDistance = 1f;
 
     [SerializeField] public float dashLagDurration = 0.5f;
 
@@ -635,7 +636,7 @@ public class BossDashState : State<BossAIScript>
         if (_dashTimer.Expired)
         {
             _lagTimer.Time += Time.deltaTime;
-
+            
             if (owner.dashAttack)
             {
                 owner.dashAttack = false;
@@ -1135,7 +1136,7 @@ public class BossPhaseOneState : State<BossAIScript>
 {
     public override void EnterState(BossAIScript owner)
     {
-        owner.bossCombatState = new BossPhaseOneCombatState(owner.minAttackSpeed, owner.attackSpeedIncreaseMax, owner.minAttackCooldown, owner.meleeRange, owner.drainRange, owner.drainAttackCooldown);
+        owner.bossCombatState = new BossPhaseOneCombatState(owner.minAttackSpeed, owner.attackSpeedIncreaseMax, owner.minAttackCooldown, owner.meleeRange, owner.drainRange, owner.drainAttackCooldown, owner.dashStoppingDistance);
 
         owner.actionStateMachine.ChangeState(owner.bossCombatState);
 
@@ -1173,13 +1174,14 @@ public class BossPhaseOneCombatState : State<BossAIScript>
     //private Vector3 _direction;
     private Vector3 _dashAttackDirection;
     private float _dashDistance;
+    private float _dashStoppingDistance;
     //private float _dashAttackAngle;
 
     private Vector3 _bossToPlayer;
 
     private RaycastHit _hit;
     
-    public BossPhaseOneCombatState(float minAttackSpeed, float attackSpeedIncreaseMax, float minAttackCooldown, float meleeAttackRange, float drainAttackRange, float drainAttackCooldown)
+    public BossPhaseOneCombatState(float minAttackSpeed, float attackSpeedIncreaseMax, float minAttackCooldown, float meleeAttackRange, float drainAttackRange, float drainAttackCooldown, float dashStoppingDistance)
     {
         _minAttackSpeed = minAttackSpeed;
         _attackSpeedIncreaseMax = attackSpeedIncreaseMax / 2;
@@ -1187,6 +1189,7 @@ public class BossPhaseOneCombatState : State<BossAIScript>
         _meleeAttackRange = meleeAttackRange;
         _drainAttackRange = drainAttackRange;
         _drainAttackCooldown = drainAttackCooldown;
+        _dashStoppingDistance = dashStoppingDistance;
 
         GenerateNewAttackSpeed();
         _timer = new Timer(_attackSpeed);
@@ -1386,11 +1389,11 @@ public class BossPhaseOneCombatState : State<BossAIScript>
             //Physics.Raycast(owner.transform.position + new Vector3(0, 1, 0), _bossToPlayer.normalized, out _hit, owner.dashAttackDistanceMax + _meleeAttackRange, owner.targetLayers);
 
             //är spelaren innom en bra range och innom LOS?
-            if (/*_hit.transform == owner.player.transform &&*/ _bossToPlayer.magnitude < owner.dashAttackDistanceMax + _meleeAttackRange / 2 && _bossToPlayer.magnitude > owner.dashAttackDistanceMin + _meleeAttackRange / 2)
+            if (/*_hit.transform == owner.player.transform &&*/ _bossToPlayer.magnitude < owner.dashAttackDistanceMax + _dashStoppingDistance && _bossToPlayer.magnitude > owner.dashAttackDistanceMin + _dashStoppingDistance)
             {
                 _dashAttackDirection = _bossToPlayer.normalized;
 
-                _dashDistance = _bossToPlayer.magnitude - _meleeAttackRange / 2;
+                _dashDistance = _bossToPlayer.magnitude - _dashStoppingDistance;
 
                 //är det något i vägen för dashen?
                 if (owner.CheckDashPath(_dashAttackDirection, _dashDistance))
@@ -1526,7 +1529,7 @@ public class BossPhaseTwoState : State<BossAIScript>
 
     public override void EnterState(BossAIScript owner)
     {
-        owner.bossCombatState = new BossPhaseTwoCombatState(owner.minAttackSpeed, owner.attackSpeedIncreaseMax, owner.minAttackCooldown, owner.meleeRange, owner.drainRange, owner.drainAttackCooldown, owner.aoeAttackCooldown, owner.spawnEnemyAbilityCooldown);
+        owner.bossCombatState = new BossPhaseTwoCombatState(owner.minAttackSpeed, owner.attackSpeedIncreaseMax, owner.minAttackCooldown, owner.meleeRange, owner.drainRange, owner.drainAttackCooldown, owner.dashStoppingDistance, owner.aoeAttackCooldown, owner.spawnEnemyAbilityCooldown);
         //om man vill ändra värden för states gör mad det här
         owner.bossAnimator.SetTrigger("newPhaseTrigger");
 
@@ -1569,12 +1572,13 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
     private Vector3 _destination;
     private Vector3 _dashAttackDirection;
     private float _dashDistance;
+    private float _dashStoppingDistance;
 
     private Vector3 _bossToPlayer;
 
     private RaycastHit _hit;
 
-    public BossPhaseTwoCombatState(float minAttackSpeed, float attackSpeedIncreaseMax, float minAttackCooldown, float meleeAttackRange, float drainAttackRange, float drainAttackCooldown, float aoeAttackCooldown, float spawnEnemyAbilityCooldown)
+    public BossPhaseTwoCombatState(float minAttackSpeed, float attackSpeedIncreaseMax, float minAttackCooldown, float meleeAttackRange, float drainAttackRange, float drainAttackCooldown, float dashStoppingDistance, float aoeAttackCooldown, float spawnEnemyAbilityCooldown)
     {
         _minMeleeAttackSpeed = minAttackSpeed;
         _meleeAttackSpeedIncreaseMax = attackSpeedIncreaseMax / 2;
@@ -1584,6 +1588,8 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
         _drainAttackCooldown = drainAttackCooldown;
         _aoeAttackCooldown = aoeAttackCooldown;
         _spawnEnemyAbilityCooldown = spawnEnemyAbilityCooldown;
+        _dashStoppingDistance = dashStoppingDistance;
+
 
         GenerateNewMeleeAttackSpeed();
         _meleeAttackTimer = new Timer(_meleeAttackSpeed);
@@ -1766,11 +1772,11 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
             //Physics.Raycast(owner.transform.position + new Vector3(0, 1, 0), _bossToPlayer.normalized, out _hit, owner.dashAttackDistanceMax + _meleeAttackRange, owner.targetLayers);
 
             //är spelaren innom en bra range och innom LOS?
-            if (/*_hit.transform == owner.player.transform &&*/ _bossToPlayer.magnitude < owner.dashAttackDistanceMax + _meleeAttackRange / 2 && _bossToPlayer.magnitude > owner.dashAttackDistanceMin + _meleeAttackRange / 2)
+            if (/*_hit.transform == owner.player.transform &&*/ _bossToPlayer.magnitude < owner.dashAttackDistanceMax + _dashStoppingDistance && _bossToPlayer.magnitude > owner.dashAttackDistanceMin + _dashStoppingDistance)
             {
                 _dashAttackDirection = _bossToPlayer.normalized;
 
-                _dashDistance = _bossToPlayer.magnitude - _meleeAttackRange / 2;
+                _dashDistance = _bossToPlayer.magnitude - _dashStoppingDistance;
 
                 //är det något i vägen för dashen?
                 if (owner.CheckDashPath(_dashAttackDirection, _dashDistance))
