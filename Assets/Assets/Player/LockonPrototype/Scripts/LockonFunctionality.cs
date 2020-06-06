@@ -28,6 +28,7 @@ public class LockonFunctionality : MonoBehaviour
     private PlayerInput _playerInput;
     private PlayerRevamp _player;
     private float _enemyAmount;
+    private Camera _camera;
 
     public Transform Target
     {
@@ -48,6 +49,7 @@ public class LockonFunctionality : MonoBehaviour
     {
         _playerInput = new PlayerInput();
         targetList = new List<GameObject>();
+        _camera = GlobalState.state.Camera;
         //_movementController = GetComponent<MovementController>();
         _player = GetComponent<PlayerRevamp>();
 
@@ -103,8 +105,8 @@ public class LockonFunctionality : MonoBehaviour
                 {
                     Vector3 direction = collider.transform.position - transform.position;
                     direction.y = 0;
-
-                    Vector3 cForward = Camera.main.transform.forward;
+                    
+                    Vector3 cForward = _camera.transform.forward;
                     cForward.y = 0;
 
                     float angle = Vector3.Angle(cForward, direction);
