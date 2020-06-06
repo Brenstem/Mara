@@ -286,7 +286,7 @@ public class PlayerInsanity : EntityHealth
         // Whispers audio
         intensity = SmoothStep(_whispersRange.start, _whispersRange.end, GetInsanityPercentage());
         intensity *= 100; // player insanity audio wants percentage value between 0 and 100
-        GlobalState.state.AudioManager.PlayerInsanityAudioUpdate(intensity);
+        GlobalState.state.AudioManager.PlayerInsanityAudioUpdate(GetInsanityPercentage());
 
         // Chromatic aberration
         intensity = SmoothStep(_chromaticAberrationRange.start, _chromaticAberrationRange.end, GetInsanityPercentage());

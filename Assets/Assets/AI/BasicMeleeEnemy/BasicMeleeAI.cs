@@ -77,7 +77,7 @@ public class BasicMeleeAI : BaseAIMovementController
         EnableHitstun(hitbox.hitstunTime, hitbox.ignoreArmor);
         base.TakeDamage(hitbox, attacker);
 
-        Instantiate(_hurtVFX, this.transform.position + new Vector3(0, 1.5f, 0), this.transform.rotation); ;
+        // Instantiate(_hurtVFX, this.transform.position + new Vector3(0, 1.5f, 0), this.transform.rotation); ;
 
         if (hitbox.damageValue > 5)
         {
