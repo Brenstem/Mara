@@ -295,7 +295,7 @@ public class PlayerInsanity : EntityHealth
             _chromaticAberration.intensity.value = intensity;
 
         // Vignette
-        intensity = SmoothStep(_vignetteRange.start, _vignetteRange.end, GetInsanityPercentage());
+        intensity = Mathf.Clamp(SmoothStep(_vignetteRange.start, _vignetteRange.end, GetInsanityPercentage()), 0, 0.5f);
 
         if (_vignette != null)
             _vignette.intensity.value = intensity;
