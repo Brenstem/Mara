@@ -11,24 +11,32 @@ public class CaveWallsTriggerScript : MonoBehaviour
 
     int sign = 0;
 
-    void Start()
+    private LayerMask _triggerDetectionLayers;
+
+    private void Awake()
     {
         allWalls[0] = wallsToHide;
         allWalls[1] = wallsToAppear;
+        _triggerDetectionLayers = (_triggerDetectionLayers | 1 << GlobalState.state.Player.gameObject.gameObject.layer);
+
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        for (int i = 0; i < allWalls[sign].Length; i++)
-        {
-            allWalls[sign][i].SetActive(false);
-        }
 
-        sign = (sign + 1) % 2;
-
-        for (int i = 0; i < allWalls[sign].Length; i++)
+        if (_triggerDetectionLayers == (_triggerDetectionLayers | 1 << other.gameObject.layer))
         {
-            allWalls[sign][i].SetActive(true);
+            for (int i = 0; i < allWalls[sign].Length; i++)
+            {
+                allWalls[sign][i].SetActive(false);
+            }
+
+            sign = (sign + 1) % 2;
+
+            for (int i = 0; i < allWalls[sign].Length; i++)
+            {
+                allWalls[sign][i].SetActive(true);
+            }
         }
     }
 }
