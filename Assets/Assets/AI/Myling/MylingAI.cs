@@ -23,8 +23,6 @@ public class MylingAI : BaseAIMovementController
 
     private new void Update()
     {
-        print(stateMachine.currentState);
-
         base.Update();
     }
 
