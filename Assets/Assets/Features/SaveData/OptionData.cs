@@ -10,6 +10,7 @@ public class OptionData : Data
     public float mouseSensitivity;
     public int qualityLevel;
     public bool isFullscreen;
+    public int refreshRate;
     public int width;
     public int height;
     public int currentLanguage;
@@ -20,8 +21,9 @@ public class OptionData : Data
         valueArray = new string[controls.Values.Count];
         path = "controls";
 
-        width = Screen.width;
-        height = Screen.height;
+        width = Screen.currentResolution.width;
+        height = Screen.currentResolution.height;
+        refreshRate = Screen.currentResolution.refreshRate;
         isFullscreen = Screen.fullScreen;
         qualityLevel = QualitySettings.GetQualityLevel();
 

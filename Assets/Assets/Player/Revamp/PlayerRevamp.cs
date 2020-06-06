@@ -44,6 +44,11 @@ public class PlayerRevamp : Entity
     [SerializeField] private Cinemachine.CinemachineVirtualCamera _lockonCam;
     [SerializeField] private TargetFinder _targetFinder;
     [SerializeField, Range(1, 50)] private int inputBufferSize = 1;
+    public float timeUntilFadeOnDeath = 2f;
+
+    [Header("VFX")]
+    [SerializeField] private GameObject _parryVFX;
+    [SerializeField] private GameObject _hurtVFX;
 
     [Header("Ground Check")]
     [SerializeField] private float _groundDistance = 0.4f;
@@ -109,7 +114,7 @@ public class PlayerRevamp : Entity
 
     /* === COMPONENT REFERENCES === */
     private PlayerInput _playerInput;
-
+    [HideInInspector] public Camera camera;
     [HideInInspector] public Transform pointOfInterest;
     [HideInInspector] public StateMachine<PlayerRevamp> stateMachine;
     [HideInInspector] public CharacterController controller;
@@ -186,7 +191,7 @@ public class PlayerRevamp : Entity
         if (d != null)
         {
             GlobalState.state.language = (GlobalState.LanguageEnum)d.currentLanguage;
-            Screen.SetResolution(d.width, d.height, d.isFullscreen);
+            Screen.SetResolution(d.width, d.height, d.isFullscreen, d.refreshRate);
             QualitySettings.SetQualityLevel(d.qualityLevel);
 
             if (d.controlKeyArray != null && d.controlKeyArray.Length > 0)
@@ -240,7 +245,7 @@ public class PlayerRevamp : Entity
         //    Cursor.lockState = CursorLockMode.Locked;
 
         _originalMaxSpeed = maxSpeed;
-
+        camera = GlobalState.state.Camera;
         controller = GetComponent<CharacterController>();
         _playerInput = new PlayerInput();
         stateMachine = new StateMachine<PlayerRevamp>(this);
@@ -362,6 +367,12 @@ public class PlayerRevamp : Entity
             successfulParry = true;
             playerAnimator.SetTrigger("ParrySuccessful");
             GlobalState.state.AudioManager.ParrySuccessAudio(transform.position);
+
+            if (_parryVFX)
+            {
+                Instantiate(_parryVFX, this.transform.position + new Vector3(0, 1.25f, 0), this.transform.rotation);
+            }
+
             if (attacker != null)
                 attacker.Parried();
 
@@ -371,6 +382,11 @@ public class PlayerRevamp : Entity
         else
         {
             GlobalState.state.AudioManager.RangedEnemyMeleeAttackHitAudio(this.transform.position);
+
+            if (_hurtVFX)
+            {
+                Instantiate(_hurtVFX, this.transform.position + new Vector3(0, 0.75f, 0), this.transform.rotation);
+            }
 
             if (!_hitstunImmunity)
             {
@@ -851,7 +867,7 @@ public class MovementState : State<PlayerRevamp>
             }
             else if (owner.Input.magnitude >= movingThreshold)
             {
-                Vector3 baseInputDirection = Camera.main.transform.right * owner.Input.normalized.x + Camera.main.transform.forward * owner.Input.normalized.y;
+                Vector3 baseInputDirection = owner.camera.transform.right * owner.Input.normalized.x + owner.camera.transform.forward * owner.Input.normalized.y;
 
                 // The angle between baseInputDirection and resultingDirection
                 float angle = Vector2.Angle(new Vector2(owner.transform.forward.x, owner.transform.forward.z),
@@ -943,10 +959,10 @@ public class DashingState : State<PlayerRevamp>
 
         GlobalState.state.AudioManager.PlayerDodgeAudio(owner.transform.position);
 
-        _dashDirection += Camera.main.transform.right * owner.Input.x;
-        _dashDirection += Camera.main.transform.forward * owner.Input.y;
+        _dashDirection += owner.camera.transform.right * owner.Input.x;
+        _dashDirection += owner.camera.transform.forward * owner.Input.y;
         if (_dashDirection == Vector3.zero)
-            _dashDirection = Camera.main.transform.forward;
+            _dashDirection = owner.camera.transform.forward;
 
         _dashDirection.y = 0;
         if (!owner.IsLockedOn)
@@ -1488,13 +1504,14 @@ public class SuccessfulParryState : State<PlayerRevamp>
             owner.stateMachine.ChangeState(new IdleState());
     }
 }
-
 public class PlayerDeathState : State<PlayerRevamp>
 {
+    private Timer _timer;
+    private bool _played;
     public override void EnterState(PlayerRevamp owner)
     {
         owner.invulerable = true;
-        GlobalState.state.GameOver.FadeToggle();
+        _timer = new Timer(owner.timeUntilFadeOnDeath);
     }
 
     public override void ExitState(PlayerRevamp owner)
@@ -1503,5 +1520,19 @@ public class PlayerDeathState : State<PlayerRevamp>
         owner.playerAnimator.SetBool("Dead", false);
     }
 
-    public override void UpdateState(PlayerRevamp owner) { }
+    public override void UpdateState(PlayerRevamp owner)
+    {
+        if (!_played)
+        {
+            if (_timer.Expired)
+            {
+                GlobalState.state.GameOver.FadeToggle();
+                _played = true;
+            }
+            else
+            {
+                _timer += Time.fixedDeltaTime;
+            }
+        }
+    }
 }

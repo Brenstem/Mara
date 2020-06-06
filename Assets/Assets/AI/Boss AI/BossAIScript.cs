@@ -78,6 +78,7 @@ public class BossAIScript : Entity
     #region Drain Variables
     [Header("Drain Variables")]
 
+    [SerializeField] public float drainAttackCooldown = 6f;
     [SerializeField] public float drainRange = 6f;
     [SerializeField] public float drainChargeTime = 7f;
     [SerializeField] public float drainAttackTime = 8f;
@@ -96,6 +97,7 @@ public class BossAIScript : Entity
 
     [SerializeField] public float dashAttackDistanceMin = 5f;
     [SerializeField] public float dashAttackDistanceMax = 5f;
+    [SerializeField] public float dashStoppingDistance = 1f;
 
     [SerializeField] public float dashLagDurration = 0.5f;
 
@@ -191,6 +193,8 @@ public class BossAIScript : Entity
 
     [NonSerialized] public bool animationEnded;
     [NonSerialized] public bool facePlayerBool = true;
+
+    [NonSerialized] public AudioManager audioManager;
     #endregion
 
     protected new void Awake()
@@ -224,6 +228,8 @@ public class BossAIScript : Entity
         dashCheckOffsetVector = new Vector3(0f, 1f, dashDistance / 2);
         dashCheckBoxSize = new Vector3(0.75f, 0.75f, dashDistance / 2);
         defaultSpeed = agent.speed;
+
+        audioManager = GlobalState.state.AudioManager;
     }
 
     void Start()
@@ -261,6 +267,7 @@ public class BossAIScript : Entity
     public override void TakeDamage(HitboxValues hitbox, Entity attacker)
     {
         health.Damage(hitbox);
+        audioManager.BossHurtAudio(transform.position);
         //spela hurtljud här
     }
 
@@ -440,7 +447,7 @@ public class BossAIScript : Entity
         Gizmos.DrawWireCube(Vector3.zero, dashCheckBoxSizeGizmo);
     }
 
-    #region Animation attack events
+    #region Action Animation events
 
     //Generella
     public void EndAnimation()
@@ -451,18 +458,19 @@ public class BossAIScript : Entity
     public void DontFacePlayer()
     {
         facePlayerBool = false;
-        //print("rotation stopped");
     }
     //P1
 
     public void EnableDrainBeam()
     {
         placeholoderDranBeam.SetActive(true);
+        audioManager.BossDrainLaserAudio(transform);
     }
 
     public void DisableDrainBeam()
     {
         placeholoderDranBeam.SetActive(false);
+        audioManager.BossDrainLaserAudioEnd();
     }
 
     public override void KillThis()
@@ -479,6 +487,22 @@ public class BossAIScript : Entity
     //{
     //    meleeHitboxActive = !meleeHitboxActive;
     //}
+
+
+    #endregion
+
+    #region Audio Animation events
+
+    public void PlayBossMeleeAudio()
+    {
+        audioManager.BirdMeleeAttackAudio(transform.position);
+    }
+    public void PlayBossWalkAudio()
+    {
+        audioManager.BossWalkAudio(transform.position);
+    }
+
+
     #endregion
 }
 
@@ -567,6 +591,9 @@ public class BossDashState : State<BossAIScript>
 
     public override void EnterState(BossAIScript owner)
     {
+        owner.audioManager.BossDashAudio(owner.transform.position);
+
+
         //animation stuff
         if (owner.dashAttack)
         {
@@ -609,7 +636,7 @@ public class BossDashState : State<BossAIScript>
         if (_dashTimer.Expired)
         {
             _lagTimer.Time += Time.deltaTime;
-
+            
             if (owner.dashAttack)
             {
                 owner.dashAttack = false;
@@ -676,6 +703,7 @@ public class MeleeAttackOneState : State<BossAIScript>
     {
         owner.bossAnimator.SetTrigger("melee1Trigger");
         owner.meleeAttackHitboxGroup.enabled = true;
+
     }
 
     public override void ExitState(BossAIScript owner)
@@ -853,6 +881,8 @@ public class AOEAttackState : State<BossAIScript>
     {
         owner.agent.SetDestination(owner.transform.position);
 
+        owner.audioManager.BossAOEAttackAudio(owner.transform);
+
         owner.bossAnimator.SetBool("spawnSpellBool", true);
 
         //SpawnMurkyWater(owner, Vector3.forward, 5f);
@@ -883,6 +913,7 @@ public class AOEAttackState : State<BossAIScript>
     public override void ExitState(BossAIScript owner)
     {
         owner.bossAnimator.SetBool("spawnSpellBool", false);
+        owner.audioManager.BossAOEAttackAudioEnd();
     }
 
     public override void UpdateState(BossAIScript owner)
@@ -1011,6 +1042,9 @@ public class SpawnEnemiesAbilityState : State<BossAIScript>
 
         owner.StartCoroutine(SpawnEnemyAfterTime(owner, _abilitySpawnTime));
 
+        owner.audioManager.BirdSpawnEnemyAudio(owner.transform);
+
+
         //SpawnEnemy(owner, Vector3.forward);
 
         //owner.StartCoroutine(owner.SpawnEnemyAbility(3f, owner.enemySpawnList));
@@ -1020,6 +1054,7 @@ public class SpawnEnemiesAbilityState : State<BossAIScript>
     {
         //owner.SpawnAbilityOver = false;
         owner.bossAnimator.SetBool("spawnSpellBool", false);
+        owner.audioManager.BirdSpawnEnemyAudioEnd();
     }
 
     public override void UpdateState(BossAIScript owner)
@@ -1101,11 +1136,11 @@ public class BossPhaseOneState : State<BossAIScript>
 {
     public override void EnterState(BossAIScript owner)
     {
-        owner.bossCombatState = new BossPhaseOneCombatState(owner.minAttackSpeed, owner.attackSpeedIncreaseMax, owner.minAttackCooldown, owner.meleeRange, owner.drainRange);
+        owner.bossCombatState = new BossPhaseOneCombatState(owner.minAttackSpeed, owner.attackSpeedIncreaseMax, owner.minAttackCooldown, owner.meleeRange, owner.drainRange, owner.drainAttackCooldown, owner.dashStoppingDistance);
 
         owner.actionStateMachine.ChangeState(owner.bossCombatState);
 
-        //owner.actionStateMachine.ChangeState(owner.aoeAttackState);
+        //owner.actionStateMachine.ChangeState(owner.aoeAttackState);        
         //owner.actionStateMachine.ChangeState(owner.spawnEnemiesAbilityState);
         //owner.actionStateMachine.ChangeState(owner.meleeAttackOneState);
     }
@@ -1125,6 +1160,7 @@ public class BossPhaseOneState : State<BossAIScript>
 public class BossPhaseOneCombatState : State<BossAIScript>
 {
     private Timer _timer;
+    private Timer _drainTimer;
     private float _minAttackSpeed;
     private float _attackSpeedIncreaseMax;
     private float _attackSpeed;
@@ -1132,44 +1168,37 @@ public class BossPhaseOneCombatState : State<BossAIScript>
     private float _minAttackCooldown;
     private float _meleeAttackRange;
     private float _drainAttackRange;
+    private float _drainAttackCooldown;
 
     private Vector3 _destination;
     //private Vector3 _direction;
     private Vector3 _dashAttackDirection;
     private float _dashDistance;
+    private float _dashStoppingDistance;
     //private float _dashAttackAngle;
 
     private Vector3 _bossToPlayer;
 
     private RaycastHit _hit;
     
-    public BossPhaseOneCombatState(float minAttackSpeed, float attackSpeedIncreaseMax, float minAttackCooldown, float meleeAttackRange, float drainAttackRange)
+    public BossPhaseOneCombatState(float minAttackSpeed, float attackSpeedIncreaseMax, float minAttackCooldown, float meleeAttackRange, float drainAttackRange, float drainAttackCooldown, float dashStoppingDistance)
     {
         _minAttackSpeed = minAttackSpeed;
         _attackSpeedIncreaseMax = attackSpeedIncreaseMax / 2;
         _baseMinAttackCooldown = minAttackCooldown;
         _meleeAttackRange = meleeAttackRange;
         _drainAttackRange = drainAttackRange;
+        _drainAttackCooldown = drainAttackCooldown;
+        _dashStoppingDistance = dashStoppingDistance;
 
         GenerateNewAttackSpeed();
         _timer = new Timer(_attackSpeed);
+
+        _drainTimer = new Timer(_drainAttackCooldown);
     }
 
     public override void EnterState(BossAIScript owner)
     {
-        ////Debug.Log("in i PhaseOneCombatState");
-        //if (_timer.Expired)
-        //{
-        //    GenerateNewAttackSpeed();
-        //    _timer = new Timer(_attackSpeed);
-        //    _minAttackCooldown = _baseMinAttackCooldown;
-        //}
-        //else
-        //{
-        //    //fan wack fixa sen
-        //    _minAttackCooldown += _timer.Time;
-        //}
-
         owner.targetMovementDirection = owner.transform.right;
         owner.currentMovementDirection = owner.transform.right;
     }
@@ -1193,6 +1222,7 @@ public class BossPhaseOneCombatState : State<BossAIScript>
         owner.FacePlayer();
 
         _timer.Time += Time.deltaTime;
+        _drainTimer.Time += Time.deltaTime;
 
         //kanske borde dela upp detta i olika movement states pga animationer men vet inte om det behövs
 
@@ -1210,8 +1240,13 @@ public class BossPhaseOneCombatState : State<BossAIScript>
             _timer = new Timer(_attackSpeed);
             _minAttackCooldown = _baseMinAttackCooldown;
 
-            //nära nog för att göra melee attacken
-            if (_drainAttackRange > Vector3.Distance(owner.transform.position, owner.player.transform.position))
+
+
+            if (_drainAttackRange < Vector3.Distance(owner.transform.position, owner.player.transform.position) && _drainTimer.Expired)
+            {
+                owner.actionStateMachine.ChangeState(owner.drainAttackChargeState);
+            }
+            else
             {
                 //funkar?? tror det
                 if (TryToDash(owner))
@@ -1223,11 +1258,25 @@ public class BossPhaseOneCombatState : State<BossAIScript>
                     owner.actionStateMachine.ChangeState(owner.chaseToAttackState);
                 }
             }
-            //drain
-            else
-            {
-                owner.actionStateMachine.ChangeState(owner.drainAttackChargeState);
-            }
+
+            ////nära nog för att göra melee attacken
+            //if (_drainAttackRange > Vector3.Distance(owner.transform.position, owner.player.transform.position))
+            //{
+            //    //funkar?? tror det
+            //    if (TryToDash(owner))
+            //    {
+            //        owner.actionStateMachine.ChangeState(owner.bossDashState);
+            //    }
+            //    else
+            //    {
+            //        owner.actionStateMachine.ChangeState(owner.chaseToAttackState);
+            //    }
+            //}
+            ////drain
+            //else
+            //{
+            //    owner.actionStateMachine.ChangeState(owner.drainAttackChargeState);
+            //}
         }
         //idle movement
         else
@@ -1340,11 +1389,11 @@ public class BossPhaseOneCombatState : State<BossAIScript>
             //Physics.Raycast(owner.transform.position + new Vector3(0, 1, 0), _bossToPlayer.normalized, out _hit, owner.dashAttackDistanceMax + _meleeAttackRange, owner.targetLayers);
 
             //är spelaren innom en bra range och innom LOS?
-            if (/*_hit.transform == owner.player.transform &&*/ _bossToPlayer.magnitude < owner.dashAttackDistanceMax + _meleeAttackRange / 2 && _bossToPlayer.magnitude > owner.dashAttackDistanceMin + _meleeAttackRange / 2)
+            if (/*_hit.transform == owner.player.transform &&*/ _bossToPlayer.magnitude < owner.dashAttackDistanceMax + _dashStoppingDistance && _bossToPlayer.magnitude > owner.dashAttackDistanceMin + _dashStoppingDistance)
             {
                 _dashAttackDirection = _bossToPlayer.normalized;
 
-                _dashDistance = _bossToPlayer.magnitude - _meleeAttackRange / 2;
+                _dashDistance = _bossToPlayer.magnitude - _dashStoppingDistance;
 
                 //är det något i vägen för dashen?
                 if (owner.CheckDashPath(_dashAttackDirection, _dashDistance))
@@ -1480,9 +1529,12 @@ public class BossPhaseTwoState : State<BossAIScript>
 
     public override void EnterState(BossAIScript owner)
     {
-        owner.bossCombatState = new BossPhaseTwoCombatState(owner.minAttackSpeed, owner.attackSpeedIncreaseMax, owner.minAttackCooldown, owner.meleeRange, owner.drainRange, owner.aoeAttackCooldown, owner.spawnEnemyAbilityCooldown);
+        owner.bossCombatState = new BossPhaseTwoCombatState(owner.minAttackSpeed, owner.attackSpeedIncreaseMax, owner.minAttackCooldown, owner.meleeRange, owner.drainRange, owner.drainAttackCooldown, owner.dashStoppingDistance, owner.aoeAttackCooldown, owner.spawnEnemyAbilityCooldown);
         //om man vill ändra värden för states gör mad det här
         owner.bossAnimator.SetTrigger("newPhaseTrigger");
+
+        owner.audioManager.BossChangePhaseAudio(owner.transform.position);
+
         owner.actionStateMachine.ChangeState(owner.bossCombatState);
     }
 
@@ -1500,10 +1552,11 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
     private Timer _meleeAttackTimer;
     private Timer _AOEAttackTimer;
     private Timer _spawnEnemyAbilityTimer;
+    private Timer _drainTimer;
 
     private float _aoeAttackCooldown;
-
     private float _spawnEnemyAbilityCooldown;
+    private float _drainAttackCooldown;
 
 
     private float _minMeleeAttackSpeed;
@@ -1515,44 +1568,38 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
     private float _meleeAttackRange;
     private float _drainAttackRange;
 
+
     private Vector3 _destination;
     private Vector3 _dashAttackDirection;
     private float _dashDistance;
-    //private float _dashAttackAngle;
+    private float _dashStoppingDistance;
 
     private Vector3 _bossToPlayer;
 
     private RaycastHit _hit;
 
-    public BossPhaseTwoCombatState(float minAttackSpeed, float attackSpeedIncreaseMax, float minAttackCooldown, float meleeAttackRange, float drainAttackRange, float aoeAttackCooldown, float spawnEnemyAbilityCooldown)
+    public BossPhaseTwoCombatState(float minAttackSpeed, float attackSpeedIncreaseMax, float minAttackCooldown, float meleeAttackRange, float drainAttackRange, float drainAttackCooldown, float dashStoppingDistance, float aoeAttackCooldown, float spawnEnemyAbilityCooldown)
     {
         _minMeleeAttackSpeed = minAttackSpeed;
         _meleeAttackSpeedIncreaseMax = attackSpeedIncreaseMax / 2;
         _baseMinMeleeAttackCooldown = minAttackCooldown;
         _meleeAttackRange = meleeAttackRange;
         _drainAttackRange = drainAttackRange;
+        _drainAttackCooldown = drainAttackCooldown;
         _aoeAttackCooldown = aoeAttackCooldown;
         _spawnEnemyAbilityCooldown = spawnEnemyAbilityCooldown;
+        _dashStoppingDistance = dashStoppingDistance;
+
 
         GenerateNewMeleeAttackSpeed();
         _meleeAttackTimer = new Timer(_meleeAttackSpeed);
         _AOEAttackTimer = new Timer(_aoeAttackCooldown);
         _spawnEnemyAbilityTimer = new Timer(_spawnEnemyAbilityCooldown);
+        _drainTimer = new Timer(_drainAttackCooldown);
     }
 
     public override void EnterState(BossAIScript owner)
-    {
-        //if (_meleeAttackTimer.Expired)
-        //{
-        //    GenerateNewMeleeAttackSpeed();
-        //    _meleeAttackTimer = new Timer(_meleeAttackSpeed);
-        //    _minMeleeAttackCooldown = _baseMinMeleeAttackCooldown;
-        //}
-        //else
-        //{
-        //    _minMeleeAttackCooldown += _meleeAttackTimer.Time;
-        //}
-    }
+    { }
 
     private void GenerateNewMeleeAttackSpeed()
     {
@@ -1573,7 +1620,8 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
 
         _meleeAttackTimer.Time += Time.deltaTime;
         _AOEAttackTimer.Time += Time.deltaTime;
-        _spawnEnemyAbilityTimer += Time.deltaTime;
+        _spawnEnemyAbilityTimer.Time += Time.deltaTime;
+        _drainTimer.Time += Time.deltaTime;
 
         //Daggs för AOE?
         if (_AOEAttackTimer.Expired)
@@ -1601,9 +1649,13 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
             _meleeAttackTimer = new Timer(_meleeAttackSpeed);
             _minMeleeAttackCooldown = _baseMinMeleeAttackCooldown;
 
-            //nära nog för att göra melee attacken
-            if (_drainAttackRange > Vector3.Distance(owner.transform.position, owner.player.transform.position))
+            if (_drainAttackRange < Vector3.Distance(owner.transform.position, owner.player.transform.position) && _drainTimer.Expired)
             {
+                owner.actionStateMachine.ChangeState(owner.drainAttackChargeState);
+            }
+            else
+            {
+                //funkar?? tror det
                 if (TryToDash(owner))
                 {
                     owner.actionStateMachine.ChangeState(owner.bossDashState);
@@ -1612,11 +1664,6 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
                 {
                     owner.actionStateMachine.ChangeState(owner.chaseToAttackState);
                 }
-            }
-            //drain
-            else
-            {
-                owner.actionStateMachine.ChangeState(owner.drainAttackChargeState);
             }
         }
         //idle movement
@@ -1641,22 +1688,52 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
                     strafeSign = 1;
                 }
 
-                owner.currentMovementDirection = owner.transform.right;
+                owner.targetMovementDirection = owner.transform.right;
 
                 //lägga till någon randomness variabel så movement inte blir lika predictable? (kan fucka animationerna?)
                 //kanske slurpa mellan de olika värdena (kan bli jobbigt och vet inte om det behövs)
                 float compairValue = Vector3.Distance(owner.transform.position, owner.player.transform.position);
 
+                //fixar så bossen går åt rätt håll baserat på desiredDistanceToPlayer och distansen från bossen till spelaren
                 for (int i = 0; i < owner.desiredDistanceValues.Length; i++)
                 {
                     if (compairValue > owner.desiredDistanceToPlayer + owner.desiredDistanceOffsetValues[i])
                     {
-                        owner.currentMovementDirection = Quaternion.AngleAxis(owner.desiredDistanceAngleValues[i] * strafeSign * -1, Vector3.up) * owner.currentMovementDirection;
-                        owner.currentMovementDirection *= strafeSign;
+                        owner.targetMovementDirection = Quaternion.AngleAxis(owner.desiredDistanceAngleValues[i] * strafeSign * -1, Vector3.up) * owner.targetMovementDirection;
+                        owner.targetMovementDirection *= strafeSign;
+
+                        Debug.DrawRay(owner.transform.position, owner.targetMovementDirection, Color.black);
+
+                        //ändra så jag har ngn timer här eller ngt idk
+
+                        //owner.currentMovementDirection = Vector3.Lerp(owner.currentMovementDirection, owner.targetMovementDirection, Time.deltaTime /** ((Vector3.Dot(owner.currentMovementDirection, owner.targetMovementDirection) + 1) / 2)*/);
+
+                        //Time.deltaTime * ngn speed
+                        owner.currentMovementDirection = Vector3.MoveTowards(owner.currentMovementDirection, owner.targetMovementDirection, Time.deltaTime);
+
+                        //Debug.Log(((Vector3.Dot(owner.currentMovementDirection, owner.targetMovementDirection) + 1) / 2));
+                        //owner.currentMovementDirection = Vector3.Lerp(owner.currentMovementDirection, owner.targetMovementDirection, 0.5f * (Time.deltaTime / (1 - ((Vector3.Dot(owner.currentMovementDirection, owner.targetMovementDirection) + 1) / 2))));
+
+                        //Debug.Log(1 - ((Vector3.Dot(owner.currentMovementDirection, owner.targetMovementDirection) + 1) / 2));
                         owner.agent.speed = owner.defaultSpeed + owner.desiredDistanceSpeedIncreseValues[i];
                         break;
                     }
                 }
+
+                //owner.currentMovementDirection = owner.transform.right;
+
+                //float compairValue = Vector3.Distance(owner.transform.position, owner.player.transform.position);
+
+                //for (int i = 0; i < owner.desiredDistanceValues.Length; i++)
+                //{
+                //    if (compairValue > owner.desiredDistanceToPlayer + owner.desiredDistanceOffsetValues[i])
+                //    {
+                //        owner.currentMovementDirection = Quaternion.AngleAxis(owner.desiredDistanceAngleValues[i] * strafeSign * -1, Vector3.up) * owner.currentMovementDirection;
+                //        owner.currentMovementDirection *= strafeSign;
+                //        owner.agent.speed = owner.defaultSpeed + owner.desiredDistanceSpeedIncreseValues[i];
+                //        break;
+                //    }
+                //}
 
                 //random dash in combat (vet inte om detta ska vara med)
                 if (UnityEngine.Random.Range(0f, 100f) > 100f - owner.dashChansePerFrame)
@@ -1695,11 +1772,11 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
             //Physics.Raycast(owner.transform.position + new Vector3(0, 1, 0), _bossToPlayer.normalized, out _hit, owner.dashAttackDistanceMax + _meleeAttackRange, owner.targetLayers);
 
             //är spelaren innom en bra range och innom LOS?
-            if (/*_hit.transform == owner.player.transform &&*/ _bossToPlayer.magnitude < owner.dashAttackDistanceMax + _meleeAttackRange / 2 && _bossToPlayer.magnitude > owner.dashAttackDistanceMin + _meleeAttackRange / 2)
+            if (/*_hit.transform == owner.player.transform &&*/ _bossToPlayer.magnitude < owner.dashAttackDistanceMax + _dashStoppingDistance && _bossToPlayer.magnitude > owner.dashAttackDistanceMin + _dashStoppingDistance)
             {
                 _dashAttackDirection = _bossToPlayer.normalized;
 
-                _dashDistance = _bossToPlayer.magnitude - _meleeAttackRange / 2;
+                _dashDistance = _bossToPlayer.magnitude - _dashStoppingDistance;
 
                 //är det något i vägen för dashen?
                 if (owner.CheckDashPath(_dashAttackDirection, _dashDistance))

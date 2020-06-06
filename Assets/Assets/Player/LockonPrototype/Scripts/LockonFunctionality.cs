@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -27,6 +27,8 @@ public class LockonFunctionality : MonoBehaviour
     private Transform _pointOfInterest;
     private PlayerInput _playerInput;
     private PlayerRevamp _player;
+    private float _enemyAmount;
+    private Camera _camera;
 
     public Transform Target
     {
@@ -47,6 +49,7 @@ public class LockonFunctionality : MonoBehaviour
     {
         _playerInput = new PlayerInput();
         targetList = new List<GameObject>();
+        _camera = GlobalState.state.Camera;
         //_movementController = GetComponent<MovementController>();
         _player = GetComponent<PlayerRevamp>();
 
@@ -73,23 +76,37 @@ public class LockonFunctionality : MonoBehaviour
         _playerInput.Disable();
         //_movementController.DisableLockon();
     }
-    
+
     void TargetRecognition()
     {
+        _cols = Physics.OverlapSphere(transform.position, _trackRadius, _enemyMask);
+
+        GlobalState.state.AudioManager.CombatMusicParamUpdate(_enemyAmount);
+
+        _enemyAmount = 0; // Don't know why i need to do this twice but okay
+
+        foreach (Collider col in _cols)
+        {
+            if (col.GetComponent<BaseAIMovementController>() != null && col.GetComponent<BaseAIMovementController>()._aggroed)
+            {
+                _enemyAmount++;
+            }
+        }
+
         if (!_player.IsLockedOn)
         {
-            _cols = Physics.OverlapSphere(transform.position, _trackRadius, _enemyMask);
             float _smallestAngle = 180;
             _closestTarget = null;
             _pointOfInterest = null;
+
             foreach (Collider collider in _cols)
             {
                 if (collider.tag == lockonTag)
                 {
                     Vector3 direction = collider.transform.position - transform.position;
                     direction.y = 0;
-
-                    Vector3 cForward = Camera.main.transform.forward;
+                    
+                    Vector3 cForward = _camera.transform.forward;
                     cForward.y = 0;
 
                     float angle = Vector3.Angle(cForward, direction);

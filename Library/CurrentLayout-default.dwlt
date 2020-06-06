@@ -14,10 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PixelRect:
     serializedVersion: 2
+<<<<<<< HEAD
     x: 1920
     y: -326
     width: 1920
     height: 997
+=======
+    x: 0
+    y: 43
+    width: 2560
+    height: 1357
+>>>>>>> level-design
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 6}
@@ -42,12 +49,16 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 30
-    width: 1920
-    height: 947
+    width: 2560
+    height: 1307
   m_MinSize: {x: 683, y: 494}
   m_MaxSize: {x: 14004, y: 14044}
   vertical: 0
+<<<<<<< HEAD
   controlID: 65
+=======
+  controlID: 112
+>>>>>>> level-design
 --- !u!114 &3
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -63,10 +74,10 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 1531
+    x: 2041
     y: 0
-    width: 389
-    height: 947
+    width: 519
+    height: 1307
   m_MinSize: {x: 277, y: 72}
   m_MaxSize: {x: 4002, y: 4022}
   m_ActualView: {fileID: 15}
@@ -91,8 +102,8 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 379
-    height: 573
+    width: 505
+    height: 939
   m_MinSize: {x: 202, y: 222}
   m_MaxSize: {x: 4002, y: 4022}
   m_ActualView: {fileID: 16}
@@ -116,9 +127,9 @@ MonoBehaviour:
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 573
-    width: 1531
-    height: 374
+    y: 939
+    width: 2041
+    height: 368
   m_MinSize: {x: 232, y: 272}
   m_MaxSize: {x: 10002, y: 10022}
   m_ActualView: {fileID: 14}
@@ -147,8 +158,8 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1920
-    height: 997
+    width: 2560
+    height: 1357
   m_MinSize: {x: 950, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &7
@@ -168,7 +179,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1920
+    width: 2560
     height: 30
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
@@ -189,8 +200,8 @@ MonoBehaviour:
   m_Position:
     serializedVersion: 2
     x: 0
-    y: 977
-    width: 1920
+    y: 1337
+    width: 2560
     height: 20
   m_MinSize: {x: 0, y: 0}
   m_MaxSize: {x: 0, y: 0}
@@ -213,12 +224,16 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1531
-    height: 947
+    width: 2041
+    height: 1307
   m_MinSize: {x: 406, y: 494}
   m_MaxSize: {x: 10002, y: 14044}
   vertical: 1
+<<<<<<< HEAD
   controlID: 66
+=======
+  controlID: 113
+>>>>>>> level-design
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -238,12 +253,16 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1531
-    height: 573
+    width: 2041
+    height: 939
   m_MinSize: {x: 406, y: 222}
   m_MaxSize: {x: 8006, y: 4022}
   vertical: 0
+<<<<<<< HEAD
   controlID: 67
+=======
+  controlID: 114
+>>>>>>> level-design
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -259,10 +278,10 @@ MonoBehaviour:
   m_Children: []
   m_Position:
     serializedVersion: 2
-    x: 379
+    x: 505
     y: 0
-    width: 1152
-    height: 573
+    width: 1536
+    height: 939
   m_MinSize: {x: 204, y: 222}
   m_MaxSize: {x: 4004, y: 4022}
   m_ActualView: {fileID: 17}
@@ -404,10 +423,17 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
+<<<<<<< HEAD
     x: 1920
     y: 277
     width: 1531
     height: 355
+=======
+    x: 0
+    y: 1012
+    width: 2041
+    height: 349
+>>>>>>> level-design
   m_ViewDataDictionary: {fileID: 0}
   m_SearchFilter:
     m_NameFilter: rock
@@ -422,6 +448,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
+<<<<<<< HEAD
     - Assets/Assets/Graphics/Materials/Environment/Ground
   m_ViewMode: 1
   m_StartGridSize: 16
@@ -436,6 +463,22 @@ MonoBehaviour:
     m_SelectedIDs: 
     m_LastClickedID: 0
     m_ExpandedIDs: 000000003a7300009e7500006e780000227a0000787a00000e8200007a830000fe860000da870000c0880000828a00008e8a0000f0dc000000ca9a3b
+=======
+    - Assets/Assets/Graphics/Animated Characters/Boss
+  m_ViewMode: 1
+  m_StartGridSize: 16
+  m_LastFolders:
+  - Assets/Assets/Graphics/Animated Characters/Boss
+  m_LastFoldersGridSize: 16
+  m_LastProjectPath: F:\Mara
+  m_LockTracker:
+    m_IsLocked: 0
+  m_FolderTreeState:
+    scrollPos: {x: 0, y: 120}
+    m_SelectedIDs: e85d0100
+    m_LastClickedID: 89576
+    m_ExpandedIDs: 00000000ca4f0100c451010018540100d6590100ca5b0100685d010000ca9a3b
+>>>>>>> level-design
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -463,7 +506,11 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
+<<<<<<< HEAD
     m_ExpandedIDs: 000000003a7300009e7500006e780000227a0000787a00000e8200007a830000fe860000da870000c0880000828a00008e8a0000f0dc0000
+=======
+    m_ExpandedIDs: 
+>>>>>>> level-design
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -491,7 +538,7 @@ MonoBehaviour:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: c6230000b8430000
+    m_ExpandedInstanceIDs: c6230000b843000010b70000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -540,10 +587,17 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
+<<<<<<< HEAD
     x: 3451
     y: -296
     width: 387
     height: 928
+=======
+    x: 2041
+    y: 73
+    width: 517
+    height: 1288
+>>>>>>> level-design
   m_ViewDataDictionary: {fileID: 0}
   m_OpenAddComponentMenu: 0
   m_ObjectsLockedBeforeSerialization: []
@@ -576,6 +630,7 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
+<<<<<<< HEAD
     x: 1920
     y: -296
     width: 379
@@ -587,6 +642,19 @@ MonoBehaviour:
       m_SelectedIDs: 
       m_LastClickedID: 0
       m_ExpandedIDs: 580effff5c0effff5e0effff0a1effff8422ffff642cffff662cffff0638ffff0838ffff6ea6ffff549100006c9500007a9c0000fa9f00001aa00000e0a70000a2ac0000ecb500006eb8000026b9000018bb000002bc000092c300000ec6000030c80000
+=======
+    x: 0
+    y: 73
+    width: 505
+    height: 920
+  m_ViewDataDictionary: {fileID: 0}
+  m_SceneHierarchy:
+    m_TreeViewState:
+      scrollPos: {x: 0, y: 22601}
+      m_SelectedIDs: 52bc0000
+      m_LastClickedID: 0
+      m_ExpandedIDs: b45cfdff80b7fdffb2dbfdffb4dbfdff94f3fdff96f3fdff22fbfdff24fbfdff14fefdff16fefdffc421feffc621feff9627feff9827feff9a2bfeffac30feff566301009a630100286401009a640100a4640100f464010018650100a6650100ce650100466601006e67010014680100466901006c690100246a01003a6a01003e6b0100ba6b01007a6c0100a26d01004470010074700100387101007c720100a07301008a740100b677010038780100ea780100f87c0100007d0100127d0100907d0100ee7d0100f47e01000e82010030820100ce8301009c850100ac860100e4860100928a0100b28a0100e28a0100108b0100388b0100648b0100548d01008a8d0100388e0100468e01007c8e0100d28e01001690010014910100a89101000092010030920100
+>>>>>>> level-design
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -631,14 +699,21 @@ MonoBehaviour:
     m_Tooltip: 
   m_Pos:
     serializedVersion: 2
+<<<<<<< HEAD
     x: 2299
     y: -296
     width: 1150
     height: 554
+=======
+    x: 505
+    y: 73
+    width: 1534
+    height: 920
+>>>>>>> level-design
   m_ViewDataDictionary: {fileID: 0}
   m_ShowContextualTools: 0
   m_WindowGUID: 28f7fc5c245e45241af7102c6e1058c5
-  m_Gizmos: 1
+  m_Gizmos: 0
   m_SceneIsLit: 1
   m_SceneLighting: 1
   m_2DMode: 0
@@ -646,9 +721,15 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
+<<<<<<< HEAD
     m_Target: {x: 90.55039, y: -10.714646, z: 6.226927}
     speed: 2
     m_Value: {x: 90.55039, y: -10.714646, z: 6.226927}
+=======
+    m_Target: {x: 231.53384, y: -68.712296, z: -24.869022}
+    speed: 2
+    m_Value: {x: 231.53384, y: -68.712296, z: -24.869022}
+>>>>>>> level-design
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -677,6 +758,7 @@ MonoBehaviour:
       speed: 2
       m_Value: 0
   m_Rotation:
+<<<<<<< HEAD
     m_Target: {x: -0.27082548, y: 0.33008936, z: -0.09913437, w: -0.89901274}
     speed: 2
     m_Value: {x: -0.27730972, y: 0.36348355, z: -0.11397151, w: -0.8820371}
@@ -684,6 +766,15 @@ MonoBehaviour:
     m_Target: 49.978333
     speed: 2
     m_Value: 52.333332
+=======
+    m_Target: {x: 0.008813378, y: -0.98871, z: 0.069898166, w: 0.13306734}
+    speed: 2
+    m_Value: {x: 0.008904834, y: -0.9886949, z: 0.07138684, w: 0.1315566}
+  m_Size:
+    m_Target: 25.354141
+    speed: 2
+    m_Value: 24.262337
+>>>>>>> level-design
   m_Ortho:
     m_Target: 0
     speed: 2
