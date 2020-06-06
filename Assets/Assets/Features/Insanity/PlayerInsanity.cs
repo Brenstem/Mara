@@ -51,7 +51,7 @@ public class PlayerInsanity : EntityHealth
     [SerializeField] private int _hitstunBuff;
     [SerializeField] private Range _movespeedRange;
     [SerializeField] private int _damageBuff;
-    [SerializeField] private int _actionAttackDebuff;
+    [SerializeField] private int _actionAttackBuff;
 
     [Header("Debuff tier values")]
     [SerializeField] private Range _whispersRange;
@@ -110,6 +110,8 @@ public class PlayerInsanity : EntityHealth
         CurrentHealth = 0;
 
         GlobalState.state.AudioManager.PlayerInsanityAudio(0);
+        GlobalState.state.AudioManager.PlayerInsanityAudioUpdate(0);
+
 
         if (vol != null)
         {
@@ -270,13 +272,14 @@ public class PlayerInsanity : EntityHealth
         // Damage buff
         multiplier = 1;
         if (Step(_damageBuff, CurrentHealth) == 1)
-            multiplier = _damageBuffMultiplier;
+            multiplier = _damageBuffMultiplier; 
+
 
         Player.modifier.DamageMultiplier *= multiplier;
 
         // Action attack buff
         Player.actionAttackActive = false;
-        if (Step(_actionAttackDebuff, CurrentHealth) == 1)
+        if (Step(_actionAttackBuff, CurrentHealth) == 1)
             Player.actionAttackActive = true; 
         #endregion
 
@@ -286,7 +289,7 @@ public class PlayerInsanity : EntityHealth
         // Whispers audio
         intensity = SmoothStep(_whispersRange.start, _whispersRange.end, GetInsanityPercentage());
         intensity *= 100; // player insanity audio wants percentage value between 0 and 100
-        GlobalState.state.AudioManager.PlayerInsanityAudioUpdate(GetInsanityPercentage());
+        GlobalState.state.AudioManager.PlayerInsanityAudioUpdate(intensity);
 
         // Chromatic aberration
         intensity = SmoothStep(_chromaticAberrationRange.start, _chromaticAberrationRange.end, GetInsanityPercentage());
@@ -295,7 +298,7 @@ public class PlayerInsanity : EntityHealth
             _chromaticAberration.intensity.value = intensity;
 
         // Vignette
-        intensity = Mathf.Clamp(SmoothStep(_vignetteRange.start, _vignetteRange.end, GetInsanityPercentage()), 0, 0.5f);
+        intensity = Mathf.Clamp(SmoothStep(_vignetteRange.start, _vignetteRange.end, GetInsanityPercentage()), 0, 0.35f);
 
         if (_vignette != null)
             _vignette.intensity.value = intensity;

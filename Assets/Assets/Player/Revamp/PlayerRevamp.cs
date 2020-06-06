@@ -1287,7 +1287,9 @@ public class HeavyAttackState : State<PlayerRevamp>
                     owner.actionHitboxGroup.enabled = false; // charge state krävs för att synkronisera med animationen (exit time)
                     if (owner.modifier.DamageMultiplier.IsModified)
                         _previousDamageMultiplier = owner.modifier.DamageMultiplier.Multiplier;
-                    owner.modifier.DamageMultiplier *= 1f + _chargeTimer.Time / owner.heavyChargeTime * owner.heavyMaxDamageMultiplier;
+
+                    owner.modifier.DamageMultiplier *= owner.modifier.DamageMultiplier.Multiplier + (_chargeTimer.Time / owner.heavyChargeTime * owner.heavyMaxDamageMultiplier);
+                    Debug.Log(owner.modifier.DamageMultiplier.Multiplier);
                 }
             }
             else
