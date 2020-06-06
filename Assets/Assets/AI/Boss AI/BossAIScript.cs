@@ -759,11 +759,7 @@ public class ChaseToAttackState : State<BossAIScript>
         _playerPos = owner.player.transform.position;
         _distanceToPlayer = Vector3.Distance(owner.transform.position, _playerPos);
 
-        if (_distanceToPlayer > owner.drainRange)
-        {
-            owner.actionStateMachine.ChangeState(owner.drainAttackChargeState);
-        }
-        else if (_distanceToPlayer < owner.meleeRange)
+        if (_distanceToPlayer < owner.meleeRange)
         {
             owner.actionStateMachine.ChangeState(owner.meleeAttackOneState);
         }
