@@ -13,10 +13,11 @@ public class BasicMeleeAI : BaseAIMovementController
 
     [Header("Shader")]
     [SerializeField] float shaderFadeMultiplier = 1f;
-    [SerializeField] Material shader;
-
-    private Timer shaderTimer;
-    private float shaderFadeTime = -1f;
+    [SerializeField] GameObject _mesh;
+    
+    private Material _shader;
+    private Timer _shaderTimer;
+    private float _shaderFadeTime = -1f;
 
     [Header("References")]
     [SerializeField] public GameObject _healthBar;
@@ -30,7 +31,11 @@ public class BasicMeleeAI : BaseAIMovementController
     /* === UNITY FUNCTIONS === */
     void Start()
     {
-        shader.SetFloat("Vector1_5443722F", -1);
+        _mesh.GetComponent<Renderer>().materials[0] = Instantiate<Material>(_mesh.GetComponent<Renderer>().materials[0]);
+
+        _shader = _mesh.GetComponent<Renderer>().materials[0];
+
+        _shader.SetFloat("Vector1_5443722F", -1);
 
         for (int i = 0; i < _healthBar.transform.childCount; i++)
         {
@@ -46,11 +51,11 @@ public class BasicMeleeAI : BaseAIMovementController
     {
         base.Update();
 
-        if (shaderTimer != null)
+        if (_shaderTimer != null)
         {
-            shaderFadeTime += Time.deltaTime * shaderFadeMultiplier;
-            Mathf.Clamp(shaderFadeTime, -1, 1);
-            shader.SetFloat("Vector1_5443722F", shaderFadeTime);
+            _shaderFadeTime += Time.deltaTime * shaderFadeMultiplier;
+            Mathf.Clamp(_shaderFadeTime, -1, 1);
+            _shader.SetFloat("Vector1_5443722F", _shaderFadeTime);
         }
 
         _anim.SetFloat("Blend", _agent.velocity.magnitude);
@@ -64,7 +69,7 @@ public class BasicMeleeAI : BaseAIMovementController
         _anim.SetBool("Dead", true);
         _agent.SetDestination(transform.position);
         transform.tag = "Untagged";
-        shaderTimer = new Timer(shaderFadeTime);
+        _shaderTimer = new Timer(_shaderFadeTime);
     }
 
     public override void TakeDamage(HitboxValues hitbox, Entity attacker)
