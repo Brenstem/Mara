@@ -6,6 +6,7 @@ using System.Diagnostics;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem.Interactions;
+using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
 
 public class RangedEnemyAI : BaseAIMovementController
@@ -15,6 +16,13 @@ public class RangedEnemyAI : BaseAIMovementController
     [SerializeField] private GameObject _projectile;
     [SerializeField] private Transform _projectileSpawnPos;
     [SerializeField] public GameObject _healthBar;
+
+    [Header("Shader")]
+    [SerializeField] float shaderFadeMultiplier = 1f;
+    [SerializeField] Material shader;
+
+    private Timer shaderTimer;
+    private float shaderFadeTime = -1f;
 
     [Header("Ranged Attack")]
     [SerializeField] private float _firerate;
@@ -36,6 +44,8 @@ public class RangedEnemyAI : BaseAIMovementController
     /* === UNITY FUNCTIONS === */
     private void Start()
     {
+        shader.SetFloat("Vector1_5443722F", -1);
+
         for (int i = 0; i < _healthBar.transform.childCount; i++)
         {
             _healthBar.transform.GetChild(i).gameObject.SetActive(false);
@@ -50,6 +60,13 @@ public class RangedEnemyAI : BaseAIMovementController
     {
         base.Update();
 
+        if (shaderTimer != null)
+        {
+            shaderFadeTime += Time.deltaTime * shaderFadeMultiplier;
+            Mathf.Clamp(shaderFadeTime, -1, 1);
+            shader.SetFloat("Vector1_5443722F", shaderFadeTime);
+        }
+
         _anim.SetFloat("Blend", _agent.velocity.magnitude);
     }
 
@@ -60,6 +77,7 @@ public class RangedEnemyAI : BaseAIMovementController
         _anim.SetBool("Dead", true);
         _agent.SetDestination(transform.position);
         transform.tag = "Untagged";
+        shaderTimer = new Timer(shaderFadeTime);
     }
 
     public override void TakeDamage(HitboxValues hitbox, Entity attacker)
