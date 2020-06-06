@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem.Interactions;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class RangedEnemyAI : BaseAIMovementController
@@ -19,7 +20,10 @@ public class RangedEnemyAI : BaseAIMovementController
 
     [Header("Shader")]
     [SerializeField] float shaderFadeMultiplier = 1f;
-    [SerializeField] Material shader;
+    [SerializeField] GameObject _mesh;
+
+    private Material _shader;
+    private Material _staffShader;
 
     private Timer shaderTimer;
     private float shaderFadeTime = -1f;
@@ -44,7 +48,14 @@ public class RangedEnemyAI : BaseAIMovementController
     /* === UNITY FUNCTIONS === */
     private void Start()
     {
-        shader.SetFloat("Vector1_5443722F", -1);
+        _mesh.GetComponent<Renderer>().materials[0] = Instantiate<Material>(_mesh.GetComponent<Renderer>().materials[0]);
+        _mesh.GetComponent<Renderer>().materials[1] = Instantiate<Material>(_mesh.GetComponent<Renderer>().materials[1]);
+
+        _shader = _mesh.GetComponent<Renderer>().materials[0];
+        _staffShader = _mesh.GetComponent<Renderer>().materials[1];
+
+        _shader.SetFloat("Vector1_5443722F", -1);
+        _staffShader.SetFloat("Vector1_5443722F", shaderFadeTime);
 
         for (int i = 0; i < _healthBar.transform.childCount; i++)
         {
@@ -64,7 +75,8 @@ public class RangedEnemyAI : BaseAIMovementController
         {
             shaderFadeTime += Time.deltaTime * shaderFadeMultiplier;
             Mathf.Clamp(shaderFadeTime, -1, 1);
-            shader.SetFloat("Vector1_5443722F", shaderFadeTime);
+            _shader.SetFloat("Vector1_5443722F", shaderFadeTime);
+            _staffShader.SetFloat("Vector1_5443722F", shaderFadeTime);
         }
 
         _anim.SetFloat("Blend", _agent.velocity.magnitude);
