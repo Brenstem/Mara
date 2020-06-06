@@ -3562,6 +3562,7 @@ MonoBehaviour:
   minAttackSpeed: 1.5
   attackSpeedIncreaseMax: 1
   minAttackCooldown: 0
+  drainAttackCooldown: 15
   drainRange: 7
   drainChargeTime: 1
   drainAttackTime: 2.5
@@ -3571,6 +3572,7 @@ MonoBehaviour:
   dashAcceleration: 2000
   dashAttackDistanceMin: 7
   dashAttackDistanceMax: 10
+  dashStoppingDistance: 1
   dashLagDurration: 0
   chasingSpeed: 8
   chasingAcceleration: 20
