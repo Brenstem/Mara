@@ -6,10 +6,11 @@ using UnityEngine;
 public class EyeScript : MonoBehaviour
 {
     [SerializeField] private float _moveSpeed;
+    [SerializeField] private float _heightOffset = 1.75f;
 
     void Update()
     {
-        Vector3 targetDirection = (GlobalState.state.Player.transform.position + Vector3.up * 1.75f) - this.transform.position;
+        Vector3 targetDirection = (GlobalState.state.Player.transform.position + Vector3.up * _heightOffset) - this.transform.position;
 
         Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, _moveSpeed * Time.deltaTime, 0);
 
