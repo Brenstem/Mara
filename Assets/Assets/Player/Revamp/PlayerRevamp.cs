@@ -259,6 +259,7 @@ public class PlayerRevamp : Entity
         if (SceneData.gameStarted)
         {
             LoadPlayerData();
+            GlobalState.state.AudioManager.RespawnMusic();
         }
 #else
         LoadPlayerData();
@@ -1538,6 +1539,7 @@ public class PlayerDeathState : State<PlayerRevamp>
     {
         owner.invulerable = true;
         _timer = new Timer(owner.timeUntilFadeOnDeath);
+        GlobalState.state.AudioManager.DeathStingerMusic();
     }
 
     public override void ExitState(PlayerRevamp owner)

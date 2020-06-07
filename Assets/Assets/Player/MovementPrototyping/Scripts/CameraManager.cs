@@ -10,6 +10,8 @@ public class CameraManager : MonoBehaviour
     private PlayerInput _defaultcontrols;
     private Vector2 _lookDelta;
 
+    public float cameraSensitivity = 100;
+
     private void Awake() => _defaultcontrols = new PlayerInput();
 
     private void OnEnable() => _defaultcontrols.Enable();
@@ -18,6 +20,8 @@ public class CameraManager : MonoBehaviour
     private void Start()
     {
         _baseInputType = CinemachineCore.GetInputAxis;
+        //cameraSensitivity = GlobalState.state.
+        //CinemachineCore.GetInputAxis = GetAxisCustom;
         //_defaultcontrols.PlayerControls.Look.performed += ctx => _lookDelta = ctx.ReadValue<Vector2>();
     }
 
@@ -27,6 +31,7 @@ public class CameraManager : MonoBehaviour
         if (_defaultcontrols.PlayerControls.Look.activeControl != null)
         {
             string controls = _defaultcontrols.PlayerControls.Look.activeControl.device.name;
+            CinemachineCore.GetInputAxis = GetAxisCustom;
             if (controls != "Mouse")
             { // Checks if the input device is a mouse
                 CinemachineCore.GetInputAxis = GetAxisCustom;
@@ -41,14 +46,13 @@ public class CameraManager : MonoBehaviour
     public float GetAxisCustom(string axisName)
     {
         _lookDelta = _defaultcontrols.PlayerControls.Look.ReadValue<Vector2>();
-
         if (axisName == "Mouse X")
         {
-            return _lookDelta.x;
+            return _lookDelta.x * Time.deltaTime * cameraSensitivity;
         }
         else if (axisName == "Mouse Y")
         {
-            return _lookDelta.y;
+            return _lookDelta.y * Time.deltaTime * cameraSensitivity;
         }
         return 0;
     }
