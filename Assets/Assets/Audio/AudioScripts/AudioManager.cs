@@ -114,6 +114,11 @@ public class AudioManager : MonoBehaviour
     [EventRef]
     [SerializeField] string mylingFootstepAudio;                    // not implemented in FMOD
 
+    [EventRef]
+    [SerializeField] string mylingIdleAudio;
+
+    EventInstance mylingIdleEvent;
+
     [Header("Sister")]
     [EventRef]
     [SerializeField] string sisterAlertedAudio;                     // not implemented in FMOD
@@ -187,6 +192,11 @@ public class AudioManager : MonoBehaviour
     [SerializeField] string m6Dialog;
     [EventRef]
     [SerializeField] string m7Dialog;
+
+    [Header("Volume Control")]
+    [EventRef]
+    [SerializeField] string volumeControl;
+    EventInstance VolumeControlEvent;
 
     #region Player Audio
     public void PlayerFootStepsAudio(Transform transform, string groundMaterial, Rigidbody rb)
@@ -392,7 +402,19 @@ public class AudioManager : MonoBehaviour
 
     public void MylingFootstepAudio(Vector3 position)              // added
     {
-        //kan behöva specialösning p.g.a fotsteg
+        RuntimeManager.PlayOneShot(mylingFootstepAudio, position);
+    }
+
+    public void MylingIdleAudio(Transform position)
+    {
+        mylingIdleEvent = RuntimeManager.CreateInstance(mylingIdleAudio);
+        RuntimeManager.AttachInstanceToGameObject(mylingIdleEvent, position);
+        mylingIdleEvent.start();
+    }
+
+    public void MylingNoticePlayerAudio()
+    {
+        mylingIdleEvent.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
     }
     #endregion
 
@@ -574,4 +596,22 @@ public class AudioManager : MonoBehaviour
         RuntimeManager.PlayOneShot(m7Dialog, position);
     }
     #endregion
+    #region Volume Control
+    public void VolumeControl (float MusicVolumePercentage, float SFXVolumePercentage)
+    {
+        VolumeControlEvent = RuntimeManager.CreateInstance(volumeControl);
+        VolumeControlEvent.setParameterByName("Music", MusicVolumePercentage);
+        VolumeControlEvent.setParameterByName("SFX", SFXVolumePercentage);
+        VolumeControlEvent.start();
+    }
+    public void MusicVolumeUpdate (float MusicVolumePercentage)
+    {
+        VolumeControlEvent.setParameterByName("Music", MusicVolumePercentage);
+    }
+    public void SFXVolumeUpdate (float SFXVolumePercentage)
+    {
+        VolumeControlEvent.setParameterByName("SFX", SFXVolumePercentage);
+    }
+    #endregion
+
 }
