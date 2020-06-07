@@ -278,6 +278,7 @@ public class AudioManager : MonoBehaviour
     public void PlayerInsanityAudioUpdate(float insanityPercentage)
     {
         InsanityEvent.setParameterByName("InsanityBar", insanityPercentage);
+        RuntimeManager.StudioSystem.setParameterByName("InsanityBarMusic", insanityPercentage);
     }
     public void PlayerHeavyAudioUpdate(float heavyattackvalue)
     {
@@ -511,6 +512,14 @@ public class AudioManager : MonoBehaviour
     public void DeathStingerMusic()
     {
         RuntimeManager.PlayOneShot(deathStingerMusic);
+
+        RuntimeManager.StudioSystem.setParameterByName("InsanityBarMusic", 0);
+        InsanityEvent.setParameterByName("InsanityBar", 0);
+        InsanityEvent.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+        RuntimeManager.StudioSystem.setParameterByName("MuteAllMusic", 1f);
+        RuntimeManager.StudioSystem.setParameterByName("FellOff", 0);
+
+
     }
 
     public void CaveMusic()
@@ -530,7 +539,12 @@ public class AudioManager : MonoBehaviour
 
     public void RespawnMusic()
     {
-       // RuntimeManager.StudioSystem.setParameterByName("FellOff", enemyAmount);
+        RuntimeManager.StudioSystem.setParameterByName("InsanityBarMusic", 0);
+        InsanityEvent.setParameterByName("InsanityBar", 0);
+        InsanityEvent.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+
+        RuntimeManager.StudioSystem.setParameterByName("MuteAllMusic", 0);
+
     }
     #endregion
 
