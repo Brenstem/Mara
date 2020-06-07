@@ -231,6 +231,11 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    public void HeavyAttackInterrupt(float heavyattackvalue, Transform transform)
+    {
+        Heavyattack.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    }
+
     public void PlayerDodgeAudio(Vector3 position)
     {
         RuntimeManager.PlayOneShot(playerDodgeAudio, position);
