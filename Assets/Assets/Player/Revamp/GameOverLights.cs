@@ -69,7 +69,7 @@ public class GameOverLights : MonoBehaviour
             }
             SceneData.lightIndex = lights.Count - 1;
         }
-        yield return new WaitForSecondsRealtime(_fadeDelay);
+        yield return new WaitForSeconds(_fadeDelay);
         DisableLight();
     }
 
