@@ -81,6 +81,7 @@ public class MylingIdleState : BaseIdleState
         base.EnterState(owner);
 
         blend = owner._anim.GetFloat("Blend");
+        GlobalState.state.AudioManager.MylingIdleAudio(owner.transform);
     }
 
     public override void UpdateState(BaseAIMovementController owner)
