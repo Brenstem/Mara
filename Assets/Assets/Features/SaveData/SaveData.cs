@@ -6,7 +6,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class SaveData
 {
-    public static void Save_Data(Data data)
+    public static void Save(Data data)
     {
         if (data.path == null)
         {
@@ -27,7 +27,7 @@ public static class SaveData
         }
     }
 
-    public static Data Load_Data(string datapath)
+    public static Data Load(string datapath)
     {
         string path = Application.persistentDataPath +"/"+ datapath + ".data";
         if (File.Exists(path))

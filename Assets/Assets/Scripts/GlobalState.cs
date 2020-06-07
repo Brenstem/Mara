@@ -6,6 +6,9 @@ using UnityEngine.SceneManagement;
 
 public class GlobalState : MonoBehaviour
 {
+    public delegate void LoadOptionsEvent();
+    public static event LoadOptionsEvent onLoadOptions;
+
     [Header("Hitstop")]
     [SerializeField, Range(0.0f, 1.0f)] private float _entryTimeFraction = 0.043f;
     [SerializeField, Range(0.0f, 1.0f)] private float _exitTimeFraction = 0.22f;
@@ -158,6 +161,13 @@ public class GlobalState : MonoBehaviour
             _state = null;
         }
     }
+
+    public void LoadEvent()
+    {
+        if (onLoadOptions != null)
+            onLoadOptions();
+    }
+
 
     private bool _hitstopRunning;
 

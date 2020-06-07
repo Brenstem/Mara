@@ -29,6 +29,6 @@ public class GenerateDropdownQuality : MonoBehaviour
     public void OnChange(int index)
     {
         QualitySettings.SetQualityLevel(index);
-        SaveData.Save_Data(new OptionData(null));
+        SaveData.Save(new OptionData(null));
     }
 }

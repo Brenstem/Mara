@@ -46,6 +46,11 @@ public class PlayerRevamp : Entity
     [SerializeField, Range(1, 50)] private int inputBufferSize = 1;
     public float timeUntilFadeOnDeath = 2f;
 
+    [Header("Controls")]
+    public float horizontalAimingSpeed = 45f;
+    public float verticalAimingSpeed = 45f;
+    public float gamepadMultiplier = 5f;
+
     [Header("VFX")]
     [SerializeField] private GameObject _parryVFX;
     [SerializeField] private GameObject _hurtVFX;
@@ -168,7 +173,7 @@ public class PlayerRevamp : Entity
 
     private void LoadPlayerData()
     {
-        PlayerData data = (PlayerData)SaveData.Load_Data("player");
+        PlayerData data = (PlayerData)SaveData.Load("player");
         if (data != null)
         {
             GetComponent<CharacterController>().enabled = false;
@@ -189,12 +194,16 @@ public class PlayerRevamp : Entity
 
     private void LoadControls()
     {
-        OptionData d = (OptionData)SaveData.Load_Data("controls");
+        OptionData d = (OptionData)SaveData.Load("controls");
         if (d != null)
         {
             GlobalState.state.language = (GlobalState.LanguageEnum)d.currentLanguage;
             Screen.SetResolution(d.width, d.height, d.isFullscreen, d.refreshRate);
             QualitySettings.SetQualityLevel(d.qualityLevel);
+
+            SceneData.horizontalSensitivity = d.horizontalSensitivity;
+            SceneData.verticalSensitivity = d.verticalSensitivity;
+            SceneData.gamepadMultiplier = d.gamepadMultiplier;
 
             if (d.controlKeyArray != null && d.controlKeyArray.Length > 0)
             {
@@ -258,6 +267,7 @@ public class PlayerRevamp : Entity
 #if UNITY_EDITOR
         if (SceneData.gameStarted)
         {
+            GlobalState.state.LoadEvent();
             LoadPlayerData();
             GlobalState.state.AudioManager.RespawnMusic();
         }
@@ -294,7 +304,7 @@ public class PlayerRevamp : Entity
         /* === MODIFIER EVENTS === */
         modifier.AttackSpeedMultiplier.onModified += UpdateAttackSpeed;
         modifier.MovementSpeedMultiplier.onModified += UpdateMoveSpeed;
-
+        GlobalState.onLoadOptions += LoadControls;
     }
 
     private void Start()
@@ -1132,6 +1142,13 @@ public class LightAttackOneState : State<PlayerRevamp>
                                 return;
                             }
                             break;
+                        case PlayerRevamp.InputType.Parry:
+                            if (owner.IsGrounded)
+                            {
+                                owner.stateMachine.ChangeState(new ParryState());
+                                return;
+                            }
+                            break;
                         default:
                             break;
                     }
@@ -1219,6 +1236,13 @@ public class LightAttackTwoState : State<PlayerRevamp>
                             if (owner.IsGrounded)
                             {
                                 owner.stateMachine.ChangeState(new HeavyAttackState());
+                                return;
+                            }
+                            break;
+                        case PlayerRevamp.InputType.Parry:
+                            if (owner.IsGrounded)
+                            {
+                                owner.stateMachine.ChangeState(new ParryState());
                                 return;
                             }
                             break;
@@ -1331,11 +1355,31 @@ public class HeavyAttackState : State<PlayerRevamp>
                         owner.FaceDirection(_target.transform);
                     owner.controller.Move(owner.transform.forward * owner.heavyStepSpeed * Time.deltaTime);
                 }
-
-                if (owner.interruptable && owner.inputBuffer.Contains(PlayerRevamp.InputType.AttackLight))
+                if (owner.interruptable)
                 {
-                    owner.playerAnimator.SetTrigger("AttackLight");
-                    owner.stateMachine.ChangeState(new LightAttackOneState());
+                    foreach (PlayerRevamp.InputType item in owner.inputBuffer)
+                    {
+                        switch (item)
+                        {
+                            case PlayerRevamp.InputType.AttackLight:
+                                if (owner.IsGrounded)
+                                {
+                                    owner.playerAnimator.SetTrigger("AttackLight");
+                                    owner.stateMachine.ChangeState(new LightAttackOneState());
+                                    return;
+                                }
+                                break;
+                            case PlayerRevamp.InputType.Parry:
+                                if (owner.IsGrounded)
+                                {
+                                    owner.stateMachine.ChangeState(new ParryState());
+                                    return;
+                                }
+                                break;
+                            default:
+                                break;
+                        }
+                    }
                 }
 
                 if (owner.walkCancel && owner.Input != Vector2.zero)

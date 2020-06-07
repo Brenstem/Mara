@@ -7,16 +7,31 @@ public class MenuInputSensitivity : MonoBehaviour
 {
     private enum Type
     {
-        Camera,
-        LockonCamera,
+        Horizontal,
+        Vertical,
+        GamepadMultiplier,
     }
     [SerializeField] private Type type;
 
     [SerializeField] private Slider _slider;
     [SerializeField] private InputField _inputField;
 
-    private void Awake()
+    private void Start()
     {
+        switch (type)
+        {
+            case Type.Horizontal:
+                _slider.value = SceneData.horizontalSensitivity;
+                break;
+            case Type.Vertical:
+                _slider.value = SceneData.verticalSensitivity;
+                break;
+            case Type.GamepadMultiplier:
+                _slider.value = SceneData.gamepadMultiplier;
+                break;
+            default:
+                break;
+        }
         _inputField.text = _slider.value.ToString();
     }
 
@@ -25,11 +40,14 @@ public class MenuInputSensitivity : MonoBehaviour
         _inputField.text = value.ToString();
         switch (type)
         {
-            case Type.Camera:
-                MenuInputResource.cameraSensitivity = value;
+            case Type.Horizontal:
+                MenuInputResource.horizontalSensitivity = value;
                 break;
-            case Type.LockonCamera:
-                MenuInputResource.lockonCameraSensitivity = value;
+            case Type.Vertical:
+                MenuInputResource.verticalSensitivity = value;
+                break;
+            case Type.GamepadMultiplier:
+                MenuInputResource.gamepadMultiplier = value;
                 break;
             default:
                 break;
@@ -43,11 +61,14 @@ public class MenuInputSensitivity : MonoBehaviour
         _slider.value = val;
         switch (type)
         {
-            case Type.Camera:
-                MenuInputResource.cameraSensitivity = val;
+            case Type.Horizontal:
+                MenuInputResource.horizontalSensitivity = val;
                 break;
-            case Type.LockonCamera:
-                MenuInputResource.lockonCameraSensitivity = val;
+            case Type.Vertical:
+                MenuInputResource.verticalSensitivity = val;
+                break;
+            case Type.GamepadMultiplier:
+                MenuInputResource.gamepadMultiplier = val;
                 break;
             default:
                 break;
