@@ -27,8 +27,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 754428931827074919}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.05, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.0003177, y: 0.050794, z: -0.00033765}
+  m_LocalScale: {x: 0.7895372, y: 0.7895372, z: 0.7895372}
   m_Children: []
   m_Father: {fileID: 5102495089523639946}
   m_RootOrder: 0
@@ -70,7 +70,7 @@ MonoBehaviour:
   _collisionLayers:
     serializedVersion: 2
     m_Bits: 2048
-  _damagePerSecond: 1
+  _damagePerSecond: 15
 --- !u!1 &8112370405205718169
 GameObject:
   m_ObjectHideFlags: 0
@@ -158,11 +158,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5102495089523639946}
     m_Modifications:
-    - target: {fileID: 9170235126889273602, guid: c9c09884931743e4285c5a5e8a461f0d,
-        type: 3}
-      propertyPath: m_Name
-      value: toxic bubbles
-      objectReference: {fileID: 0}
     - target: {fileID: 9170235126889273607, guid: c9c09884931743e4285c5a5e8a461f0d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -232,6 +227,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 0.08899013
+      objectReference: {fileID: 0}
+    - target: {fileID: 9170235126889273602, guid: c9c09884931743e4285c5a5e8a461f0d,
+        type: 3}
+      propertyPath: m_Name
+      value: toxic bubbles
       objectReference: {fileID: 0}
     - target: {fileID: 9170235126889273604, guid: c9c09884931743e4285c5a5e8a461f0d,
         type: 3}
