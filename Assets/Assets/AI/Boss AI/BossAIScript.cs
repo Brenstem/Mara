@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.SceneManagement;
 
 public class BossAIScript : Entity
 {
@@ -1907,6 +1908,7 @@ public class BossDeadState : State<BossAIScript>
 
     public override void EnterState(BossAIScript owner)
     {
+        owner.audioManager.BossChangePhaseAudio(owner.transform.position);
         owner.bossAnimator.SetBool("deathBool", true);
         owner.GetComponent<HitboxEventHandler>().DisableHitboxes(0);
         owner.GetComponent<HitboxEventHandler>().EndAnim();
@@ -1921,13 +1923,14 @@ public class BossDeadState : State<BossAIScript>
 
     public override void ExitState(BossAIScript owner)
     {
-
     }
 
     public override void UpdateState(BossAIScript owner)
     {
         if (owner.animationEnded)
         {
+            SceneData.gameStarted = false;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             GameObject.Destroy(owner.gameObject);
             //owner.Destroy(owner.gameObject);
         }

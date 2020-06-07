@@ -37,6 +37,8 @@ public class CaveWallsTriggerScript : MonoBehaviour
             {
                 allWalls[sign][i].SetActive(true);
             }
+
+            sign = (sign + 1) % 2;
         }
     }
 }

@@ -241,7 +241,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    public void HeavyAttackInterrupt(float heavyattackvalue, Transform transform)
+    public void HeavyAttackInterrupt()
     {
         Heavyattack.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
@@ -569,6 +569,7 @@ public class AudioManager : MonoBehaviour
         RuntimeManager.StudioSystem.setParameterByName("MuteAllMusic", 0);
 
     }
+    
     #endregion
 
     #region Dialog

@@ -263,16 +263,10 @@ public class PlayerRevamp : Entity
 
         LoadControls();
 
-#if UNITY_EDITOR
-        if (SceneData.gameStarted)
-        {
+        if (GlobalState.state.GameStarted)
             GlobalState.state.LoadEvent();
-            LoadPlayerData();
-            GlobalState.state.AudioManager.RespawnMusic();
-        }
-#else
         LoadPlayerData();
-#endif
+        GlobalState.state.AudioManager.RespawnMusic();
 
         inputBuffer = new CircularBuffer<InputType>(inputBufferSize);
 
@@ -397,7 +391,7 @@ public class PlayerRevamp : Entity
         }
         else
         {
-            GlobalState.state.AudioManager.RangedEnemyMeleeAttackHitAudio(this.transform.position);
+            GlobalState.state.AudioManager.PlayerHurtAudio(this.transform.position);
 
             if (_hurtVFX)
             {
@@ -1315,6 +1309,8 @@ public class HeavyAttackState : State<PlayerRevamp>
             owner.modifier.DamageMultiplier *= _previousDamageMultiplier;
         else
             owner.modifier.DamageMultiplier.Reset();
+
+        GlobalState.state.AudioManager.HeavyAttackInterrupt();
     }
 
     public override void UpdateState(PlayerRevamp owner)
