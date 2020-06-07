@@ -6,6 +6,22 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class SaveData
 {
+    public static void DeleteSaveFile()
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+
+        string path = Application.persistentDataPath + "/player.data";
+        
+        if (File.Exists(path))
+        {
+            File.Delete(path);
+
+            #if UNITY_EDITOR
+                UnityEditor.AssetDatabase.Refresh();
+            #endif
+        }
+    }
+
     public static void Save(Data data)
     {
         if (data.path == null)
