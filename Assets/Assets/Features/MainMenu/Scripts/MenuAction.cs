@@ -39,6 +39,7 @@ public class MenuAction : MonoBehaviour
     public void SetFullscreenMode(bool isFullscreen)
     {
         Screen.fullScreen = isFullscreen;
+        SaveData.Save_Data(new OptionData(null));
         print(isFullscreen);
         //QualitySettings.SetQualityLevel(qualityIndex);
     }

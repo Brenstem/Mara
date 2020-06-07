@@ -41,7 +41,12 @@ public class GenerateDropdownFullscreen : MonoBehaviour
         {
             Debug.LogWarning("Dropdown component is missing!", this);
         }
+    }
 
-
+    public void OnChange(int index)
+    {
+        Resolution r = Screen.resolutions[index];
+        Screen.SetResolution(r.width, r.height, Screen.fullScreen, r.refreshRate);
+        SaveData.Save_Data(new OptionData(null));
     }
 }

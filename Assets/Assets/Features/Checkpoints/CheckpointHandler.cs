@@ -46,7 +46,7 @@ public class CheckpointHandler : MonoBehaviour
     // Save checkpoint data to struct on checkpoint activation
     public void ActivateCheckpoint(Transform respawnPosition, bool useMaxHealth)
     {
-        print("Checkpoint Set");
+        //print("Checkpoint Set");
 
         float insanity;
 

@@ -25,4 +25,10 @@ public class GenerateDropdownQuality : MonoBehaviour
             Debug.LogWarning("Dropdown component is missing!", this);
         }
     }
+
+    public void OnChange(int index)
+    {
+        QualitySettings.SetQualityLevel(index);
+        SaveData.Save_Data(new OptionData(null));
+    }
 }

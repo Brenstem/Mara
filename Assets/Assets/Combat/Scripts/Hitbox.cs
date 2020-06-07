@@ -95,9 +95,9 @@ public class Hitbox : MonoBehaviour
             //Gizmos.matrix = Matrix4x4.TRS(transform.position + _offset, transform.rotation, transform.localScale);
 
             if (followPoint == null)
-                Gizmos.matrix = Matrix4x4.TRS(transform.TransformPoint(_offset), transform.rotation, transform.localScale);
+                Gizmos.matrix = Matrix4x4.TRS(transform.TransformPoint(_offset), transform.rotation, Vector3.one);
             else
-                Gizmos.matrix = Matrix4x4.TRS(followPoint.TransformPoint(_offset), followPoint.rotation, transform.localScale);
+                Gizmos.matrix = Matrix4x4.TRS(followPoint.TransformPoint(_offset), followPoint.rotation, Vector3.one);
 
             switch (priority)
             {
