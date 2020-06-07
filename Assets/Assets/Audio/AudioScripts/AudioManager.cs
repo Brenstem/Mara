@@ -172,6 +172,22 @@ public class AudioManager : MonoBehaviour
     [EventRef]
     [SerializeField] string murkyWaterDamage;                       // not implemented in FMOD
 
+    [Header("Dialog")]
+    [EventRef]
+    [SerializeField] string a1Dialog;
+    [EventRef]
+    [SerializeField] string b2Dialog;
+    [EventRef]
+    [SerializeField] string d3Dialog;
+    [EventRef]
+    [SerializeField] string f4Dialog;
+    [EventRef]
+    [SerializeField] string gh5Dialog;
+    [EventRef]
+    [SerializeField] string m6Dialog;
+    [EventRef]
+    [SerializeField] string m7Dialog;
+
     #region Player Audio
     public void PlayerFootStepsAudio(Transform transform, string groundMaterial, Rigidbody rb)
     {
@@ -215,6 +231,11 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    public void HeavyAttackInterrupt(float heavyattackvalue, Transform transform)
+    {
+        Heavyattack.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+    }
+
     public void PlayerDodgeAudio(Vector3 position)
     {
         RuntimeManager.PlayOneShot(playerDodgeAudio, position);
@@ -239,6 +260,7 @@ public class AudioManager : MonoBehaviour
     {
         InsanityEvent = RuntimeManager.CreateInstance(InsanityEventAudio);        // Create a new FMOD::Studio::EventInstance.
         InsanityEvent.setParameterByName("InsanityBar", insanityPercentage);     // string-värdet är parameternamnet och insanitypercentage är float-värdet
+        RuntimeManager.StudioSystem.setParameterByName("InsanityBarMusic", insanityPercentage);
 
         InsanityEvent.start();                                                  // spelar upp ljudet
     }
@@ -420,6 +442,8 @@ public class AudioManager : MonoBehaviour
     public void BossChangePhaseAudio(Vector3 position)
     {
         RuntimeManager.PlayOneShot(bossHeavyHurt, position);
+        RuntimeManager.StudioSystem.setParameterByName("BossPhase2", 1);
+
     }
 
     public void BossAOEAttackAudio(Transform position)
@@ -432,7 +456,7 @@ public class AudioManager : MonoBehaviour
     {
         birdAoeAttackEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
-    
+
     public void BossWalkAudio(Vector3 position)
     {
         RuntimeManager.PlayOneShot(birdWalkAudio, position);
@@ -502,6 +526,38 @@ public class AudioManager : MonoBehaviour
     public void CombatMusicParamUpdate(float enemyAmount)
     {
         RuntimeManager.StudioSystem.setParameterByName("CombatNumberOfEnemies", enemyAmount);
+    }
+
+    public void RespawnMusic()
+    {
+       // RuntimeManager.StudioSystem.setParameterByName("FellOff", enemyAmount);
+    }
+    #endregion
+
+    #region Dialog
+    public void A1Dialog(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(a1Dialog, position);
+    }
+    public void B2Dialog(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(b2Dialog, position);
+    }
+    public void D3Dialog(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(d3Dialog, position);
+    }
+    public void GH5Dialog(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(gh5Dialog, position);
+    }
+    public void M6Dialog(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(m6Dialog, position);
+    }
+    public void M7Dialog(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(m7Dialog, position);
     }
     #endregion
 }
