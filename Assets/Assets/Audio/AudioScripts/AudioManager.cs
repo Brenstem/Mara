@@ -246,6 +246,11 @@ public class AudioManager : MonoBehaviour
         Heavyattack.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
 
+    public void BossMusicCancel()
+    {
+        RuntimeManager.StudioSystem.setParameterByName("BossDEad", 1f);
+    }
+
     public void PlayerDodgeAudio(Vector3 position)
     {
         RuntimeManager.PlayOneShot(playerDodgeAudio, position);
