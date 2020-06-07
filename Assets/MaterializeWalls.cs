@@ -7,6 +7,7 @@ public class MaterializeWalls : MonoBehaviour
     [SerializeField] private Material _mat1;
     [SerializeField] private Material _mat2;
     [SerializeField] private Material _mat3;
+    [SerializeField] private GameObject _colliders;
 
     [Header("Shader")]
     [SerializeField] float shaderFadeMultiplier = 1f;
@@ -41,6 +42,7 @@ public class MaterializeWalls : MonoBehaviour
         {
             print("meme");
             _shaderTimer = new Timer(_shaderFadeTime);
+            _colliders.SetActive(true);
         }
     }
 }
