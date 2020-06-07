@@ -239,6 +239,7 @@ public class AudioManager : MonoBehaviour
     {
         InsanityEvent = RuntimeManager.CreateInstance(InsanityEventAudio);        // Create a new FMOD::Studio::EventInstance.
         InsanityEvent.setParameterByName("InsanityBar", insanityPercentage);     // string-värdet är parameternamnet och insanitypercentage är float-värdet
+        RuntimeManager.StudioSystem.setParameterByName("InsanityBarMusic", insanityPercentage);
 
         InsanityEvent.start();                                                  // spelar upp ljudet
     }
@@ -420,6 +421,8 @@ public class AudioManager : MonoBehaviour
     public void BossChangePhaseAudio(Vector3 position)
     {
         RuntimeManager.PlayOneShot(bossHeavyHurt, position);
+        RuntimeManager.StudioSystem.setParameterByName("BossPhase2", 1);
+
     }
 
     public void BossAOEAttackAudio(Transform position)
@@ -432,7 +435,7 @@ public class AudioManager : MonoBehaviour
     {
         birdAoeAttackEvent.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
-    
+
     public void BossWalkAudio(Vector3 position)
     {
         RuntimeManager.PlayOneShot(birdWalkAudio, position);
@@ -502,6 +505,11 @@ public class AudioManager : MonoBehaviour
     public void CombatMusicParamUpdate(float enemyAmount)
     {
         RuntimeManager.StudioSystem.setParameterByName("CombatNumberOfEnemies", enemyAmount);
+    }
+
+    public void RespawnMusic()
+    {
+       // RuntimeManager.StudioSystem.setParameterByName("FellOff", enemyAmount);
     }
     #endregion
 }
