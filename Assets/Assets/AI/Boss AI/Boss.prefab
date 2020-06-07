@@ -397,7 +397,7 @@ MonoBehaviour:
     hitstopTime: 0.1
     parryable: 0
     ignoreArmor: 0
-  _size: {x: 2.996805, y: 1.617612, z: 2.903189}
+  _size: {x: 2.996805, y: 1.617612, z: 3.76}
   _offset: {x: 0, y: 0, z: 0}
   followPoint: {fileID: 0}
   circleCollider: 0
@@ -440,8 +440,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1613292306923649698}
   m_LocalRotation: {x: -0, y: 0.9999854, z: -0, w: -0.005410477}
-  m_LocalPosition: {x: 0, y: 1.5, z: 10}
-  m_LocalScale: {x: 0.3000002, y: 0.3, z: 20.000013}
+  m_LocalPosition: {x: 0.01, y: 1.13, z: 11.720015}
+  m_LocalScale: {x: 0.5615104, y: 0.5607, z: 20.000013}
   m_Children: []
   m_Father: {fileID: 5536227234145099786}
   m_RootOrder: 4
@@ -471,7 +471,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 73c176f402d2c2f4d929aa5da7585d17, type: 2}
+  - {fileID: 2100000, guid: 6c5bd88ce1c19b24d851a08732ab9174, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2351,7 +2351,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6496311428679761329}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.3700002, z: 1.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 6496311429204840572}
@@ -2376,12 +2376,12 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   hitboxValues:
-    damageValue: 5
+    damageValue: 50
     hitstunTime: 0.2
     hitstopTime: 0.2
     parryable: 0
     ignoreArmor: 0
-  _size: {x: 0.5, y: 1, z: 20}
+  _size: {x: 1.42, y: 1.35, z: 27.9}
   _offset: {x: 0, y: 0, z: 0}
   followPoint: {fileID: 0}
   circleCollider: 0
@@ -2558,7 +2558,7 @@ MonoBehaviour:
     hitstopTime: 0.1
     parryable: 0
     ignoreArmor: 0
-  _size: {x: 2.996805, y: 1.617612, z: 2.903189}
+  _size: {x: 2.996805, y: 1.617612, z: 3.76}
   _offset: {x: 0, y: 0, z: 0}
   followPoint: {fileID: 0}
   circleCollider: 0
@@ -3520,7 +3520,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac2019947aa47dc45b41d13851ab1ee6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxHealth: 800
+  _maxHealth: 500
   _healthBar: {fileID: 0}
 --- !u!114 &8831550686162915868
 MonoBehaviour:
@@ -3560,19 +3560,19 @@ MonoBehaviour:
   _fill: {fileID: 0}
   meleeAttackHitboxGroup: {fileID: 6496311428754721636}
   drainAttackHitboxGroup: {fileID: 6496311429204840573}
-  minAttackSpeed: 1.5
+  minAttackSpeed: 1
   attackSpeedIncreaseMax: 1
   minAttackCooldown: 0
-  drainAttackCooldown: 15
-  drainRange: 7
+  drainAttackCooldown: 10
+  drainRange: 5
   drainChargeTime: 1
   drainAttackTime: 2.5
   dashChansePerFrame: 0
   dashAttackChanse: 100
   dashSpeed: 20
   dashAcceleration: 2000
-  dashAttackDistanceMin: 7
-  dashAttackDistanceMax: 10
+  dashAttackDistanceMin: 5
+  dashAttackDistanceMax: 8
   dashStoppingDistance: 1
   dashLagDurration: 0
   chasingSpeed: 8
@@ -3583,14 +3583,14 @@ MonoBehaviour:
   - {fileID: 8112370405205718169, guid: 3392ee89ff117414e82069bc06ba2b0d, type: 3}
   baseSpawnPosOffset: {x: 0, y: -0.05, z: 0}
   aoeAttackCooldown: 7
-  useSpiral: 1
-  spiralLayers: 5
-  poolsPerLayer: 4
+  useSpiral: 0
+  spiralLayers: 3
+  poolsPerLayer: 5
   spiralIntensity: 3
   poolTimeToLive: 10
-  spawnTimeBetweenPools: 0
-  spaceBetweenLayers: 1
-  firstLayerOffset: 2
+  spawnTimeBetweenPools: 0.06666667
+  spaceBetweenLayers: 2.5
+  firstLayerOffset: 4
   spawnEnemyAbilityCooldown: 12
   enemyToSpawnPrefab: {fileID: 2231895019740060378, guid: 1484e21ae7d0ced4a88ec32012c3c014,
     type: 3}
@@ -3611,10 +3611,10 @@ MonoBehaviour:
   dashCollisionLayers:
     serializedVersion: 2
     m_Bits: 311
-  phaseTwoTransitionHP: 0.5
+  phaseTwoTransitionHP: 0.6667
   aggroRange: 20
   defaultTurnSpeed: 4.5
-  drainActiveTurnSpeed: 1
+  drainActiveTurnSpeed: 0
   meleeRange: 2.5
   desiredDistanceToPlayer: 1
   placeholoderDranBeam: {fileID: 1613292306923649698}
