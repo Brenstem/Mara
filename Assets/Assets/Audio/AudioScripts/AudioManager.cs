@@ -114,6 +114,11 @@ public class AudioManager : MonoBehaviour
     [EventRef]
     [SerializeField] string mylingFootstepAudio;                    // not implemented in FMOD
 
+    [EventRef]
+    [SerializeField] string mylingIdleAudio;
+
+    EventInstance mylingIdleEvent;
+
     [Header("Sister")]
     [EventRef]
     [SerializeField] string sisterAlertedAudio;                     // not implemented in FMOD
@@ -392,7 +397,19 @@ public class AudioManager : MonoBehaviour
 
     public void MylingFootstepAudio(Vector3 position)              // added
     {
-        //kan behöva specialösning p.g.a fotsteg
+        RuntimeManager.PlayOneShot(mylingFootstepAudio, position);
+    }
+
+    public void MylingIdleAudio(Transform position)
+    {
+        mylingIdleEvent = RuntimeManager.CreateInstance(mylingIdleAudio);
+        RuntimeManager.AttachInstanceToGameObject(mylingIdleEvent, position);
+        mylingIdleEvent.start();
+    }
+
+    public void MylingNoticePlayerAudio ()
+    {
+        mylingIdleEvent.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
     }
     #endregion
 
