@@ -193,6 +193,11 @@ public class AudioManager : MonoBehaviour
     [EventRef]
     [SerializeField] string m7Dialog;
 
+    [Header("Volume Control")]
+    [EventRef]
+    [SerializeField] string volumeControl;
+    EventInstance VolumeControlEvent;
+
     #region Player Audio
     public void PlayerFootStepsAudio(Transform transform, string groundMaterial, Rigidbody rb)
     {
@@ -407,7 +412,7 @@ public class AudioManager : MonoBehaviour
         mylingIdleEvent.start();
     }
 
-    public void MylingNoticePlayerAudio ()
+    public void MylingNoticePlayerAudio()
     {
         mylingIdleEvent.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
     }
@@ -591,4 +596,22 @@ public class AudioManager : MonoBehaviour
         RuntimeManager.PlayOneShot(m7Dialog, position);
     }
     #endregion
+    #region Volume Control
+    public void VolumeControl (float MusicVolumePercentage, float SFXVolumePercentage)
+    {
+        VolumeControlEvent = RuntimeManager.CreateInstance(volumeControl);
+        VolumeControlEvent.setParameterByName("Music", MusicVolumePercentage);
+        VolumeControlEvent.setParameterByName("SFX", SFXVolumePercentage);
+        VolumeControlEvent.start();
+    }
+    public void MusicVolumeUpdate (float MusicVolumePercentage)
+    {
+        VolumeControlEvent.setParameterByName("Music", MusicVolumePercentage);
+    }
+    public void SFXVolumeUpdate (float SFXVolumePercentage)
+    {
+        VolumeControlEvent.setParameterByName("SFX", SFXVolumePercentage);
+    }
+    #endregion
+
 }
