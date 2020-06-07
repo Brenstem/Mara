@@ -1,0 +1,970 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3327609165666758836
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3269923153108695005}
+  m_Layer: 0
+  m_Name: Monologue Boxes
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3269923153108695005
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3327609165666758836}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1063263494929033850}
+  - {fileID: 1063263495301018249}
+  - {fileID: 1063263494151848647}
+  - {fileID: 1063263493402370923}
+  - {fileID: 1063263495196530463}
+  - {fileID: 1063263494638560457}
+  - {fileID: 1063263495365754482}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &8559538135658779906
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3269923153108695005}
+    m_Modifications:
+    - target: {fileID: 8649424862818498164, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_Name
+      value: Trigger Monologue Box (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 134.87
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -30.91
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -9.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.02802059
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.32254696
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.06797742
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.94369346
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -0.518
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 37.778004
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -8.417001
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 20.268135
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.1846995
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueSwedish.monologueText.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueEnglish.monologueText.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueSwedish.monologueText.Array.data[0].timeToDisplaySlide
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueSwedish.monologueText.Array.data[0].textPerSlide
+      value: Minns du? Det var ditt fel, inte sant?
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueEnglish.monologueText.Array.data[0].timeToDisplaySlide
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueEnglish.monologueText.Array.data[0].textPerSlide
+      value: "Do you remember? It was your fault, wasn\u2019t it?"
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: onlyTriggerOnce
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498167, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: OverrideMinDistance
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498167, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: OverrideMaxDistance
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3fe85600f79391749bfb3c18af707cfa, type: 3}
+--- !u!4 &1063263493402370923 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+    type: 3}
+  m_PrefabInstance: {fileID: 8559538135658779906}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8559538136646268078
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3269923153108695005}
+    m_Modifications:
+    - target: {fileID: 8649424862818498164, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_Name
+      value: Trigger Monologue Box (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 252.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -38.42
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -51.18
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.026419574
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.27791175
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.13249885
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9510579
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 1.34
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 32.396
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -15.473001
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 15.364323
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 6.4200797
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.863112
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueSwedish.monologueText.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueEnglish.monologueText.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueSwedish.monologueText.Array.data[0].timeToDisplaySlide
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueSwedish.monologueText.Array.data[0].textPerSlide
+      value: "Du kan f\xF6rs\xF6ka gl\xF6mma, men jag minns vad du minns."
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueEnglish.monologueText.Array.data[0].timeToDisplaySlide
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueEnglish.monologueText.Array.data[0].textPerSlide
+      value: You can try to forget, but I know your memories.
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: onlyTriggerOnce
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498167, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: OverrideMinDistance
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498167, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: OverrideMaxDistance
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3fe85600f79391749bfb3c18af707cfa, type: 3}
+--- !u!4 &1063263494151848647 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+    type: 3}
+  m_PrefabInstance: {fileID: 8559538136646268078}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8559538137232577184
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3269923153108695005}
+    m_Modifications:
+    - target: {fileID: 8649424862818498164, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_Name
+      value: Trigger Monologue Box (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -20.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 5.47
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -113.59
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 17.346352
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.7207597
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.8735666
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueSwedish.monologueText.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueEnglish.monologueText.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueSwedish.monologueText.Array.data[0].timeToDisplaySlide
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueSwedish.monologueText.Array.data[0].textPerSlide
+      value: "V\xE4lkommen, dr\xF6mmare... Till mitt rike..."
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueEnglish.monologueText.Array.data[0].timeToDisplaySlide
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueEnglish.monologueText.Array.data[0].textPerSlide
+      value: Welcome, dreamer... To my realm...
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: onlyTriggerOnce
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498167, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: OverrideMinDistance
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498167, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: OverrideMaxDistance
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3fe85600f79391749bfb3c18af707cfa, type: 3}
+--- !u!4 &1063263494638560457 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+    type: 3}
+  m_PrefabInstance: {fileID: 8559538137232577184}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8559538137487432723
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3269923153108695005}
+    m_Modifications:
+    - target: {fileID: 8649424862818498164, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_Name
+      value: Trigger Monologue Box (7)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 243.88
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -78.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -16.96
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.014321354
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.33966064
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.044031784
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9394077
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -3.2570002
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 39.638
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 4.1930003
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 12.489689
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.6127946
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueSwedish.monologueText.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueEnglish.monologueText.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueSwedish.monologueText.Array.data[0].timeToDisplaySlide
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueSwedish.monologueText.Array.data[0].textPerSlide
+      value: "Jag kan ta mig in genom minsta springa och in i varje vr\xE5. Jag \xE4r
+        den som rider dina dr\xF6mmar. De har kallat mig nattens drottning och Vanlades
+        baneman. Men det \xE4r dina k\xE4nslor jag livn\xE4r mig p\xE5, och din skuld
+        smakar fantastiskt..."
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueEnglish.monologueText.Array.data[0].timeToDisplaySlide
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueEnglish.monologueText.Array.data[0].textPerSlide
+      value: "I can get through the smallest crevice and into every nook. I\u2019m
+        the one who rides your dreams. They have called me the queen of the night
+        and the slayer of Vanlade. But it is your feelings I feast upon, and your
+        guilt tastes fantastic\u2026"
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: onlyTriggerOnce
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498167, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: OverrideMinDistance
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498167, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: OverrideMaxDistance
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3fe85600f79391749bfb3c18af707cfa, type: 3}
+--- !u!4 &1063263494929033850 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+    type: 3}
+  m_PrefabInstance: {fileID: 8559538137487432723}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8559538137587517467
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3269923153108695005}
+    m_Modifications:
+    - target: {fileID: 8649424862818498164, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_Name
+      value: Trigger Monologue Box (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -14.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 7.61
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -141.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.9925956
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 17.051292
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.1318
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueSwedish.monologueText.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueEnglish.monologueText.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueSwedish.monologueText.Array.data[0].timeToDisplaySlide
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueSwedish.monologueText.Array.data[0].textPerSlide
+      value: "Vad \xE4r detta? Vaken? S\xE5 besynnerligt..."
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueEnglish.monologueText.Array.data[0].timeToDisplaySlide
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueEnglish.monologueText.Array.data[0].textPerSlide
+      value: What is this? Awake? How peculiar...
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: onlyTriggerOnce
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498167, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: OverrideMinDistance
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498167, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: OverrideMaxDistance
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3fe85600f79391749bfb3c18af707cfa, type: 3}
+--- !u!4 &1063263495365754482 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+    type: 3}
+  m_PrefabInstance: {fileID: 8559538137587517467}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8559538137644451040
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3269923153108695005}
+    m_Modifications:
+    - target: {fileID: 8649424862818498164, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_Name
+      value: Trigger Monologue Box (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 270.24
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -63.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -15.49
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.0040064063
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.1590973
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.04811758
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.98608154
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -0.425
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 18.310001
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 5.519
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 10.7443075
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 2.3691
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueSwedish.monologueText.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueEnglish.monologueText.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: onlyTriggerOnce
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueSwedish.monologueText.Array.data[0].timeToDisplaySlide
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueSwedish.monologueText.Array.data[0].textPerSlide
+      value: "Undrar du vem jag \xE4r som k\xE4nner ditt inre?"
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueEnglish.monologueText.Array.data[0].timeToDisplaySlide
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueEnglish.monologueText.Array.data[0].textPerSlide
+      value: Do you wonder who I am, who knows your inner self?
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498167, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: OverrideMinDistance
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498167, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: OverrideMaxDistance
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3fe85600f79391749bfb3c18af707cfa, type: 3}
+--- !u!4 &1063263495301018249 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+    type: 3}
+  m_PrefabInstance: {fileID: 8559538137644451040}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &8559538137757262198
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 3269923153108695005}
+    m_Modifications:
+    - target: {fileID: 8649424862818498164, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_Name
+      value: Trigger Monologue Box (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 46.94
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -11.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -31.86
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.04162436
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.385007
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.010805627
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.92191124
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 4.88
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 45.362003
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0.697
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 9.725552
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.9157591
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueSwedish.monologueText.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueEnglish.monologueText.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueSwedish.monologueText.Array.data[0].timeToDisplaySlide
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueSwedish.monologueText.Array.data[0].textPerSlide
+      value: "Vad g\xF6r den d\xE4r h\xE4r? Ah, s\xE5klart..."
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueEnglish.monologueText.Array.data[0].timeToDisplaySlide
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: monologueEnglish.monologueText.Array.data[0].textPerSlide
+      value: What is that doing here? Ah, of course...
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498165, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: onlyTriggerOnce
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498167, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: OverrideMinDistance
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8649424862818498167, guid: 3fe85600f79391749bfb3c18af707cfa,
+        type: 3}
+      propertyPath: OverrideMaxDistance
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 3fe85600f79391749bfb3c18af707cfa, type: 3}
+--- !u!4 &1063263495196530463 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8649424862818498153, guid: 3fe85600f79391749bfb3c18af707cfa,
+    type: 3}
+  m_PrefabInstance: {fileID: 8559538137757262198}
+  m_PrefabAsset: {fileID: 0}
