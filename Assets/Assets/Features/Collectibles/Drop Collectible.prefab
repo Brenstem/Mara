@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5644683654622283358}
   - component: {fileID: 386527908510245127}
   - component: {fileID: 4327426528178161308}
+  - component: {fileID: 4896270891585758738}
   m_Layer: 13
   m_Name: Drop Collectible
   m_TagString: Untagged
@@ -138,3 +139,16 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 80
   m_CollisionDetection: 0
+--- !u!135 &4896270891585758738
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 386527908510245126}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.69
+  m_Center: {x: 0, y: 0, z: 0}

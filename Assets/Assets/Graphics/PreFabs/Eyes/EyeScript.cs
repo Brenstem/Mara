@@ -10,7 +10,7 @@ public class EyeScript : MonoBehaviour
 
     void Update()
     {
-        Vector3 targetDirection = (GlobalState.state.Player.transform.position + Vector3.up * _heightOffset) - this.transform.position;
+        Vector3 targetDirection = (GlobalState.state.Camera.transform.position + Vector3.up * _heightOffset) - this.transform.position;
 
         Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDirection, _moveSpeed * Time.deltaTime, 0);
 

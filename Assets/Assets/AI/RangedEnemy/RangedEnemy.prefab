@@ -233,7 +233,7 @@ MonoBehaviour:
     type: 3}
   _projectileSpawnPos: {fileID: 3882684762693499996}
   _healthBar: {fileID: 4975744970937386883}
-  shaderFadeMultiplier: 1
+  shaderFadeMultiplier: 0.6
   _mesh: {fileID: 5695580177332629781}
   _firerate: 0
   _aimAssistDistanceCutOff: 3
@@ -647,16 +647,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: HitboxGroup
       objectReference: {fileID: 0}
-    - target: {fileID: 2778033842384518024, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
-        type: 3}
-      propertyPath: hitboxEventHandler
-      value: 
-      objectReference: {fileID: 697183228}
-    - target: {fileID: 2778033842384518024, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
-        type: 3}
-      propertyPath: hitboxEventHandler
-      value: 
-      objectReference: {fileID: 697183228}
     - target: {fileID: 2778033842384518025, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -767,6 +757,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 9.5
       objectReference: {fileID: 0}
+    - target: {fileID: 2778033842384518024, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
+        type: 3}
+      propertyPath: hitboxEventHandler
+      value: 
+      objectReference: {fileID: 697183228}
+    - target: {fileID: 2778033842384518024, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
+        type: 3}
+      propertyPath: hitboxEventHandler
+      value: 
+      objectReference: {fileID: 697183228}
     - target: {fileID: 2778033842924246593, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
       propertyPath: hitboxValues.damageValue

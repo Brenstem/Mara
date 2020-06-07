@@ -99,7 +99,7 @@ public class PlayerInsanity : EntityHealth
     {
         if (_playerLight)
         {
-            _playerLight.intensity = GetInsanityPercentage();
+            _playerLight.intensity = (100 - GetInsanityPercentage()) / 2;
         }
 
         if (HealthBar != null)
@@ -137,7 +137,7 @@ public class PlayerInsanity : EntityHealth
         
         if (!HealthBar)
         {
-            throw new System.Exception("Healthbar prefab missing!");
+            //throw new System.Exception("Healthbar prefab missing!");
         }
     }
 
@@ -196,7 +196,10 @@ public class PlayerInsanity : EntityHealth
         }
 
         ActivateBuffs();
-        HealthBar.SetValue(CurrentHealth);
+        if (HealthBar != null)
+        {
+            HealthBar.SetValue(CurrentHealth);
+        }
     }
 
     public override void Damage(HitboxValues hitbox)
@@ -204,7 +207,10 @@ public class PlayerInsanity : EntityHealth
         _healTimer = new Timer(_timeBeforeHeal);
 
         CurrentHealth += hitbox.damageValue;
-        HealthBar.SetValue(CurrentHealth);
+        if (HealthBar != null)
+        {
+            HealthBar.SetValue(CurrentHealth);
+        }
         ActivateBuffs();
         UpdateHealthTier();
     }
@@ -247,7 +253,7 @@ public class PlayerInsanity : EntityHealth
     {
         if (_playerLight)
         {
-            _playerLight.intensity = GetInsanityPercentage();
+            _playerLight.intensity = 1 - GetInsanityPercentage();
         }
 
         #region Buffs
