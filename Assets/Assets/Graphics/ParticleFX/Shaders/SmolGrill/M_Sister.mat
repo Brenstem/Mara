@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: M_Ghost
+  m_Name: M_Sister
   m_Shader: {fileID: -6465566751694194690, guid: 384d978c44272c6459932fdc903e3364,
     type: 3}
   m_ShaderKeywords: _BLENDMODE_ALPHA _SURFACE_TYPE_TRANSPARENT
@@ -121,6 +121,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
+    - Vector1_3084784C: 2
+    - Vector1_86BE48DC: 1
+    - Vector1_B7D7A343: 0.1
+    - Vector1_F1154ACD: 0
+    - Vector1_F7F258E2: 2
     - _AORemapMax: 1
     - _AORemapMin: 0
     - _ATDistance: 1
@@ -243,6 +248,7 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     m_Colors:
+    - Color_AFA6B339: {r: 0.4764151, g: 1, b: 0.980242, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
