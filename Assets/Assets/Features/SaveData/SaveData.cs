@@ -22,6 +22,8 @@ public static class SaveData
 
             bf.Serialize(stream, data);
             stream.Close();
+
+            Debug.Log("Saved on \"" + path + "\" with values: " + data.ToString());
         }
     }
 

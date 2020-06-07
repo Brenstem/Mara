@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class LockonFunctionality : MonoBehaviour
 {
     [Header("Information")]
-    [SerializeField] private LayerMask _enemyMask;
+    [SerializeField] private LayerMask _lockonMask;
     [SerializeField] private LayerMask _groundMask;
     [TagSelector] public string lockonTag;
     [SerializeField] private Transform _lockonThreshold;
@@ -79,7 +79,7 @@ public class LockonFunctionality : MonoBehaviour
 
     void TargetRecognition()
     {
-        _cols = Physics.OverlapSphere(transform.position, _trackRadius, _enemyMask);
+        _cols = Physics.OverlapSphere(transform.position, _trackRadius, _lockonMask);
 
         GlobalState.state.AudioManager.CombatMusicParamUpdate(_enemyAmount);
 
@@ -121,7 +121,7 @@ public class LockonFunctionality : MonoBehaviour
                             {
                                 hit = true;
                             }
-                            else if (Physics.Raycast(_lockonThreshold.position, direction.normalized, out secondHit, Mathf.Infinity, _enemyMask))
+                            else if (Physics.Raycast(_lockonThreshold.position, direction.normalized, out secondHit, Mathf.Infinity, _lockonMask))
                             {
                                 if (!secondHit.collider.CompareTag(lockonTag))
                                 {

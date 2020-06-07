@@ -17,10 +17,7 @@ public class OptionData : Data
 
     public OptionData(Dictionary<System.Guid, string> controls)
     {
-        controlKeyArray = new byte[controls.Keys.Count][];
-        valueArray = new string[controls.Values.Count];
         path = "controls";
-
         width = Screen.currentResolution.width;
         height = Screen.currentResolution.height;
         refreshRate = Screen.currentResolution.refreshRate;
@@ -28,13 +25,36 @@ public class OptionData : Data
         qualityLevel = QualitySettings.GetQualityLevel();
 
         currentLanguage = (int)GlobalState.state.language;
-
-        int i = 0;
-        foreach (var key in controls.Keys)
+        if (controls == null)
         {
-            controlKeyArray[i] = key.ToByteArray();
-            valueArray[i] = controls[key];
-            i++;
+            OptionData d = (OptionData)SaveData.Load_Data("controls");
+            if (d.controlKeyArray.Length > 0)
+            {
+                controlKeyArray = d.controlKeyArray;
+                valueArray = d.valueArray;
+            }
+            else
+            {
+                controlKeyArray = new byte[0][];
+                valueArray = new string[0];
+            }
         }
+        else
+        {
+            controlKeyArray = new byte[controls.Keys.Count][];
+            valueArray = new string[controls.Values.Count];
+            int i = 0;
+            foreach (var key in controls.Keys)
+            {
+                controlKeyArray[i] = key.ToByteArray();
+                valueArray[i] = controls[key];
+                i++;
+            }
+        }
+    }
+
+    public override string ToString()
+    {
+        return "Width: " + width + ", height: " + height + ", refresh rate: " + refreshRate + ", fullscreen: " + isFullscreen + ", quality level: " + qualityLevel + ", language: " + currentLanguage + ",  control key length: " + controlKeyArray.Length;
     }
 }
