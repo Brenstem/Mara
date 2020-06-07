@@ -63,6 +63,8 @@ public class PlayerRevamp : Entity
     public float rotationSpeed = 15f;
     public float rotationAngleUntilMove = 30;
     public float timeUntilIdle = 5f;
+    public float stoppingBlendDuration = 0.15f;
+    public float toMovingBlendDuration = 0.3f;
 
     [Header("Jump")]
     [SerializeField] private float _gravity = -9.82f;
@@ -309,9 +311,13 @@ public class PlayerRevamp : Entity
 
     private void Update()
     {
+        if (Input == Vector2.zero)
+        {
+            playerAnimator.SetFloat("StrafeDirX", Mathf.Lerp(playerAnimator.GetFloat("StrafeDirX"), Input.x, Time.deltaTime * 8));
+            playerAnimator.SetFloat("StrafeDirY", Mathf.Lerp(playerAnimator.GetFloat("StrafeDirY"), Input.y, Time.deltaTime * 8));
+        }
         stateMachine.Update();
-        playerAnimator.SetFloat("StrafeDirX", Input.x);
-        playerAnimator.SetFloat("StrafeDirY", Input.y);
+
 
         //print(stateMachine.currentState);
 
@@ -689,8 +695,6 @@ public class IdleState : State<PlayerRevamp>
     private float time = 0;
     private float blend;
 
-    public float idleBlendDuration = 0.15f;
-
     public override void EnterState(PlayerRevamp owner)
     {
         blend = owner.playerAnimator.GetFloat("Blend");
@@ -713,8 +717,11 @@ public class IdleState : State<PlayerRevamp>
             owner.stateMachine.ChangeState(new MovementState());
         }
 
-        owner.playerAnimator.SetFloat("Blend", Mathf.Lerp(blend, 0, time / (idleBlendDuration * blend)));
-
+        //owner.playerAnimator.SetFloat("Blend", Mathf.Lerp(blend, 0, time / (owner.stoppingBlendDuration * blend)));
+        if (blend <= 0.001f)
+            owner.playerAnimator.SetFloat("Blend", 0);
+        else
+            owner.playerAnimator.SetFloat("Blend", Mathf.Lerp(blend, 0, time / (owner.stoppingBlendDuration * (blend))));
         time += Time.deltaTime;
 
         /*
@@ -775,12 +782,14 @@ public class MovementState : State<PlayerRevamp>
 {
     private bool _isMoving;
     private float time = 0;
-    public float idleBlendDuration = 0.15f;
     private float blend;
+    private Vector2 lazyDir;
 
     public override void EnterState(PlayerRevamp owner)
     {
         blend = owner.playerAnimator.GetFloat("Blend");
+        lazyDir = new Vector2(0, 0);
+
         owner.ikImplementationReference.useIK = true;
         owner.IsAlert = false;
     }
@@ -863,6 +872,11 @@ public class MovementState : State<PlayerRevamp>
 
                 owner._currentDirection = move;
 
+                owner.playerAnimator.SetFloat("StrafeDirX", lazyDir.x);
+                owner.playerAnimator.SetFloat("StrafeDirY", lazyDir.y);
+
+                lazyDir = Vector2.Lerp(lazyDir, owner.Input, Time.deltaTime * 3);
+
                 owner.controller.Move(move * owner.maxSpeed * Time.deltaTime);
             }
             else if (owner.Input.magnitude >= movingThreshold)
@@ -884,12 +898,10 @@ public class MovementState : State<PlayerRevamp>
                 Vector3 move = owner.transform.forward * owner.Input.magnitude;                 // Constant forward facing force
 
 
-
                 float magnitude = owner.Input.magnitude > 1 ? 1 : owner.Input.magnitude;
-                //owner.playerAnimator.SetFloat("Blend", magnitude);
-                if (time <= idleBlendDuration)
+                if (time < owner.toMovingBlendDuration && blend != 1)
                 {
-                    owner.playerAnimator.SetFloat("Blend", Mathf.Lerp(blend, magnitude, time / (idleBlendDuration * blend)));
+                    owner.playerAnimator.SetFloat("Blend", Mathf.Lerp(blend, magnitude, time / (owner.toMovingBlendDuration * (1 - blend))));
                     time += Time.deltaTime;
                 }
                 else
@@ -969,6 +981,20 @@ public class DashingState : State<PlayerRevamp>
         {
             Quaternion lookRotation = Quaternion.LookRotation(new Vector3(_dashDirection.x, 0, _dashDirection.z));
             owner.transform.rotation = lookRotation;
+        }
+        if (owner.IsLockedOn)
+        {
+            owner.playerAnimator.SetFloat("DashDirX", owner.Input.x);
+
+            if (owner.Input.y == 0)
+                owner.playerAnimator.SetFloat("DashDirY", 1);
+            else
+                owner.playerAnimator.SetFloat("DashDirY", owner.Input.y);
+        }
+        else
+        {
+            owner.playerAnimator.SetFloat("DashDirX", _dashDirection.x);
+            owner.playerAnimator.SetFloat("DashDirY", _dashDirection.z);
         }
     }
 
@@ -1287,9 +1313,7 @@ public class HeavyAttackState : State<PlayerRevamp>
                     owner.actionHitboxGroup.enabled = false; // charge state krävs för att synkronisera med animationen (exit time)
                     if (owner.modifier.DamageMultiplier.IsModified)
                         _previousDamageMultiplier = owner.modifier.DamageMultiplier.Multiplier;
-
                     owner.modifier.DamageMultiplier *= owner.modifier.DamageMultiplier.Multiplier + (_chargeTimer.Time / owner.heavyChargeTime * owner.heavyMaxDamageMultiplier);
-                    Debug.Log(owner.modifier.DamageMultiplier.Multiplier);
                 }
             }
             else

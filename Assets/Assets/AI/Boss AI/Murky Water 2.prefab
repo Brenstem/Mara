@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 3465645773498173442}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 150, y: 5.1779895, z: 150}
+  m_LocalScale: {x: 213.44693, y: 5.4886684, z: 192.26279}
   m_Children:
   - {fileID: 6115899853736482862}
   - {fileID: 2944465522364182656}
@@ -107,8 +107,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7114371689223645757}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.05, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0.00021217, y: 0.050653, z: -0.00031321}
+  m_LocalScale: {x: 0.82757, y: 0.82757, z: 0.82757}
   m_Children: []
   m_Father: {fileID: 451252357907855889}
   m_RootOrder: 0
@@ -150,7 +150,7 @@ MonoBehaviour:
   _collisionLayers:
     serializedVersion: 2
     m_Bits: 2048
-  _damagePerSecond: 1
+  _damagePerSecond: 15
 --- !u!1001 &6314028577590192519
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -158,11 +158,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 451252357907855889}
     m_Modifications:
-    - target: {fileID: 9170235126889273602, guid: c9c09884931743e4285c5a5e8a461f0d,
-        type: 3}
-      propertyPath: m_Name
-      value: toxic bubbles
-      objectReference: {fileID: 0}
     - target: {fileID: 9170235126889273607, guid: c9c09884931743e4285c5a5e8a461f0d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -221,17 +216,22 @@ PrefabInstance:
     - target: {fileID: 9170235126889273607, guid: c9c09884931743e4285c5a5e8a461f0d,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.1
+      value: 0.122650005
       objectReference: {fileID: 0}
     - target: {fileID: 9170235126889273607, guid: c9c09884931743e4285c5a5e8a461f0d,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.1
+      value: 0.122650005
       objectReference: {fileID: 0}
     - target: {fileID: 9170235126889273607, guid: c9c09884931743e4285c5a5e8a461f0d,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.1
+      value: 0.122650005
+      objectReference: {fileID: 0}
+    - target: {fileID: 9170235126889273602, guid: c9c09884931743e4285c5a5e8a461f0d,
+        type: 3}
+      propertyPath: m_Name
+      value: toxic bubbles
       objectReference: {fileID: 0}
     - target: {fileID: 9170235126889273604, guid: c9c09884931743e4285c5a5e8a461f0d,
         type: 3}
