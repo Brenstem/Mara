@@ -1240,6 +1240,7 @@ public class BossPhaseOneCombatState : State<BossAIScript>
 
             if (_drainAttackRange < Vector3.Distance(owner.transform.position, owner.player.transform.position) && _drainTimer.Expired)
             {
+                _drainTimer = new Timer(_drainAttackCooldown);
                 owner.actionStateMachine.ChangeState(owner.drainAttackChargeState);
             }
             else
@@ -1647,6 +1648,7 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
 
             if (_drainAttackRange < Vector3.Distance(owner.transform.position, owner.player.transform.position) && _drainTimer.Expired)
             {
+                _drainTimer = new Timer(_drainAttackCooldown);
                 owner.actionStateMachine.ChangeState(owner.drainAttackChargeState);
             }
             else
