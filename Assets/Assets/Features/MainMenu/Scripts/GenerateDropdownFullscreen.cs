@@ -47,5 +47,6 @@ public class GenerateDropdownFullscreen : MonoBehaviour
     {
         Resolution r = Screen.resolutions[index];
         Screen.SetResolution(r.width, r.height, Screen.fullScreen, r.refreshRate);
+        SaveData.Save_Data(new OptionData(null));
     }
 }
