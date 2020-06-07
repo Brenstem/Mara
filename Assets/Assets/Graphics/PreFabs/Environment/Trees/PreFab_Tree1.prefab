@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 1523089959304807665}
   m_Layer: 0
   m_Name: PreFab_Tree1
-  m_TagString: Untagged
+  m_TagString: CameraIgnore
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &5293955699799770926
 Transform:
@@ -57,6 +57,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PreFab_Tree1
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: dc01e4b0942837d40a4d1857aad8eb19,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: -6217191440602387399, guid: dc01e4b0942837d40a4d1857aad8eb19,
+        type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: dc01e4b0942837d40a4d1857aad8eb19,
         type: 3}

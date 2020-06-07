@@ -107,7 +107,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7114371689223645757}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.00021217, y: 0.050653, z: -0.00031321}
+  m_LocalPosition: {x: 0.00021217, y: 0.0076, z: -0.00031321}
   m_LocalScale: {x: 0.82757, y: 0.82757, z: 0.82757}
   m_Children: []
   m_Father: {fileID: 451252357907855889}
@@ -158,40 +158,45 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 451252357907855889}
     m_Modifications:
+    - target: {fileID: 9170235126889273602, guid: c9c09884931743e4285c5a5e8a461f0d,
+        type: 3}
+      propertyPath: m_Name
+      value: toxic bubbles
+      objectReference: {fileID: 0}
     - target: {fileID: 9170235126889273607, guid: c9c09884931743e4285c5a5e8a461f0d,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.00146
+      value: 0.00187
       objectReference: {fileID: 0}
     - target: {fileID: 9170235126889273607, guid: c9c09884931743e4285c5a5e8a461f0d,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.015
       objectReference: {fileID: 0}
     - target: {fileID: 9170235126889273607, guid: c9c09884931743e4285c5a5e8a461f0d,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.00136
+      value: -0.00176
       objectReference: {fileID: 0}
     - target: {fileID: 9170235126889273607, guid: c9c09884931743e4285c5a5e8a461f0d,
         type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.68454427
+      value: -0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 9170235126889273607, guid: c9c09884931743e4285c5a5e8a461f0d,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.17719817
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 9170235126889273607, guid: c9c09884931743e4285c5a5e8a461f0d,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.17719813
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 9170235126889273607, guid: c9c09884931743e4285c5a5e8a461f0d,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.68454427
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 9170235126889273607, guid: c9c09884931743e4285c5a5e8a461f0d,
         type: 3}
@@ -201,7 +206,7 @@ PrefabInstance:
     - target: {fileID: 9170235126889273607, guid: c9c09884931743e4285c5a5e8a461f0d,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
-      value: -90.00001
+      value: -90
       objectReference: {fileID: 0}
     - target: {fileID: 9170235126889273607, guid: c9c09884931743e4285c5a5e8a461f0d,
         type: 3}
@@ -211,31 +216,36 @@ PrefabInstance:
     - target: {fileID: 9170235126889273607, guid: c9c09884931743e4285c5a5e8a461f0d,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 29.026001
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9170235126889273607, guid: c9c09884931743e4285c5a5e8a461f0d,
         type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.122650005
+      value: 0.0004582659
       objectReference: {fileID: 0}
     - target: {fileID: 9170235126889273607, guid: c9c09884931743e4285c5a5e8a461f0d,
         type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.122650005
+      value: 0.0004582659
       objectReference: {fileID: 0}
     - target: {fileID: 9170235126889273607, guid: c9c09884931743e4285c5a5e8a461f0d,
         type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.122650005
-      objectReference: {fileID: 0}
-    - target: {fileID: 9170235126889273602, guid: c9c09884931743e4285c5a5e8a461f0d,
-        type: 3}
-      propertyPath: m_Name
-      value: toxic bubbles
+      value: 0.0004582659
       objectReference: {fileID: 0}
     - target: {fileID: 9170235126889273604, guid: c9c09884931743e4285c5a5e8a461f0d,
         type: 3}
       propertyPath: SubModule.enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9170235126889273604, guid: c9c09884931743e4285c5a5e8a461f0d,
+        type: 3}
+      propertyPath: moveWithTransform
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9170235126889273604, guid: c9c09884931743e4285c5a5e8a461f0d,
+        type: 3}
+      propertyPath: scalingMode
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

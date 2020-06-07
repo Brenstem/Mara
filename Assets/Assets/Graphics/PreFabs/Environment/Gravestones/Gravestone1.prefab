@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 7335978691203320785}
   - component: {fileID: 8224171281074109969}
   - component: {fileID: 9183937117663135103}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: gravestone01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &7335978691203320785
 Transform:
@@ -88,12 +88,12 @@ GameObject:
   m_Component:
   - component: {fileID: 9099604243587336709}
   - component: {fileID: 1516614501691268035}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Gravestone1
-  m_TagString: Untagged
+  m_TagString: CameraIgnore
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &9099604243587336709
 Transform:
@@ -104,7 +104,7 @@ Transform:
   m_GameObject: {fileID: 8513311208022687733}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -5.506, y: 1.218, z: 0.331}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 114.25301, y: 114.253105, z: 114.25301}
   m_Children:
   - {fileID: 7335978691203320785}
   m_Father: {fileID: 0}
