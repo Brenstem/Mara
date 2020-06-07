@@ -38,4 +38,9 @@ public class GenerateDropdownLanguage : MonoBehaviour
             Debug.LogWarning("Dropdown component is missing!", this);
         }
     }
+
+    public void OnChange(int index)
+    {
+        GlobalState.state.language = (GlobalState.LanguageEnum)index;
+    }
 }

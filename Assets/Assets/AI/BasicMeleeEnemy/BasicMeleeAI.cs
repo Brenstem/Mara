@@ -9,7 +9,15 @@ public class BasicMeleeAI : BaseAIMovementController
     [SerializeField] private float _hitstunOnParry;
 
     [Header("Hitstun")]
-    [SerializeField] public float _attackDelayAfterHitstun; 
+    [SerializeField] public float _attackDelayAfterHitstun;
+
+    [Header("Shader")]
+    [SerializeField] float shaderFadeMultiplier = 1f;
+    [SerializeField] GameObject _mesh;
+    
+    private Material _shader;
+    private Timer _shaderTimer;
+    private float _shaderFadeTime = -1f;
 
     [Header("References")]
     [SerializeField] public GameObject _healthBar;
@@ -23,6 +31,12 @@ public class BasicMeleeAI : BaseAIMovementController
     /* === UNITY FUNCTIONS === */
     void Start()
     {
+        _mesh.GetComponent<Renderer>().materials[0] = Instantiate<Material>(_mesh.GetComponent<Renderer>().materials[0]);
+
+        _shader = _mesh.GetComponent<Renderer>().materials[0];
+
+        _shader.SetFloat("Vector1_5443722F", -1);
+
         for (int i = 0; i < _healthBar.transform.childCount; i++)
         {
             _healthBar.transform.GetChild(i).gameObject.SetActive(false);
@@ -37,6 +51,13 @@ public class BasicMeleeAI : BaseAIMovementController
     {
         base.Update();
 
+        if (_shaderTimer != null)
+        {
+            _shaderFadeTime += Time.deltaTime * shaderFadeMultiplier;
+            Mathf.Clamp(_shaderFadeTime, -1, 1);
+            _shader.SetFloat("Vector1_5443722F", _shaderFadeTime);
+        }
+
         _anim.SetFloat("Blend", _agent.velocity.magnitude);
     }
 
@@ -48,6 +69,7 @@ public class BasicMeleeAI : BaseAIMovementController
         _anim.SetBool("Dead", true);
         _agent.SetDestination(transform.position);
         transform.tag = "Untagged";
+        _shaderTimer = new Timer(_shaderFadeTime);
     }
 
     public override void TakeDamage(HitboxValues hitbox, Entity attacker)
@@ -55,7 +77,7 @@ public class BasicMeleeAI : BaseAIMovementController
         EnableHitstun(hitbox.hitstunTime, hitbox.ignoreArmor);
         base.TakeDamage(hitbox, attacker);
 
-        Instantiate(_hurtVFX, this.transform.position + new Vector3(0, 1.5f, 0), this.transform.rotation); ;
+        // Instantiate(_hurtVFX, this.transform.position + new Vector3(0, 1.5f, 0), this.transform.rotation); ;
 
         if (hitbox.damageValue > 5)
         {

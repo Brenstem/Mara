@@ -233,6 +233,8 @@ MonoBehaviour:
     type: 3}
   _projectileSpawnPos: {fileID: 3882684762693499996}
   _healthBar: {fileID: 4975744970937386883}
+  shaderFadeMultiplier: 1
+  _mesh: {fileID: 5695580177332629781}
   _firerate: 0
   _aimAssistDistanceCutOff: 3
   _meleeRange: 2
@@ -517,11 +519,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: anim_basicEnemy_Ranged
       objectReference: {fileID: 0}
-    - target: {fileID: -6057140222963153312, guid: adf34ba624f6f3549ace6940ab49be95,
-        type: 3}
-      propertyPath: m_Controller
-      value: 
-      objectReference: {fileID: 9100000, guid: 1ff0ee8a3b2244348bb840e86d2808c6, type: 2}
     - target: {fileID: -4216859302048453862, guid: adf34ba624f6f3549ace6940ab49be95,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -592,6 +589,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.z
       value: 1.75
       objectReference: {fileID: 0}
+    - target: {fileID: -6057140222963153312, guid: adf34ba624f6f3549ace6940ab49be95,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 1ff0ee8a3b2244348bb840e86d2808c6, type: 2}
     - target: {fileID: 7650750634625878982, guid: adf34ba624f6f3549ace6940ab49be95,
         type: 3}
       propertyPath: m_Materials.Array.data[2]
@@ -601,12 +603,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: 0184c7a3b8b50464498132677f5ebb6e, type: 2}
+      objectReference: {fileID: 2100000, guid: 7da9ea0b6bdfaeb4a8b1ac9fd9d86a2e, type: 2}
     - target: {fileID: 7650750634625878982, guid: adf34ba624f6f3549ace6940ab49be95,
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 1e792a7f8b53c7943871f1ac282f498a, type: 2}
+      objectReference: {fileID: 2100000, guid: 35f41573d44a7af4ea0d118191735d8b, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: adf34ba624f6f3549ace6940ab49be95, type: 3}
 --- !u!1 &3740833856009472521 stripped
@@ -618,6 +620,12 @@ GameObject:
 --- !u!4 &410185227624118298 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: adf34ba624f6f3549ace6940ab49be95,
+    type: 3}
+  m_PrefabInstance: {fileID: 4669090988226794240}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5695580177332629781 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1135244083771908629, guid: adf34ba624f6f3549ace6940ab49be95,
     type: 3}
   m_PrefabInstance: {fileID: 4669090988226794240}
   m_PrefabAsset: {fileID: 0}
@@ -643,7 +651,12 @@ PrefabInstance:
         type: 3}
       propertyPath: hitboxEventHandler
       value: 
-      objectReference: {fileID: 6667721907499913706}
+      objectReference: {fileID: 697183228}
+    - target: {fileID: 2778033842384518024, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
+        type: 3}
+      propertyPath: hitboxEventHandler
+      value: 
+      objectReference: {fileID: 697183228}
     - target: {fileID: 2778033842384518025, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -754,11 +767,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 9.5
       objectReference: {fileID: 0}
-    - target: {fileID: 2778033842384518024, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
-        type: 3}
-      propertyPath: hitboxEventHandler
-      value: 
-      objectReference: {fileID: 697183228}
     - target: {fileID: 2778033842924246593, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
       propertyPath: hitboxValues.damageValue
