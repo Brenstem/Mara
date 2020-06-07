@@ -397,7 +397,7 @@ public class PlayerRevamp : Entity
         }
         else
         {
-            GlobalState.state.AudioManager.RangedEnemyMeleeAttackHitAudio(this.transform.position);
+            GlobalState.state.AudioManager.PlayerHurtAudio(this.transform.position);
 
             if (_hurtVFX)
             {
