@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5098342326289789461
+--- !u!1 &1493549561364794637
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,37 +8,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5012024836148085542}
-  - component: {fileID: 6742400643128379348}
-  - component: {fileID: 3774442788988937710}
+  - component: {fileID: 6944443911092900290}
+  - component: {fileID: 7356044700613000388}
+  - component: {fileID: 9212691788189323110}
   m_Layer: 9
-  m_Name: Enter Cave
+  m_Name: Cave exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5012024836148085542
+--- !u!4 &6944443911092900290
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5098342326289789461}
-  m_LocalRotation: {x: -0.037836283, y: 0.97309166, z: -0.084786266, w: -0.21088469}
-  m_LocalPosition: {x: 94.93, y: -8.89, z: 9.720001}
-  m_LocalScale: {x: 9.648355, y: 8.697925, z: -0.9910129}
+  m_GameObject: {fileID: 1493549561364794637}
+  m_LocalRotation: {x: -0.04715875, y: 0.80681825, z: -0.06897712, w: 0.5848613}
+  m_LocalPosition: {x: 95.1, y: -11, z: 14.4}
+  m_LocalScale: {x: 14.455218, y: 16.34027, z: 40.017235}
   m_Children: []
   m_Father: {fileID: 7751487591708997888}
   m_RootOrder: 24
-  m_LocalEulerAnglesHint: {x: 10.426001, y: 204.254, z: -2.207}
---- !u!114 &6742400643128379348
+  m_LocalEulerAnglesHint: {x: 3.2180002, y: 107.869, z: -9.034}
+--- !u!114 &7356044700613000388
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5098342326289789461}
+  m_GameObject: {fileID: 1493549561364794637}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
@@ -46,26 +46,164 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CollisionTag: Player
   Emitters:
-  - Target: {fileID: 0}
+  - Target: {fileID: 7751487590954023105}
     Params:
-    - Name: Location
-      Value: 3
     - Name: Wind intensity
-      Value: 0
-  TriggerEvent: 3
---- !u!65 &3774442788988937710
-BoxCollider:
+      Value: 1.3
+    - Name: Location
+      Value: 1
+  TriggerEvent: 4
+--- !u!135 &9212691788189323110
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5098342326289789461}
+  m_GameObject: {fileID: 1493549561364794637}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &3053483260913609310
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8555898156229973908}
+  - component: {fileID: 7781225867780880648}
+  - component: {fileID: 2686391952558302580}
+  m_Layer: 9
+  m_Name: Bridge 3 (side) (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8555898156229973908
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3053483260913609310}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 300.4, y: -53.74, z: -71.3}
+  m_LocalScale: {x: 97.872215, y: 0.30772, z: 0.73429}
+  m_Children: []
+  m_Father: {fileID: 7751487591708997888}
+  m_RootOrder: 26
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &7781225867780880648
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3053483260913609310}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &2686391952558302580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3053483260913609310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: Player
+  Event: event:/SFX/Environment and ambience/Island Ambience
+  PlayEvent: 3
+  StopEvent: 4
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params:
+  - Name: Wind intensity
+    Value: 1
+  OverrideAttenuation: 1
+  OverrideMinDistance: 4
+  OverrideMaxDistance: 20
+--- !u!1 &5684739058912105654
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6066342706016082635}
+  - component: {fileID: 3555052381986012406}
+  - component: {fileID: 8790700627733598931}
+  m_Layer: 9
+  m_Name: Laugh in cave
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6066342706016082635
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5684739058912105654}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 81.842, y: -13.106, z: 20.827}
+  m_LocalScale: {x: 1, y: 1, z: 20.244118}
+  m_Children: []
+  m_Father: {fileID: 7751487591708997888}
+  m_RootOrder: 27
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &3555052381986012406
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5684739058912105654}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8790700627733598931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5684739058912105654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: Player
+  Event: event:/SFX/Fiender/Myling/Myling idle
+  PlayEvent: 3
+  StopEvent: 4
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  Params: []
+  OverrideAttenuation: 1
+  OverrideMinDistance: 6
+  OverrideMaxDistance: 10
 --- !u!1 &5866224002304279002
 GameObject:
   m_ObjectHideFlags: 0
@@ -130,7 +268,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &5990013383542216462
+--- !u!1 &6799271427442406338
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -138,220 +276,68 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1024966007068465633}
-  - component: {fileID: 8301369956028902513}
-  - component: {fileID: 6306956209028178369}
+  - component: {fileID: 4566630472508837769}
+  - component: {fileID: 4498203745021826197}
+  - component: {fileID: 9058308026259401296}
   m_Layer: 9
-  m_Name: Enter Cave (2)
+  m_Name: Bridge 3 (side) (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1024966007068465633
+--- !u!4 &4566630472508837769
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5990013383542216462}
-  m_LocalRotation: {x: -0.06446775, y: 0.84295815, z: -0.066814706, w: -0.5299069}
-  m_LocalPosition: {x: 107.76, y: -12.199999, z: 26.7998}
-  m_LocalScale: {x: 9.648375, y: 8.697929, z: -0.99101037}
+  m_GameObject: {fileID: 6799271427442406338}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 271.5, y: -64, z: -38.5}
+  m_LocalScale: {x: 97.872215, y: 0.30772, z: 0.73429}
   m_Children: []
   m_Father: {fileID: 7751487591708997888}
-  m_RootOrder: 26
-  m_LocalEulerAnglesHint: {x: 10.426001, y: 244.108, z: -2.207}
---- !u!114 &8301369956028902513
-MonoBehaviour:
+  m_RootOrder: 25
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!135 &4498203745021826197
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5990013383542216462}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: Player
-  Emitters:
-  - Target: {fileID: 0}
-    Params:
-    - Name: Location
-      Value: 3
-    - Name: Wind intensity
-      Value: 0
-  TriggerEvent: 3
---- !u!65 &6306956209028178369
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5990013383542216462}
+  m_GameObject: {fileID: 6799271427442406338}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: -21.08}
---- !u!1 &7733061314707691483
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4860345365151903756}
-  - component: {fileID: 6808007456944192493}
-  - component: {fileID: 7721402247049112343}
-  - component: {fileID: 290428398785143160}
-  m_Layer: 9
-  m_Name: exit cave (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4860345365151903756
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7733061314707691483}
-  m_LocalRotation: {x: -0.037836283, y: 0.97309166, z: -0.084786266, w: -0.21088469}
-  m_LocalPosition: {x: 163.55, y: 23.816, z: 204.26}
-  m_LocalScale: {x: 8.781926, y: 8.697929, z: -9.5639515}
-  m_Children: []
-  m_Father: {fileID: 7751487591708997888}
-  m_RootOrder: 28
-  m_LocalEulerAnglesHint: {x: 10.426001, y: 204.254, z: -2.207}
---- !u!114 &6808007456944192493
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &9058308026259401296
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7733061314707691483}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: Player
-  Emitters:
-  - Target: {fileID: 0}
-    Params:
-    - Name: Location
-      Value: 1
-    - Name: Weather
-      Value: 1.4
-  TriggerEvent: 3
---- !u!65 &7721402247049112343
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7733061314707691483}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: -21.08}
---- !u!114 &290428398785143160
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7733061314707691483}
+  m_GameObject: {fileID: 6799271427442406338}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   CollisionTag: Player
-  Event: event:/SFX/Fiender/Myling/Myling idle
+  Event: event:/SFX/Environment and ambience/Island Ambience
   PlayEvent: 3
   StopEvent: 4
   AllowFadeout: 1
   TriggerOnce: 0
   Preload: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 1
+  Params:
+  - Name: Wind intensity
+    Value: 1
+  OverrideAttenuation: 1
+  OverrideMinDistance: 4
   OverrideMaxDistance: 20
---- !u!1 &7737358604891241117
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8211325999241980480}
-  - component: {fileID: 5243656447236431894}
-  - component: {fileID: 7492719056882689949}
-  m_Layer: 9
-  m_Name: Enter Cave (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8211325999241980480
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7737358604891241117}
-  m_LocalRotation: {x: -0.008085259, y: 0.99283457, z: 0.03362774, w: -0.114382245}
-  m_LocalPosition: {x: 96.7, y: -5.6900005, z: 3.78}
-  m_LocalScale: {x: 8.134811, y: 6.4790597, z: -0.9910103}
-  m_Children: []
-  m_Father: {fileID: 7751487591708997888}
-  m_RootOrder: 27
-  m_LocalEulerAnglesHint: {x: -3.7220001, y: 193.18799, z: -1.3640001}
---- !u!114 &5243656447236431894
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7737358604891241117}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: Player
-  Emitters:
-  - Target: {fileID: 0}
-    Params:
-    - Name: Location
-      Value: 1
-    - Name: Wind intensity
-      Value: 0.94
-  TriggerEvent: 3
---- !u!65 &7492719056882689949
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7737358604891241117}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7751487590653214950
 GameObject:
   m_ObjectHideFlags: 0
@@ -363,7 +349,7 @@ GameObject:
   - component: {fileID: 7751487590653214949}
   - component: {fileID: 7751487590653214947}
   - component: {fileID: 7751487590653214948}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bridge 2 (midlow)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -377,13 +363,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7751487590653214950}
-  m_LocalRotation: {x: 0.15702671, y: 0.7453132, z: -0.098317064, w: 0.6404566}
-  m_LocalPosition: {x: 58, y: -7.6, z: -9.8}
-  m_LocalScale: {x: 20.324549, y: 38.507217, z: 13.692346}
+  m_LocalRotation: {x: 0.18511248, y: 0.32983258, z: -0.0075510233, w: 0.92568177}
+  m_LocalPosition: {x: 40.38, y: 0.81, z: -63.37}
+  m_LocalScale: {x: 20.324549, y: 38.507217, z: 8.724078}
   m_Children: []
   m_Father: {fileID: 7751487591708997888}
   m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 20.346, y: 99.844, z: 6.623}
+  m_LocalEulerAnglesHint: {x: 20.346, y: 40.413002, z: 6.623}
 --- !u!65 &7751487590653214947
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -427,7 +413,7 @@ GameObject:
   - component: {fileID: 7751487590671182233}
   - component: {fileID: 7751487590671182231}
   - component: {fileID: 7751487590671182232}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bridge 3 (side)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -442,7 +428,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7751487590671182234}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 196.4, y: -95.2, z: -89.4}
+  m_LocalPosition: {x: 271.5, y: -64, z: -38.5}
   m_LocalScale: {x: 97.87221, y: 0.30772, z: 0.73429}
   m_Children: []
   m_Father: {fileID: 7751487591708997888}
@@ -482,10 +468,10 @@ MonoBehaviour:
   Preload: 0
   Params:
   - Name: Wind intensity
-    Value: 0.968
+    Value: 1
   OverrideAttenuation: 1
-  OverrideMinDistance: 1
-  OverrideMaxDistance: 48.79583
+  OverrideMinDistance: 4
+  OverrideMaxDistance: 20
 --- !u!1 &7751487590840826503
 GameObject:
   m_ObjectHideFlags: 0
@@ -497,7 +483,7 @@ GameObject:
   - component: {fileID: 7751487590840826502}
   - component: {fileID: 7751487590840826500}
   - component: {fileID: 7751487590840826501}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bridge 2 (midlow Exit)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -511,13 +497,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7751487590840826503}
-  m_LocalRotation: {x: 0.15702671, y: 0.7453132, z: -0.098317064, w: 0.6404566}
-  m_LocalPosition: {x: 66.32, y: -10.36, z: -17.89}
+  m_LocalRotation: {x: 0.07500244, y: 0.32822964, z: -0.04420902, w: 0.9405772}
+  m_LocalPosition: {x: 48.06, y: -0.6999998, z: -61.49}
   m_LocalScale: {x: 20.324572, y: 38.50722, z: 3.5240016}
   m_Children: []
   m_Father: {fileID: 7751487591708997888}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 20.346, y: 99.844, z: 6.623}
+  m_LocalEulerAnglesHint: {x: 9.794001, y: 38.305, z: -1.973}
 --- !u!65 &7751487590840826500
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -548,7 +534,7 @@ MonoBehaviour:
   - Target: {fileID: 7751487590954023105}
     Params:
     - Name: Wind intensity
-      Value: 0
+      Value: 0.94
   TriggerEvent: 3
 --- !u!1 &7751487590877759878
 GameObject:
@@ -561,7 +547,7 @@ GameObject:
   - component: {fileID: 7751487590877759877}
   - component: {fileID: 7751487590877759875}
   - component: {fileID: 7751487590877759876}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Island 3 (exit)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -614,7 +600,7 @@ MonoBehaviour:
     - Name: Location
       Value: 1
     - Name: Wind intensity
-      Value: 1.128
+      Value: 1.59
   TriggerEvent: 3
 --- !u!1 &7751487590944155604
 GameObject:
@@ -627,7 +613,7 @@ GameObject:
   - component: {fileID: 7751487590944155603}
   - component: {fileID: 7751487590944155601}
   - component: {fileID: 7751487590944155602}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Island 0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -641,13 +627,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7751487590944155604}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.1, y: 9.3, z: -22.1}
+  m_LocalRotation: {x: -0, y: -0.14602864, z: -0, w: 0.98928034}
+  m_LocalPosition: {x: -16.7, y: 9.3, z: -134.5}
   m_LocalScale: {x: 26.629099, y: 0.30772, z: 0.5427025}
   m_Children: []
   m_Father: {fileID: 7751487591708997888}
   m_RootOrder: 19
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -16.794, z: 0}
 --- !u!135 &7751487590944155601
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -680,10 +666,12 @@ MonoBehaviour:
   AllowFadeout: 1
   TriggerOnce: 0
   Preload: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 0
-  OverrideMaxDistance: 0
+  Params:
+  - Name: Wind intensity
+    Value: 0
+  OverrideAttenuation: 1
+  OverrideMinDistance: 4
+  OverrideMaxDistance: 10
 --- !u!1 &7751487590946982669
 GameObject:
   m_ObjectHideFlags: 0
@@ -695,8 +683,8 @@ GameObject:
   - component: {fileID: 7751487590946982668}
   - component: {fileID: 7751487590946982666}
   - component: {fileID: 7751487590946982667}
-  m_Layer: 0
-  m_Name: Small side island (1)
+  m_Layer: 9
+  m_Name: Small side island by Cave
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -710,7 +698,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7751487590946982669}
   m_LocalRotation: {x: -0.04715876, y: 0.80681825, z: -0.068977125, w: 0.5848613}
-  m_LocalPosition: {x: 136.76, y: -23.19, z: -49.53}
+  m_LocalPosition: {x: 132.13, y: -12.71, z: 8.36}
   m_LocalScale: {x: 12.800319, y: 7.717674, z: 3.9471397}
   m_Children: []
   m_Father: {fileID: 7751487591708997888}
@@ -759,7 +747,7 @@ GameObject:
   - component: {fileID: 7751487590954023135}
   - component: {fileID: 7751487590954023104}
   - component: {fileID: 7751487590954023105}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Ambience manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -816,7 +804,7 @@ MonoBehaviour:
   - Name: Location
     Value: 1
   - Name: Wind intensity
-    Value: 1.48
+    Value: 1.63
   OverrideAttenuation: 0
   OverrideMinDistance: 0
   OverrideMaxDistance: 0
@@ -831,7 +819,7 @@ GameObject:
   - component: {fileID: 7751487591108426146}
   - component: {fileID: 7751487591108426144}
   - component: {fileID: 7751487591108426145}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Island 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -846,7 +834,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7751487591108426147}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 50.54, y: 2.59, z: 4.36}
+  m_LocalPosition: {x: 30.89, y: 2.59, z: -39.03}
   m_LocalScale: {x: 20, y: 20, z: 20}
   m_Children: []
   m_Father: {fileID: 7751487591708997888}
@@ -899,7 +887,7 @@ GameObject:
   - component: {fileID: 7751487591202931414}
   - component: {fileID: 7751487591202931412}
   - component: {fileID: 7751487591202931413}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bridge 2 (middle)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -913,13 +901,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7751487591202931415}
-  m_LocalRotation: {x: 0.17065793, y: 0.8376389, z: -0.072107494, w: 0.5138456}
-  m_LocalPosition: {x: 35.39, y: -4.39, z: -2.34}
-  m_LocalScale: {x: 12.996051, y: 16.340267, z: 42.163563}
+  m_LocalRotation: {x: 0.096859865, y: 0.47827435, z: 0.01769175, w: 0.87267333}
+  m_LocalPosition: {x: 31.49, y: 4.69, z: -69.51}
+  m_LocalScale: {x: 15.63286, y: 8.274616, z: 17.855425}
   m_Children: []
   m_Father: {fileID: 7751487591708997888}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 17.229, y: 118.895004, z: 12.812}
+  m_LocalEulerAnglesHint: {x: 8.75, y: 58.000004, z: 7.1800003}
 --- !u!65 &7751487591202931412
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -963,7 +951,7 @@ GameObject:
   - component: {fileID: 7751487591289852185}
   - component: {fileID: 7751487591289852183}
   - component: {fileID: 7751487591289852184}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bridge 3 (Low) (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1034,7 +1022,7 @@ GameObject:
   - component: {fileID: 7751487591325750032}
   - component: {fileID: 7751487591325750033}
   - component: {fileID: 7751487591325750063}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Nightmare machine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1123,7 +1111,7 @@ GameObject:
   - component: {fileID: 7751487591386400093}
   - component: {fileID: 7751487591386400091}
   - component: {fileID: 7751487591386400092}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Island 1 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1191,7 +1179,7 @@ GameObject:
   - component: {fileID: 7751487591515809767}
   - component: {fileID: 7751487591515809765}
   - component: {fileID: 7751487591515809766}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bridge 3 (Low)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1261,7 +1249,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7751487591708997888}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: SFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1303,11 +1291,10 @@ Transform:
   - {fileID: 7751487592502971570}
   - {fileID: 7751487591757887214}
   - {fileID: 5044553473276034050}
-  - {fileID: 5012024836148085542}
-  - {fileID: 8808455785914462742}
-  - {fileID: 1024966007068465633}
-  - {fileID: 8211325999241980480}
-  - {fileID: 4860345365151903756}
+  - {fileID: 6944443911092900290}
+  - {fileID: 4566630472508837769}
+  - {fileID: 8555898156229973908}
+  - {fileID: 6066342706016082635}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1322,7 +1309,7 @@ GameObject:
   - component: {fileID: 7751487591757887214}
   - component: {fileID: 7751487591757887212}
   - component: {fileID: 7751487591757887213}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Island 1 (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1388,7 +1375,7 @@ GameObject:
   - component: {fileID: 7751487591990930898}
   - component: {fileID: 7751487591990930896}
   - component: {fileID: 7751487591990930897}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Island 3 (exit) (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1454,8 +1441,8 @@ GameObject:
   - component: {fileID: 7751487592079853559}
   - component: {fileID: 7751487592079853557}
   - component: {fileID: 7751487592079853558}
-  m_Layer: 0
-  m_Name: Small side island (high
+  m_Layer: 9
+  m_Name: Cave reverb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1469,8 +1456,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7751487592079853560}
   m_LocalRotation: {x: -0.04715876, y: 0.80681825, z: -0.068977125, w: 0.5848613}
-  m_LocalPosition: {x: 47.11, y: 3.5, z: 4.42}
-  m_LocalScale: {x: 12.996061, y: 16.34027, z: 17.996267}
+  m_LocalPosition: {x: 87.53, y: -12.42, z: 15.33}
+  m_LocalScale: {x: 12.323982, y: 16.34027, z: 33.88038}
   m_Children: []
   m_Father: {fileID: 7751487591708997888}
   m_RootOrder: 16
@@ -1491,8 +1478,10 @@ MonoBehaviour:
   Emitters:
   - Target: {fileID: 7751487590954023105}
     Params:
+    - Name: Location
+      Value: 3
     - Name: Wind intensity
-      Value: 2
+      Value: 0
   TriggerEvent: 3
 --- !u!135 &7751487592079853558
 SphereCollider:
@@ -1519,7 +1508,7 @@ GameObject:
   - component: {fileID: 7751487592090727984}
   - component: {fileID: 7751487592090727985}
   - component: {fileID: 7751487592090728015}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bridge 1 (high)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1533,13 +1522,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7751487592090727987}
-  m_LocalRotation: {x: 0.22031909, y: 0.16924687, z: -0.038848195, w: 0.9598468}
-  m_LocalPosition: {x: 5.56, y: 7.96, z: -4.05}
-  m_LocalScale: {x: 6.5214214, y: 5.3501, z: 12.546985}
+  m_LocalRotation: {x: 0.19284761, y: 0.49404016, z: -0.11339982, w: 0.8401635}
+  m_LocalPosition: {x: 22.28, y: 9.74, z: -74.5}
+  m_LocalScale: {x: 11.22728, y: 12.812419, z: 40.421368}
   m_Children: []
   m_Father: {fileID: 7751487591708997888}
   m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 25.855, y: 20, z: 0}
+  m_LocalEulerAnglesHint: {x: 25.855001, y: 60.913002, z: 0}
 --- !u!65 &7751487592090727984
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1593,7 +1582,7 @@ MonoBehaviour:
   - Target: {fileID: 7751487590954023105}
     Params:
     - Name: Wind intensity
-      Value: 0.5
+      Value: 2
   TriggerEvent: 4
 --- !u!1 &7751487592274271308
 GameObject:
@@ -1606,7 +1595,7 @@ GameObject:
   - component: {fileID: 7751487592274271307}
   - component: {fileID: 7751487592274271305}
   - component: {fileID: 7751487592274271306}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Swamp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1680,7 +1669,7 @@ GameObject:
   - component: {fileID: 7751487592502971570}
   - component: {fileID: 7751487592502971568}
   - component: {fileID: 7751487592502971569}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Island 1 (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1748,7 +1737,7 @@ GameObject:
   - component: {fileID: 7751487592510039604}
   - component: {fileID: 7751487592510039602}
   - component: {fileID: 7751487592510039603}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Island 3 (exit) 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1814,7 +1803,7 @@ GameObject:
   - component: {fileID: 7751487592537532408}
   - component: {fileID: 7751487592537532406}
   - component: {fileID: 7751487592537532407}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Island 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1828,13 +1817,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7751487592537532409}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 13.61, y: 5.33, z: 6.49}
-  m_LocalScale: {x: 20, y: 0.30772, z: 0.4608621}
+  m_LocalRotation: {x: -0, y: -0.14602864, z: -0, w: 0.98928034}
+  m_LocalPosition: {x: 28.06, y: 6.13, z: -71.41}
+  m_LocalScale: {x: 66.005226, y: 0.30772, z: 0.4608621}
   m_Children: []
   m_Father: {fileID: 7751487591708997888}
   m_RootOrder: 17
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -16.794, z: 0}
 --- !u!135 &7751487592537532406
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1867,10 +1856,12 @@ MonoBehaviour:
   AllowFadeout: 1
   TriggerOnce: 0
   Preload: 0
-  Params: []
-  OverrideAttenuation: 0
-  OverrideMinDistance: 0
-  OverrideMaxDistance: 0
+  Params:
+  - Name: 
+    Value: 1.48
+  OverrideAttenuation: 1
+  OverrideMinDistance: 9
+  OverrideMaxDistance: 30
 --- !u!1 &7751487592573597136
 GameObject:
   m_ObjectHideFlags: 0
@@ -1883,7 +1874,7 @@ GameObject:
   - component: {fileID: 7751487592573597165}
   - component: {fileID: 7751487592573597166}
   - component: {fileID: 7751487592573597164}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Bridge 2 (midlow Exit) (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1968,7 +1959,7 @@ GameObject:
   - component: {fileID: 7751487592623501508}
   - component: {fileID: 7751487592623501506}
   - component: {fileID: 7751487592623501507}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Small side island
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1983,7 +1974,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7751487592623501509}
   m_LocalRotation: {x: -0.047158767, y: 0.80681825, z: -0.06897713, w: 0.5848613}
-  m_LocalPosition: {x: 47.11, y: 3.5, z: 4.42}
+  m_LocalPosition: {x: 24.55, y: 12.34, z: -62.4}
   m_LocalScale: {x: 12.996044, y: 16.34027, z: 17.99624}
   m_Children: []
   m_Father: {fileID: 7751487591708997888}
@@ -2021,69 +2012,3 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!1 &8147443496920445585
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8808455785914462742}
-  - component: {fileID: 5080941923053852025}
-  - component: {fileID: 5041119786711893974}
-  m_Layer: 9
-  m_Name: Enter Cave (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8808455785914462742
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8147443496920445585}
-  m_LocalRotation: {x: -0.037836283, y: 0.97309166, z: -0.084786266, w: -0.21088469}
-  m_LocalPosition: {x: 116.48, y: -8.890001, z: 37.99}
-  m_LocalScale: {x: 9.648365, y: 8.697929, z: -0.99101037}
-  m_Children: []
-  m_Father: {fileID: 7751487591708997888}
-  m_RootOrder: 25
-  m_LocalEulerAnglesHint: {x: 10.426001, y: 204.254, z: -2.207}
---- !u!114 &5080941923053852025
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8147443496920445585}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: Player
-  Emitters:
-  - Target: {fileID: 0}
-    Params:
-    - Name: Location
-      Value: 3
-    - Name: Wind intensity
-      Value: 0
-  TriggerEvent: 3
---- !u!65 &5041119786711893974
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8147443496920445585}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: -21.08}
