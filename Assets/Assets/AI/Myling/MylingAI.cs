@@ -10,10 +10,24 @@ public class MylingAI : BaseAIMovementController
     [SerializeField] public GameObject _healthBar;
     [SerializeField] public HitboxGroup _hitBox;
 
+    [Header("Shader")]
+    [SerializeField] float shaderFadeMultiplier = 1f;
+    [SerializeField] GameObject _mesh;
+
+    private Material _shader;
+    private Timer _shaderTimer;
+    private float _shaderFadeTime = -1f;
+
     private void Start()
     {
+        _mesh.GetComponent<Renderer>().materials[0] = Instantiate<Material>(_mesh.GetComponent<Renderer>().materials[0]);
+
+        _shader = _mesh.GetComponent<Renderer>().materials[0];
+
         stateMachine.ChangeState(new MylingIdleState());
         mylingAI = this;
+
+        _shader.SetFloat("Vector1_5443722F", -1);
 
         for (int i = 0; i < _healthBar.transform.childCount; i++)
         {
@@ -24,6 +38,13 @@ public class MylingAI : BaseAIMovementController
     private new void Update()
     {
         base.Update();
+
+        if (_shaderTimer != null)
+        {
+            _shaderFadeTime += Time.deltaTime * shaderFadeMultiplier;
+            Mathf.Clamp(_shaderFadeTime, -1, 1);
+            _shader.SetFloat("Vector1_5443722F", _shaderFadeTime);
+        }
     }
 
     public override void KillThis()
@@ -32,6 +53,7 @@ public class MylingAI : BaseAIMovementController
         _anim.SetBool("Dead", true);
         _agent.SetDestination(transform.position);
         transform.tag = "Untagged";
+        _shaderTimer = new Timer(_shaderFadeTime);
     }
 
     public override void Parried() { /* Cant parry this motherfucker */ }
