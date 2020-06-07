@@ -172,6 +172,22 @@ public class AudioManager : MonoBehaviour
     [EventRef]
     [SerializeField] string murkyWaterDamage;                       // not implemented in FMOD
 
+    [Header("Dialog")]
+    [EventRef]
+    [SerializeField] string a1Dialog;
+    [EventRef]
+    [SerializeField] string b2Dialog;
+    [EventRef]
+    [SerializeField] string d3Dialog;
+    [EventRef]
+    [SerializeField] string f4Dialog;
+    [EventRef]
+    [SerializeField] string gh5Dialog;
+    [EventRef]
+    [SerializeField] string m6Dialog;
+    [EventRef]
+    [SerializeField] string m7Dialog;
+
     #region Player Audio
     public void PlayerFootStepsAudio(Transform transform, string groundMaterial, Rigidbody rb)
     {
@@ -510,6 +526,33 @@ public class AudioManager : MonoBehaviour
     public void RespawnMusic()
     {
        // RuntimeManager.StudioSystem.setParameterByName("FellOff", enemyAmount);
+    }
+    #endregion
+
+    #region Dialog
+    public void A1Dialog(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(a1Dialog, position);
+    }
+    public void B2Dialog(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(b2Dialog, position);
+    }
+    public void D3Dialog(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(d3Dialog, position);
+    }
+    public void GH5Dialog(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(gh5Dialog, position);
+    }
+    public void M6Dialog(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(m6Dialog, position);
+    }
+    public void M7Dialog(Vector3 position)
+    {
+        RuntimeManager.PlayOneShot(m7Dialog, position);
     }
     #endregion
 }
