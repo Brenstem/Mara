@@ -729,7 +729,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1311657372456169857}
-  - component: {fileID: 3890696394025811656}
   - component: {fileID: 2591842468862650041}
   - component: {fileID: 528365078247470177}
   - component: {fileID: 2532695795629632027}
@@ -739,6 +738,7 @@ GameObject:
   - component: {fileID: 5328456364906160354}
   - component: {fileID: 4965936174566512124}
   - component: {fileID: 302436284058155494}
+  - component: {fileID: 1294825746}
   m_Layer: 9
   m_Name: MusicFallOff
   m_TagString: Untagged
@@ -760,25 +760,6 @@ Transform:
   m_Father: {fileID: 4614874529162583396}
   m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3890696394025811656
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2759424202578927521}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 744a208c85da6d04c861d81b992e4ead, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  CollisionTag: Player
-  Emitters:
-  - Target: {fileID: 4614874530639040514}
-    Params:
-    - Name: FellOff
-      Value: 1
-  TriggerEvent: 3
 --- !u!65 &2591842468862650041
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -896,6 +877,22 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 236.7, y: 1, z: 207}
   m_Center: {x: 201.3, y: -119.1, z: 67.8}
+--- !u!114 &1294825746
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2759424202578927521}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b0e04e2572f9a940a47465f6f3c2f00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: Player
+  parameter: FellOff
+  TriggerEvent: 3
+  value: 1
 --- !u!1 &4013508528518763757
 GameObject:
   m_ObjectHideFlags: 0
@@ -1483,6 +1480,7 @@ GameObject:
   - component: {fileID: 4614874530639040515}
   - component: {fileID: 4614874530639040514}
   - component: {fileID: 294837463}
+  - component: {fileID: 637052732}
   m_Layer: 9
   m_Name: MusicPlayer
   m_TagString: Untagged
@@ -1526,6 +1524,8 @@ MonoBehaviour:
   Params:
   - Name: To Beginning
     Value: 1
+  - Name: 
+    Value: 0
   OverrideAttenuation: 0
   OverrideMinDistance: 0
   OverrideMaxDistance: 0
@@ -1543,6 +1543,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CollisionTag: 
   parameter: FellOff
+  TriggerEvent: 11
+  value: 0
+--- !u!114 &637052732
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4614874530639040524}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b0e04e2572f9a940a47465f6f3c2f00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  parameter: InsanityBarMusic
   TriggerEvent: 11
   value: 0
 --- !u!1 &4614874530718734605
