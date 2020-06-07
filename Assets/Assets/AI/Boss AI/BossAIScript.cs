@@ -1930,6 +1930,7 @@ public class BossDeadState : State<BossAIScript>
         if (owner.animationEnded)
         {
             SceneData.gameStarted = false;
+            owner.audioManager.BossMusicCancel();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             GameObject.Destroy(owner.gameObject);
             //owner.Destroy(owner.gameObject);
