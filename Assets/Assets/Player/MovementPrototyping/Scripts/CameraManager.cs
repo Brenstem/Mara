@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 
 public class CameraManager : MonoBehaviour
 { // https://forum.unity.com/threads/free-look-with-new-input-system.676873/
+    /*
     private CinemachineCore.AxisInputDelegate _baseInputType;
     private PlayerInput _defaultcontrols;
     private Vector2 _lookDelta;
@@ -21,10 +22,10 @@ public class CameraManager : MonoBehaviour
     {
         _baseInputType = CinemachineCore.GetInputAxis;
         //cameraSensitivity = GlobalState.state.
-        //CinemachineCore.GetInputAxis = GetAxisCustom;
+        CinemachineCore.GetInputAxis = GetAxisCustom;
         //_defaultcontrols.PlayerControls.Look.performed += ctx => _lookDelta = ctx.ReadValue<Vector2>();
     }
-
+    /*
     private void Update()
     {
         _lookDelta = _defaultcontrols.PlayerControls.Look.ReadValue<Vector2>();
@@ -42,7 +43,8 @@ public class CameraManager : MonoBehaviour
             }
         }
     }
-
+    */
+    /*
     public float GetAxisCustom(string axisName)
     {
         _lookDelta = _defaultcontrols.PlayerControls.Look.ReadValue<Vector2>();
@@ -56,4 +58,5 @@ public class CameraManager : MonoBehaviour
         }
         return 0;
     }
+    */
 }

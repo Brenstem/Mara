@@ -7,7 +7,9 @@ public class OptionData : Data
 {
     public byte[][] controlKeyArray;
     public string[] valueArray;
-    public float mouseSensitivity;
+    public float horizontalSensitivity;
+    public float verticalSensitivity;
+    public float gamepadMultiplier;
     public int qualityLevel;
     public bool isFullscreen;
     public int refreshRate;
@@ -15,7 +17,7 @@ public class OptionData : Data
     public int height;
     public int currentLanguage;
 
-    public OptionData(Dictionary<System.Guid, string> controls)
+    public OptionData(Dictionary<System.Guid, string> controls, float horizontalSensitivity = 0, float verticalSensitivity = 0, float gamepadMultiplier = 0)
     {
         path = "controls";
         width = Screen.currentResolution.width;
@@ -24,16 +26,28 @@ public class OptionData : Data
         isFullscreen = Screen.fullScreen;
         qualityLevel = QualitySettings.GetQualityLevel();
 
+        if (horizontalSensitivity > 0)
+            this.horizontalSensitivity = horizontalSensitivity;
+        if (verticalSensitivity > 0)
+            this.verticalSensitivity = verticalSensitivity;
+        if (gamepadMultiplier > 0)
+            this.gamepadMultiplier = gamepadMultiplier;
+
         currentLanguage = (int)GlobalState.state.language;
         if (controls == null)
         {
-            OptionData d = (OptionData)SaveData.Load_Data("controls");
-            if (d.controlKeyArray.Length > 0)
+            OptionData d = (OptionData)SaveData.Load("controls");
+            bool load = true;
+            if (d != null && d.controlKeyArray != null)
             {
-                controlKeyArray = d.controlKeyArray;
-                valueArray = d.valueArray;
+                if (d.controlKeyArray.Length > 0)
+                {
+                    controlKeyArray = d.controlKeyArray;
+                    valueArray = d.valueArray;
+                    load = false;
+                }
             }
-            else
+            if (load)
             {
                 controlKeyArray = new byte[0][];
                 valueArray = new string[0];

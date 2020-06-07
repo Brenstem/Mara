@@ -12,7 +12,7 @@ public class ButtonFunction : MonoBehaviour
     }
     public void Load()
     {
-        PlayerData data = (PlayerData)SaveData.Load_Data("player");
+        PlayerData data = (PlayerData)SaveData.Load("player");
 
 
         Vector3 position;

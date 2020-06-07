@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class SceneData : MonoBehaviour
 {
+    public static SceneData _sceneData;
     public static bool gameStarted;
     public static int lightIndex;
-    public static SceneData _sceneData;
+
+    public static float horizontalSensitivity = 45f;
+    public static float verticalSensitivity = 45f;
+    public static float gamepadMultiplier = 5f;
 
     void Awake()
     {

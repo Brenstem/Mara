@@ -63,7 +63,7 @@ public class CheckpointHandler : MonoBehaviour
 
 
         _activeCheckPoint = new PlayerData(insanity , position);
-        SaveData.Save_Data(_activeCheckPoint);
+        SaveData.Save(_activeCheckPoint);
     }
 
     // Respawn player using checkpoint data

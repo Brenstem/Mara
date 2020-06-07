@@ -7,8 +7,9 @@ public class MenuInputResource : MonoBehaviour
 {
     public static Dictionary<System.Guid, string> overrides;
 
-    public static float cameraSensitivity;
-    public static float lockonCameraSensitivity;
+    public static float horizontalSensitivity;
+    public static float verticalSensitivity;
+    public static float gamepadMultiplier;
 
     public static PlayerInput _playerInput;
     public static PlayerInput PlayerInput
@@ -27,7 +28,7 @@ public class MenuInputResource : MonoBehaviour
             return _playerInput;
         }
     }
-
+    
     public static void SaveOverrides()
     {
         overrides = new Dictionary<System.Guid, string>();
@@ -46,8 +47,13 @@ public class MenuInputResource : MonoBehaviour
         }
 
         OptionData data = new OptionData(overrides);
-
-        SaveData.Save_Data(data);
+        data.horizontalSensitivity = horizontalSensitivity;
+        data.verticalSensitivity = verticalSensitivity;
+        data.gamepadMultiplier = gamepadMultiplier;
+        SceneData.horizontalSensitivity = horizontalSensitivity;
+        SceneData.verticalSensitivity = verticalSensitivity;
+        SceneData.gamepadMultiplier = gamepadMultiplier;
+        SaveData.Save(data);
 
         PlayerInput.PlayerControls.Disable();
     }
