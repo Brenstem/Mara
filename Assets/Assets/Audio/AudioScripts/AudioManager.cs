@@ -540,6 +540,7 @@ public class AudioManager : MonoBehaviour
         InsanityEvent.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
         RuntimeManager.StudioSystem.setParameterByName("MuteAllMusic", 1f);
         RuntimeManager.StudioSystem.setParameterByName("FellOff", 0);
+        RuntimeManager.StudioSystem.setParameterByName("BossPhase2", 0);
 
 
     }
