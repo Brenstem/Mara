@@ -1191,7 +1191,7 @@ public class BossPhaseOneCombatState : State<BossAIScript>
         GenerateNewAttackSpeed();
         _timer = new Timer(_attackSpeed);
 
-        _drainTimer = new Timer(_drainAttackCooldown);
+        _drainTimer = new Timer(_drainAttackCooldown * 0);
     }
 
     public override void EnterState(BossAIScript owner)
@@ -1929,8 +1929,9 @@ public class BossDeadState : State<BossAIScript>
     {
         if (owner.animationEnded)
         {
-            SceneData.gameStarted = false;
             owner.audioManager.BossMusicCancel();
+            SceneData.gameStarted = false;
+            SaveData.DeleteSaveFile();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             GameObject.Destroy(owner.gameObject);
             //owner.Destroy(owner.gameObject);
