@@ -86,7 +86,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   invulerable: 0
   health: {fileID: 648613035391747721}
-  _aggroRange: 19
+  _aggroRange: 15
   _unaggroRange: 20
   _targetLayers:
     serializedVersion: 2
@@ -115,7 +115,7 @@ MonoBehaviour:
   _dropAmount: 10
   _healthBar: {fileID: 5392630511110434561}
   _hitBox: {fileID: 3426633559148580248}
-  shaderFadeMultiplier: 0.6
+  shaderFadeMultiplier: 0.4
   _mesh: {fileID: 1189297275099749677}
 --- !u!136 &7497086228146343657
 CapsuleCollider:
@@ -622,11 +622,6 @@ PrefabInstance:
       propertyPath: hitboxEventHandler
       value: 
       objectReference: {fileID: 648613035466919867}
-    - target: {fileID: 2778033842924246596, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
-        type: 3}
-      propertyPath: m_Layer
-      value: 12
-      objectReference: {fileID: 0}
     - target: {fileID: 2778033842924246593, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
         type: 3}
       propertyPath: targetLayerMask.m_Bits
@@ -656,6 +651,11 @@ PrefabInstance:
         type: 3}
       propertyPath: circleRadius
       value: 4.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2778033842924246596, guid: d4a7c34f967a3df49a8e3ebb9aa373a5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d4a7c34f967a3df49a8e3ebb9aa373a5, type: 3}

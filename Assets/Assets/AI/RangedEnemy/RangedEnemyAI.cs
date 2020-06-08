@@ -107,7 +107,6 @@ public class RangedEnemyAI : BaseAIMovementController
     public override void Parried()
     {
         EnableHitstun(_hitstunOnParry, true);
-        UnityEngine.Debug.LogWarning("Parried implementation missing", this);
     }
 
     public void EnableHitstun(float duration, bool ignoreArmor)

@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7345135197825358136}
-  - component: {fileID: -3820507617163276663}
   m_Layer: 8
   m_Name: Gravestone3
   m_TagString: CameraIgnore
@@ -32,19 +31,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!65 &-3820507617163276663
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4266092540877674596}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1.3309535, z: 0.32195014}
-  m_Center: {x: 0, y: 0.65786976, z: -0.080720276}
 --- !u!1 &5222132917833774032
 GameObject:
   m_ObjectHideFlags: 0
@@ -56,6 +42,7 @@ GameObject:
   - component: {fileID: 3853849298267087869}
   - component: {fileID: 5389608773023268945}
   - component: {fileID: 8246400713730487566}
+  - component: {fileID: 6152883062344592016}
   m_Layer: 8
   m_Name: gravestone03
   m_TagString: Untagged
@@ -123,3 +110,16 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!65 &6152883062344592016
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5222132917833774032}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 94.12036, y: 133.2422, z: 33.104324}
+  m_Center: {x: 0.00008440018, y: -0.0000076293945, z: 0.00001335144}
