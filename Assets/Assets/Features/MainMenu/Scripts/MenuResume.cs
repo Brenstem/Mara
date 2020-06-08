@@ -6,6 +6,6 @@ public class MenuResume : MonoBehaviour
 {
     public void Unpause()
     {
-        GlobalState.state.Unpause();
+        //GlobalState.state.Unpause();
     }
 }

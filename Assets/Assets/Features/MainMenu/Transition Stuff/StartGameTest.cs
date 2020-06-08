@@ -27,15 +27,17 @@ public class StartGameTest : MonoBehaviour
 
         GlobalState.state.LockCursor = true;
         GlobalState.state.GameStarted = true;
-        StartCoroutine(StartGameTransition(_cinemachineStateDrivenCamera.m_CustomBlends.m_CustomBlends[START_CAMERA_BLEND_INDEX].m_Blend.m_Time * _activeControlsFaction));
+        // StartCoroutine(StartGameTransition(_cinemachineStateDrivenCamera.m_CustomBlends.m_CustomBlends[START_CAMERA_BLEND_INDEX].m_Blend.m_Time * _activeControlsFaction));
     }
 
     private IEnumerator StartGameTransition(float transitionTime)
     {
         yield return new WaitForSecondsRealtime(transitionTime);
+
         if (_canvas == null)
             _canvas = GetComponentInParent<Canvas>().gameObject;
-        _canvas.SetActive(false);
+
+        //_canvas.SetActive(false);
         _playerRevamp.EnabledControls = true;
     }
 }

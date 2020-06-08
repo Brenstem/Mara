@@ -36,6 +36,8 @@ public class GlobalState : MonoBehaviour
 
     [SerializeField] private LayerMask _groundMask;
 
+    [SerializeField] private StartMenuManagerTest _startMenuManager;
+
     [SerializeField] public enum LanguageEnum
     {
         Swedish,
@@ -236,14 +238,9 @@ public class GlobalState : MonoBehaviour
         yield return 0;
     }
 
-    public void Pause()
+    public void TogglePause()
     {
-        Time.timeScale = 0;
-    }
-
-    public void Unpause()
-    {
-        Time.timeScale = 1;
+        _startMenuManager.ToggleStartGame();
     }
 
     private void OnValidate()

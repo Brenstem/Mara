@@ -284,7 +284,7 @@ public class PlayerRevamp : Entity
         _playerInput.PlayerControls.AttackLight.performed += performedInput => Action(InputType.AttackLight);
         _playerInput.PlayerControls.AttackHeavy.started += performedInput => Action(InputType.AttackHeavy);
         _playerInput.PlayerControls.AttackHeavy.canceled += performedInput => Action(InputType.AttackHeavyReleased);
-        _playerInput.PlayerControls.Pause.canceled += performedInput => GlobalState.state.Pause();
+        _playerInput.PlayerControls.Pause.canceled += performedInput => GlobalState.state.TogglePause();
 
         _playerInput.PlayerControls.Parry.performed += performedInput => Action(InputType.Parry);
 
