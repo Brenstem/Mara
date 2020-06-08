@@ -235,7 +235,7 @@ MonoBehaviour:
   _healthBar: {fileID: 4975744970937386883}
   shaderFadeMultiplier: 0.6
   _mesh: {fileID: 5695580177332629781}
-  _firerate: 0
+  _firerate: 0.4
   _aimAssistDistanceCutOff: 3
   _meleeRange: 2
   _meleeHitBoxGroup: {fileID: 8004133527846166422}
@@ -514,11 +514,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8713683434502732735}
     m_Modifications:
-    - target: {fileID: -927199367670048503, guid: adf34ba624f6f3549ace6940ab49be95,
-        type: 3}
-      propertyPath: m_Name
-      value: anim_basicEnemy_Ranged
-      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: adf34ba624f6f3549ace6940ab49be95,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -588,6 +583,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalScale.z
       value: 1.75
+      objectReference: {fileID: 0}
+    - target: {fileID: -927199367670048503, guid: adf34ba624f6f3549ace6940ab49be95,
+        type: 3}
+      propertyPath: m_Name
+      value: anim_basicEnemy_Ranged
       objectReference: {fileID: 0}
     - target: {fileID: -6057140222963153312, guid: adf34ba624f6f3549ace6940ab49be95,
         type: 3}

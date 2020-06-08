@@ -62,6 +62,8 @@ public class MylingAI : BaseAIMovementController
     {
         base.TakeDamage(hitbox, attacker);
 
+        GlobalState.state.AudioManager.BossHurtAudio(this.transform.position);
+
         for (int i = 0; i < _healthBar.transform.childCount; i++)
         {
             // _healthBar.transform.GetChild(i).gameObject.SetActive(true);

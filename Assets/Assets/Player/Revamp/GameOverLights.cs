@@ -31,14 +31,14 @@ public class GameOverLights : MonoBehaviour
             Debug.LogError("Unable to find CanvasGroup!", this);
         }
 
-        if (SceneData.lightIndex == 0)
-            SceneData.lightIndex = lights.Count - 1;
+        if (SceneData.LightIndex == 0)
+            SceneData.LightIndex = lights.Count - 1;
 
         for (int i = 0; i < transform.childCount; i++)
         {
             lights.Add(transform.GetChild(i).GetComponent<RawImage>());
 
-            if (SceneData.lightIndex < i)
+            if (SceneData.LightIndex < i)
             {
                 var c = lights[i].color;
                 c.a = 0;
@@ -46,11 +46,13 @@ public class GameOverLights : MonoBehaviour
             }
         }
 
-
         Canvas.planeDistance = 0.14f;
 
         Fade.onFadeExit += Light;
+
+        SceneData.lightCount = lights.Count - 1;
     }
+
 
     private void Light()
     {
@@ -59,7 +61,7 @@ public class GameOverLights : MonoBehaviour
 
     private IEnumerator UpdateLight()
     {
-        if (SceneData.lightIndex < 0)
+        if (SceneData.LightIndex < 0)
         {
             foreach (RawImage item in lights)
             {
@@ -67,7 +69,7 @@ public class GameOverLights : MonoBehaviour
                 c.a = 1;
                 item.color = c;
             }
-            SceneData.lightIndex = lights.Count - 1;
+            SceneData.LightIndex = lights.Count - 1;
         }
         yield return new WaitForSeconds(_fadeDelay);
         DisableLight();
@@ -75,7 +77,7 @@ public class GameOverLights : MonoBehaviour
 
     public void DisableLight()
     {
-        if (SceneData.lightIndex >= 0)
+        if (SceneData.LightIndex >= 0)
         {
             StartCoroutine(FadeEnumerator(1.0f));
         }
@@ -90,9 +92,9 @@ public class GameOverLights : MonoBehaviour
             GetComponent<CanvasGroup>().alpha = Mathf.Lerp(0.0f, 1.0f, time / fadeTime);
         }
 
-        var c = lights[SceneData.lightIndex].color;
+        var c = lights[SceneData.LightIndex].color;
         c.a = 1;
-        lights[SceneData.lightIndex].color = c;
+        lights[SceneData.LightIndex].color = c;
         
         time = 0.0f;
         float d = Canvas.planeDistance;
@@ -101,11 +103,11 @@ public class GameOverLights : MonoBehaviour
             yield return new WaitForFixedUpdate();
             time += Time.fixedDeltaTime;
             c.a = Mathf.Lerp(1.0f, 0.0f, time / fadeTime);
-            lights[SceneData.lightIndex].color = c;
+            lights[SceneData.LightIndex].color = c;
         }
         c.a = 0;
-        lights[SceneData.lightIndex].color = c;
-        SceneData.lightIndex -= 1;
+        lights[SceneData.LightIndex].color = c;
+        SceneData.LightIndex -= 1;
 
 
 

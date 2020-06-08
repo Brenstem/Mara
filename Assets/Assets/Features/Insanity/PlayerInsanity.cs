@@ -99,7 +99,7 @@ public class PlayerInsanity : EntityHealth
     {
         if (_playerLight)
         {
-            _playerLight.intensity = (100 - GetInsanityPercentage()) / 2;
+            _playerLight.intensity = (100 - GetInsanityPercentage());
         }
 
         if (HealthBar != null)
@@ -253,7 +253,7 @@ public class PlayerInsanity : EntityHealth
     {
         if (_playerLight)
         {
-            _playerLight.intensity = 1 - GetInsanityPercentage();
+            _playerLight.intensity = 100 - GetInsanityPercentage();
         }
 
         #region Buffs
