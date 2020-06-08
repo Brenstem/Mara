@@ -81,6 +81,14 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Pause"",
+                    ""type"": ""Button"",
+                    ""id"": ""2d4fbe7a-b531-49dd-83a3-8d7e4f495d3b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -347,6 +355,28 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                     ""action"": ""Parry"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""76e59546-3def-4d20-9058-aa1e0076d893"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""91146ef3-9f33-4291-b598-f03449bddae3"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Pause"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -391,6 +421,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         m_PlayerControls_AttackLight = m_PlayerControls.FindAction("AttackLight", throwIfNotFound: true);
         m_PlayerControls_AttackHeavy = m_PlayerControls.FindAction("AttackHeavy", throwIfNotFound: true);
         m_PlayerControls_Parry = m_PlayerControls.FindAction("Parry", throwIfNotFound: true);
+        m_PlayerControls_Pause = m_PlayerControls.FindAction("Pause", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -448,6 +479,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
     private readonly InputAction m_PlayerControls_AttackLight;
     private readonly InputAction m_PlayerControls_AttackHeavy;
     private readonly InputAction m_PlayerControls_Parry;
+    private readonly InputAction m_PlayerControls_Pause;
     public struct PlayerControlsActions
     {
         private @PlayerInput m_Wrapper;
@@ -460,6 +492,7 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         public InputAction @AttackLight => m_Wrapper.m_PlayerControls_AttackLight;
         public InputAction @AttackHeavy => m_Wrapper.m_PlayerControls_AttackHeavy;
         public InputAction @Parry => m_Wrapper.m_PlayerControls_Parry;
+        public InputAction @Pause => m_Wrapper.m_PlayerControls_Pause;
         public InputActionMap Get() { return m_Wrapper.m_PlayerControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -493,6 +526,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Parry.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnParry;
                 @Parry.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnParry;
                 @Parry.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnParry;
+                @Pause.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnPause;
+                @Pause.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnPause;
+                @Pause.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnPause;
             }
             m_Wrapper.m_PlayerControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -521,6 +557,9 @@ public class @PlayerInput : IInputActionCollection, IDisposable
                 @Parry.started += instance.OnParry;
                 @Parry.performed += instance.OnParry;
                 @Parry.canceled += instance.OnParry;
+                @Pause.started += instance.OnPause;
+                @Pause.performed += instance.OnPause;
+                @Pause.canceled += instance.OnPause;
             }
         }
     }
@@ -553,5 +592,6 @@ public class @PlayerInput : IInputActionCollection, IDisposable
         void OnAttackLight(InputAction.CallbackContext context);
         void OnAttackHeavy(InputAction.CallbackContext context);
         void OnParry(InputAction.CallbackContext context);
+        void OnPause(InputAction.CallbackContext context);
     }
 }

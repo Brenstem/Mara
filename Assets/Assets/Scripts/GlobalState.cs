@@ -236,6 +236,16 @@ public class GlobalState : MonoBehaviour
         yield return 0;
     }
 
+    public void Pause()
+    {
+        Time.timeScale = 0;
+    }
+
+    public void Unpause()
+    {
+        Time.timeScale = 1;
+    }
+
     private void OnValidate()
     {
         bool exceeded = _entryTimeFraction + _exitTimeFraction > 1 ? true : false;
