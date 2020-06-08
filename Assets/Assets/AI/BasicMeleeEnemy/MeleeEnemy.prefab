@@ -241,6 +241,7 @@ MonoBehaviour:
   hitboxGroup: {fileID: 4594331576501799848}
   _hurtVFX: {fileID: 2055114425240093390, guid: d9acb96206d2e5044888731ef282c750,
     type: 3}
+  _lockonTarget: {fileID: 4782456632990872345}
 --- !u!114 &1505761187
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -764,6 +765,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 313704346685451411, guid: b807af36e0443f34ca0390bead88dd65,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 313704346685451411, guid: b807af36e0443f34ca0390bead88dd65,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b807af36e0443f34ca0390bead88dd65, type: 3}

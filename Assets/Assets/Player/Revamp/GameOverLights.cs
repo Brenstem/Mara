@@ -31,39 +31,49 @@ public class GameOverLights : MonoBehaviour
             Debug.LogError("Unable to find CanvasGroup!", this);
         }
 
-        if (SceneData.LightIndex == 0)
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            lights.Add(transform.GetChild(i).GetComponent<RawImage>());
+        }
+
+        SceneData.lightCount = lights.Count - 1;
+
+        if (SceneData.LightIndex <= 0)
             SceneData.LightIndex = lights.Count - 1;
 
         for (int i = 0; i < transform.childCount; i++)
         {
-            lights.Add(transform.GetChild(i).GetComponent<RawImage>());
-
+            var c = lights[i].color;
             if (SceneData.LightIndex < i)
             {
-                var c = lights[i].color;
                 c.a = 0;
-                lights[i].color = c;
             }
+            else
+            {
+                c.a = 1;
+            }
+            lights[i].color = c;
         }
 
         Canvas.planeDistance = 0.14f;
 
         Fade.onFadeExit += Light;
 
-        SceneData.lightCount = lights.Count - 1;
+        print(SceneData.LightIndex);
     }
 
 
     private void Light()
     {
         StartCoroutine(UpdateLight());
+        print(SceneData.LightIndex);
     }
 
     private IEnumerator UpdateLight()
     {
         if (SceneData.LightIndex < 0)
         {
-            foreach (RawImage item in lights)
+            foreach (RawImage item in lights) // enable all lights
             {
                 var c = item.color;
                 c.a = 1;
@@ -95,6 +105,9 @@ public class GameOverLights : MonoBehaviour
         var c = lights[SceneData.LightIndex].color;
         c.a = 1;
         lights[SceneData.LightIndex].color = c;
+
+        print(SceneData.LightIndex);
+
         
         time = 0.0f;
         float d = Canvas.planeDistance;
@@ -108,7 +121,7 @@ public class GameOverLights : MonoBehaviour
         c.a = 0;
         lights[SceneData.LightIndex].color = c;
         SceneData.LightIndex -= 1;
-
+        
 
 
         yield return new WaitForSecondsRealtime(_timeUntilFadeAway); // delay

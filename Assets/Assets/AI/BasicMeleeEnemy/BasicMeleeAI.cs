@@ -23,6 +23,7 @@ public class BasicMeleeAI : BaseAIMovementController
     [SerializeField] public GameObject _healthBar;
     [SerializeField] public HitboxGroup hitboxGroup;
     [SerializeField] private GameObject _hurtVFX;
+    [SerializeField] private GameObject _lockonTarget;
 
     // [SerializeField] public float _attackDelayAfterHitstun;
 
@@ -69,6 +70,8 @@ public class BasicMeleeAI : BaseAIMovementController
         _anim.SetBool("Dead", true);
         _agent.SetDestination(transform.position);
         transform.tag = "Untagged";
+        _lockonTarget.tag = "Untagged";
+
         _shaderTimer = new Timer(_shaderFadeTime);
     }
 

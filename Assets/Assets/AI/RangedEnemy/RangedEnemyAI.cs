@@ -17,6 +17,7 @@ public class RangedEnemyAI : BaseAIMovementController
     [SerializeField] private GameObject _projectile;
     [SerializeField] private Transform _projectileSpawnPos;
     [SerializeField] public GameObject _healthBar;
+    [SerializeField] private GameObject _lockonTarget;
 
     [Header("Shader")]
     [SerializeField] float shaderFadeMultiplier = 1f;
@@ -89,6 +90,7 @@ public class RangedEnemyAI : BaseAIMovementController
         _anim.SetBool("Dead", true);
         _agent.SetDestination(transform.position);
         transform.tag = "Untagged";
+        _lockonTarget.tag = "Untagged";
         shaderTimer = new Timer(shaderFadeTime);
     }
 

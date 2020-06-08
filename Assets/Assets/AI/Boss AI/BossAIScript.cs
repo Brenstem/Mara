@@ -7,6 +7,8 @@ using UnityEngine.SceneManagement;
 
 public class BossAIScript : Entity
 {
+    public GameObject victoryScreen;
+
     [System.Serializable]
     public struct PhaseOneStats
     {
@@ -1932,7 +1934,8 @@ public class BossDeadState : State<BossAIScript>
             owner.audioManager.BossMusicCancel();
             SceneData.gameStarted = false;
             SaveData.DeleteSaveFile();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            owner.victoryScreen.SetActive(true);
+            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             GameObject.Destroy(owner.gameObject);
             //owner.Destroy(owner.gameObject);
         }
