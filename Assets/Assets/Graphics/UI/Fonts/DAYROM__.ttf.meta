@@ -11,9 +11,10 @@ TrueTypeFontImporter:
   fontName: Day Roman
   fontNames:
   - Day Roman
-  fallbackFontReferences: []
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 8b70b81cab15f7840af96f4f0faf832f, type: 3}
   customCharacters: 
-  fontRenderingMode: 0
+  fontRenderingMode: 3
   ascentCalculationMode: 1
   useLegacyBoundsCalculation: 0
   shouldRoundAdvanceValue: 1

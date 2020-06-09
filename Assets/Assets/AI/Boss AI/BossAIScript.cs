@@ -1907,7 +1907,6 @@ public class BossPhaseTwoCombatState : State<BossAIScript>
 #region Dead state
 public class BossDeadState : State<BossAIScript>
 {
-
     public override void EnterState(BossAIScript owner)
     {
         owner.audioManager.BossChangePhaseAudio(owner.transform.position);
@@ -1934,9 +1933,20 @@ public class BossDeadState : State<BossAIScript>
             owner.audioManager.BossMusicCancel();
             SceneData.gameStarted = false;
             SaveData.DeleteSaveFile();
-            owner.victoryScreen.SetActive(true);
-            //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            GameObject.Destroy(owner.gameObject);
+            //owner.victoryScreen.SetActive(true);
+
+            try
+            {
+                SceneManager.LoadScene(1);
+            }
+            catch
+            {
+                Debug.LogWarning("There is no scene index 1, add the credits scene to scene index 1");
+                //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            }
+            //GameObject.Destroy(owner.gameObject);
+
+
             //owner.Destroy(owner.gameObject);
         }
     }
