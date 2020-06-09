@@ -5,34 +5,44 @@ using UnityEngine;
 public class StartMenuManagerTest : MonoBehaviour
 {
     [SerializeField] private float _fadeTime;
+    [SerializeField] private GameObject _canvas;
 
     private float _timer;
-
+    private PlayerRevamp _playerRevamp;
     private bool _playing = SceneData.gameStarted;
+
+    private void Awake()
+    {
+        _playerRevamp = GlobalState.state.Player;
+    }
 
     public void ToggleStartGame()
     {
-        // StopAllCoroutines();
+        StopAllCoroutines();
+
+        _timer = 0f;
 
         if (_playing) // Fade in
         {
             _playing = false;
-            Time.timeScale = 0;
 
-            print("before: " + this.GetComponent<Canvas>().enabled);
+            //print("before: " + _canvas.activeSelf);
 
-            this.GetComponent<Canvas>().enabled = true;
+            _canvas.SetActive(true);
 
-            print("after: " + this.GetComponent<Canvas>().enabled);
+            //print("after: " + _canvas.activeSelf);
 
-            Time.timeScale = 0;
-            GlobalState.state.Player.EnabledControls = false;
             GlobalState.state.LockCursor = false;
 
             StartCoroutine(FadeIn());
         }
         else
         {
+            _playerRevamp.cameraAnimator.SetTrigger("GameStarted");
+
+            GlobalState.state.LockCursor = true;
+            GlobalState.state.GameStarted = true;
+
             _playing = true;
             Time.timeScale = 1;
             StartCoroutine(FadeOut());
@@ -41,28 +51,35 @@ public class StartMenuManagerTest : MonoBehaviour
 
     private IEnumerator FadeOut()
     {
-        if (this.GetComponent<CanvasGroup>().alpha > 0f)
+        if (_canvas.GetComponent<CanvasGroup>().alpha > 0f)
         {
             _timer += Time.fixedDeltaTime;
-            this.GetComponent<CanvasGroup>().alpha = 1 - _timer / _fadeTime;
+            _canvas.GetComponent<CanvasGroup>().alpha = 1 - _timer / _fadeTime;
             yield return new WaitForFixedUpdate();
             StartCoroutine(FadeOut());
         }
         else
         {
-            this.GetComponent<Canvas>().enabled = false;
+            _canvas.SetActive(false);
             GlobalState.state.Player.EnabledControls = true;
         }
     }
 
     private IEnumerator FadeIn()
     {
-        if (this.GetComponent<CanvasGroup>().alpha < 1f)
+        if (_canvas.GetComponent<CanvasGroup>().alpha < 1f)
         {
             _timer += Time.fixedDeltaTime;
-            this.GetComponent<CanvasGroup>().alpha = _timer / _fadeTime;
+            _canvas.GetComponent<CanvasGroup>().alpha = _timer / _fadeTime;
+
             yield return new WaitForFixedUpdate();
             StartCoroutine(FadeIn());
+        }
+        else
+        {
+            print("meme");
+            GlobalState.state.Player.enabled = false;
+            Time.timeScale = 0;
         }
     }
 }

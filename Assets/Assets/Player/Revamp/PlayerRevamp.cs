@@ -284,7 +284,7 @@ public class PlayerRevamp : Entity
         _playerInput.PlayerControls.AttackLight.performed += performedInput => Action(InputType.AttackLight);
         _playerInput.PlayerControls.AttackHeavy.started += performedInput => Action(InputType.AttackHeavy);
         _playerInput.PlayerControls.AttackHeavy.canceled += performedInput => Action(InputType.AttackHeavyReleased);
-        _playerInput.PlayerControls.Pause.canceled += performedInput => GlobalState.state.TogglePause();
+        _playerInput.PlayerControls.Pause.canceled += performedInput => GlobalState.state.Pause();
 
         _playerInput.PlayerControls.Parry.performed += performedInput => Action(InputType.Parry);
 
@@ -306,7 +306,6 @@ public class PlayerRevamp : Entity
         //anänds inte när vi har _lockCursorOnStart boolen i global state men när vi tar bort den ska denna rad vara med
         //EnabledControls = false;
 
-
         if (GlobalState.state.GameStarted)
         {
             cameraAnimator.SetTrigger("GameStarted");
@@ -322,7 +321,6 @@ public class PlayerRevamp : Entity
             playerAnimator.SetFloat("StrafeDirY", Mathf.Lerp(playerAnimator.GetFloat("StrafeDirY"), Input.y, Time.deltaTime * 8));
         }
         stateMachine.Update();
-
 
         //print(stateMachine.currentState);
 

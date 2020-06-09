@@ -45,6 +45,9 @@ public static class SaveData
 
     public static Data Load(string datapath)
     {
+#if UNITY_EDITOR
+        return null;
+#else
         string path = Application.persistentDataPath +"/"+ datapath + ".data";
         if (File.Exists(path))
         {
@@ -61,6 +64,7 @@ public static class SaveData
             Debug.LogError("Save file not found in " + path);
             return null;
         }
+#endif
     }
 }
 

@@ -36,7 +36,7 @@ public class GlobalState : MonoBehaviour
 
     [SerializeField] private LayerMask _groundMask;
 
-    [SerializeField] private StartMenuManagerTest _startMenuManager;
+    private StartMenuManagerTest _startMenuManager;
 
     [SerializeField] public enum LanguageEnum
     {
@@ -141,6 +141,8 @@ public class GlobalState : MonoBehaviour
             // DontDestroyOnLoad(this);
             _state = this;
         }
+
+        _startMenuManager = GetComponent<StartMenuManagerTest>();
     }
 
     private void Start()
@@ -191,7 +193,6 @@ public class GlobalState : MonoBehaviour
         StartCoroutine(HitStopCoroutine(values.hitstopTime));
     }
 
-
     private IEnumerator HitStopCoroutine(float duration)
     {
 
@@ -238,7 +239,9 @@ public class GlobalState : MonoBehaviour
         yield return 0;
     }
 
-    public void TogglePause()
+    public GameObject CANVAS;
+
+    public void Pause()
     {
         _startMenuManager.ToggleStartGame();
     }

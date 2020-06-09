@@ -58,8 +58,6 @@ public class GameOverLights : MonoBehaviour
         Canvas.planeDistance = 0.14f;
 
         Fade.onFadeExit += Light;
-
-        print(SceneData.LightIndex);
     }
 
 

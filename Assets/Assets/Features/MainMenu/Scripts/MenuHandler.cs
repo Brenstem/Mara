@@ -25,10 +25,7 @@ public class MenuHandler : MonoBehaviour
 
     private void EnableMenu(GameObject gameObject)
     {
-        if (!GlobalState.state.GameStarted)
-        {
-            gameObject.SetActive(true);
-        }
+        gameObject.SetActive(true);
     }
 
     private void DisableMenu(GameObject gameObject)
