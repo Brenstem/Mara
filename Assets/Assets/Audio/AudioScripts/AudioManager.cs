@@ -550,6 +550,11 @@ public class AudioManager : MonoBehaviour
 
     }
 
+    public void StopMusic()
+    {
+        RuntimeManager.StudioSystem.setParameterByName("MuteAllMusic", 1f);
+    }
+
     public void CaveMusic()
     {
 
@@ -603,6 +608,7 @@ public class AudioManager : MonoBehaviour
         RuntimeManager.PlayOneShot(m7Dialog, position);
     }
     #endregion
+
     #region Volume Control
     public void VolumeControl (float MusicVolumePercentage, float SFXVolumePercentage)
     {

@@ -1920,6 +1920,8 @@ public class BossDeadState : State<BossAIScript>
             owner.spawnedEnemy.GetComponent<BaseAIMovementController>().KillThis();
         }
         owner.actionStateMachine.ChangeState(owner.bossIdleActionState);
+
+        GlobalState.state.AudioManager.StopMusic();
     }
 
     public override void ExitState(BossAIScript owner)
