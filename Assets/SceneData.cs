@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SceneData : MonoBehaviour
 {
-    public static SceneData _sceneData;
+    public static SceneData sceneData;
     public static bool gameStarted;
 
     public static int lightCount;
@@ -30,14 +30,14 @@ public class SceneData : MonoBehaviour
 
     void Awake()
     {
-        if (_sceneData != null && _sceneData != this)
+        if (sceneData != null && sceneData != this)
         {
             Destroy(this.gameObject);
         }
         else
         {
             DontDestroyOnLoad(this);
-            _sceneData = this;
+            sceneData = this;
         }
     }
 }

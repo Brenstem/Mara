@@ -14,6 +14,12 @@ public class StartMenuManagerTest : MonoBehaviour
     private void Awake()
     {
         _playerRevamp = GlobalState.state.Player;
+
+        if (SceneData.gameStarted)
+        {
+            _canvas.SetActive(false);
+            _canvas.GetComponent<CanvasGroup>().alpha = 0;
+        }
     }
 
     public void ToggleStartGame()
@@ -26,11 +32,7 @@ public class StartMenuManagerTest : MonoBehaviour
         {
             _playing = false;
 
-            //print("before: " + _canvas.activeSelf);
-
             _canvas.SetActive(true);
-
-            //print("after: " + _canvas.activeSelf);
 
             GlobalState.state.LockCursor = false;
 
@@ -77,8 +79,7 @@ public class StartMenuManagerTest : MonoBehaviour
         }
         else
         {
-            print("meme");
-            GlobalState.state.Player.enabled = false;
+            GlobalState.state.Player.EnabledControls = false;
             Time.timeScale = 0;
         }
     }
